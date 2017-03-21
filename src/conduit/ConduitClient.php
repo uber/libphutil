@@ -161,7 +161,8 @@ final class ConduitClient extends Phobject {
         $core_future->addHeader('Cookie', $new_cookies);
       } else {
         throw new Exception(
-          pht('Env variable ARC_USSO_COOKIE was set, but unable to obtain usso cookie using %s', getenv('ARC_WONKA_CLI')));
+          pht('Env variable ARC_USSO_COOKIE was set, but unable to obtain usso cookie using %s',
+            getenv('ARC_WONKA_CLI')));
       }
     }
     // UBER CODE END
@@ -206,16 +207,27 @@ final class ConduitClient extends Phobject {
     if (file_exists($claim_file)) {
       $stale = time() - filemtime($claim_file);
       if ($stale < 60) {
-        $claim = rtrim(file_get_contents($claim_file));
+        $claim = $this->readClaimFile($claim_file);
       }
     }
     if (empty($claim)) {
       $wonka_cli = getenv('ARC_WONKA_CLI');
       system("{$wonka_cli} {$claim_file}");
-      $claim = rtrim(file_get_contents($claim_file));
+      $claim = $this->readClaimFile($claim_file);
       if (getenv('ARC_DEBUG')) {
         echo "Ran {$wonka_cli} {$claim_file}\n Got {$claim}\n";
       }
+    }
+    return $claim;
+  }
+
+  private function readClaimFile($claim_file = '') {
+    $claim = rtrim(file_get_contents($claim_file, null, null, 0, 1024));
+    // Base 64 string with no newlines.
+    if (!preg_match('/^[a-zA-Z0-9\/+]*={0,2}$/', $claim)) {
+      throw new Exception(
+        pht('ARC_USSO_COOKIE %s has mal-formed claim',
+          getenv('ARC_USSO_COOKIE')));
     }
     return $claim;
   }
