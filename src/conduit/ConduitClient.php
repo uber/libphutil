@@ -148,7 +148,11 @@ final class ConduitClient extends Phobject {
 
     // UBER CODE BEGIN
     if (getenv('ARC_USSO_COOKIE')) {
-      $cookies = $core_future->getHeaders('Cookie');
+      $cookies = '';
+      $cookies_array = $core_future->getHeaders('Cookie');
+      if (array_key_exists('Cookie', $cookies_array)) {
+        $cookies = $cookies_array['Cookie'];
+      }
       $new_cookies = $this->addWonkaClaimToCookies($cookies);
       if (strcmp($new_cookies, $cookies) !== 0) {
         if (getenv('ARC_DEBUG')) {
@@ -198,17 +202,20 @@ final class ConduitClient extends Phobject {
   private function getWonkaClaim() {
     $claim = '';
     // if the file exists and is current, use it.
-    $claim_file = getenv('NEED_USSO_COOKIE');
+    $claim_file = getenv('ARC_USSO_COOKIE');
     if (file_exists($claim_file)) {
       $stale = time() - filemtime($claim_file);
       if ($stale < 60) {
         $claim = rtrim(file_get_contents($claim_file));
       }
     }
-    if (!isset($claim)) {
+    if (empty($claim)) {
       $wonka_cli = getenv('ARC_WONKA_CLI');
       system("{$wonka_cli} {$claim_file}");
       $claim = rtrim(file_get_contents($claim_file));
+      if (getenv('ARC_DEBUG')) {
+        echo "Ran {$wonka_cli} {$claim_file}\n Got {$claim}\n";
+      }
     }
     return $claim;
   }
