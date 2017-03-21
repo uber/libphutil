@@ -147,7 +147,7 @@ final class ConduitClient extends Phobject {
     $core_future->addHeader('Host', $this->getHostStringForHeader());
 
     // UBER CODE BEGIN
-    if (getenv('NEED_USSO_COOKIE')) {
+    if (getenv('ARC_USSO_COOKIE')) {
       $cookies = $core_future->getHeaders('Cookie');
       $new_cookies = $this->addWonkaClaimToCookies($cookies);
       if (strcmp($new_cookies, $cookies) !== 0) {
@@ -155,7 +155,7 @@ final class ConduitClient extends Phobject {
         $core_future->addHeader('Cookie', $new_cookies);
       } else {
         throw new Exception(
-          pht('Env variable NEED_USSO_COOKIE was set, but unable to obtain usso cookie using %s', getenv('ARC_WONKA_CLI')));
+          pht('Env variable ARC_USSO_COOKIE was set, but unable to obtain usso cookie using %s', getenv('ARC_WONKA_CLI')));
       }
     }
     // UBER CODE END
