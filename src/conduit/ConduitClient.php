@@ -203,19 +203,45 @@ final class ConduitClient extends Phobject {
   private function getWonkaClaim() {
     $claim = '';
     // if the file exists and is current, use it.
-    $claim_file = getenv('ARC_USSO_COOKIE');
-    if (file_exists($claim_file)) {
-      $stale = time() - filemtime($claim_file);
-      if ($stale < 60) {
+    // append the pid
+    $claim_file_head = getenv('ARC_USSO_COOKIE');
+    $claim_file = sprintf('%s_%d', $claim_file_head, getmypid());
+    // Happy path
+    $claim = $this->happyPath($claim_file);
+
+    $now = time();
+    $wonka_cli = getenv('ARC_WONKA_CLI');
+    while (empty($claim)) {
+      if ((time() - $now) > 5 ) {
+        $this->rmLock($claim_file);
+        throw new Exception(
+          pht('Unable to obtain lock on dir %s.lock, removing', $claim_file));
+      }
+      // there is a race condition here.
+      if ($this->getLock($claim_file)) {
+        system("{$wonka_cli} {$claim_file}");
         $claim = $this->readClaimFile($claim_file);
+        $this->rmLock($claim_file);
+        if (getenv('ARC_DEBUG')) {
+          echo "Ran {$wonka_cli} {$claim_file}\n Got {$claim}\n";
+        }
+      } else {
+        usleep(200000);
+        $claim = $this->happyPath($claim_file);
+      }
+      if (getenv('ARC_DEBUG')) {
+        echo "Looping on {$claim_file}\n Got {$claim}\n";
       }
     }
-    if (empty($claim)) {
-      $wonka_cli = getenv('ARC_WONKA_CLI');
-      system("{$wonka_cli} {$claim_file}");
-      $claim = $this->readClaimFile($claim_file);
-      if (getenv('ARC_DEBUG')) {
-        echo "Ran {$wonka_cli} {$claim_file}\n Got {$claim}\n";
+    return $claim;
+  }
+
+  private function happyPath($claim_file = '') {
+    $claim = '';
+    if (file_exists($claim_file)) {
+      $stale = time() - filemtime($claim_file);
+      if ($stale < 59) {
+        $claim = $this->readClaimFile($claim_file);
       }
     }
     return $claim;
@@ -230,6 +256,21 @@ final class ConduitClient extends Phobject {
           getenv('ARC_USSO_COOKIE')));
     }
     return $claim;
+  }
+
+  // Old trick of using mkdir as atomic test and set for locking.
+  private function getLock($claim_file = '') {
+    $lockdir = "${claim_file}.lock";
+    $state = @mkdir($lockdir);
+    if (getenv('ARC_DEBUG')) {
+      echo "In getLock {$claim_file}:{$lockdir}:{$state}\n";
+    }
+    return $state;
+  }
+
+  private function rmLock($claim_file = '') {
+    $lockdir = "${claim_file}.lock";
+    @rmdir($lockdir);
   }
   // UBER CODE END
 
