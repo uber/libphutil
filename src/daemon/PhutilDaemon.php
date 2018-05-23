@@ -128,7 +128,7 @@ abstract class PhutilDaemon extends Phobject {
 
   final protected function shouldHibernate($duration) {
     // Don't hibernate if we don't have very long to sleep.
-    if ($duration < 5) {
+    if ($duration < 30) {
       return false;
     }
 
@@ -139,7 +139,7 @@ abstract class PhutilDaemon extends Phobject {
     }
 
     // Don't hibernate for too long.
-    $duration = max($duration, phutil_units('3 minutes in seconds'));
+    $duration = min($duration, phutil_units('3 minutes in seconds'));
 
     $this->emitOverseerMessage(
       self::MESSAGETYPE_HIBERNATE,
@@ -169,7 +169,7 @@ abstract class PhutilDaemon extends Phobject {
 
     if ($scale_down) {
       if ($this->workState == self::WORKSTATE_IDLE) {
-        $dur = (time() - $this->idleSince);
+        $dur = $this->getIdleDuration();
         $this->log(pht('Idle for %s seconds.', $dur));
       }
     }
@@ -380,4 +380,14 @@ abstract class PhutilDaemon extends Phobject {
 
     return $this;
   }
+
+  protected function getIdleDuration() {
+    if (!$this->idleSince) {
+      return null;
+    }
+
+    $now = time();
+    return ($now - $this->idleSince);
+  }
+
 }

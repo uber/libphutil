@@ -152,7 +152,18 @@ EOHELP
       } else if ($pid) {
         exit(0);
       }
+
+      $sid = posix_setsid();
+      if ($sid <= 0) {
+        throw new Exception(pht('Failed to create new process session!'));
+      }
     }
+
+    $this->logMessage(
+      'OVER',
+      pht(
+        'Started new daemon overseer (with PID "%s").',
+        getmypid()));
 
     $this->modules = PhutilDaemonOverseerModule::getAllModules();
 
@@ -173,11 +184,25 @@ EOHELP
       }
 
       $futures = array();
+
+      $running_pools = false;
       foreach ($this->getDaemonPools() as $pool) {
         $pool->updatePool();
 
+        if (!$this->shouldShutdown()) {
+          if ($pool->isHibernating()) {
+            if ($this->shouldWakePool($pool)) {
+              $pool->wakeFromHibernation();
+            }
+          }
+        }
+
         foreach ($pool->getFutures() as $future) {
           $futures[] = $future;
+        }
+
+        if ($pool->getDaemons()) {
+          $running_pools = true;
         }
       }
 
@@ -186,8 +211,8 @@ EOHELP
 
       $this->waitForDaemonFutures($futures);
 
-      if (!$futures) {
-        if ($this->inGracefulShutdown) {
+      if (!$futures && !$running_pools) {
+        if ($this->shouldShutdown()) {
           break;
         }
       }
@@ -209,7 +234,7 @@ EOHELP
         break;
       }
     } else {
-      if (!$this->inGracefulShutdown) {
+      if (!$this->shouldShutdown()) {
         sleep(1);
       }
     }
@@ -348,7 +373,15 @@ EOHELP
   }
 
   public function logMessage($type, $message, $context = null) {
-    if ($this->traceMode || $this->verbose) {
+    $always_log = false;
+    switch ($type) {
+      case 'OVER':
+      case 'SGNL':
+        $always_log = true;
+        break;
+    }
+
+    if ($always_log || $this->traceMode || $this->verbose) {
       error_log(date('Y-m-d g:i:s A').' ['.$type.'] '.$message);
     }
   }
@@ -378,6 +411,14 @@ EOHELP
    * @task signals
    */
   public function didReceiveSignal($signo) {
+    $this->logMessage(
+      'SGNL',
+      pht(
+        'Overseer ("%d") received signal %d ("%s").',
+        getmypid(),
+        $signo,
+        phutil_get_signal_name($signo)));
+
     switch ($signo) {
       case SIGUSR2:
         $signal_type = self::SIGNAL_NOTIFY;
@@ -449,5 +490,31 @@ EOHELP
     return $should_reload;
   }
 
+  private function shouldWakePool(PhutilDaemonPool $pool) {
+    $modules = $this->getModules();
+
+    $should_wake = false;
+    foreach ($modules as $module) {
+      try {
+        if ($module->shouldWakePool($pool)) {
+          $this->logMessage(
+            'WAKE',
+            pht(
+              'Waking pool "%s" (triggered by overseer module "%s").',
+              $pool->getPoolLabel(),
+              get_class($module)));
+          $should_wake = true;
+        }
+      } catch (Exception $ex) {
+        phlog($ex);
+      }
+    }
+
+    return $should_wake;
+  }
+
+  private function shouldShutdown() {
+    return $this->inGracefulShutdown || $this->inAbruptShutdown;
+  }
 
 }
