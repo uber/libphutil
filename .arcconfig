@@ -1,0 +1,5 @@
+{
+    "conduit_uri": "https://code.uberinternal.com/",
+    "git.default-relative-commit": "origin/staging",
+    "arc.land.onto.default": "staging"
+}
