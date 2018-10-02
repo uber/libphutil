@@ -1,0 +1,11 @@
+language: php
+install:
+  - git clone https://github.com/uber/arcanist.git ../arcanist
+php:
+  # - '5.4'
+  - '5.5'
+  - '5.6'
+  - '7.1'
+  - '7.2'
+script:
+  - ../arcanist/bin/arc unit --everything --no-coverage
