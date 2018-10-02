@@ -1,6 +1,8 @@
 `libphutil` is a collection of utility classes and functions for PHP. Some
 features of the library include:
 
+[![Build Status](https://travis-ci.com/uber/libphutil.svg?branch=master)](https://travis-ci.com/uber/libphutil)
+
 **libphutil Library System**
 A system for organizing, loading and introspecting PHP classes and functions.
 Uses static analysis to generate, validate and update library contents and
