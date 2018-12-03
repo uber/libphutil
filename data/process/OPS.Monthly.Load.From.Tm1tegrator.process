@@ -1,0 +1,281 @@
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: PROPERTIES                                                           #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+{
+    "DataSource": {
+        "Type": "ODBC",
+        "dataSourceNameForClient": "TM1TEGRATOR",
+        "dataSourceNameForServer": "TM1TEGRATOR",
+        "query": "select * from \"pipe.fds_tm1_OPS_monthly.20180109220420.VZNR05\";",
+        "userName": "epm",
+        "usesUnicode": true
+    },
+    "HasSecurityAccess": false,
+    "Name": "OPS.Monthly.Load.From.Tm1tegrator",
+    "Parameters": [
+        {
+            "Name": "pTable",
+            "Prompt": "",
+            "Type": "String",
+            "Value": "pipe.fds_tm1_OPS_monthly.20180109220420.VZNR05"
+        },
+        {
+            "Name": "pDebug",
+            "Prompt": "",
+            "Type": "Numeric",
+            "Value": 0
+        }
+    ],
+    "UIData": "CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
+    "Variables": [
+        {
+            "EndByte": 0,
+            "Name": "vCarType",
+            "Position": 1,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vCityid",
+            "Position": 2,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vFlowType",
+            "Position": 3,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vMetric",
+            "Position": 4,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vMonth",
+            "Position": 5,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "Value",
+            "Position": 6,
+            "StartByte": 0,
+            "Type": "Numeric"
+        }
+    ],
+    "VariablesUIData": [
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=33\fColType=827\f",
+        "VarName=V7\fVarType=33\fColType=1165\fVarFormulaDestination=BOTH\f"
+    ]
+}
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: PROPERTIES                                                             #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: PROLOG PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+################################################################################
+##~~                        UBER MARVEL TM1                                ~~##
+################################################################################
+
+# Cube.OPS.Load.Monthly - Process to load OPS data at monthly level from FDS to OPS Monthly cube
+
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+## Populate Process Audit
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+
+NumericGlobalVariable ( 'DataMinorErrorCount' );
+NumericGlobalVariable ( 'MetadataMinorErrorCount' );
+NumericGlobalVariable ( 'PrologMinorErrorCount' );
+
+ExecuteProcess('System.Process.Log',
+    'pPosition', 'Prolog'
+  , 'pProcess', getProcessName
+  , 'pParam', 'pTable'
+  , 'pParamVal',  pTable
+  , 'pDelim', '++'
+  , 'pDebug', pDebug);
+
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+# Define Constants
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+
+cCube = 'OPS Monthly';
+cVersion='Actual';
+cRateType='USD';
+cMeasure='Amount';
+cMetricZero='N';
+cOPSSource = 'FDP';
+nRecords =1;
+
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+# Set Query
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+
+
+sQuery = EXPAND('SELECT * FROM "%pTable%"');
+
+DATASOURCEQUERY = sQuery;
+
+
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: PROLOG PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: METADATA PROCEDURE                                                   #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+
+
+
+
+
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: METADATA PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: DATA PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+# For the correct month
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+
+sMonth = SubSt(vMonth,1,7);
+
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+# Transform Metrics
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+
+If (vMetric @= 'Gross Bookings');   
+  vMetric='Bookings Vertica';
+EndIf;
+
+If (vMetric @= 'Fares');
+  vMetric='41105';
+EndIf;
+
+If (vMetric @= 'Booking Fee');
+ vMetric='41115';
+EndIf;
+
+If (vMetric @= 'refunds');
+  vMetric='41519';
+EndIf;
+
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+# Clear Data
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+
+If (cMetricZero @= 'N');
+
+  sFilter = 'Version:' | cVersion | '&OPS Metric:' | vMetric | '&Month:' | sMonth;
+  sProcess = 'Bedrock.Cube.Data.Clear';
+  ExecuteProcess ( sProcess,
+   'pCube', cCube,
+     'pView', '',
+    'pFilter', sFilter
+   ,'pDebug' , pDebug
+  );
+
+  cMetricZero='Y';
+
+EndIf;
+
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+# Transformation
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+
+sLoc='V' | vCityid;
+IF ( DIMIX ('Location',sLoc) = 0 % vCityid@='\N' % vCityid@='' );
+    IF (vMetric @= 'Continuing Driver Count' %  vMetric @= 'Continuing Rider Count');
+             sLoc='0000';
+    Else;
+           Itemskip;
+    EndIf;
+EndIf;
+
+sDim='Flow Type';
+sFlowType = vFlowType;
+If (vFlowType @= '\N'% vFlowType @= ''%vFlowType @= 'None'% DIMIX (sDim,sFlowType) = 0);
+   sFlowType = 'Not Specified';
+EndIf;
+
+sDim = 'Car Type';
+If (vCarType @= '\N' % vCarType @= '');
+   sCarType = 'Not Specified';
+   sLOB = '0000';
+Else;
+   sLOB = ATTRS(sDim, vCarType, 'LOB');
+   sCarType = vCarType;
+EndIf;
+
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+# Load Data
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+
+If (vMetric @= 'ufp_adj_down');
+  CellIncrementN( (-1*Value), cCube,cVersion,sMonth,cRatetype,cOPSSource,sLoc,sLOB,sFlowType,sCarType,vMetric, cMeasure );
+Else;
+  CellIncrementN(Value, cCube,cVersion,sMonth,cRatetype,cOPSSource,sLoc,sLOB,sFlowType,sCarType,vMetric, cMeasure );
+EndIf;
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: DATA PROCEDURE                                                         #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: EPILOG PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+## Process Log
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+
+sErrors = NumberToString(DataMinorErrorCount + MetadataMinorErrorCount + PrologMinorErrorCount);
+
+ExecuteProcess('System.Process.Log',
+    'pPosition', 'Epilog'
+  , 'pProcess', getProcessName
+  , 'pProcessSuccess', sErrors
+  , 'pRecords', NumberToString(nRecords)
+  , 'pDebug', 0);
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: EPILOG PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #

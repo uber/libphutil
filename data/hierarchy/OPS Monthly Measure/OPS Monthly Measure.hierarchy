@@ -1,0 +1,76 @@
+{
+    "DefaultMember": {
+        "Attributes": {
+            "Caption": "Amount",
+            "Format": "#,##0;(#,##0)"
+        },
+        "IsPlaceholder": false,
+        "Name": "Amount",
+        "Ordinal": 1,
+        "Type": "Regular",
+        "UniqueName": "[OPS Monthly Measure].[OPS Monthly Measure].[Amount]",
+        "Weight": 0
+    },
+    "Edges": [],
+    "ElementAttributes": [
+        {
+            "Name": "Format",
+            "Type": "String"
+        }
+    ],
+    "Elements": [
+        {
+            "Attributes": {
+                "Caption": "Amount",
+                "Format": "#,##0;(#,##0)"
+            },
+            "Index": 1,
+            "Name": "Amount",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Monthly Measure].[OPS Monthly Measure].[Amount]"
+        },
+        {
+            "Attributes": {
+                "Caption": "MoM Amount Growth",
+                "Format": "#,##0.0;(#,##0.0);"
+            },
+            "Index": 2,
+            "Name": "MoM Amount Growth",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Monthly Measure].[OPS Monthly Measure].[MoM Amount Growth]"
+        },
+        {
+            "Attributes": {
+                "Caption": "MoM Amount Growth %",
+                "Format": "#.0%;(#.0%);"
+            },
+            "Index": 3,
+            "Name": "MoM Amount Growth %",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Monthly Measure].[OPS Monthly Measure].[MoM Amount Growth %]"
+        },
+        {
+            "Attributes": {
+                "Caption": "12 Month Amount CMGR %",
+                "Format": "#.0%;(#.0%);"
+            },
+            "Index": 4,
+            "Name": "12 Month Amount CMGR %",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Monthly Measure].[OPS Monthly Measure].[12 Month Amount CMGR %]"
+        },
+        {
+            "Attributes": {
+                "Caption": "YoY Amount Multiple",
+                "Format": "#,##0.0;(#,##0.0);"
+            },
+            "Index": 5,
+            "Name": "YoY Amount Multiple",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Monthly Measure].[OPS Monthly Measure].[YoY Amount Multiple]"
+        }
+    ],
+    "Name": "OPS Monthly Measure",
+    "Subsets": [],
+    "UniqueName": "[OPS Monthly Measure].[OPS Monthly Measure]"
+}

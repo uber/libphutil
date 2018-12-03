@@ -1,0 +1,3074 @@
+{
+    "DefaultMember": {
+        "Attributes": {
+            "Caption": "Minutes",
+            "Code": "Minutes",
+            "Code - Description": "Minutes",
+            "GL Load Name": "Completed Trip Minutes",
+            "Load Cube Name": "Minutes",
+            "Plan Load Name": "Minutes",
+            "Reporting": "Minutes"
+        },
+        "IsPlaceholder": false,
+        "Name": "Minutes",
+        "Ordinal": 1,
+        "Type": "Regular",
+        "UniqueName": "[OPS Metric].[OPS Metric].[Minutes]",
+        "Weight": 0
+    },
+    "Edges": [
+        {
+            "ComponentName": "Total Marketing Credits",
+            "ParentName": "Net Inflows",
+            "Weight": -1
+        },
+        {
+            "ComponentName": "Restaurant Payments",
+            "ParentName": "Net Inflows",
+            "Weight": -1
+        },
+        {
+            "ComponentName": "Refunds",
+            "ParentName": "Net Inflows",
+            "Weight": -1
+        },
+        {
+            "ComponentName": "Promos",
+            "ParentName": "Net Inflows",
+            "Weight": -1
+        },
+        {
+            "ComponentName": "New Driver Incentives",
+            "ParentName": "Net Inflows",
+            "Weight": -1
+        },
+        {
+            "ComponentName": "Net Bookings",
+            "ParentName": "Net Inflows",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Misc. Partner Stmt",
+            "ParentName": "Net Inflows",
+            "Weight": -1
+        },
+        {
+            "ComponentName": "Existing Driver Incentives",
+            "ParentName": "Net Inflows",
+            "Weight": -1
+        },
+        {
+            "ComponentName": "Driver Partner Payment - Principal Model",
+            "ParentName": "Net Inflows",
+            "Weight": -1
+        },
+        {
+            "ComponentName": "Driver Partner Payment - Agent Model",
+            "ParentName": "Net Inflows",
+            "Weight": -1
+        },
+        {
+            "ComponentName": "Contra Rev. - Tolls - Partner",
+            "ParentName": "Net Inflows",
+            "Weight": -1
+        },
+        {
+            "ComponentName": "Rider Satisfaction Refund",
+            "ParentName": "Total Marketing Credits",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Other Marketing Credits",
+            "ParentName": "Total Marketing Credits",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Contra Rev Credits",
+            "ParentName": "Total Marketing Credits",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Fare Adjust - Non-Partner Impact",
+            "ParentName": "Rider Satisfaction Refund",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Rider Satisfaction - Appeasement Credits/Returns",
+            "ParentName": "Other Marketing Credits",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Marketing Credits (Accrued)",
+            "ParentName": "Other Marketing Credits",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Marketing Credits",
+            "ParentName": "Other Marketing Credits",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Budget - Marketing Credits",
+            "ParentName": "Other Marketing Credits",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Contra Rev. - Marketing Credits",
+            "ParentName": "Contra Rev Credits",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Contra Rev. - Restaurant Commission Fee",
+            "ParentName": "Restaurant Payments",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Contra Rev. - Fare Adjust - Restaurant Impact",
+            "ParentName": "Restaurant Payments",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Contra Rev. - Fare Adjust - Restaurant Refund",
+            "ParentName": "Refunds",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Contra Rev. - Fare Adjust - Partner Impact",
+            "ParentName": "Refunds",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Other New Promos",
+            "ParentName": "Promos",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "G1G1 Promos",
+            "ParentName": "Promos",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Existing Promos",
+            "ParentName": "Promos",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "New Client Promotions",
+            "ParentName": "Other New Promos",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Marketing Promotions - Accrued",
+            "ParentName": "G1G1 Promos",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "G1G1 Promotions",
+            "ParentName": "G1G1 Promos",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Contra Rev. - Marketing Promotions",
+            "ParentName": "G1G1 Promos",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Promotions - Price Cut",
+            "ParentName": "Existing Promos",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Marketing Promotions",
+            "ParentName": "Existing Promos",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "DSR",
+            "ParentName": "Existing Promos",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Budget - Promos",
+            "ParentName": "Existing Promos",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "New Driver Incentives (SLOG)",
+            "ParentName": "New Driver Incentives",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "New Driver Incentives (ex-SLOG)",
+            "ParentName": "New Driver Incentives",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Driver Referral Reclass",
+            "ParentName": "New Driver Incentives",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "COR - Partner Incentive - Referral Special Promotion",
+            "ParentName": "New Driver Incentives (SLOG)",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Contra Rev. - Partner Incentive - Referral Special Promotion",
+            "ParentName": "New Driver Incentives (SLOG)",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "COR - Partner Incentive - New Partner Incentive",
+            "ParentName": "New Driver Incentives (ex-SLOG)",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Contra Rev. - Partner Incentive - New Partner Incentive",
+            "ParentName": "New Driver Incentives (ex-SLOG)",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Budget - New Incentives",
+            "ParentName": "New Driver Incentives (ex-SLOG)",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Partner Referral Reclass",
+            "ParentName": "Driver Referral Reclass",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Total Bookings",
+            "ParentName": "Net Bookings",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Net Upfront Adjustments",
+            "ParentName": "Net Bookings",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Taxes & Fees - collected",
+            "ParentName": "Total Bookings",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Fares",
+            "ParentName": "Total Bookings",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Booking Fee",
+            "ParentName": "Total Bookings",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Gross Fares - Join & Support - Sales Tax",
+            "ParentName": "Taxes & Fees - collected",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Gross Fares - Join & Support - Fees",
+            "ParentName": "Taxes & Fees - collected",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Gross Fares - Commission - Tolls",
+            "ParentName": "Taxes & Fees - collected",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Gross Fares - Commission - Sales Tax",
+            "ParentName": "Taxes & Fees - collected",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Gross Fares - Commission - Fees",
+            "ParentName": "Taxes & Fees - collected",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Gross Fares - Commission - Airport Fees",
+            "ParentName": "Taxes & Fees - collected",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Gross Fares - Join & Support - Split Fare",
+            "ParentName": "Fares",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Gross Fares - Join & Support",
+            "ParentName": "Fares",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Gross Fares - Hourly",
+            "ParentName": "Fares",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Gross Fares - Hinter License Income",
+            "ParentName": "Fares",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Gross Fares - Commission - Other Uber Fees",
+            "ParentName": "Fares",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Gross Fares - Commission",
+            "ParentName": "Fares",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Contra Rev. - Trip Fare",
+            "ParentName": "Fares",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Gross Fares - Join & Support - Booking Fee",
+            "ParentName": "Booking Fee",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Gross Fares - Commission - Booking Fee",
+            "ParentName": "Booking Fee",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Contra Rev. - Fare Adjustment Up",
+            "ParentName": "Net Upfront Adjustments",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Contra Rev. - Fare Adjustment Down",
+            "ParentName": "Net Upfront Adjustments",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "COR - Partner Misc - Partner Stmt",
+            "ParentName": "Misc. Partner Stmt",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Contra Rev. - Partner Misc - Partner Stmt",
+            "ParentName": "Misc. Partner Stmt",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Budget - Misc Driver Expenses",
+            "ParentName": "Misc. Partner Stmt",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Partner Incentive Reclass",
+            "ParentName": "Existing Driver Incentives",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Existing Driver Incentives (SLOG)",
+            "ParentName": "Existing Driver Incentives",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Existing Driver Incentives (ex-SLOG)",
+            "ParentName": "Existing Driver Incentives",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Partner - Join & Support Reclass",
+            "ParentName": "Partner Incentive Reclass",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Partner - Hourly Reclass",
+            "ParentName": "Partner Incentive Reclass",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "COR - Partner Payments 01-9 Reclass",
+            "ParentName": "Partner Incentive Reclass",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "COR - Partner Incentive - Trip Incentive",
+            "ParentName": "Partner Incentive Reclass",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "COR - Partner Incentive - Special Promotion",
+            "ParentName": "Partner Incentive Reclass",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "COR - Partner Incentive - Special Price Discount",
+            "ParentName": "Partner Incentive Reclass",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "COR - Partner Incentive - Misc. Partner Incentive",
+            "ParentName": "Partner Incentive Reclass",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "COR - Partner Incentive - Guarantee",
+            "ParentName": "Partner Incentive Reclass",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "COR - Join & Support Fee",
+            "ParentName": "Partner Incentive Reclass",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Contra Rev. - Partner Incentive - Special Promotion",
+            "ParentName": "Existing Driver Incentives (SLOG)",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Contra Rev. - Partner Payments 01-9 Reclass",
+            "ParentName": "Existing Driver Incentives (ex-SLOG)",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Contra Rev. - Partner Incentives - Trip Incentive",
+            "ParentName": "Existing Driver Incentives (ex-SLOG)",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Contra Rev. - Partner Incentive - Special Price Discount",
+            "ParentName": "Existing Driver Incentives (ex-SLOG)",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Contra Rev. - Partner Incentive - Misc. Partner Incentive",
+            "ParentName": "Existing Driver Incentives (ex-SLOG)",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Contra Rev. - Partner Incentive - Guarantee",
+            "ParentName": "Existing Driver Incentives (ex-SLOG)",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Contra Rev. - Partner Hourly Fee",
+            "ParentName": "Existing Driver Incentives (ex-SLOG)",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Contra Rev. - Join & Support Fee",
+            "ParentName": "Existing Driver Incentives (ex-SLOG)",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Budget - Existing Incentives",
+            "ParentName": "Existing Driver Incentives (ex-SLOG)",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "COR - Commission Fee",
+            "ParentName": "Driver Partner Payment - Principal Model",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Contra Rev. - Sales Taxes - Partner",
+            "ParentName": "Driver Partner Payment - Agent Model",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Contra Rev. - Commission Fee",
+            "ParentName": "Driver Partner Payment - Agent Model",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Unique Drivers",
+            "ParentName": "Reactived Drivers",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "New Drivers",
+            "ParentName": "Reactived Drivers",
+            "Weight": -1
+        },
+        {
+            "ComponentName": "Continuing Drivers",
+            "ParentName": "Reactived Drivers",
+            "Weight": -1
+        },
+        {
+            "ComponentName": "New Driver Trips",
+            "ParentName": "Reactived Driver Trips",
+            "Weight": -1
+        },
+        {
+            "ComponentName": "Continuing Driver Trips",
+            "ParentName": "Reactived Driver Trips",
+            "Weight": -1
+        },
+        {
+            "ComponentName": "Completed Trips",
+            "ParentName": "Reactived Driver Trips",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Unique Riders",
+            "ParentName": "Reactived Riders",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "New Riders",
+            "ParentName": "Reactived Riders",
+            "Weight": -1
+        },
+        {
+            "ComponentName": "Continuing Riders",
+            "ParentName": "Reactived Riders",
+            "Weight": -1
+        },
+        {
+            "ComponentName": "New Rider Trips",
+            "ParentName": "Reactived Rider Trips",
+            "Weight": -1
+        },
+        {
+            "ComponentName": "Continuing Rider Trips",
+            "ParentName": "Reactived Rider Trips",
+            "Weight": -1
+        },
+        {
+            "ComponentName": "Completed Trips",
+            "ParentName": "Reactived Rider Trips",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Bookings Vertica",
+            "ParentName": "Total Bookings Vertica",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Bookings Pool Adj",
+            "ParentName": "Total Bookings Vertica",
+            "Weight": 1
+        }
+    ],
+    "ElementAttributes": [
+        {
+            "Name": "Code",
+            "Type": "Alias"
+        },
+        {
+            "Name": "Code - Description",
+            "Type": "Alias"
+        },
+        {
+            "Name": "Format",
+            "Type": "String"
+        },
+        {
+            "Name": "GL Load Name",
+            "Type": "Alias"
+        },
+        {
+            "Name": "Load Cube",
+            "Type": "String"
+        },
+        {
+            "Name": "Load Cube Name",
+            "Type": "Alias"
+        },
+        {
+            "Name": "Measure Element",
+            "Type": "String"
+        },
+        {
+            "Name": "Non-Aggregation Flag",
+            "Type": "Numeric"
+        },
+        {
+            "Name": "Plan Load Cube",
+            "Type": "String"
+        },
+        {
+            "Name": "Plan Load Name",
+            "Type": "Alias"
+        },
+        {
+            "Name": "Reporting",
+            "Type": "Alias"
+        }
+    ],
+    "Elements": [
+        {
+            "Attributes": {
+                "Caption": "Minutes",
+                "Code": "Minutes",
+                "Code - Description": "Minutes",
+                "GL Load Name": "Completed Trip Minutes",
+                "Load Cube Name": "Minutes",
+                "Plan Load Name": "Minutes",
+                "Reporting": "Minutes"
+            },
+            "Index": 1,
+            "Name": "Minutes",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Minutes]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Miles",
+                "Code": "Miles",
+                "Code - Description": "Miles",
+                "GL Load Name": "Completed Trip Miles",
+                "Load Cube Name": "Miles",
+                "Plan Load Name": "Miles",
+                "Reporting": "Miles"
+            },
+            "Index": 2,
+            "Name": "Miles",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Miles]"
+        },
+        {
+            "Attributes": {
+                "Caption": "% Surge Trips",
+                "Code": "% Surge Trips",
+                "Code - Description": "% Surge Trips",
+                "Format": "#.00%",
+                "GL Load Name": "% Surge Trips",
+                "Load Cube": "Calculation",
+                "Load Cube Name": "% Surge Trips (C)",
+                "Measure Element": "Percentage",
+                "Plan Load Cube": "Ops Monthly by Vehicle Type",
+                "Plan Load Name": "% Surge Trips",
+                "Reporting": "% Surge Trips"
+            },
+            "Index": 3,
+            "Name": "% Surge Trips",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[% Surge Trips]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Average ETA (mins)",
+                "Code": "Average ETA (mins)",
+                "Code - Description": "Average ETA (mins)",
+                "GL Load Name": "Average ETA (mins)",
+                "Load Cube": "Calculation",
+                "Load Cube Name": "Average ETA (mins) (C)",
+                "Measure Element": "Count",
+                "Plan Load Cube": "Ops Monthly by Vehicle Type",
+                "Plan Load Name": "Average ETA (mins)",
+                "Reporting": "Average ETA (mins)"
+            },
+            "Index": 4,
+            "Name": "Average ETA (mins)",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Average ETA (mins)]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Average Fare",
+                "Code": "Average Fare",
+                "Code - Description": "Average Fare",
+                "Format": "#,##0.00;(#,##0.00)",
+                "GL Load Name": "Average Fare",
+                "Load Cube": "Calculation",
+                "Load Cube Name": "Average Fare (C)",
+                "Measure Element": "Amount",
+                "Plan Load Cube": "Ops Monthly by Vehicle Type",
+                "Plan Load Name": "avg_fare",
+                "Reporting": "Average Fare"
+            },
+            "Index": 5,
+            "Name": "Average Fare",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Average Fare]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Bookings / Driver",
+                "Code": "Bookings / Driver",
+                "Code - Description": "Bookings / Driver",
+                "GL Load Name": "Bookings / Driver",
+                "Load Cube": "Calculation",
+                "Load Cube Name": "Bookings / Driver (C)",
+                "Measure Element": "Amount",
+                "Plan Load Cube": "Ops Monthly by Vehicle Type",
+                "Plan Load Name": "Bookings / Driver",
+                "Reporting": "Bookings / Driver"
+            },
+            "Index": 6,
+            "Name": "Bookings / Driver",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Bookings / Driver]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Bookings / Hour",
+                "Code": "Bookings / Hour",
+                "Code - Description": "Bookings / Hour",
+                "GL Load Name": "Bookings / Hour",
+                "Load Cube": "Calculation",
+                "Load Cube Name": "Bookings / Hour (C)",
+                "Measure Element": "Amount",
+                "Plan Load Cube": "Ops Monthly by Vehicle Type",
+                "Plan Load Name": "Bookings / Hour",
+                "Reporting": "Bookings / Hour"
+            },
+            "Index": 7,
+            "Name": "Bookings / Hour",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Bookings / Hour]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Bookings / Rider",
+                "Code": "Bookings / Rider",
+                "Code - Description": "Bookings / Rider",
+                "GL Load Name": "Bookings / Rider",
+                "Load Cube": "Calculation",
+                "Load Cube Name": "Bookings / Rider (C)",
+                "Measure Element": "Amount",
+                "Plan Load Cube": "Ops Monthly by Vehicle Type",
+                "Plan Load Name": "Bookings / Rider",
+                "Reporting": "Bookings / Rider"
+            },
+            "Index": 8,
+            "Name": "Bookings / Rider",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Bookings / Rider]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Bookings GL",
+                "Code": "Bookings GL",
+                "Code - Description": "Bookings GL",
+                "GL Load Name": "City - Total Gross Bookings",
+                "Load Cube": "GL Reporting",
+                "Load Cube Name": "Bookings GL (G)",
+                "Measure Element": "Amount",
+                "Plan Load Cube": "Ops Monthly by Vehicle Type",
+                "Plan Load Name": "bookings",
+                "Reporting": "Bookings GL"
+            },
+            "Index": 9,
+            "Name": "Bookings GL",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Bookings GL]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Bookings Mix %",
+                "Code": "Bookings Mix %",
+                "Code - Description": "Bookings Mix %",
+                "Format": "#.00%",
+                "GL Load Name": "Bookings Mix %",
+                "Load Cube": "Calculation",
+                "Load Cube Name": "Bookings Mix % (C)",
+                "Measure Element": "Amount",
+                "Plan Load Cube": "Ops Monthly by Vehicle Type",
+                "Plan Load Name": "Bookings Mix %",
+                "Reporting": "Bookings Mix %"
+            },
+            "Index": 10,
+            "Name": "Bookings Mix %",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Bookings Mix %]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Churned Drivers",
+                "Code": "Churned Drivers",
+                "Code - Description": "Churned Drivers",
+                "GL Load Name": "Churned Drivers",
+                "Load Cube": "Calculation",
+                "Load Cube Name": "Churned Drivers (C)",
+                "Measure Element": "Count",
+                "Plan Load Cube": "Ops Monthly by Vehicle Type",
+                "Plan Load Name": "Churned Drivers",
+                "Reporting": "Churned Drivers"
+            },
+            "Index": 11,
+            "Name": "Churned Drivers",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Churned Drivers]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Churned Drivers %",
+                "Code": "Churned Drivers %",
+                "Code - Description": "Churned Drivers %",
+                "Format": "#.00%",
+                "GL Load Name": "Churned Drivers %",
+                "Load Cube": "Calculation",
+                "Load Cube Name": "Churned Drivers % (C)",
+                "Measure Element": "Percentage",
+                "Plan Load Cube": "Ops Monthly by Vehicle Type",
+                "Plan Load Name": "Churned Drivers %",
+                "Reporting": "Churned Drivers %"
+            },
+            "Index": 12,
+            "Name": "Churned Drivers %",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Churned Drivers %]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Churned Riders",
+                "Code": "Churned Riders",
+                "Code - Description": "Churned Riders",
+                "GL Load Name": "Churned Riders",
+                "Load Cube": "Calculation",
+                "Load Cube Name": "Churned Riders (C)",
+                "Measure Element": "Count",
+                "Plan Load Cube": "Ops Monthly by Vehicle Type",
+                "Plan Load Name": "Churned Riders",
+                "Reporting": "Churned Riders"
+            },
+            "Index": 13,
+            "Name": "Churned Riders",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Churned Riders]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Churned Riders %",
+                "Code": "Churned Riders %",
+                "Code - Description": "Churned Riders %",
+                "Format": "#.00%",
+                "GL Load Name": "Churned Riders %",
+                "Load Cube": "Calculation",
+                "Load Cube Name": "Churned Riders % (C)",
+                "Measure Element": "Percentage",
+                "Plan Load Cube": "Ops Monthly by Vehicle Type",
+                "Plan Load Name": "Churned Riders %",
+                "Reporting": "Churned Riders %"
+            },
+            "Index": 14,
+            "Name": "Churned Riders %",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Churned Riders %]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Completed %",
+                "Code": "Completed %",
+                "Code - Description": "Completed %",
+                "Format": "#.00%",
+                "GL Load Name": "Completed %",
+                "Load Cube": "Calculation",
+                "Load Cube Name": "Completed % (C)",
+                "Measure Element": "Percentage",
+                "Plan Load Cube": "Ops Monthly by Vehicle Type",
+                "Plan Load Name": "Completed %",
+                "Reporting": "Completed %"
+            },
+            "Index": 15,
+            "Name": "Completed %",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Completed %]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Continuing Drivers %",
+                "Code": "Continuing Drivers %",
+                "Code - Description": "Continuing Drivers %",
+                "Format": "#.00%",
+                "GL Load Name": "Continuing Drivers %",
+                "Load Cube": "Calculation",
+                "Load Cube Name": "Continuing Drivers % (C)",
+                "Measure Element": "Percentage",
+                "Plan Load Cube": "Ops Monthly by Vehicle Type",
+                "Plan Load Name": "Continuing Drivers %",
+                "Reporting": "Continuing Drivers %"
+            },
+            "Index": 16,
+            "Name": "Continuing Drivers %",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Continuing Drivers %]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Continuing Riders %",
+                "Code": "Continuing Riders %",
+                "Code - Description": "Continuing Riders %",
+                "Format": "#.00%",
+                "GL Load Name": "Continuing Riders %",
+                "Load Cube": "Calculation",
+                "Load Cube Name": "Continuing Riders % (C)",
+                "Measure Element": "Percentage",
+                "Plan Load Cube": "Ops Monthly by Vehicle Type",
+                "Plan Load Name": "Continuing Riders %",
+                "Reporting": "Continuing Riders %"
+            },
+            "Index": 17,
+            "Name": "Continuing Riders %",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Continuing Riders %]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Driver Supply Minutes",
+                "Code": "Driver Supply Minutes",
+                "Code - Description": "Driver Supply Minutes",
+                "GL Load Name": "Supply Minutes",
+                "Load Cube": "OPS Daily",
+                "Load Cube Name": "Driver Supply Minutes (D)",
+                "Measure Element": "Count",
+                "Plan Load Cube": "Ops Monthly by Vehicle Type",
+                "Plan Load Name": "Driver Supply Minutes",
+                "Reporting": "Driver Supply Minutes"
+            },
+            "Index": 18,
+            "Name": "Driver Supply Minutes",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Driver Supply Minutes]"
+        },
+        {
+            "Attributes": {
+                "Caption": "ETA Minutes",
+                "Code": "ETA Minutes",
+                "Code - Description": "ETA Minutes",
+                "GL Load Name": "ETA Minutes",
+                "Load Cube": "Ops Daily by Vehicle",
+                "Load Cube Name": "ETA Minutes (V)",
+                "Measure Element": "Count",
+                "Plan Load Cube": "Ops Monthly by Vehicle Type",
+                "Plan Load Name": "ETA Minutes",
+                "Reporting": "ETA Minutes"
+            },
+            "Index": 19,
+            "Name": "ETA Minutes",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[ETA Minutes]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Inflows / Bookings %",
+                "Code": "Inflows / Bookings %",
+                "Code - Description": "Inflows / Bookings %",
+                "Format": "#.00%",
+                "GL Load Name": "Inflows / Bookings %",
+                "Load Cube": "Calculation",
+                "Load Cube Name": "Inflows / Bookings % (C)",
+                "Measure Element": "Percentage",
+                "Plan Load Cube": "Ops Monthly by Vehicle Type",
+                "Plan Load Name": "Inflows / Bookings %",
+                "Reporting": "Inflows / Bookings %"
+            },
+            "Index": 20,
+            "Name": "Inflows / Bookings %",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Inflows / Bookings %]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Location Age",
+                "Code": "Location Age",
+                "Code - Description": "Location Age",
+                "GL Load Name": "Location Age",
+                "Load Cube": "OPS Monthly",
+                "Load Cube Name": "Location Age (M*)",
+                "Measure Element": "Count",
+                "Non-Aggregation Flag": 1,
+                "Plan Load Cube": "Ops Monthly by Vehicle Type",
+                "Plan Load Name": "Location Age",
+                "Reporting": "Location Age"
+            },
+            "Index": 21,
+            "Name": "Location Age",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Location Age]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Net Inflows",
+                "Code": "Net Inflows",
+                "Code - Description": "Net Inflows",
+                "GL Load Name": "City - Net Inflows",
+                "Load Cube Name": "Net Inflows (G)",
+                "Measure Element": "Amount",
+                "Plan Load Cube": "Ops Monthly by Vehicle Type",
+                "Plan Load Name": "Net Inflows",
+                "Reporting": "NET INFLOWS"
+            },
+            "Index": 22,
+            "Name": "Net Inflows",
+            "Type": "Consolidated",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Net Inflows]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Total Marketing Credits",
+                "Code": "Total Marketing Credits",
+                "Code - Description": "Total Marketing Credits",
+                "GL Load Name": "Total Marketing Credits",
+                "Load Cube Name": "Total Marketing Credits",
+                "Plan Load Name": "Total Marketing Credits",
+                "Reporting": "Total Marketing Credits"
+            },
+            "Index": 23,
+            "Name": "Total Marketing Credits",
+            "Type": "Consolidated",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Total Marketing Credits]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Rider Satisfaction Refund",
+                "Code": "Rider Satisfaction Refund",
+                "Code - Description": "Rider Satisfaction Refund",
+                "GL Load Name": "Rider Satisfaction Refund",
+                "Load Cube Name": "Rider Satisfaction Refund",
+                "Plan Load Name": "Rider Satisfaction Refund",
+                "Reporting": "Rider Satisfaction Refund"
+            },
+            "Index": 24,
+            "Name": "Rider Satisfaction Refund",
+            "Type": "Consolidated",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Rider Satisfaction Refund]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Fare Adjust - Non-Partner Impact",
+                "Code": "72520",
+                "Code - Description": "72520 - Fare Adjust - Non-Partner Impact",
+                "GL Load Name": "Fare Adjust - Non-Partner Impact",
+                "Load Cube Name": "Fare Adjust - Non-Partner Impact",
+                "Plan Load Name": "Fare Adjust - Non-Partner Impact",
+                "Reporting": "Fare Adjust - Non-Partner Impact"
+            },
+            "Index": 25,
+            "Name": "Fare Adjust - Non-Partner Impact",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Fare Adjust - Non-Partner Impact]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Other Marketing Credits",
+                "Code": "Other Marketing Credits",
+                "Code - Description": "Other Marketing Credits",
+                "GL Load Name": "Other Marketing Credits",
+                "Load Cube Name": "Other Marketing Credits",
+                "Plan Load Name": "Other Marketing Credits",
+                "Reporting": "Other Marketing Credits"
+            },
+            "Index": 26,
+            "Name": "Other Marketing Credits",
+            "Type": "Consolidated",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Other Marketing Credits]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Rider Satisfaction - Appeasement Credits/Returns",
+                "Code": "72510",
+                "Code - Description": "72510 - Rider Satisfaction - Appeasement Credits/Returns",
+                "GL Load Name": "Rider Satisfaction - Appeasement Credits/Returns",
+                "Load Cube Name": "Rider Satisfaction - Appeasement Credits/Returns",
+                "Plan Load Name": "Rider Satisfaction - Appeasement Credits/Returns",
+                "Reporting": "marketing_credits"
+            },
+            "Index": 27,
+            "Name": "Rider Satisfaction - Appeasement Credits/Returns",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Rider Satisfaction - Appeasement Credits/Returns]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Marketing Credits (Accrued)",
+                "Code": "72506",
+                "Code - Description": "72506 - Marketing Credits (Accrued)",
+                "GL Load Name": "Marketing Credits (Accrued)",
+                "Load Cube Name": "Marketing Credits (Accrued)",
+                "Plan Load Name": "Marketing Credits (Accrued)",
+                "Reporting": "Marketing Credits (Accrued)"
+            },
+            "Index": 28,
+            "Name": "Marketing Credits (Accrued)",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Marketing Credits (Accrued)]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Marketing Credits",
+                "Code": "72505",
+                "Code - Description": "72505 - Marketing Credits",
+                "GL Load Name": "Marketing Credits",
+                "Load Cube Name": "Marketing Credits",
+                "Plan Load Name": "Marketing Credits",
+                "Reporting": "Marketing Credits"
+            },
+            "Index": 29,
+            "Name": "Marketing Credits",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Marketing Credits]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Budget - Marketing Credits",
+                "Code": "P0090",
+                "Code - Description": "P0090 - Budget - Marketing Credits",
+                "GL Load Name": "Budget - Marketing Credits",
+                "Load Cube Name": "Budget - Marketing Credits",
+                "Plan Load Name": "Budget - Marketing Credits",
+                "Reporting": "Budget - Marketing Credits"
+            },
+            "Index": 30,
+            "Name": "Budget - Marketing Credits",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Budget - Marketing Credits]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Contra Rev Credits",
+                "Code": "Contra Rev Credits",
+                "Code - Description": "Contra Rev Credits",
+                "GL Load Name": "Contra Rev Credits",
+                "Load Cube Name": "Contra Rev Credits",
+                "Plan Load Name": "Contra Rev Credits",
+                "Reporting": "Contra Rev Credits"
+            },
+            "Index": 31,
+            "Name": "Contra Rev Credits",
+            "Type": "Consolidated",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Contra Rev Credits]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Contra Rev. - Marketing Credits",
+                "Code": "41659",
+                "Code - Description": "41659 - Contra Rev. - Marketing Credits",
+                "GL Load Name": "Contra Rev. - Marketing Credits",
+                "Load Cube Name": "Contra Rev. - Marketing Credits",
+                "Plan Load Name": "Contra Rev. - Marketing Credits",
+                "Reporting": "Contra Rev. - Marketing Credits"
+            },
+            "Index": 32,
+            "Name": "Contra Rev. - Marketing Credits",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Contra Rev. - Marketing Credits]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Restaurant Payments",
+                "Code": "Restaurant Payments",
+                "Code - Description": "Restaurant Payments",
+                "GL Load Name": "Restaurant Payments",
+                "Load Cube Name": "Restaurant Payments",
+                "Plan Load Name": "Restaurant Payments",
+                "Reporting": "Restaurant Payments"
+            },
+            "Index": 33,
+            "Name": "Restaurant Payments",
+            "Type": "Consolidated",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Restaurant Payments]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Contra Rev. - Restaurant Commission Fee",
+                "Code": "41359",
+                "Code - Description": "41359 - Contra Rev. - Restaurant Commission Fee",
+                "GL Load Name": "Contra Rev. - Restaurant Commission Fee",
+                "Load Cube Name": "Contra Rev. - Restaurant Commission Fee",
+                "Plan Load Name": "Contra Rev. - Restaurant Commission Fee",
+                "Reporting": "restaurant_payments"
+            },
+            "Index": 34,
+            "Name": "Contra Rev. - Restaurant Commission Fee",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Contra Rev. - Restaurant Commission Fee]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Contra Rev. - Fare Adjust - Restaurant Impact",
+                "Code": "41379",
+                "Code - Description": "41379 - Contra Rev. - Fare Adjust - Restaurant Impact",
+                "GL Load Name": "Contra Rev. - Fare Adjust - Restaurant Impact",
+                "Load Cube Name": "Contra Rev. - Fare Adjust - Restaurant Impact",
+                "Plan Load Name": "Contra Rev. - Fare Adjust - Restaurant Impact",
+                "Reporting": "Contra Rev. - Fare Adjust - Restaurant Impact"
+            },
+            "Index": 35,
+            "Name": "Contra Rev. - Fare Adjust - Restaurant Impact",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Contra Rev. - Fare Adjust - Restaurant Impact]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Refunds",
+                "Code": "Refunds",
+                "Code - Description": "Refunds",
+                "GL Load Name": "Refunds",
+                "Load Cube Name": "Refunds",
+                "Plan Load Name": "Refunds",
+                "Reporting": "Refunds"
+            },
+            "Index": 36,
+            "Name": "Refunds",
+            "Type": "Consolidated",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Refunds]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Contra Rev. - Fare Adjust - Restaurant Refund",
+                "Code": "41529",
+                "Code - Description": "41529 - Contra Rev. - Fare Adjust - Restaurant Refund",
+                "GL Load Name": "Contra Rev. - Fare Adjust - Restaurant Refund",
+                "Load Cube Name": "Contra Rev. - Fare Adjust - Restaurant Refund",
+                "Plan Load Name": "Contra Rev. - Fare Adjust - Restaurant Refund",
+                "Reporting": "Contra Rev. - Fare Adjust - Restaurant Refund"
+            },
+            "Index": 37,
+            "Name": "Contra Rev. - Fare Adjust - Restaurant Refund",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Contra Rev. - Fare Adjust - Restaurant Refund]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Contra Rev. - Fare Adjust - Partner Impact",
+                "Code": "41519",
+                "Code - Description": "41519 - Contra Rev. - Fare Adjust - Partner Impact - COS",
+                "GL Load Name": "Contra Rev. - Fare Adjust - Partner Impact",
+                "Load Cube Name": "Contra Rev. - Fare Adjust - Partner Impact",
+                "Plan Load Name": "Contra Rev. - Fare Adjust - Partner Impact",
+                "Reporting": "Contra Rev. - Fare Adjust - Partner Impact"
+            },
+            "Index": 38,
+            "Name": "Contra Rev. - Fare Adjust - Partner Impact",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Contra Rev. - Fare Adjust - Partner Impact]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Promos",
+                "Code": "Promos",
+                "Code - Description": "Promos",
+                "GL Load Name": "Promos",
+                "Load Cube Name": "Promos",
+                "Plan Load Name": "Promos",
+                "Reporting": "Promos"
+            },
+            "Index": 39,
+            "Name": "Promos",
+            "Type": "Consolidated",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Promos]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Other New Promos",
+                "Code": "Other New Promos",
+                "Code - Description": "Other New Promos",
+                "GL Load Name": "Other New Promos",
+                "Load Cube Name": "Other New Promos",
+                "Plan Load Name": "Other New Promos",
+                "Reporting": "Other New Promos"
+            },
+            "Index": 40,
+            "Name": "Other New Promos",
+            "Type": "Consolidated",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Other New Promos]"
+        },
+        {
+            "Attributes": {
+                "Caption": "New Client Promotions",
+                "Code": "72523",
+                "Code - Description": "72523 - New Client Promotions",
+                "GL Load Name": "New Client Promotions",
+                "Load Cube Name": "New Client Promotions",
+                "Plan Load Name": "New Client Promotions",
+                "Reporting": "other_new_promos"
+            },
+            "Index": 41,
+            "Name": "New Client Promotions",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[New Client Promotions]"
+        },
+        {
+            "Attributes": {
+                "Caption": "G1G1 Promos",
+                "Code": "G1G1 Promos",
+                "Code - Description": "G1G1 Promos",
+                "GL Load Name": "G1G1 Promos",
+                "Load Cube Name": "G1G1 Promos",
+                "Plan Load Name": "G1G1 Promos",
+                "Reporting": "G1G1 Promos"
+            },
+            "Index": 42,
+            "Name": "G1G1 Promos",
+            "Type": "Consolidated",
+            "UniqueName": "[OPS Metric].[OPS Metric].[G1G1 Promos]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Marketing Promotions - Accrued",
+                "Code": "72516",
+                "Code - Description": "72516 - Marketing Promotions - Accrued",
+                "GL Load Name": "Marketing Promotions - Accrued",
+                "Load Cube Name": "Marketing Promotions - Accrued",
+                "Plan Load Name": "Marketing Promotions - Accrued",
+                "Reporting": "Marketing Promotions - Accrued"
+            },
+            "Index": 43,
+            "Name": "Marketing Promotions - Accrued",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Marketing Promotions - Accrued]"
+        },
+        {
+            "Attributes": {
+                "Caption": "G1G1 Promotions",
+                "Code": "72522",
+                "Code - Description": "72522 - G1G1 Promotions",
+                "GL Load Name": "G1G1 Promotions",
+                "Load Cube Name": "G1G1 Promotions",
+                "Plan Load Name": "G1G1 Promotions",
+                "Reporting": "g1g1_promos"
+            },
+            "Index": 44,
+            "Name": "G1G1 Promotions",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[G1G1 Promotions]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Contra Rev. - Marketing Promotions",
+                "Code": "41649",
+                "Code - Description": "41649 - Contra Rev. - Marketing Promotions",
+                "GL Load Name": "Contra Rev. - Marketing Promotions",
+                "Load Cube Name": "Contra Rev. - Marketing Promotions",
+                "Plan Load Name": "Contra Rev. - Marketing Promotions",
+                "Reporting": "Contra Rev. - Marketing Promotions"
+            },
+            "Index": 45,
+            "Name": "Contra Rev. - Marketing Promotions",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Contra Rev. - Marketing Promotions]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Existing Promos",
+                "Code": "Existing Promos",
+                "Code - Description": "Existing Promos",
+                "GL Load Name": "Existing Promos",
+                "Load Cube Name": "Existing Promos",
+                "Plan Load Name": "Existing Promos",
+                "Reporting": "Existing Promos"
+            },
+            "Index": 46,
+            "Name": "Existing Promos",
+            "Type": "Consolidated",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Existing Promos]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Promotions - Price Cut",
+                "Code": "41205",
+                "Code - Description": "41205 - Promotions - Price Cut",
+                "GL Load Name": "Promotions - Price Cut",
+                "Load Cube Name": "Promotions - Price Cut",
+                "Plan Load Name": "Promotions - Price Cut",
+                "Reporting": "Promotions - Price Cut"
+            },
+            "Index": 47,
+            "Name": "Promotions - Price Cut",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Promotions - Price Cut]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Marketing Promotions",
+                "Code": "72515",
+                "Code - Description": "72515 - Marketing Promotions",
+                "GL Load Name": "Marketing Promotions",
+                "Load Cube Name": "Marketing Promotions",
+                "Plan Load Name": "Marketing Promotions",
+                "Reporting": "existing_promos"
+            },
+            "Index": 48,
+            "Name": "Marketing Promotions",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Marketing Promotions]"
+        },
+        {
+            "Attributes": {
+                "Caption": "DSR",
+                "Code": "72517",
+                "Code - Description": "72517 - DSR",
+                "GL Load Name": "DSR",
+                "Load Cube Name": "DSR",
+                "Plan Load Name": "DSR",
+                "Reporting": "DSR"
+            },
+            "Index": 49,
+            "Name": "DSR",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[DSR]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Budget - Promos",
+                "Code": "P0095",
+                "Code - Description": "P0095 - Budget - Promos",
+                "GL Load Name": "Budget - Promos",
+                "Load Cube Name": "Budget - Promos",
+                "Plan Load Name": "Budget - Promos",
+                "Reporting": "Budget - Promos"
+            },
+            "Index": 50,
+            "Name": "Budget - Promos",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Budget - Promos]"
+        },
+        {
+            "Attributes": {
+                "Caption": "New Driver Incentives",
+                "Code": "New Driver Incentives",
+                "Code - Description": "New Driver Incentives",
+                "GL Load Name": "New Driver Incentives",
+                "Load Cube Name": "New Driver Incentives",
+                "Plan Load Name": "New Driver Incentives",
+                "Reporting": "New Driver Incentives"
+            },
+            "Index": 51,
+            "Name": "New Driver Incentives",
+            "Type": "Consolidated",
+            "UniqueName": "[OPS Metric].[OPS Metric].[New Driver Incentives]"
+        },
+        {
+            "Attributes": {
+                "Caption": "New Driver Incentives (SLOG)",
+                "Code": "New Driver Incentives (SLOG)",
+                "Code - Description": "New Driver Incentives (SLOG)",
+                "GL Load Name": "New Driver Incentives (SLOG)",
+                "Load Cube Name": "New Driver Incentives (SLOG)",
+                "Plan Load Name": "New Driver Incentives (SLOG)",
+                "Reporting": "New Driver Incentives (SLOG)"
+            },
+            "Index": 52,
+            "Name": "New Driver Incentives (SLOG)",
+            "Type": "Consolidated",
+            "UniqueName": "[OPS Metric].[OPS Metric].[New Driver Incentives (SLOG)]"
+        },
+        {
+            "Attributes": {
+                "Caption": "COR - Partner Incentive - Referral Special Promotion",
+                "Code": "51525",
+                "Code - Description": "51525 - COR - Partner Incentive - Referral Special Promotion",
+                "GL Load Name": "COR - Partner Incentive - Referral Special Promotion",
+                "Load Cube Name": "COR - Partner Incentive - Referral Special Promotion",
+                "Plan Load Name": "COR - Partner Incentive - Referral Special Promotion",
+                "Reporting": "COR - Partner Incentive - Referral Special Promotion"
+            },
+            "Index": 53,
+            "Name": "COR - Partner Incentive - Referral Special Promotion",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[COR - Partner Incentive - Referral Special Promotion]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Contra Rev. - Partner Incentive - Referral Special Promotion",
+                "Code": "41459",
+                "Code - Description": "41459 - Contra Rev. - Partner Incentive - Referral Special Promotion",
+                "GL Load Name": "Contra Rev. - Partner Incentive - Referral Special Promotion",
+                "Load Cube Name": "Contra Rev. - Partner Incentive - Referral Special Promotion",
+                "Plan Load Name": "Contra Rev. - Partner Incentive - Referral Special Promotion",
+                "Reporting": "driver_referral_spend"
+            },
+            "Index": 54,
+            "Name": "Contra Rev. - Partner Incentive - Referral Special Promotion",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Contra Rev. - Partner Incentive - Referral Special Promotion]"
+        },
+        {
+            "Attributes": {
+                "Caption": "New Driver Incentives (ex-SLOG)",
+                "Code": "New Driver Incentives (ex-SLOG)",
+                "Code - Description": "New Driver Incentives (ex-SLOG)",
+                "GL Load Name": "New Driver Incentives (ex-SLOG)",
+                "Load Cube Name": "New Driver Incentives (ex-SLOG)",
+                "Plan Load Name": "New Driver Incentives (ex-SLOG)",
+                "Reporting": "New Driver Incentives (ex-SLOG)"
+            },
+            "Index": 55,
+            "Name": "New Driver Incentives (ex-SLOG)",
+            "Type": "Consolidated",
+            "UniqueName": "[OPS Metric].[OPS Metric].[New Driver Incentives (ex-SLOG)]"
+        },
+        {
+            "Attributes": {
+                "Caption": "COR - Partner Incentive - New Partner Incentive",
+                "Code": "51530",
+                "Code - Description": "51530 - COR - Partner Incentive - New Partner Incentive",
+                "GL Load Name": "COR - Partner Incentive - New Partner Incentive",
+                "Load Cube Name": "COR - Partner Incentive - New Partner Incentive",
+                "Plan Load Name": "COR - Partner Incentive - New Partner Incentive",
+                "Reporting": "COR - Partner Incentive - New Partner Incentive"
+            },
+            "Index": 56,
+            "Name": "COR - Partner Incentive - New Partner Incentive",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[COR - Partner Incentive - New Partner Incentive]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Contra Rev. - Partner Incentive - New Partner Incentive",
+                "Code": "41469",
+                "Code - Description": "41469 - Contra Rev. - Partner Incentive - New Partner Incentive",
+                "GL Load Name": "Contra Rev. - Partner Incentive - New Partner Incentive",
+                "Load Cube Name": "Contra Rev. - Partner Incentive - New Partner Incentive",
+                "Plan Load Name": "Contra Rev. - Partner Incentive - New Partner Incentive",
+                "Reporting": "other_new_incentives"
+            },
+            "Index": 57,
+            "Name": "Contra Rev. - Partner Incentive - New Partner Incentive",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Contra Rev. - Partner Incentive - New Partner Incentive]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Budget - New Incentives",
+                "Code": "P0025",
+                "Code - Description": "P0025 - Budget - New Incentives",
+                "GL Load Name": "Budget - New Incentives",
+                "Load Cube Name": "Budget - New Incentives",
+                "Plan Load Name": "Budget - New Incentives",
+                "Reporting": "Budget - New Incentives"
+            },
+            "Index": 58,
+            "Name": "Budget - New Incentives",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Budget - New Incentives]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Driver Referral Reclass",
+                "Code": "Driver Referral Reclass",
+                "Code - Description": "Driver Referral Reclass",
+                "GL Load Name": "Driver Referral Reclass",
+                "Load Cube Name": "Driver Referral Reclass",
+                "Plan Load Name": "Driver Referral Reclass",
+                "Reporting": "Driver Referral Reclass"
+            },
+            "Index": 59,
+            "Name": "Driver Referral Reclass",
+            "Type": "Consolidated",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Driver Referral Reclass]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Partner Referral Reclass",
+                "Code": "72117",
+                "Code - Description": "72117 - Partner Referral Reclass",
+                "GL Load Name": "Partner Referral Reclass",
+                "Load Cube Name": "Partner Referral Reclass",
+                "Plan Load Name": "Partner Referral Reclass",
+                "Reporting": "Partner Referral Reclass"
+            },
+            "Index": 60,
+            "Name": "Partner Referral Reclass",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Partner Referral Reclass]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Net Bookings",
+                "Code": "Net Bookings",
+                "Code - Description": "Net Bookings",
+                "GL Load Name": "Net Bookings",
+                "Load Cube Name": "Net Bookings",
+                "Plan Load Name": "Net Bookings",
+                "Reporting": "Net Bookings"
+            },
+            "Index": 61,
+            "Name": "Net Bookings",
+            "Type": "Consolidated",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Net Bookings]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Total Bookings",
+                "Code": "Total Bookings",
+                "Code - Description": "Total Bookings",
+                "GL Load Name": "Total Bookings",
+                "Load Cube": "Calculation",
+                "Load Cube Name": "Total Bookings (C)",
+                "Measure Element": "Amount",
+                "Plan Load Cube": "Ops Monthly by Vehicle Type",
+                "Plan Load Name": "Total Bookings",
+                "Reporting": "GROSS BOOKINGS"
+            },
+            "Index": 62,
+            "Name": "Total Bookings",
+            "Type": "Consolidated",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Total Bookings]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Taxes & Fees - collected",
+                "Code": "Taxes & Fees - collected",
+                "Code - Description": "Taxes & Fees - collected",
+                "GL Load Name": "Taxes & Fees - collected",
+                "Load Cube Name": "Taxes & Fees - collected",
+                "Plan Load Name": "Taxes & Fees - collected",
+                "Reporting": "Taxes & Fees - collected"
+            },
+            "Index": 63,
+            "Name": "Taxes & Fees - collected",
+            "Type": "Consolidated",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Taxes & Fees - collected]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Gross Fares - Join & Support - Sales Tax",
+                "Code": "41121",
+                "Code - Description": "41121 - Gross Fares - Join & Support - Sales Tax",
+                "GL Load Name": "Gross Fares - Join & Support - Sales Tax",
+                "Load Cube Name": "Gross Fares - Join & Support - Sales Tax",
+                "Plan Load Name": "Gross Fares - Join & Support - Sales Tax",
+                "Reporting": "Gross Fares - Join & Support - Sales Tax"
+            },
+            "Index": 64,
+            "Name": "Gross Fares - Join & Support - Sales Tax",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Gross Fares - Join & Support - Sales Tax]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Gross Fares - Join & Support - Fees",
+                "Code": "41122",
+                "Code - Description": "41122 - Gross Fares - Join & Support - Fees",
+                "GL Load Name": "Gross Fares - Join & Support - Fees",
+                "Load Cube Name": "Gross Fares - Join & Support - Fees",
+                "Plan Load Name": "Gross Fares - Join & Support - Fees",
+                "Reporting": "Gross Fares - Join & Support - Fees"
+            },
+            "Index": 65,
+            "Name": "Gross Fares - Join & Support - Fees",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Gross Fares - Join & Support - Fees]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Gross Fares - Commission - Tolls",
+                "Code": "41108",
+                "Code - Description": "41108 - Gross Fares - Commission - Tolls",
+                "GL Load Name": "Gross Fares - Commission - Tolls",
+                "Load Cube Name": "Gross Fares - Commission - Tolls",
+                "Plan Load Name": "Gross Fares - Commission - Tolls",
+                "Reporting": "tolls_collected"
+            },
+            "Index": 66,
+            "Name": "Gross Fares - Commission - Tolls",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Gross Fares - Commission - Tolls]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Gross Fares - Commission - Sales Tax",
+                "Code": "41106",
+                "Code - Description": "41106 - Gross Fares - Commission - Sales Tax",
+                "GL Load Name": "Gross Fares - Commission - Sales Tax",
+                "Load Cube Name": "Gross Fares - Commission - Sales Tax",
+                "Plan Load Name": "Gross Fares - Commission - Sales Tax",
+                "Reporting": "taxes_collected"
+            },
+            "Index": 67,
+            "Name": "Gross Fares - Commission - Sales Tax",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Gross Fares - Commission - Sales Tax]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Gross Fares - Commission - Fees",
+                "Code": "41107",
+                "Code - Description": "41107 - Gross Fares - Commission - Fees",
+                "GL Load Name": "Gross Fares - Commission - Fees",
+                "Load Cube Name": "Gross Fares - Commission - Fees",
+                "Plan Load Name": "Gross Fares - Commission - Fees",
+                "Reporting": "other_fees_collected"
+            },
+            "Index": 68,
+            "Name": "Gross Fares - Commission - Fees",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Gross Fares - Commission - Fees]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Gross Fares - Commission - Airport Fees",
+                "Code": "41109",
+                "Code - Description": "41109 - Gross Fares - Commission - Airport Fees",
+                "GL Load Name": "Gross Fares - Commission - Airport Fees",
+                "Load Cube Name": "Gross Fares - Commission - Airport Fees",
+                "Plan Load Name": "Gross Fares - Commission - Airport Fees",
+                "Reporting": "Gross Fares - Commission - Airport Fees"
+            },
+            "Index": 69,
+            "Name": "Gross Fares - Commission - Airport Fees",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Gross Fares - Commission - Airport Fees]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Fares",
+                "Code": "Fares",
+                "Code - Description": "Fares",
+                "GL Load Name": "Fares",
+                "Load Cube Name": "Fares",
+                "Plan Load Name": "Fares",
+                "Reporting": "Fares"
+            },
+            "Index": 70,
+            "Name": "Fares",
+            "Type": "Consolidated",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Fares]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Gross Fares - Join & Support - Split Fare",
+                "Code": "41125",
+                "Code - Description": "41125 - Gross Fares - Join & Support - Split Fare",
+                "GL Load Name": "Gross Fares - Join & Support - Split Fare",
+                "Load Cube Name": "Gross Fares - Join & Support - Split Fare",
+                "Plan Load Name": "Gross Fares - Join & Support - Split Fare",
+                "Reporting": "Gross Fares - Join & Support - Split Fare"
+            },
+            "Index": 71,
+            "Name": "Gross Fares - Join & Support - Split Fare",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Gross Fares - Join & Support - Split Fare]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Gross Fares - Join & Support",
+                "Code": "41120",
+                "Code - Description": "41120 - Gross Fares - Join & Support",
+                "GL Load Name": "Gross Fares - Join & Support",
+                "Load Cube Name": "Gross Fares - Join & Support",
+                "Plan Load Name": "Gross Fares - Join & Support",
+                "Reporting": "Gross Fares - Join & Support"
+            },
+            "Index": 72,
+            "Name": "Gross Fares - Join & Support",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Gross Fares - Join & Support]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Gross Fares - Hourly",
+                "Code": "41135",
+                "Code - Description": "41135 - Gross Fares - Hourly",
+                "GL Load Name": "Gross Fares - Hourly",
+                "Load Cube Name": "Gross Fares - Hourly",
+                "Plan Load Name": "Gross Fares - Hourly",
+                "Reporting": "Gross Fares - Hourly"
+            },
+            "Index": 73,
+            "Name": "Gross Fares - Hourly",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Gross Fares - Hourly]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Gross Fares - Hinter License Income",
+                "Code": "41140",
+                "Code - Description": "41140 - Gross Fares - Hinter License Income",
+                "GL Load Name": "Gross Fares - Hinter License Income",
+                "Load Cube Name": "Gross Fares - Hinter License Income",
+                "Plan Load Name": "Gross Fares - Hinter License Income",
+                "Reporting": "Gross Fares - Hinter License Income"
+            },
+            "Index": 74,
+            "Name": "Gross Fares - Hinter License Income",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Gross Fares - Hinter License Income]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Gross Fares - Commission - Other Uber Fees",
+                "Code": "41110",
+                "Code - Description": "41110 - Gross Fares - Commission - Other Uber Fees",
+                "GL Load Name": "Gross Fares - Commission - Other Uber Fees",
+                "Load Cube Name": "Gross Fares - Commission - Other Uber Fees",
+                "Plan Load Name": "Gross Fares - Commission - Other Uber Fees",
+                "Reporting": "Gross Fares - Commission - Other Uber Fees"
+            },
+            "Index": 75,
+            "Name": "Gross Fares - Commission - Other Uber Fees",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Gross Fares - Commission - Other Uber Fees]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Gross Fares - Commission",
+                "Code": "41105",
+                "Code - Description": "41105 - Gross Fares - Commission",
+                "GL Load Name": "Gross Fares - Commission",
+                "Load Cube Name": "Gross Fares - Commission",
+                "Plan Load Name": "Gross Fares - Commission",
+                "Reporting": "Gross Fares - Commission"
+            },
+            "Index": 76,
+            "Name": "Gross Fares - Commission",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Gross Fares - Commission]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Contra Rev. - Trip Fare",
+                "Code": "41619",
+                "Code - Description": "41619 - Contra Rev. - Trip Fare",
+                "GL Load Name": "Contra Rev. - Trip Fare",
+                "Load Cube Name": "Contra Rev. - Trip Fare",
+                "Plan Load Name": "Contra Rev. - Trip Fare",
+                "Reporting": "Contra Rev. - Trip Fare"
+            },
+            "Index": 77,
+            "Name": "Contra Rev. - Trip Fare",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Contra Rev. - Trip Fare]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Booking Fee",
+                "Code": "Booking Fee",
+                "Code - Description": "Booking Fee",
+                "GL Load Name": "Booking Fee",
+                "Load Cube Name": "Booking Fee",
+                "Plan Load Name": "Booking Fee",
+                "Reporting": "Booking Fee"
+            },
+            "Index": 78,
+            "Name": "Booking Fee",
+            "Type": "Consolidated",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Booking Fee]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Gross Fares - Join & Support - Booking Fee",
+                "Code": "41130",
+                "Code - Description": "41130 - Gross Fares - Join & Support - Booking Fee",
+                "GL Load Name": "Gross Fares - Join & Support - Booking Fee",
+                "Load Cube Name": "Gross Fares - Join & Support - Booking Fee",
+                "Plan Load Name": "Gross Fares - Join & Support - Booking Fee",
+                "Reporting": "Gross Fares - Join & Support - Booking Fee"
+            },
+            "Index": 79,
+            "Name": "Gross Fares - Join & Support - Booking Fee",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Gross Fares - Join & Support - Booking Fee]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Gross Fares - Commission - Booking Fee",
+                "Code": "41115",
+                "Code - Description": "41115 - Gross Fares - Commission - Booking Fee",
+                "GL Load Name": "Gross Fares - Commission - Booking Fee",
+                "Load Cube Name": "Gross Fares - Commission - Booking Fee",
+                "Plan Load Name": "Gross Fares - Commission - Booking Fee",
+                "Reporting": "Gross Fares - Commission - Booking Fee"
+            },
+            "Index": 80,
+            "Name": "Gross Fares - Commission - Booking Fee",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Gross Fares - Commission - Booking Fee]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Net Upfront Adjustments",
+                "Code": "Net Upfront Adjustments",
+                "Code - Description": "Net Upfront Adjustments",
+                "GL Load Name": "Net Upfront Adjustments",
+                "Load Cube Name": "Net Upfront Adjustments",
+                "Plan Load Name": "Net Upfront Adjustments",
+                "Reporting": "Net Upfront Adjustments"
+            },
+            "Index": 81,
+            "Name": "Net Upfront Adjustments",
+            "Type": "Consolidated",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Net Upfront Adjustments]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Contra Rev. - Fare Adjustment Up",
+                "Code": "41679",
+                "Code - Description": "41679 - Contra Rev. - Fare Adjustment Up",
+                "GL Load Name": "Contra Rev. - Fare Adjustment Up",
+                "Load Cube Name": "Contra Rev. - Fare Adjustment Up",
+                "Plan Load Name": "Contra Rev. - Fare Adjustment Up",
+                "Reporting": "ufp_adj_up"
+            },
+            "Index": 82,
+            "Name": "Contra Rev. - Fare Adjustment Up",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Contra Rev. - Fare Adjustment Up]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Contra Rev. - Fare Adjustment Down",
+                "Code": "41669",
+                "Code - Description": "41669 - Contra Rev. - Fare Adjustment Down",
+                "GL Load Name": "Contra Rev. - Fare Adjustment Down",
+                "Load Cube Name": "Contra Rev. - Fare Adjustment Down",
+                "Plan Load Name": "Contra Rev. - Fare Adjustment Down",
+                "Reporting": "ufp_adj_down"
+            },
+            "Index": 83,
+            "Name": "Contra Rev. - Fare Adjustment Down",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Contra Rev. - Fare Adjustment Down]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Misc. Partner Stmt",
+                "Code": "Misc. Partner Stmt",
+                "Code - Description": "Misc. Partner Stmt",
+                "GL Load Name": "Misc. Partner Stmt",
+                "Load Cube Name": "Misc. Partner Stmt",
+                "Plan Load Name": "Misc. Partner Stmt",
+                "Reporting": "Misc. Partner Stmt"
+            },
+            "Index": 84,
+            "Name": "Misc. Partner Stmt",
+            "Type": "Consolidated",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Misc. Partner Stmt]"
+        },
+        {
+            "Attributes": {
+                "Caption": "COR - Partner Misc - Partner Stmt",
+                "Code": "51610",
+                "Code - Description": "51610 - COR - Partner Misc - Partner Stmt",
+                "GL Load Name": "COR - Partner Misc - Partner Stmt",
+                "Load Cube Name": "COR - Partner Misc - Partner Stmt",
+                "Plan Load Name": "COR - Partner Misc - Partner Stmt",
+                "Reporting": "COR - Partner Misc - Partner Stmt"
+            },
+            "Index": 85,
+            "Name": "COR - Partner Misc - Partner Stmt",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[COR - Partner Misc - Partner Stmt]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Contra Rev. - Partner Misc - Partner Stmt",
+                "Code": "41629",
+                "Code - Description": "41629 - Contra Rev. - Partner Misc - Partner Stmt",
+                "GL Load Name": "Contra Rev. - Partner Misc - Partner Stmt",
+                "Load Cube Name": "Contra Rev. - Partner Misc - Partner Stmt",
+                "Plan Load Name": "Contra Rev. - Partner Misc - Partner Stmt",
+                "Reporting": "misc_payments"
+            },
+            "Index": 86,
+            "Name": "Contra Rev. - Partner Misc - Partner Stmt",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Contra Rev. - Partner Misc - Partner Stmt]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Budget - Misc Driver Expenses",
+                "Code": "P0030",
+                "Code - Description": "P0030 - Budget - Misc Driver Expenses",
+                "GL Load Name": "Budget - Misc Driver Expenses",
+                "Load Cube Name": "Budget - Misc Driver Expenses",
+                "Plan Load Name": "Budget - Misc Driver Expenses",
+                "Reporting": "Budget - Misc Driver Expenses"
+            },
+            "Index": 87,
+            "Name": "Budget - Misc Driver Expenses",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Budget - Misc Driver Expenses]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Existing Driver Incentives",
+                "Code": "Existing Driver Incentives",
+                "Code - Description": "Existing Driver Incentives",
+                "GL Load Name": "Existing Driver Incentives",
+                "Load Cube Name": "Existing Driver Incentives",
+                "Plan Load Name": "Existing Driver Incentives",
+                "Reporting": "Existing Driver Incentives"
+            },
+            "Index": 88,
+            "Name": "Existing Driver Incentives",
+            "Type": "Consolidated",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Existing Driver Incentives]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Partner Incentive Reclass",
+                "Code": "Partner Incentive Reclass",
+                "Code - Description": "Partner Incentive Reclass",
+                "GL Load Name": "Partner Incentive Reclass",
+                "Load Cube Name": "Partner Incentive Reclass",
+                "Plan Load Name": "Partner Incentive Reclass",
+                "Reporting": "Partner Incentive Reclass"
+            },
+            "Index": 89,
+            "Name": "Partner Incentive Reclass",
+            "Type": "Consolidated",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Partner Incentive Reclass]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Partner - Join & Support Reclass",
+                "Code": "51006",
+                "Code - Description": "51006 - Partner - Join & Support Reclass",
+                "GL Load Name": "Partner - Join & Support Reclass",
+                "Load Cube Name": "Partner - Join & Support Reclass",
+                "Plan Load Name": "Partner - Join & Support Reclass",
+                "Reporting": "Partner - Join & Support Reclass"
+            },
+            "Index": 90,
+            "Name": "Partner - Join & Support Reclass",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Partner - Join & Support Reclass]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Partner - Hourly Reclass",
+                "Code": "51005",
+                "Code - Description": "51005 - Partner - Hourly Reclass",
+                "GL Load Name": "Partner - Hourly Reclass",
+                "Load Cube Name": "Partner - Hourly Reclass",
+                "Plan Load Name": "Partner - Hourly Reclass",
+                "Reporting": "Partner - Hourly Reclass"
+            },
+            "Index": 91,
+            "Name": "Partner - Hourly Reclass",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Partner - Hourly Reclass]"
+        },
+        {
+            "Attributes": {
+                "Caption": "COR - Partner Payments 01-9 Reclass",
+                "Code": "51415",
+                "Code - Description": "51415 - COR - Partner Payments 01-9 Reclass",
+                "GL Load Name": "COR - Partner Payments 01-9 Reclass",
+                "Load Cube Name": "COR - Partner Payments 01-9 Reclass",
+                "Plan Load Name": "COR - Partner Payments 01-9 Reclass",
+                "Reporting": "COR - Partner Payments 01-9 Reclass"
+            },
+            "Index": 92,
+            "Name": "COR - Partner Payments 01-9 Reclass",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[COR - Partner Payments 01-9 Reclass]"
+        },
+        {
+            "Attributes": {
+                "Caption": "COR - Partner Incentive - Trip Incentive",
+                "Code": "51505",
+                "Code - Description": "51505 - COR - Partner Incentive - Trip Incentive",
+                "GL Load Name": "COR - Partner Incentive - Trip Incentive",
+                "Load Cube Name": "COR - Partner Incentive - Trip Incentive",
+                "Plan Load Name": "COR - Partner Incentive - Trip Incentive",
+                "Reporting": "COR - Partner Incentive - Trip Incentive"
+            },
+            "Index": 93,
+            "Name": "COR - Partner Incentive - Trip Incentive",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[COR - Partner Incentive - Trip Incentive]"
+        },
+        {
+            "Attributes": {
+                "Caption": "COR - Partner Incentive - Special Promotion",
+                "Code": "51520",
+                "Code - Description": "51520 - COR - Partner Incentive - Special Promotion",
+                "GL Load Name": "COR - Partner Incentive - Special Promotion",
+                "Load Cube Name": "COR - Partner Incentive - Special Promotion",
+                "Plan Load Name": "COR - Partner Incentive - Special Promotion",
+                "Reporting": "COR - Partner Incentive - Special Promotion"
+            },
+            "Index": 94,
+            "Name": "COR - Partner Incentive - Special Promotion",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[COR - Partner Incentive - Special Promotion]"
+        },
+        {
+            "Attributes": {
+                "Caption": "COR - Partner Incentive - Special Price Discount",
+                "Code": "51535",
+                "Code - Description": "51535 - COR - Partner Incentive - Special Price Discount",
+                "GL Load Name": "COR - Partner Incentive - Special Price Discount",
+                "Load Cube Name": "COR - Partner Incentive - Special Price Discount",
+                "Plan Load Name": "COR - Partner Incentive - Special Price Discount",
+                "Reporting": "COR - Partner Incentive - Special Price Discount"
+            },
+            "Index": 95,
+            "Name": "COR - Partner Incentive - Special Price Discount",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[COR - Partner Incentive - Special Price Discount]"
+        },
+        {
+            "Attributes": {
+                "Caption": "COR - Partner Incentive - Misc. Partner Incentive",
+                "Code": "51515",
+                "Code - Description": "51515 - COR - Partner Incentive - Misc. Partner Incentive",
+                "GL Load Name": "COR - Partner Incentive - Misc. Partner Incentive",
+                "Load Cube Name": "COR - Partner Incentive - Misc. Partner Incentive",
+                "Plan Load Name": "COR - Partner Incentive - Misc. Partner Incentive",
+                "Reporting": "COR - Partner Incentive - Misc. Partner Incentive"
+            },
+            "Index": 96,
+            "Name": "COR - Partner Incentive - Misc. Partner Incentive",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[COR - Partner Incentive - Misc. Partner Incentive]"
+        },
+        {
+            "Attributes": {
+                "Caption": "COR - Partner Incentive - Guarantee",
+                "Code": "51510",
+                "Code - Description": "51510 - COR - Partner Incentive - Guarantee",
+                "GL Load Name": "COR - Partner Incentive - Guarantee",
+                "Load Cube Name": "COR - Partner Incentive - Guarantee",
+                "Plan Load Name": "COR - Partner Incentive - Guarantee",
+                "Reporting": "COR - Partner Incentive - Guarantee"
+            },
+            "Index": 97,
+            "Name": "COR - Partner Incentive - Guarantee",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[COR - Partner Incentive - Guarantee]"
+        },
+        {
+            "Attributes": {
+                "Caption": "COR - Join & Support Fee",
+                "Code": "51410",
+                "Code - Description": "51410 - COR - Join & Support Fee",
+                "GL Load Name": "COR - Join & Support Fee",
+                "Load Cube Name": "COR - Join & Support Fee",
+                "Plan Load Name": "COR - Join & Support Fee",
+                "Reporting": "COR - Join & Support Fee"
+            },
+            "Index": 98,
+            "Name": "COR - Join & Support Fee",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[COR - Join & Support Fee]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Existing Driver Incentives (SLOG)",
+                "Code": "Existing Driver Incentives (SLOG)",
+                "Code - Description": "Existing Driver Incentives (SLOG)",
+                "GL Load Name": "Existing Driver Incentives (SLOG)",
+                "Load Cube Name": "Existing Driver Incentives (SLOG)",
+                "Plan Load Name": "Existing Driver Incentives (SLOG)",
+                "Reporting": "Existing Driver Incentives (SLOG)"
+            },
+            "Index": 99,
+            "Name": "Existing Driver Incentives (SLOG)",
+            "Type": "Consolidated",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Existing Driver Incentives (SLOG)]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Contra Rev. - Partner Incentive - Special Promotion",
+                "Code": "41449",
+                "Code - Description": "41449 - Contra Rev. - Partner Incentive - Special Promotion",
+                "GL Load Name": "Contra Rev. - Partner Incentive - Special Promotion",
+                "Load Cube Name": "Contra Rev. - Partner Incentive - Special Promotion",
+                "Plan Load Name": "Contra Rev. - Partner Incentive - Special Promotion",
+                "Reporting": "Contra Rev. - Partner Incentive - Special Promotion"
+            },
+            "Index": 100,
+            "Name": "Contra Rev. - Partner Incentive - Special Promotion",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Contra Rev. - Partner Incentive - Special Promotion]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Existing Driver Incentives (ex-SLOG)",
+                "Code": "Existing Driver Incentives (ex-SLOG)",
+                "Code - Description": "Existing Driver Incentives (ex-SLOG)",
+                "GL Load Name": "Existing Driver Incentives (ex-SLOG)",
+                "Load Cube Name": "Existing Driver Incentives (ex-SLOG)",
+                "Plan Load Name": "Existing Driver Incentives (ex-SLOG)",
+                "Reporting": "Existing Driver Incentives (ex-SLOG)"
+            },
+            "Index": 101,
+            "Name": "Existing Driver Incentives (ex-SLOG)",
+            "Type": "Consolidated",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Existing Driver Incentives (ex-SLOG)]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Contra Rev. - Partner Payments 01-9 Reclass",
+                "Code": "41349",
+                "Code - Description": "41349 - Contra Rev. - Partner Payments 01-9 Reclass",
+                "GL Load Name": "Contra Rev. - Partner Payments 01-9 Reclass",
+                "Load Cube Name": "Contra Rev. - Partner Payments 01-9 Reclass",
+                "Plan Load Name": "Contra Rev. - Partner Payments 01-9 Reclass",
+                "Reporting": "Contra Rev. - Partner Payments 01-9 Reclass"
+            },
+            "Index": 102,
+            "Name": "Contra Rev. - Partner Payments 01-9 Reclass",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Contra Rev. - Partner Payments 01-9 Reclass]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Contra Rev. - Partner Incentives - Trip Incentive",
+                "Code": "41419",
+                "Code - Description": "41419 - Contra Rev. - Partner Incentives - Trip Incentive",
+                "GL Load Name": "Contra Rev. - Partner Incentives - Trip Incentive",
+                "Load Cube Name": "Contra Rev. - Partner Incentives - Trip Incentive",
+                "Plan Load Name": "Contra Rev. - Partner Incentives - Trip Incentive",
+                "Reporting": "existing_driver_incentives"
+            },
+            "Index": 103,
+            "Name": "Contra Rev. - Partner Incentives - Trip Incentive",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Contra Rev. - Partner Incentives - Trip Incentive]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Contra Rev. - Partner Incentive - Special Price Discount",
+                "Code": "41479",
+                "Code - Description": "41479 - Contra Rev. - Partner Incentive - Special Price Discount",
+                "GL Load Name": "Contra Rev. - Partner Incentive - Special Price Discount",
+                "Load Cube Name": "Contra Rev. - Partner Incentive - Special Price Discount",
+                "Plan Load Name": "Contra Rev. - Partner Incentive - Special Price Discount",
+                "Reporting": "Contra Rev. - Partner Incentive - Special Price Discount"
+            },
+            "Index": 104,
+            "Name": "Contra Rev. - Partner Incentive - Special Price Discount",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Contra Rev. - Partner Incentive - Special Price Discount]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Contra Rev. - Partner Incentive - Misc. Partner Incentive",
+                "Code": "41439",
+                "Code - Description": "41439 - Contra Rev. - Partner Incentive - Misc. Partner Incentive",
+                "GL Load Name": "Contra Rev. - Partner Incentive - Misc. Partner Incentive",
+                "Load Cube Name": "Contra Rev. - Partner Incentive - Misc. Partner Incentive",
+                "Plan Load Name": "Contra Rev. - Partner Incentive - Misc. Partner Incentive",
+                "Reporting": "Contra Rev. - Partner Incentive - Misc. Partner Incentive"
+            },
+            "Index": 105,
+            "Name": "Contra Rev. - Partner Incentive - Misc. Partner Incentive",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Contra Rev. - Partner Incentive - Misc. Partner Incentive]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Contra Rev. - Partner Incentive - Guarantee",
+                "Code": "41329",
+                "Code - Description": "41429 - Contra Rev. - Partner Incentive - Guarantee",
+                "GL Load Name": "Contra Rev. - Partner Incentive - Guarantee",
+                "Load Cube Name": "Contra Rev. - Partner Incentive - Guarantee",
+                "Plan Load Name": "Contra Rev. - Partner Incentive - Guarantee",
+                "Reporting": "Contra Rev. - Partner Incentive - Guarantee"
+            },
+            "Index": 106,
+            "Name": "Contra Rev. - Partner Incentive - Guarantee",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Contra Rev. - Partner Incentive - Guarantee]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Contra Rev. - Partner Hourly Fee",
+                "Code": "41339",
+                "Code - Description": "41339 - Contra Rev. - Partner Hourly Fee",
+                "GL Load Name": "Contra Rev. - Partner Hourly Fee",
+                "Load Cube Name": "Contra Rev. - Partner Hourly Fee",
+                "Plan Load Name": "Contra Rev. - Partner Hourly Fee",
+                "Reporting": "Contra Rev. - Partner Hourly Fee"
+            },
+            "Index": 107,
+            "Name": "Contra Rev. - Partner Hourly Fee",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Contra Rev. - Partner Hourly Fee]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Contra Rev. - Join & Support Fee",
+                "Code": "Contra Rev. - Join & Support Fee",
+                "Code - Description": "41329 - Contra Rev. - Join & Support Fee",
+                "GL Load Name": "Contra Rev. - Join & Support Fee",
+                "Load Cube Name": "Contra Rev. - Join & Support Fee",
+                "Plan Load Name": "Contra Rev. - Join & Support Fee",
+                "Reporting": "Contra Rev. - Join & Support Fee"
+            },
+            "Index": 108,
+            "Name": "Contra Rev. - Join & Support Fee",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Contra Rev. - Join & Support Fee]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Budget - Existing Incentives",
+                "Code": "P0020",
+                "Code - Description": "P0020 - Budget - Existing Incentives",
+                "GL Load Name": "Budget - Existing Incentives",
+                "Load Cube Name": "Budget - Existing Incentives",
+                "Plan Load Name": "Budget - Existing Incentives",
+                "Reporting": "Budget - Existing Incentives"
+            },
+            "Index": 109,
+            "Name": "Budget - Existing Incentives",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Budget - Existing Incentives]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Driver Partner Payment - Principal Model",
+                "Code": "Driver Partner Payment - Principal Model",
+                "Code - Description": "Driver Partner Payment - Principal Model",
+                "GL Load Name": "Driver Partner Payment - Principal Model",
+                "Load Cube Name": "Driver Partner Payment - Principal Model",
+                "Plan Load Name": "Driver Partner Payment - Principal Model",
+                "Reporting": "Driver Partner Payment - Principal Model"
+            },
+            "Index": 110,
+            "Name": "Driver Partner Payment - Principal Model",
+            "Type": "Consolidated",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Driver Partner Payment - Principal Model]"
+        },
+        {
+            "Attributes": {
+                "Caption": "COR - Commission Fee",
+                "Code": "51405",
+                "Code - Description": "51405 - COR - Commission Fee",
+                "GL Load Name": "COR - Commission Fee",
+                "Load Cube Name": "COR - Commission Fee",
+                "Plan Load Name": "COR - Commission Fee",
+                "Reporting": "COR - Commission Fee"
+            },
+            "Index": 111,
+            "Name": "COR - Commission Fee",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[COR - Commission Fee]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Driver Partner Payment - Agent Model",
+                "Code": "Driver Partner Payment - Agent Model",
+                "Code - Description": "Driver Partner Payment - Agent Model",
+                "GL Load Name": "Driver Partner Payment - Agent Model",
+                "Load Cube Name": "Driver Partner Payment - Agent Model",
+                "Plan Load Name": "Driver Partner Payment - Agent Model",
+                "Reporting": "Driver Partner Payment - Agent Model"
+            },
+            "Index": 112,
+            "Name": "Driver Partner Payment - Agent Model",
+            "Type": "Consolidated",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Driver Partner Payment - Agent Model]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Contra Rev. - Sales Taxes - Partner",
+                "Code": "41323",
+                "Code - Description": "41323 - Contra Rev. - Sales Taxes - Partner",
+                "GL Load Name": "Contra Rev. - Sales Taxes - Partner",
+                "Load Cube Name": "Contra Rev. - Sales Taxes - Partner",
+                "Plan Load Name": "Contra Rev. - Sales Taxes - Partner",
+                "Reporting": "driver_tax_paid"
+            },
+            "Index": 113,
+            "Name": "Contra Rev. - Sales Taxes - Partner",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Contra Rev. - Sales Taxes - Partner]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Contra Rev. - Commission Fee",
+                "Code": "41319",
+                "Code - Description": "41319 - Contra Rev. - Commission Fee",
+                "GL Load Name": "Contra Rev. - Commission Fee",
+                "Load Cube Name": "Contra Rev. - Commission Fee",
+                "Plan Load Name": "Contra Rev. - Commission Fee",
+                "Reporting": "driver_earnings"
+            },
+            "Index": 114,
+            "Name": "Contra Rev. - Commission Fee",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Contra Rev. - Commission Fee]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Contra Rev. - Tolls - Partner",
+                "Code": "41321",
+                "Code - Description": "41321 - Contra Rev. - Tolls - Partner",
+                "GL Load Name": "Contra Rev. - Tolls - Partner",
+                "Load Cube Name": "Contra Rev. - Tolls - Partner",
+                "Plan Load Name": "Contra Rev. - Tolls - Partner",
+                "Reporting": "tolls_disbursed"
+            },
+            "Index": 115,
+            "Name": "Contra Rev. - Tolls - Partner",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Contra Rev. - Tolls - Partner]"
+        },
+        {
+            "Attributes": {
+                "Caption": "New Drivers %",
+                "Code": "New Drivers %",
+                "Code - Description": "New Drivers %",
+                "Format": "#.00%",
+                "GL Load Name": "New Drivers %",
+                "Load Cube": "Calculation",
+                "Load Cube Name": "New Drivers % (C)",
+                "Measure Element": "Percentage",
+                "Plan Load Cube": "Ops Monthly by Vehicle Type",
+                "Plan Load Name": "New Drivers %",
+                "Reporting": "New Drivers %"
+            },
+            "Index": 116,
+            "Name": "New Drivers %",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[New Drivers %]"
+        },
+        {
+            "Attributes": {
+                "Caption": "New Riders %",
+                "Code": "New Riders %",
+                "Code - Description": "New Riders %",
+                "Format": "#.00%",
+                "GL Load Name": "New Riders %",
+                "Load Cube": "Calculation",
+                "Load Cube Name": "New Riders % (C)",
+                "Measure Element": "Percentage",
+                "Plan Load Cube": "Ops Monthly by Vehicle Type",
+                "Plan Load Name": "New Riders %",
+                "Reporting": "New Riders %"
+            },
+            "Index": 117,
+            "Name": "New Riders %",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[New Riders %]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Reactived Drivers",
+                "Code": "Reactived Drivers",
+                "Code - Description": "Reactived Drivers",
+                "GL Load Name": "Reactived Drivers",
+                "Load Cube": "Consolidation",
+                "Load Cube Name": "Reactived Drivers (C)",
+                "Measure Element": "Count",
+                "Plan Load Cube": "Ops Monthly by Vehicle Type",
+                "Plan Load Name": "Reactived Drivers",
+                "Reporting": "Reactived Drivers"
+            },
+            "Index": 118,
+            "Name": "Reactived Drivers",
+            "Type": "Consolidated",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Reactived Drivers]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Unique Drivers",
+                "Code": "Unique Drivers",
+                "Code - Description": "Unique Drivers",
+                "GL Load Name": "Unique Drivers",
+                "Load Cube": "Ops Monthly by Vehicle Type",
+                "Load Cube Name": "Unique Drivers (T)",
+                "Measure Element": "Count",
+                "Non-Aggregation Flag": 1,
+                "Plan Load Cube": "Ops Monthly by Vehicle Type",
+                "Plan Load Name": "Unique Drivers",
+                "Reporting": "Unique Drivers"
+            },
+            "Index": 119,
+            "Name": "Unique Drivers",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Unique Drivers]"
+        },
+        {
+            "Attributes": {
+                "Caption": "New Drivers",
+                "Code": "New Drivers",
+                "Code - Description": "New Drivers",
+                "GL Load Name": "New Driver - Count",
+                "Load Cube": "Ops Monthly",
+                "Load Cube Name": "New Drivers (M)",
+                "Measure Element": "Count",
+                "Plan Load Cube": "Ops Monthly by Vehicle Type",
+                "Plan Load Name": "first_time_drivers",
+                "Reporting": "New Drivers"
+            },
+            "Index": 120,
+            "Name": "New Drivers",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[New Drivers]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Continuing Drivers",
+                "Code": "Continuing Drivers",
+                "Code - Description": "Continuing Drivers",
+                "GL Load Name": "Continuing Driver Count",
+                "Load Cube": "Ops Monthly",
+                "Load Cube Name": "Continuing Drivers (M)",
+                "Measure Element": "Count",
+                "Plan Load Cube": "Ops Monthly by Vehicle Type",
+                "Plan Load Name": "Continuing Drivers",
+                "Reporting": "Continuing Drivers"
+            },
+            "Index": 121,
+            "Name": "Continuing Drivers",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Continuing Drivers]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Reactived Drivers %",
+                "Code": "Reactived Drivers %",
+                "Code - Description": "Reactived Drivers %",
+                "Format": "#.00%",
+                "GL Load Name": "Reactived Drivers %",
+                "Load Cube": "Calculation",
+                "Load Cube Name": "Reactived Drivers % (C)",
+                "Measure Element": "Percentage",
+                "Plan Load Cube": "Ops Monthly by Vehicle Type",
+                "Plan Load Name": "Reactived Drivers %",
+                "Reporting": "Reactived Drivers %"
+            },
+            "Index": 122,
+            "Name": "Reactived Drivers %",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Reactived Drivers %]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Reactived Driver Trips",
+                "Code": "Reactived Driver Trips",
+                "Code - Description": "Reactived Driver Trips",
+                "GL Load Name": "Reactived Driver Trips",
+                "Load Cube": "Consolidation",
+                "Load Cube Name": "Reactivated Driver Trips (C)",
+                "Measure Element": "Count",
+                "Plan Load Cube": "Ops Monthly by Vehicle Type",
+                "Plan Load Name": "Reactived Driver Trips",
+                "Reporting": "Reactived Driver Trips"
+            },
+            "Index": 123,
+            "Name": "Reactived Driver Trips",
+            "Type": "Consolidated",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Reactived Driver Trips]"
+        },
+        {
+            "Attributes": {
+                "Caption": "New Driver Trips",
+                "Code": "New Driver Trips",
+                "Code - Description": "New Driver Trips",
+                "GL Load Name": "New Driver - Trips",
+                "Load Cube": "Ops Monthly",
+                "Load Cube Name": "New Driver Trips (M)",
+                "Measure Element": "Count",
+                "Plan Load Cube": "Ops Monthly by Vehicle Type",
+                "Plan Load Name": "New Driver Trips",
+                "Reporting": "New Driver Trips"
+            },
+            "Index": 124,
+            "Name": "New Driver Trips",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[New Driver Trips]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Continuing Driver Trips",
+                "Code": "Continuing Driver Trips",
+                "Code - Description": "Continuing Driver Trips",
+                "GL Load Name": "Continuing Driver Trips",
+                "Load Cube": "Ops Monthly",
+                "Load Cube Name": "Continuing Driver Trips (M)",
+                "Measure Element": "Count",
+                "Plan Load Cube": "Ops Monthly by Vehicle Type",
+                "Plan Load Name": "Continuing Driver Trips",
+                "Reporting": "Continuing Driver Trips"
+            },
+            "Index": 125,
+            "Name": "Continuing Driver Trips",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Continuing Driver Trips]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Completed Trips",
+                "Code": "Completed Trips",
+                "Code - Description": "Completed Trips",
+                "GL Load Name": "Completed Trips",
+                "Load Cube": "Ops Daily by Vehicle",
+                "Load Cube Name": "Completed Trips (V)",
+                "Measure Element": "Count",
+                "Plan Load Cube": "Ops Monthly by Vehicle Type",
+                "Plan Load Name": "trips",
+                "Reporting": "TRIPS"
+            },
+            "Index": 126,
+            "Name": "Completed Trips",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Completed Trips]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Reactived Riders",
+                "Code": "Reactived Riders",
+                "Code - Description": "Reactived Riders",
+                "GL Load Name": "Reactived Riders",
+                "Load Cube": "Consolidation",
+                "Load Cube Name": "Reactived Riders (C)",
+                "Measure Element": "Count",
+                "Plan Load Cube": "Ops Monthly by Vehicle Type",
+                "Plan Load Name": "Reactived Riders",
+                "Reporting": "Reactived Riders"
+            },
+            "Index": 127,
+            "Name": "Reactived Riders",
+            "Type": "Consolidated",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Reactived Riders]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Unique Riders",
+                "Code": "Unique Riders",
+                "Code - Description": "Unique Riders",
+                "GL Load Name": "Unique Riders",
+                "Load Cube": "Ops Monthly by Vehicle Type",
+                "Load Cube Name": "Unique Riders (T)",
+                "Measure Element": "Count",
+                "Non-Aggregation Flag": 1,
+                "Plan Load Cube": "Ops Monthly by Vehicle Type",
+                "Plan Load Name": "Unique Riders",
+                "Reporting": "Unique Riders"
+            },
+            "Index": 128,
+            "Name": "Unique Riders",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Unique Riders]"
+        },
+        {
+            "Attributes": {
+                "Caption": "New Riders",
+                "Code": "New Riders",
+                "Code - Description": "New Riders",
+                "GL Load Name": "New Rider - Count",
+                "Load Cube": "Ops Monthly",
+                "Load Cube Name": "New Riders (M*)",
+                "Measure Element": "Count",
+                "Plan Load Cube": "Ops Monthly by Vehicle Type",
+                "Plan Load Name": "first_time_riders",
+                "Reporting": "New Riders"
+            },
+            "Index": 129,
+            "Name": "New Riders",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[New Riders]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Continuing Riders",
+                "Code": "Continuing Riders",
+                "Code - Description": "Continuing Riders",
+                "GL Load Name": "Continuing Rider Count",
+                "Load Cube": "Ops Monthly",
+                "Load Cube Name": "Continuing Riders (M)",
+                "Measure Element": "Count",
+                "Plan Load Cube": "Ops Monthly by Vehicle Type",
+                "Plan Load Name": "Continuing Riders",
+                "Reporting": "Continuing Riders"
+            },
+            "Index": 130,
+            "Name": "Continuing Riders",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Continuing Riders]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Reactived Riders %",
+                "Code": "Reactived Riders %",
+                "Code - Description": "Reactived Riders %",
+                "GL Load Name": "Reactived Riders %",
+                "Load Cube": "Calculation",
+                "Load Cube Name": "Reactived Riders % (C)",
+                "Measure Element": "Percentage",
+                "Plan Load Cube": "Ops Monthly by Vehicle Type",
+                "Plan Load Name": "Reactived Riders %",
+                "Reporting": "Reactived Riders %"
+            },
+            "Index": 131,
+            "Name": "Reactived Riders %",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Reactived Riders %]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Reactived Rider Trips",
+                "Code": "Reactived Rider Trips",
+                "Code - Description": "Reactived Rider Trips",
+                "GL Load Name": "Reactived Rider Trips",
+                "Load Cube": "Consolidation",
+                "Load Cube Name": "Reactivated Rider Trips (C)",
+                "Measure Element": "Count",
+                "Plan Load Cube": "Ops Monthly by Vehicle Type",
+                "Plan Load Name": "Reactived Rider Trips",
+                "Reporting": "Reactived Rider Trips"
+            },
+            "Index": 132,
+            "Name": "Reactived Rider Trips",
+            "Type": "Consolidated",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Reactived Rider Trips]"
+        },
+        {
+            "Attributes": {
+                "Caption": "New Rider Trips",
+                "Code": "New Rider Trips",
+                "Code - Description": "New Rider Trips",
+                "GL Load Name": "New Rider - Trips",
+                "Load Cube": "Ops Monthly",
+                "Load Cube Name": "New Rider Trips (M*)",
+                "Measure Element": "Count",
+                "Plan Load Cube": "Ops Monthly by Vehicle Type",
+                "Plan Load Name": "New Rider Trips",
+                "Reporting": "New Rider Trips"
+            },
+            "Index": 133,
+            "Name": "New Rider Trips",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[New Rider Trips]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Continuing Rider Trips",
+                "Code": "Continuing Rider Trips",
+                "Code - Description": "Continuing Rider Trips",
+                "GL Load Name": "Continuing Rider Trips",
+                "Load Cube": "Ops Monthly",
+                "Load Cube Name": "Continuing Rider Trips (M)",
+                "Measure Element": "Count",
+                "Plan Load Cube": "Ops Monthly by Vehicle Type",
+                "Plan Load Name": "Continuing Rider Trips",
+                "Reporting": "Continuing Rider Trips"
+            },
+            "Index": 134,
+            "Name": "Continuing Rider Trips",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Continuing Rider Trips]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Requests",
+                "Code": "Requests",
+                "Code - Description": "Requests",
+                "GL Load Name": "Requests",
+                "Load Cube": "Ops Daily by Vehicle",
+                "Load Cube Name": "Requests (V)",
+                "Measure Element": "Count",
+                "Plan Load Cube": "Ops Monthly by Vehicle Type",
+                "Plan Load Name": "Requests",
+                "Reporting": "Requests"
+            },
+            "Index": 135,
+            "Name": "Requests",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Requests]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Rider Price Discount",
+                "Code": "Rider Price Discount",
+                "Code - Description": "Rider Price Discount",
+                "GL Load Name": "Rider Price Discount",
+                "Load Cube Name": "Rider Price Discount",
+                "Plan Load Cube": "Ops Monthly by Vehicle Type",
+                "Plan Load Name": "Rider Price Discount",
+                "Reporting": "Rider Price Discount"
+            },
+            "Index": 136,
+            "Name": "Rider Price Discount",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Rider Price Discount]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Rider Signups",
+                "Code": "Rider Signups",
+                "Code - Description": "Rider Signups",
+                "GL Load Name": "Rider Signups",
+                "Load Cube": "OPS Daily",
+                "Load Cube Name": "Rider Signups (D)",
+                "Measure Element": "Count",
+                "Plan Load Cube": "Ops Monthly by Vehicle Type",
+                "Plan Load Name": "Rider Signups",
+                "Reporting": "Rider Signups"
+            },
+            "Index": 137,
+            "Name": "Rider Signups",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Rider Signups]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Supply Hours / Driver",
+                "Code": "Supply Hours / Driver",
+                "Code - Description": "Supply Hours / Driver",
+                "GL Load Name": "Supply Hours / Driver",
+                "Load Cube": "Calculation",
+                "Load Cube Name": "Supply Hours / Driver (C)",
+                "Measure Element": "Count",
+                "Plan Load Cube": "Ops Monthly by Vehicle Type",
+                "Plan Load Name": "Supply Hours / Driver",
+                "Reporting": "Supply Hours / Driver"
+            },
+            "Index": 138,
+            "Name": "Supply Hours / Driver",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Supply Hours / Driver]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Surge Trips",
+                "Code": "Surge Trips",
+                "Code - Description": "Surge Trips",
+                "GL Load Name": "Surged Trips",
+                "Load Cube": "Ops Daily by Vehicle",
+                "Load Cube Name": "Surge Trips (V)",
+                "Measure Element": "Count",
+                "Plan Load Cube": "Ops Monthly by Vehicle Type",
+                "Plan Load Name": "Surge Trips",
+                "Reporting": "Surge Trips"
+            },
+            "Index": 139,
+            "Name": "Surge Trips",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Surge Trips]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Total Bookings Vertica",
+                "Code": "Total Bookings Vertica",
+                "Code - Description": "Total Bookings Vertica",
+                "GL Load Name": "Total Bookings Vertica",
+                "Load Cube": "Consolidation",
+                "Load Cube Name": "Total Bookings Vertica (C)",
+                "Measure Element": "Amount",
+                "Plan Load Cube": "Ops Monthly by Vehicle Type",
+                "Plan Load Name": "Total Bookings Vertica",
+                "Reporting": "Total Bookings Vertica"
+            },
+            "Index": 140,
+            "Name": "Total Bookings Vertica",
+            "Type": "Consolidated",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Total Bookings Vertica]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Bookings Vertica",
+                "Code": "Bookings Vertica",
+                "Code - Description": "Bookings Vertica",
+                "GL Load Name": "Bookings Vertica",
+                "Load Cube": "Ops Daily by Vehicle",
+                "Load Cube Name": "Bookings Vertica (V)",
+                "Measure Element": "Amount",
+                "Plan Load Cube": "Ops Monthly by Vehicle Type",
+                "Plan Load Name": "Bookings Vertica",
+                "Reporting": "Bookings Vertica"
+            },
+            "Index": 141,
+            "Name": "Bookings Vertica",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Bookings Vertica]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Bookings Pool Adj",
+                "Code": "Bookings Pool Adj",
+                "Code - Description": "Bookings Pool Adj",
+                "GL Load Name": "Bookings Pool Adj",
+                "Load Cube": "Ops Daily by Vehicle",
+                "Load Cube Name": "Bookings Pool Adj (V)",
+                "Measure Element": "Amount",
+                "Plan Load Cube": "Ops Monthly by Vehicle Type",
+                "Plan Load Name": "Bookings Pool Adj",
+                "Reporting": "Bookings Pool Adj"
+            },
+            "Index": 142,
+            "Name": "Bookings Pool Adj",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Bookings Pool Adj]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Trips / Continuing Driver",
+                "Code": "Trips / Continuing Driver",
+                "Code - Description": "Trips / Continuing Driver",
+                "GL Load Name": "Trips / Continuing Driver",
+                "Load Cube": "Calculation",
+                "Load Cube Name": "Trips / Continuing Driver (C)",
+                "Measure Element": "Count",
+                "Plan Load Cube": "Ops Monthly by Vehicle Type",
+                "Plan Load Name": "Trips / Continuing Driver",
+                "Reporting": "Trips / Continuing Driver"
+            },
+            "Index": 143,
+            "Name": "Trips / Continuing Driver",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Trips / Continuing Driver]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Trips / Continuing Rider",
+                "Code": "Trips / Continuing Rider",
+                "Code - Description": "Trips / Continuing Rider",
+                "GL Load Name": "Trips / Continuing Rider",
+                "Load Cube": "Calculation",
+                "Load Cube Name": "Trips / Continuing Rider (C)",
+                "Measure Element": "Count",
+                "Plan Load Cube": "Ops Monthly by Vehicle Type",
+                "Plan Load Name": "Trips / Continuing Rider",
+                "Reporting": "Trips / Continuing Rider"
+            },
+            "Index": 144,
+            "Name": "Trips / Continuing Rider",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Trips / Continuing Rider]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Trips / Driver",
+                "Code": "Trips / Driver",
+                "Code - Description": "Trips / Driver",
+                "GL Load Name": "Trips / Driver",
+                "Load Cube": "Calculation",
+                "Load Cube Name": "Trips / Driver (C)",
+                "Measure Element": "Count",
+                "Plan Load Cube": "Ops Monthly by Vehicle Type",
+                "Plan Load Name": "Trips / Driver",
+                "Reporting": "Trips / Driver"
+            },
+            "Index": 145,
+            "Name": "Trips / Driver",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Trips / Driver]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Trips / Hour",
+                "Code": "Trips / Hour",
+                "Code - Description": "Trips / Hour",
+                "GL Load Name": "Trips / Hour",
+                "Load Cube": "Calculation",
+                "Load Cube Name": "Trips / Hour (C)",
+                "Measure Element": "Count",
+                "Plan Load Cube": "Ops Monthly by Vehicle Type",
+                "Plan Load Name": "Trips / Hour",
+                "Reporting": "Trips / Hour"
+            },
+            "Index": 146,
+            "Name": "Trips / Hour",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Trips / Hour]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Trips / New Driver",
+                "Code": "Trips / New Driver",
+                "Code - Description": "Trips / New Driver",
+                "GL Load Name": "Trips / New Driver",
+                "Load Cube": "Calculation",
+                "Load Cube Name": "Trips / New Driver (C)",
+                "Measure Element": "Count",
+                "Plan Load Cube": "Ops Monthly by Vehicle Type",
+                "Plan Load Name": "Trips / New Driver",
+                "Reporting": "Trips / New Driver"
+            },
+            "Index": 147,
+            "Name": "Trips / New Driver",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Trips / New Driver]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Trips / New Rider",
+                "Code": "Trips / New Rider",
+                "Code - Description": "Trips / New Rider",
+                "GL Load Name": "Trips / New Rider",
+                "Load Cube": "Calculation",
+                "Load Cube Name": "Trips / New Rider (C)",
+                "Measure Element": "Count",
+                "Plan Load Cube": "Ops Monthly by Vehicle Type",
+                "Plan Load Name": "Trips / New Rider",
+                "Reporting": "Trips / New Rider"
+            },
+            "Index": 148,
+            "Name": "Trips / New Rider",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Trips / New Rider]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Trips / Reactived Driver",
+                "Code": "Trips / Reactived Driver",
+                "Code - Description": "Trips / Reactived Driver",
+                "GL Load Name": "Trips / Reactived Driver",
+                "Load Cube": "Calculation",
+                "Load Cube Name": "Trips / Reactived Driver (C)",
+                "Measure Element": "Count",
+                "Plan Load Cube": "Ops Monthly by Vehicle Type",
+                "Plan Load Name": "Trips / Reactived Driver",
+                "Reporting": "Trips / Reactived Driver"
+            },
+            "Index": 149,
+            "Name": "Trips / Reactived Driver",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Trips / Reactived Driver]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Trips / Reactived Rider",
+                "Code": "Trips / Reactived Rider",
+                "Code - Description": "Trips / Reactived Rider",
+                "GL Load Name": "Trips / Reactived Rider",
+                "Load Cube": "Calculation",
+                "Load Cube Name": "Trips / Reactived Rider (C)",
+                "Measure Element": "Count",
+                "Plan Load Cube": "Ops Monthly by Vehicle Type",
+                "Plan Load Name": "Trips / Reactived Rider",
+                "Reporting": "Trips / Reactived Rider"
+            },
+            "Index": 150,
+            "Name": "Trips / Reactived Rider",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Trips / Reactived Rider]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Trips / Rider",
+                "Code": "Trips / Rider",
+                "Code - Description": "Trips / Rider",
+                "GL Load Name": "Trips / Rider",
+                "Load Cube": "Calculation",
+                "Load Cube Name": "Trips / Rider (C)",
+                "Measure Element": "Count",
+                "Plan Load Cube": "Ops Monthly by Vehicle Type",
+                "Plan Load Name": "Trips / Rider",
+                "Reporting": "Trips / Rider"
+            },
+            "Index": 151,
+            "Name": "Trips / Rider",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Trips / Rider]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Trips Mix %",
+                "Code": "Trips Mix %",
+                "Code - Description": "Trips Mix %",
+                "Format": "#.00%",
+                "GL Load Name": "Trips Mix %",
+                "Load Cube": "Calculation",
+                "Load Cube Name": "Trips Mix % (C)",
+                "Measure Element": "Percentage",
+                "Plan Load Cube": "Ops Monthly by Vehicle Type",
+                "Plan Load Name": "Trips Mix %",
+                "Reporting": "Trips Mix %"
+            },
+            "Index": 152,
+            "Name": "Trips Mix %",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Metric].[OPS Metric].[Trips Mix %]"
+        }
+    ],
+    "Name": "OPS Metric",
+    "Subsets": [],
+    "UniqueName": "[OPS Metric].[OPS Metric]"
+}

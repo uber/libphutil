@@ -1,0 +1,126 @@
+FEEDSTRINGS;
+SKIPCHECK;
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=- #
+# Completed Trips Calcs
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=- #
+
+['% Surge Trips', 'Amount'] =
+	['Surge Trips'] \ ['Completed Trips'];
+
+['Average Fare', 'Amount'] =
+	['Total Bookings'] \ ['Completed Trips'];
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=- #
+# Riders Calcs
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=- #
+
+['Trips / Rider', 'Amount'] =
+	['Completed Trips'] \ ['Unique Riders'];
+
+['Bookings / Rider', 'Amount'] =
+	['Total Bookings'] \ ['Unique Riders'];
+
+['Trips / New Rider', 'Amount'] =
+	['New Rider Trips'] \ ['New Riders'];
+
+['Trips / Continuing Rider', 'Amount'] =
+	['Continuing Rider Trips'] \ ['Continuing Riders'];
+
+['Trips / Reactived Rider', 'Amount'] =
+	['Reactived Rider Trips'] \ ['Reactived Riders'];
+
+['Churned Riders', 'Amount'] = ['Unique Riders'] - DB ( 'OPS Monthly by Age', !Version, !Rate Type , !Location,
+	DIMNM ( 'OPS Location Age', DIMIX ( 'OPS Location Age', !OPS Location Age ) - 1 )
+	, !Line of Business, !OPS Flow Type, !Product Type, 'Unique Riders', !OPS Monthly by Age Measure ) - ['New Riders'];
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=- #
+# Drivers  Calcs
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=- #
+
+['Trips / Driver', 'Amount'] =
+	['Completed Trips'] \ ['Unique Drivers'];
+
+['Bookings / Driver' ,'Amount'] =
+	['Total Bookings'] \ ['Unique Drivers'];
+
+['Trips / New Driver', 'Amount'] =
+	['New Driver Trips'] \ ['New Drivers'];
+
+['Trips / Continuing Driver', 'Amount'] =
+	['Continuing Driver Trips'] \ ['Continuing Drivers'];
+
+['Trips / Reactived Driver', 'Amount'] =
+	['Reactived Driver Trips'] \ ['Reactived Drivers'];
+
+['Churned Drivers', 'Amount'] = ['Unique Drivers'] - DB ( 'OPS Monthly by Age', !Version, !Rate Type, !Location,
+	DIMNM ( 'OPS Location Age', DIMIX ( 'OPS Location Age', !OPS Location Age ) - 1 )
+	, !Line of Business, !OPS Flow Type, !Product Type, 'Unique Drivers', !OPS Monthly by Age Measure ) - ['New Drivers'];
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=- #
+# Supply Min  Calcs
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=- #
+
+['Trips / Hour', 'Amount'] =
+	['Completed Trips'] \ ( ['Driver Supply Minutes'] \ 60 );
+
+['Bookings / Hour', 'Amount'] =
+	['Total Bookings'] \ ( ['Driver Supply Minutes'] \ 60 );
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=- #
+# Other  Calcs
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=- #
+
+['Completed %', 'Amount'] =
+	['Completed Trips'] \ ['Requests'];
+
+['Inflows / Bookings %' ,'Amount'] =
+	['Net Inflows'] \ ['Total Bookings'];
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=- #
+# Consol  Calcs
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=- #
+
+['Amount'] = C: IF ( ATTRN ( 'OPS Metric', !OPS Metric, 'Non-Aggregation Flag' ) = 1
+	, 0, CONTINUE );
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- #
+FEEDERS;
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- #
+
+['Completed Trips','Amount'] =>
+	['% Surge Trips'],
+	['Average Fare'],
+	['Actual', 'Completed %'],
+	['Actual', 'Trips / Hour'];
+
+['Unique Riders'] =>
+	[ 'Trips / Rider'],
+	[ 'Bookings / Rider'];
+
+['Unique Drivers'] =>
+	[ 'Trips / Driver'],
+	[ 'Bookings / Driver'];
+
+['Total Bookings'] =>
+	[ 'Bookings / Hour'],
+	[ 'Inflows / Bookings %'];
+
+['New Riders'] =>
+	[ 'Trips / New Rider'], [ 'Churned Riders'];
+['Continuing Riders'] =>
+	[ 'Trips / Continuing Rider'];
+['Reactived Riders'] =>
+	[ 'Trips / Reactived Rider'];
+
+['New Drivers'] =>
+	[ 'Trips / New Driver'], [ 'Churned Drivers'];
+['Continuing Drivers', 'Amount'] =>
+	[ 'Trips / Continuing Driver'];
+['Reactived Drivers'] =>
+	[ 'Trips / Reactived Driver'];
+
+
+
+

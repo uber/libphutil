@@ -1,0 +1,129 @@
+{
+    "DefaultMember": {
+        "Attributes": {
+            "Caption": "Total Source"
+        },
+        "IsPlaceholder": false,
+        "Name": "Total Source",
+        "Ordinal": 1,
+        "Type": "Regular",
+        "UniqueName": "[OPS Source].[OPS Source].[Total Source]",
+        "Weight": 0
+    },
+    "Edges": [
+        {
+            "ComponentName": "FDP",
+            "ParentName": "Total Source",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Fermat",
+            "ParentName": "Total Source",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Adjustment",
+            "ParentName": "Total Source",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Variance",
+            "ParentName": "Total Source",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "uReporting",
+            "ParentName": "Total Source",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "FDP",
+            "ParentName": "Total Source excl Variance",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Fermat",
+            "ParentName": "Total Source excl Variance",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Adjustment",
+            "ParentName": "Total Source excl Variance",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "uReporting",
+            "ParentName": "Total Source excl Variance",
+            "Weight": 1
+        }
+    ],
+    "ElementAttributes": [],
+    "Elements": [
+        {
+            "Attributes": {
+                "Caption": "Total Source"
+            },
+            "Index": 1,
+            "Name": "Total Source",
+            "Type": "Consolidated",
+            "UniqueName": "[OPS Source].[OPS Source].[Total Source]"
+        },
+        {
+            "Attributes": {
+                "Caption": "FDP"
+            },
+            "Index": 2,
+            "Name": "FDP",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Source].[OPS Source].[FDP]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Fermat"
+            },
+            "Index": 3,
+            "Name": "Fermat",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Source].[OPS Source].[Fermat]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Adjustment"
+            },
+            "Index": 4,
+            "Name": "Adjustment",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Source].[OPS Source].[Adjustment]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Variance"
+            },
+            "Index": 5,
+            "Name": "Variance",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Source].[OPS Source].[Variance]"
+        },
+        {
+            "Attributes": {
+                "Caption": "uReporting"
+            },
+            "Index": 6,
+            "Name": "uReporting",
+            "Type": "Numeric",
+            "UniqueName": "[OPS Source].[OPS Source].[uReporting]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Total Source excl Variance"
+            },
+            "Index": 7,
+            "Name": "Total Source excl Variance",
+            "Type": "Consolidated",
+            "UniqueName": "[OPS Source].[OPS Source].[Total Source excl Variance]"
+        }
+    ],
+    "Name": "OPS Source",
+    "Subsets": [],
+    "UniqueName": "[OPS Source].[OPS Source]"
+}

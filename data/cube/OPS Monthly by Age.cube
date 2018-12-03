@@ -1,0 +1,32 @@
+{
+    "Dimensions": [
+        {
+            "Name": "Version"
+        },
+        {
+            "Name": "Rate Type"
+        },
+        {
+            "Name": "Location"
+        },
+        {
+            "Name": "OPS Location Age"
+        },
+        {
+            "Name": "Line of Business"
+        },
+        {
+            "Name": "OPS Flow Type"
+        },
+        {
+            "Name": "Product Type"
+        },
+        {
+            "Name": "OPS Metric"
+        },
+        {
+            "Name": "OPS Monthly by Age Measure"
+        }
+    ],
+    "Name": "OPS Monthly by Age"
+}
