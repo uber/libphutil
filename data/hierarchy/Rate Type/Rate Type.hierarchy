@@ -1,0 +1,177 @@
+{
+    "DefaultMember": {
+        "Attributes": {
+            "Caption": "FX Rates Significant Adj"
+        },
+        "IsPlaceholder": false,
+        "Name": "FX Rates Significant Adj",
+        "Ordinal": 1,
+        "Type": "Regular",
+        "UniqueName": "[Rate Type].[Rate Type].[FX Rates Significant Adj]",
+        "Weight": 0
+    },
+    "Edges": [
+        {
+            "ComponentName": "Significant Adj at Prior Year Budget",
+            "ParentName": "FX Rates Significant Adj",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Significant Adj at Prior Year",
+            "ParentName": "FX Rates Significant Adj",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Significant Adj at Prior",
+            "ParentName": "FX Rates Significant Adj",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Significant Adj at Current",
+            "ParentName": "FX Rates Significant Adj",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Significant Adj at Budget",
+            "ParentName": "FX Rates Significant Adj",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "USD at Budget",
+            "ParentName": "FX Rates",
+            "Weight": -1
+        }
+    ],
+    "ElementAttributes": [],
+    "Elements": [
+        {
+            "Attributes": {
+                "Caption": "FX Rates Significant Adj"
+            },
+            "Index": 1,
+            "Name": "FX Rates Significant Adj",
+            "Type": "Consolidated",
+            "UniqueName": "[Rate Type].[Rate Type].[FX Rates Significant Adj]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Significant Adj at Prior Year Budget"
+            },
+            "Index": 2,
+            "Name": "Significant Adj at Prior Year Budget",
+            "Type": "Numeric",
+            "UniqueName": "[Rate Type].[Rate Type].[Significant Adj at Prior Year Budget]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Significant Adj at Prior Year"
+            },
+            "Index": 3,
+            "Name": "Significant Adj at Prior Year",
+            "Type": "Numeric",
+            "UniqueName": "[Rate Type].[Rate Type].[Significant Adj at Prior Year]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Significant Adj at Prior"
+            },
+            "Index": 4,
+            "Name": "Significant Adj at Prior",
+            "Type": "Numeric",
+            "UniqueName": "[Rate Type].[Rate Type].[Significant Adj at Prior]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Significant Adj at Current"
+            },
+            "Index": 5,
+            "Name": "Significant Adj at Current",
+            "Type": "Numeric",
+            "UniqueName": "[Rate Type].[Rate Type].[Significant Adj at Current]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Significant Adj at Budget"
+            },
+            "Index": 6,
+            "Name": "Significant Adj at Budget",
+            "Type": "Numeric",
+            "UniqueName": "[Rate Type].[Rate Type].[Significant Adj at Budget]"
+        },
+        {
+            "Attributes": {
+                "Caption": "USD"
+            },
+            "Index": 7,
+            "Name": "USD",
+            "Type": "Numeric",
+            "UniqueName": "[Rate Type].[Rate Type].[USD]"
+        },
+        {
+            "Attributes": {
+                "Caption": "USD at Current Rate"
+            },
+            "Index": 8,
+            "Name": "USD at Current Rate",
+            "Type": "Numeric",
+            "UniqueName": "[Rate Type].[Rate Type].[USD at Current Rate]"
+        },
+        {
+            "Attributes": {
+                "Caption": "USD at Prior Rate"
+            },
+            "Index": 9,
+            "Name": "USD at Prior Rate",
+            "Type": "Numeric",
+            "UniqueName": "[Rate Type].[Rate Type].[USD at Prior Rate]"
+        },
+        {
+            "Attributes": {
+                "Caption": "USD at Prior Year Budget"
+            },
+            "Index": 10,
+            "Name": "USD at Prior Year Budget",
+            "Type": "Numeric",
+            "UniqueName": "[Rate Type].[Rate Type].[USD at Prior Year Budget]"
+        },
+        {
+            "Attributes": {
+                "Caption": "USD at Prior Year"
+            },
+            "Index": 11,
+            "Name": "USD at Prior Year",
+            "Type": "Numeric",
+            "UniqueName": "[Rate Type].[Rate Type].[USD at Prior Year]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Local"
+            },
+            "Index": 12,
+            "Name": "Local",
+            "Type": "Numeric",
+            "UniqueName": "[Rate Type].[Rate Type].[Local]"
+        },
+        {
+            "Attributes": {
+                "Caption": "FX Rates"
+            },
+            "Index": 13,
+            "Name": "FX Rates",
+            "Type": "Consolidated",
+            "UniqueName": "[Rate Type].[Rate Type].[FX Rates]"
+        },
+        {
+            "Attributes": {
+                "Caption": "USD at Budget"
+            },
+            "Index": 14,
+            "Name": "USD at Budget",
+            "Type": "Numeric",
+            "UniqueName": "[Rate Type].[Rate Type].[USD at Budget]"
+        }
+    ],
+    "Name": "Rate Type",
+    "Subsets": [],
+    "UniqueName": "[Rate Type].[Rate Type]"
+}
