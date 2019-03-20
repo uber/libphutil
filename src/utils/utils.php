@@ -1010,11 +1010,26 @@ function phutil_fwrite_nonblocking_stream($stream, $bytes) {
   // the stream, write to it again if PHP claims that it's writable, and
   // consider the pipe broken if the write fails.
 
+  // (Signals received signals during the "fwrite()" do not appear to affect
+  // anything, see D20083.)
+
   $read = array();
   $write = array($stream);
   $except = array();
 
-  @stream_select($read, $write, $except, 0);
+  $result = @stream_select($read, $write, $except, 0);
+  if ($result === false) {
+    // See T13243. If the select is interrupted by a signal, it may return
+    // "false" indicating an underlying EINTR condition. In this case, the
+    // results (notably, "$write") are not usable because "stream_select()"
+    // didn't update them.
+
+    // In this case, treat this stream as blocked and tell the caller to
+    // retry, since EINTR is the only condition we're currently aware of that
+    // can cause "fwrite()" to return "0" and "stream_select()" to return
+    // "false" on the same stream.
+    return 0;
+  }
 
   if (!$write) {
     // The stream isn't writable, so we conclude that it probably really is
@@ -1098,6 +1113,7 @@ function phutil_units($description) {
               $src_unit));
       }
       break;
+
     case 'bytes':
       switch ($src_unit) {
         case 'byte':
@@ -1116,6 +1132,59 @@ function phutil_units($description) {
               $src_unit));
       }
       break;
+
+    case 'milliseconds':
+      switch ($src_unit) {
+        case 'second':
+        case 'seconds':
+          $factor = 1000;
+          break;
+        case 'minute':
+        case 'minutes':
+          $factor = 1000 * 60;
+          break;
+        case 'hour':
+        case 'hours':
+          $factor = 1000 * 60 * 60;
+          break;
+        case 'day':
+        case 'days':
+          $factor = 1000 * 60 * 60 * 24;
+          break;
+        default:
+          throw new InvalidArgumentException(
+            pht(
+              'This function can not convert from the unit "%s".',
+              $src_unit));
+      }
+      break;
+
+    case 'microseconds':
+      switch ($src_unit) {
+        case 'second':
+        case 'seconds':
+          $factor = 1000000;
+          break;
+        case 'minute':
+        case 'minutes':
+          $factor = 1000000 * 60;
+          break;
+        case 'hour':
+        case 'hours':
+          $factor = 1000000 * 60 * 60;
+          break;
+        case 'day':
+        case 'days':
+          $factor = 1000000 * 60 * 60 * 24;
+          break;
+        default:
+          throw new InvalidArgumentException(
+            pht(
+              'This function can not convert from the unit "%s".',
+              $src_unit));
+      }
+      break;
+
     default:
       throw new InvalidArgumentException(
         pht(
@@ -1305,7 +1374,15 @@ function phutil_ini_decode($string) {
   $trap = new PhutilErrorTrap();
 
   try {
-    if (!function_exists('parse_ini_string')) {
+    $have_call = false;
+    if (function_exists('parse_ini_string')) {
+      if (defined('INI_SCANNER_RAW')) {
+        $results = @parse_ini_string($string, true, INI_SCANNER_RAW);
+        $have_call = true;
+      }
+    }
+
+    if (!$have_call) {
       throw new PhutilMethodNotImplementedException(
         pht(
           '%s is not compatible with your version of PHP (%s). This function '.
@@ -1313,8 +1390,6 @@ function phutil_ini_decode($string) {
           __FUNCTION__,
           phpversion()));
     }
-
-    $results = @parse_ini_string($string, true, INI_SCANNER_RAW);
 
     if ($results === false) {
       throw new PhutilINIParserException(trim($trap->getErrorsAsString()));
@@ -1401,7 +1476,7 @@ function phutil_var_export($var) {
     }
 
     // Don't show keys for non-associative arrays.
-    $show_keys = (array_keys($var) !== range(0, count($var) - 1));
+    $show_keys = !phutil_is_natural_list($var);
 
     $output = array();
     $output[] = 'array(';
@@ -1536,4 +1611,186 @@ function phutil_hashes_are_identical($u, $v) {
   }
 
   return ($bits === 0);
+}
+
+
+/**
+ * Build a query string from a dictionary.
+ *
+ * @param map<string, string> Dictionary of parameters.
+ * @return string HTTP query string.
+ */
+function phutil_build_http_querystring(array $parameters) {
+  $pairs = array();
+  foreach ($parameters as $key => $value) {
+    $pairs[] = array($key, $value);
+  }
+
+  return phutil_build_http_querystring_from_pairs($pairs);
+}
+
+/**
+ * Build a query string from a list of parameter pairs.
+ *
+ * @param list<pair<string, string>> List of pairs.
+ * @return string HTTP query string.
+ */
+function phutil_build_http_querystring_from_pairs(array $pairs) {
+  // We want to encode in RFC3986 mode, but "http_build_query()" did not get
+  // a flag for that mode until PHP 5.4.0. This is equivalent to calling
+  // "http_build_query()" with the "PHP_QUERY_RFC3986" flag.
+
+  $query = array();
+  foreach ($pairs as $pair_key => $pair) {
+    if (!is_array($pair) || (count($pair) !== 2)) {
+      throw new Exception(
+        pht(
+          'HTTP parameter pair (with key "%s") is not valid: each pair must '.
+          'be an array with exactly two elements.',
+          $pair_key));
+    }
+
+    list($key, $value) = $pair;
+    list($key, $value) = phutil_http_parameter_pair($key, $value);
+    $query[] = rawurlencode($key).'='.rawurlencode($value);
+  }
+  $query = implode($query, '&');
+
+  return $query;
+}
+
+/**
+ * Typecheck and cast an HTTP key-value parameter pair.
+ *
+ * Scalar values are converted to strings. Nonscalar values raise exceptions.
+ *
+ * @param scalar HTTP parameter key.
+ * @param scalar HTTP parameter value.
+ * @return pair<string, string> Key and value as strings.
+ */
+function phutil_http_parameter_pair($key, $value) {
+  try {
+    assert_stringlike($key);
+  } catch (InvalidArgumentException $ex) {
+    throw new PhutilProxyException(
+      pht('HTTP query parameter key must be a scalar.'),
+      $ex);
+  }
+
+  $key = phutil_string_cast($key);
+
+  try {
+    assert_stringlike($value);
+  } catch (InvalidArgumentException $ex) {
+    throw new PhutilProxyException(
+      pht(
+        'HTTP query parameter value (for key "%s") must be a scalar.',
+        $key),
+      $ex);
+  }
+
+  $value = phutil_string_cast($value);
+
+  return array($key, $value);
+}
+
+function phutil_decode_mime_header($header) {
+  if (function_exists('iconv_mime_decode')) {
+    return iconv_mime_decode($header, 0, 'UTF-8');
+  }
+
+  if (function_exists('mb_decode_mimeheader')) {
+    return mb_decode_mimeheader($header);
+  }
+
+  throw new Exception(
+    pht(
+      'Unable to decode MIME header: install "iconv" or "mbstring" '.
+      'extension.'));
+}
+
+/**
+ * Perform a "(string)" cast without disabling standard exception behavior.
+ *
+ * When PHP invokes "__toString()" automatically, it fatals if the method
+ * raises an exception. In older versions of PHP (until PHP 7.1), this fatal is
+ * fairly opaque and does not give you any information about the exception
+ * itself, although newer versions of PHP at least include the exception
+ * message.
+ *
+ * This is documented on the "__toString()" manual page:
+ *
+ *   Warning
+ *   You cannot throw an exception from within a __toString() method. Doing
+ *   so will result in a fatal error.
+ *
+ * However, this only applies to implicit invocation by the language runtime.
+ * Application code can safely call `__toString()` directly without any effect
+ * on exception handling behavior. Very cool.
+ *
+ * We also reject arrays. PHP casts them to the string "Array". This behavior
+ * is, charitably, evil.
+ *
+ * @param wild Any value which aspires to be represented as a string.
+ * @return string String representation of the provided value.
+ */
+function phutil_string_cast($value) {
+  if (is_array($value)) {
+    throw new Exception(
+      pht(
+        'Value passed to "phutil_string_cast()" is an array; arrays can '.
+        'not be sensibly cast to strings.'));
+  }
+
+  if (is_object($value)) {
+    $string = $value->__toString();
+
+    if (!is_string($string)) {
+      throw new Exception(
+        pht(
+          'Object (of class "%s") did not return a string from "__toString()".',
+          get_class($value)));
+    }
+
+    return $string;
+  }
+
+  return (string)$value;
+}
+
+
+/**
+ * Return a short, human-readable description of an object's type.
+ *
+ * This is mostly useful for raising errors like "expected x() to return a Y,
+ * but it returned a Z".
+ *
+ * This is similar to "get_type()", but describes objects and arrays in more
+ * detail.
+ *
+ * @param wild Anything.
+ * @return string Human-readable description of the value's type.
+ */
+function phutil_describe_type($value) {
+  return PhutilTypeSpec::getTypeOf($value);
+}
+
+
+/**
+ * Test if a list has the natural numbers (1, 2, 3, and so on) as keys, in
+ * order.
+ *
+ * @return bool True if the list is a natural list.
+ */
+function phutil_is_natural_list(array $list) {
+  $expect = 0;
+
+  foreach ($list as $key => $item) {
+    if ($key !== $expect) {
+      return false;
+    }
+    $expect++;
+  }
+
+  return true;
 }
