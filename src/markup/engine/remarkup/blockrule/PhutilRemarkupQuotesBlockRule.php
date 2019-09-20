@@ -1,6 +1,7 @@
 <?php
 
-final class PhutilRemarkupQuotesBlockRule extends PhutilRemarkupBlockRule {
+final class PhutilRemarkupQuotesBlockRule
+  extends PhutilRemarkupQuotedBlockRule {
 
   public function getMatchingLineCount(array $lines, $cursor) {
     $pos = $cursor;
@@ -14,32 +15,13 @@ final class PhutilRemarkupQuotesBlockRule extends PhutilRemarkupBlockRule {
     return ($pos - $cursor);
   }
 
-  public function supportsChildBlocks() {
-    return true;
-  }
-
   public function extractChildText($text) {
-    $text = phutil_split_lines($text, true);
-    foreach ($text as $key => $line) {
-      $text[$key] = substr($line, 1);
-    }
-
-    return array('', implode('', $text));
+    return array('', $this->normalizeQuotedBody($text));
   }
 
   public function markupText($text, $children) {
     if ($this->getEngine()->isTextMode()) {
-      $lines = rtrim($children, "\n");
-      $lines = phutil_split_lines($lines);
-      foreach ($lines as $key => $line) {
-        if (isset($line[0]) && ($line[0] == '>')) {
-          $line = '>'.$line;
-        } else {
-          $line = '> '.$line;
-        }
-        $lines[$key] = $line;
-      }
-      return implode('', $lines);
+      return $this->getQuotedText($children);
     }
 
     $attributes = array();
