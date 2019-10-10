@@ -219,6 +219,7 @@ final class HTTPSFuture extends BaseHTTPFuture {
         $allowed_protocols = CURLPROTO_HTTPS | CURLPROTO_HTTP;
         curl_setopt($curl, CURLOPT_PROTOCOLS, $allowed_protocols);
         curl_setopt($curl, CURLOPT_REDIR_PROTOCOLS, $allowed_protocols);
+	curl_setopt($curl, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
       }
 
       if (strlen($this->rawBody)) {
