@@ -7,6 +7,8 @@ final class PhutilHTTPResponseParser extends Phobject {
   private $response;
   private $buffer;
   private $state = 'headers';
+  private $writeHandle;
+  private $progressSink;
 
   public function setFollowLocationHeaders($follow_location_headers) {
     $this->followLocationHeaders = $follow_location_headers;
@@ -15,6 +17,24 @@ final class PhutilHTTPResponseParser extends Phobject {
 
   public function getFollowLocationHeaders() {
     return $this->followLocationHeaders;
+  }
+
+  public function setWriteHandle($write_handle) {
+    $this->writeHandle = $write_handle;
+    return $this;
+  }
+
+  public function getWriteHandle() {
+    return $this->writeHandle;
+  }
+
+  public function setProgressSink(PhutilProgressSink $progress_sink) {
+    $this->progressSink = $progress_sink;
+    return $this;
+  }
+
+  public function getProgressSink() {
+    return $this->progressSink;
   }
 
   public function readBytes($bytes) {
@@ -90,7 +110,7 @@ final class PhutilHTTPResponseParser extends Phobject {
             HTTPFutureParseResponseStatus::ERROR_MALFORMED_RESPONSE,
             $raw_headers);
 
-          $this->newHTTPRepsonse()
+          $this->newHTTPResponse()
             ->setStatus($malformed);
 
           $this->buffer = '';
@@ -144,8 +164,15 @@ final class PhutilHTTPResponseParser extends Phobject {
 
       if ($this->state == 'body') {
         if (strlen($this->buffer)) {
-          $this->response->appendBody($this->buffer);
+          $bytes = $this->buffer;
           $this->buffer = '';
+
+          $this->response->appendBody($bytes);
+
+          $sink = $this->getProgressSink();
+          if ($sink) {
+            $sink->didMakeProgress(strlen($bytes));
+          }
         }
         break;
       }
@@ -166,6 +193,12 @@ final class PhutilHTTPResponseParser extends Phobject {
 
   private function newHTTPResponse() {
     $response = new PhutilHTTPResponse();
+
+    $write_handle = $this->getWriteHandle();
+    if ($write_handle) {
+      $response->setWriteHandle($write_handle);
+    }
+
     $this->responses[] = $response;
     $this->response = $response;
     return $response;

@@ -22,6 +22,11 @@ final class HTTPSFuture extends BaseHTTPFuture {
   private $rawBodyPos = 0;
   private $fileHandle;
 
+  private $downloadPath;
+  private $downloadHandle;
+  private $parser;
+  private $progressSink;
+
   /**
    * Create a temp file containing an SSL cert, and use it for this session.
    *
@@ -137,6 +142,28 @@ final class HTTPSFuture extends BaseHTTPFuture {
     }
   }
 
+  public function setDownloadPath($download_path) {
+    $this->downloadPath = $download_path;
+
+    if (Filesystem::pathExists($download_path)) {
+      throw new Exception(
+        pht(
+          'Specified download path "%s" already exists, refusing to '.
+          'overwrite.'));
+    }
+
+    return $this;
+  }
+
+  public function setProgressSink(PhutilProgressSink $progress_sink) {
+    $this->progressSink = $progress_sink;
+    return $this;
+  }
+
+  public function getProgressSink() {
+    return $this->progressSink;
+  }
+
   /**
    * Attach a file to the request.
    *
@@ -173,6 +200,12 @@ final class HTTPSFuture extends BaseHTTPFuture {
 
     $uri = $this->getURI();
     $domain = id(new PhutilURI($uri))->getDomain();
+
+    $is_download = $this->isDownload();
+
+    // See T13396. For now, use the streaming response parser only if we're
+    // downloading the response to disk.
+    $use_streaming_parser = (bool)$is_download;
 
     if (!$this->handle) {
       $uri_object = new PhutilURI($uri);
@@ -356,8 +389,39 @@ final class HTTPSFuture extends BaseHTTPFuture {
       curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, $verify_host);
       curl_setopt($curl, CURLOPT_SSLVERSION, 0);
 
+      // See T13391. Recent versions of cURL default to "HTTP/2" on some
+      // connections, but do not support HTTP/2 proxies. Until HTTP/2
+      // stabilizes, force HTTP/1.1 explicitly.
+      curl_setopt($curl, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
+
       if ($proxy) {
         curl_setopt($curl, CURLOPT_PROXY, (string)$proxy);
+      }
+
+      if ($is_download) {
+        $this->downloadHandle = @fopen($this->downloadPath, 'wb+');
+        if (!$this->downloadHandle) {
+          throw new Exception(
+            pht(
+              'Failed to open filesystem path "%s" for writing.',
+              $this->downloadPath));
+        }
+      }
+
+      if ($use_streaming_parser) {
+        $streaming_parser = id(new PhutilHTTPResponseParser())
+          ->setFollowLocationHeaders($this->getFollowLocation());
+
+        if ($this->downloadHandle) {
+          $streaming_parser->setWriteHandle($this->downloadHandle);
+        }
+
+        $progress_sink = $this->getProgressSink();
+        if ($progress_sink) {
+          $streaming_parser->setProgressSink($progress_sink);
+        }
+
+        $this->parser = $streaming_parser;
       }
     } else {
       $curl = $this->handle;
@@ -411,6 +475,21 @@ final class HTTPSFuture extends BaseHTTPFuture {
       $body = null;
       $headers = array();
       $this->result = array($status, $body, $headers);
+    } else if ($this->parser) {
+      $streaming_parser = $this->parser;
+      try {
+        $responses = $streaming_parser->getResponses();
+        $final_response = last($responses);
+        $result = array(
+          $final_response->getStatus(),
+          $final_response->getBody(),
+          $final_response->getHeaders(),
+        );
+      } catch (HTTPFutureParseResponseStatus $ex) {
+        $result = array($ex, null, array());
+      }
+
+      $this->result = $result;
     } else {
       // cURL returns headers of all redirects, we strip all but the final one.
       $redirects = curl_getinfo($curl, CURLINFO_REDIRECT_COUNT);
@@ -427,6 +506,24 @@ final class HTTPSFuture extends BaseHTTPFuture {
       self::$pool[$domain][] = $curl;
     }
 
+    if ($is_download) {
+      if ($this->downloadHandle) {
+        fflush($this->downloadHandle);
+        fclose($this->downloadHandle);
+        $this->downloadHandle = null;
+      }
+    }
+
+    $sink = $this->getProgressSink();
+    if ($sink) {
+      $status = head($this->result);
+      if ($status->isError()) {
+        $sink->didFailWork();
+      } else {
+        $sink->didCompleteWork();
+      }
+    }
+
     $profiler = PhutilServiceProfiler::getInstance();
     $profiler->endServiceCall($this->profilerCallID, array());
 
@@ -439,7 +536,12 @@ final class HTTPSFuture extends BaseHTTPFuture {
    * the data to a buffer.
    */
   public function didReceiveDataCallback($handle, $data) {
-    $this->responseBuffer .= $data;
+    if ($this->parser) {
+      $this->parser->readBytes($data);
+    } else {
+      $this->responseBuffer .= $data;
+    }
+
     return strlen($data);
   }
 
@@ -455,6 +557,20 @@ final class HTTPSFuture extends BaseHTTPFuture {
    * @return string Response data, if available.
    */
   public function read() {
+    if ($this->isDownload()) {
+      throw new Exception(
+        pht(
+          'You can not read the result buffer while streaming results '.
+          'to disk: there is no in-memory buffer to read.'));
+    }
+
+    if ($this->parser) {
+      throw new Exception(
+        pht(
+          'Streaming reads are not currently supported by the streaming '.
+          'parser.'));
+    }
+
     $result = substr($this->responseBuffer, $this->responseBufferPos);
     $this->responseBufferPos = strlen($this->responseBuffer);
     return $result;
@@ -468,6 +584,20 @@ final class HTTPSFuture extends BaseHTTPFuture {
    * @return this
    */
   public function discardBuffers() {
+    if ($this->isDownload()) {
+      throw new Exception(
+        pht(
+          'You can not discard the result buffer while streaming results '.
+          'to disk: there is no in-memory buffer to discard.'));
+    }
+
+    if ($this->parser) {
+      throw new Exception(
+        pht(
+          'Buffer discards are not currently supported by the streaming '.
+          'parser.'));
+    }
+
     $this->responseBuffer = '';
     $this->responseBufferPos = 0;
     return $this;
@@ -685,5 +815,8 @@ final class HTTPSFuture extends BaseHTTPFuture {
     return true;
   }
 
+  private function isDownload() {
+   return ($this->downloadPath !== null);
+  }
 
 }
