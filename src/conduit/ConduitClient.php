@@ -146,14 +146,6 @@ final class ConduitClient extends Phobject {
     $core_future = new HTTPSFuture($uri, $data);
     $core_future->addHeader('Host', $this->getHostStringForHeader());
 
-    if ( getenv('NEED_USSO_COOKIE')) {
-
-      $cookies = $core_future->getHeaders('Cookie');
-      $new_cookies = $this->addWonkaClaimToCookies($cookies);
-      echo "Adding USSO Cookie\n {$new_cookies}\n" ;
-      $core_future->addHeader('Cookie', $new_cookies);
-    }
-
     $core_future->setMethod('POST');
     $core_future->setTimeout($this->timeout);
 
@@ -165,35 +157,6 @@ final class ConduitClient extends Phobject {
 
     return id(new ConduitFuture($core_future))
       ->setClient($this, $method);
-  }
-
-  private function addWonkaClaimToCookies($cookies) {
-    $claim = $this->getWonkaClaim();
-    $usso_cookie = "usso={$claim}";
-    if (empty($cookies)) {
-      $new_cookies = $usso_cookie ;
-    } else {
-      $new_cookies = $cookies . "; {$usso_cookie}" ;
-    }
-    return $new_cookies;
-  }
-
-  private function getWonkaClaim() {
-    unset($cookie);
-    // if the file exists and is current, use it.
-    $cookie_file = getenv('NEED_USSO_COOKIE');
-    if (file_exists($cookie_file)) {
-      $stale = time() - filemtime($cookie_file);
-      if( $stale < 60 ) {
-        $cookie = rtrim(file_get_contents($cookie_file));
-      }
-    }
-    if ( ! isset($cookie)) {
-      $wonka_cli = getenv('ARC_WONKA_CLI');
-      system("{$wonka_cli} {$cookie_file}", $retval);
-      $cookie = rtrim(file_get_contents($cookie_file));
-    }
-    return $cookie;
   }
 
   public function setBasicAuthCredentials($username, $password) {
