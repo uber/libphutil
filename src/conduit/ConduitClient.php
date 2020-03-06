@@ -146,19 +146,13 @@ final class ConduitClient extends Phobject {
     $core_future = new HTTPSFuture($uri, $data);
     $core_future->addHeader('Host', $this->getHostStringForHeader());
 
-    // UBER CODE BEGIN
-    if (getenv('NEED_USSO_COOKIE')) {
+    if ( getenv('NEED_USSO_COOKIE')) {
+
       $cookies = $core_future->getHeaders('Cookie');
       $new_cookies = $this->addWonkaClaimToCookies($cookies);
-      if (strcmp($new_cookies, $cookies) !== 0) {
-        echo "Adding USSO Cookie\n {$new_cookies}\n";
-        $core_future->addHeader('Cookie', $new_cookies);
-      } else {
-        throw new Exception(
-          pht('Env variable NEED_USSO_COOKIE was set, but unable to obtain usso cookie using %s', getenv('ARC_WONKA_CLI')));
-      }
+      echo "Adding USSO Cookie\n {$new_cookies}\n" ;
+      $core_future->addHeader('Cookie', $new_cookies);
     }
-    // UBER CODE END
 
     $core_future->setMethod('POST');
     $core_future->setTimeout($this->timeout);
@@ -173,40 +167,34 @@ final class ConduitClient extends Phobject {
       ->setClient($this, $method);
   }
 
-  // UBER CODE BEGIN
   private function addWonkaClaimToCookies($cookies) {
     $claim = $this->getWonkaClaim();
-    $new_cookies = '';
-    if (empty($claim)) {
-      return $cookies;
-    }
     $usso_cookie = "usso={$claim}";
     if (empty($cookies)) {
-      $new_cookies = $usso_cookie;
+      $new_cookies = $usso_cookie ;
     } else {
-      $new_cookies = $cookies."; {$usso_cookie}";
+      $new_cookies = $cookies . "; {$usso_cookie}" ;
     }
     return $new_cookies;
   }
 
   private function getWonkaClaim() {
-    $claim = '';
+    unset($cookie);
     // if the file exists and is current, use it.
-    $claim_file = getenv('NEED_USSO_COOKIE');
-    if (file_exists($claim_file)) {
-      $stale = time() - filemtime($claim_file);
-      if ($stale < 60) {
-        $claim = rtrim(file_get_contents($claim_file));
+    $cookie_file = getenv('NEED_USSO_COOKIE');
+    if (file_exists($cookie_file)) {
+      $stale = time() - filemtime($cookie_file);
+      if( $stale < 60 ) {
+        $cookie = rtrim(file_get_contents($cookie_file));
       }
     }
-    if (!isset($claim)) {
+    if ( ! isset($cookie)) {
       $wonka_cli = getenv('ARC_WONKA_CLI');
-      system("{$wonka_cli} {$claim_file}");
-      $claim = rtrim(file_get_contents($claim_file));
+      system("{$wonka_cli} {$cookie_file}", $retval);
+      $cookie = rtrim(file_get_contents($cookie_file));
     }
-    return $claim;
+    return $cookie;
   }
-  // UBER CODE END
 
   public function setBasicAuthCredentials($username, $password) {
     $this->username = $username;
