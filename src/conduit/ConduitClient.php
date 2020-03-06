@@ -160,14 +160,9 @@ final class ConduitClient extends Phobject {
         }
         $core_future->addHeader('Cookie', $new_cookies);
       } else {
-        // To the last, I grapple with thee;
-        // From Hell's heart, I stab at thee;
-        // For hate's sake, I spit my last breath at thee.
-        // Herman Mellville - Moby Dick
         throw new Exception(
-          pht('Env variable ARC_USSO_COOKIE was set, %s %s',
-          'but unable to obtain usso cookie using',
-            $this->getWonkaCli()));
+          pht('Env variable ARC_USSO_COOKIE was set, but unable to obtain usso cookie using %s',
+            getenv('ARC_WONKA_CLI')));
       }
     }
     // UBER CODE END
@@ -211,6 +206,7 @@ final class ConduitClient extends Phobject {
     $claim = $this->happyPath($claim_file);
 
     $now = time();
+    $wonka_cli = getenv('ARC_WONKA_CLI');
 
     while (empty($claim)) {
       if ((time() - $now) > 5) {
@@ -220,11 +216,11 @@ final class ConduitClient extends Phobject {
       }
       // there is a race condition here.
       if ($this->getLock($claim_file)) {
-        $this->antiFootGun($claim_file);
+        $this->antiFootGun("{$wonka_cli} {$claim_file}");
         $claim = $this->readClaimFile($claim_file);
         $this->rmLock($claim_file);
         if (getenv('ARC_DEBUG')) {
-          echo "Ran {getWonkaCli()} {$claim_file}\n Got {$claim}\n";
+          echo "Ran {$wonka_cli} {$claim_file}\n Got {$claim}\n";
         }
       } else {
         usleep(200000);
@@ -237,80 +233,17 @@ final class ConduitClient extends Phobject {
     return $claim;
   }
 
-  private function antiFootGun($claim_file = '') {
-    $wonka_cli = $this->getWonkaCli();
-    $better_safe  = escapeshellarg($claim_file);
-    $better_safe_than_sorry = "{$wonka_cli} {$better_safe}";
+  private function antiFootGun($cmd_string = '') {
+    $better_safe_than_sorry = '';
+    $tokens = preg_split('/\s+/', $cmd_string);
+    $quoted_tokens = array_map('escapeshellarg', $tokens);
+    $better_safe = join(' ', $quoted_tokens);
+    $better_safe_than_sorry = escapeshellcmd($better_safe);
     if (getenv('ARC_DEBUG')) {
       echo "Running {$better_safe_than_sorry}\n";
     }
     if (!empty($better_safe_than_sorry)) {
       system($better_safe_than_sorry);
-    }
-  }
-
-  private function getWonkaCli() {
-    $flaw = '';
-    // find HOME
-    $uid = posix_getuid();
-    $home =  idx(posix_getpwuid($uid), 'dir', '');
-    $home_bin = "{$home}/bin";
-    $this->isSafePath($uid, $home_bin);
-    $wonka_cli = "{$home_bin}/testadura";
-    if (is_file($wonka_cli)) {
-      if (is_executable($wonka_cli)) {
-        if (fileowner($wonka_cli) != $uid) {
-          $owner = idx(posix_getpwuid($uid), 'name', '');
-          $flaw = "is not owned by {$owner}";
-        } else {
-          $perms = fileperms($wonka_cli);
-          $info = (($perms & 0x0010) ? 'w' : '-');
-          $info .= (($perms & 0x0002) ? 'w' : '-');
-          if ($info != '--') {
-            $flaw = 'is writable by other than owner.';
-          }
-        }
-      } else {
-        $flaw = 'is not executable.';
-      }
-    } else {
-        $flaw = 'is not a file.';
-    }
-
-    if (empty($flaw)) {
-      return $wonka_cli;
-    } else {
-      throw new Exception(pht('%s %s', $wonka_cli, $flaw));
-    }
-  }
-
-  private function isSafePath($uid, $path) {
-    $flaw = '';
-    if (is_dir($path)) {
-      // First check path is owned by $uid
-      $owner = fileowner($path);
-      $root_id = 0;
-      if ($owner != $uid && $owner != $root_id ) {
-        $owner_name = idx(posix_getpwuid($owner), 'name', '');
-        $flaw = "{$path} is owned by {$owner_name}.";
-      } else {
-        $perms = fileperms($path);
-        $info = (($perms & 0x0010) ? 'w' : '-');
-        $info .= (($perms & 0x0002) ? 'w' : '-');
-        if ($info != '--') {
-          $flaw = '{$path} is writable by other than owner.';
-        } else {
-          if (!$path == '/') {
-            $head = idx(pathinfo($path), 'dirname', '/');
-            $this->isSafePath($uid, $head);
-          }
-        }
-      }
-    } else {
-      $flaw = "{$path} is not a directory.";
-    }
-    if (!empty($flaw)) {
-      throw new Exception(pht('Unsafe path %s, %s', $path, $flaw));
     }
   }
 
@@ -328,18 +261,12 @@ final class ConduitClient extends Phobject {
   }
 
   private function readClaimFile($claim_file = '') {
-    if (!is_readable($claim_file)) {
-      throw new Exception(
-        pht('ARC_USSO_COOKIE file %s is not a readable file.',
-          $claim_file));
-    }
-
     $claim = rtrim(file_get_contents($claim_file, null, null, 0, 1024));
     // Base 64 string with no newlines.
-    if (!preg_match('/^[a-zA-Z0-9\/+]+={0,2}$/', $claim) ) {
+    if (!preg_match('/^[a-zA-Z0-9\/+]*={0,2}$/', $claim)) {
       throw new Exception(
-        pht('ARC_USSO_COOKIE %s has mal-formed claim.',
-          $claim_file));
+        pht('ARC_USSO_COOKIE %s has mal-formed claim',
+          getenv('ARC_USSO_COOKIE')));
     }
     return $claim;
   }
