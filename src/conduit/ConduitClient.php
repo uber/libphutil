@@ -151,9 +151,7 @@ final class ConduitClient extends Phobject {
       $cookies = $core_future->getHeaders('Cookie');
       $new_cookies = $this->addWonkaClaimToCookies($cookies);
       if (strcmp($new_cookies, $cookies) !== 0) {
-        if (getenv('ARC_DEBUG')) {
-          echo "Adding USSO Cookie\n {$new_cookies}\n";
-        }
+        echo "Adding USSO Cookie\n {$new_cookies}\n";
         $core_future->addHeader('Cookie', $new_cookies);
       } else {
         throw new Exception(
