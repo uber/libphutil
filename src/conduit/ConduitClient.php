@@ -215,7 +215,7 @@ final class ConduitClient extends Phobject {
       }
       // there is a race condition here.
       if ($this->getLock($claim_file)) {
-        $this->antiFootGun("{$wonka_cli} {$claim_file}");
+        system("{$wonka_cli} {$claim_file}");
         $claim = $this->readClaimFile($claim_file);
         $this->rmLock($claim_file);
         if (getenv('ARC_DEBUG')) {
@@ -230,19 +230,6 @@ final class ConduitClient extends Phobject {
       }
     }
     return $claim;
-  }
-
-  private function antiFootGun($cmd_string = '') {
-    $better_safe_than_sorry = '';
-    $tokens = preg_split('/\s+/', $cmd_string);
-    $quoted_tokens = array_map('escapeshellarg', $tokens);
-    $better_safe_than_sorry = escapeshellcmd($quoted_tokens);
-    if (getenv('ARC_DEBUG')) {
-      echo "Running {$better_safe_than_sorry}\n";
-    }
-    if (!empty($better_safe_than_sorry)) {
-      system($better_safe_than_sorry);
-    }
   }
 
   private function happyPath($claim_file = '') {
