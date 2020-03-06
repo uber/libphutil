@@ -207,9 +207,8 @@ final class ConduitClient extends Phobject {
 
     $now = time();
     $wonka_cli = getenv('ARC_WONKA_CLI');
-
     while (empty($claim)) {
-      if ((time() - $now) > 5) {
+      if ((time() - $now) > 5 ) {
         $this->rmLock($claim_file);
         throw new Exception(
           pht('Unable to obtain lock on dir %s.lock, removing', $claim_file));
@@ -237,8 +236,7 @@ final class ConduitClient extends Phobject {
     $better_safe_than_sorry = '';
     $tokens = preg_split('/\s+/', $cmd_string);
     $quoted_tokens = array_map('escapeshellarg', $tokens);
-    $better_safe = join(' ', $quoted_tokens);
-    $better_safe_than_sorry = escapeshellcmd($better_safe);
+    $better_safe_than_sorry = escapeshellcmd($quoted_tokens);
     if (getenv('ARC_DEBUG')) {
       echo "Running {$better_safe_than_sorry}\n";
     }
@@ -249,11 +247,9 @@ final class ConduitClient extends Phobject {
 
   private function happyPath($claim_file = '') {
     $claim = '';
-    // Greater than 59, less than 600
-    $wonka_life = max(min((int)getenv('ARC_WONKA_LIFETIME'), 600), 59);
     if (file_exists($claim_file)) {
       $stale = time() - filemtime($claim_file);
-      if ($stale < $wonka_life) {
+      if ($stale < 59) {
         $claim = $this->readClaimFile($claim_file);
       }
     }
