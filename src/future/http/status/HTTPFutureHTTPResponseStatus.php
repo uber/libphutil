@@ -64,4 +64,7 @@ final class HTTPFutureHTTPResponseStatus extends HTTPFutureResponseStatus {
     return idx($map, $code)."\n".$this->excerpt."\n";
   }
 
+  public function getExcerpt() {
+    return $this->excerpt;
+  }
 }
