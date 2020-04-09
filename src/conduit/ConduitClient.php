@@ -13,6 +13,7 @@ final class ConduitClient extends Phobject {
   private $privateKey;
   private $conduitToken;
   private $oauthToken;
+  private $extraHeaders = array(); // UBER CODE
 
   const AUTH_ASYMMETRIC = 'asymmetric';
 
@@ -145,6 +146,11 @@ final class ConduitClient extends Phobject {
     // protocol edge cases that HTTPFuture does not support.
     $core_future = new HTTPSFuture($uri, $data);
     $core_future->addHeader('Host', $this->getHostStringForHeader());
+    // UBER CODE
+    foreach ($this->extraHeaders as $header => $value) {
+      $core_future->addHeader($header, $value);
+    }
+    // UBER CODE END
 
     $core_future->setMethod('POST');
     $core_future->setTimeout($this->timeout);
@@ -392,4 +398,9 @@ final class ConduitClient extends Phobject {
     return implode('', $out);
   }
 
+  // UBER CODE
+  public function setHeader($header, $value) {
+    $this->extraHeaders[$header] = $value;
+  }
+  // UBER CODE
 }
