@@ -66,7 +66,7 @@
         "Bedrock.*",
         "SecMeta*",
         "}Drill_Audit*",
-        "zTemp*"
+        "zTemp*",
         "}*"
     ],
     "exclude_rule": "",
