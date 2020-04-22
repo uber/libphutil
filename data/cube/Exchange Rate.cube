@@ -1,0 +1,20 @@
+{
+    "Dimensions": [
+        {
+            "Name": "Version"
+        },
+        {
+            "Name": "Month"
+        },
+        {
+            "Name": "Currency"
+        },
+        {
+            "Name": "Currency To"
+        },
+        {
+            "Name": "Exchange Rate Measure"
+        }
+    ],
+    "Name": "Exchange Rate"
+}

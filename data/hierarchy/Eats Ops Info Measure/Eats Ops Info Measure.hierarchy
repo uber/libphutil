@@ -1,0 +1,47 @@
+{
+    "DefaultMember": {
+        "Attributes": {
+            "Caption": "Source Table"
+        },
+        "IsPlaceholder": false,
+        "Name": "Source Table",
+        "Ordinal": 1,
+        "Type": "Regular",
+        "UniqueName": "[Eats Ops Info Measure].[Eats Ops Info Measure].[Source Table]",
+        "Weight": 0
+    },
+    "Edges": [],
+    "ElementAttributes": [],
+    "Elements": [
+        {
+            "Attributes": {
+                "Caption": "Source Table"
+            },
+            "Index": 1,
+            "Name": "Source Table",
+            "Type": "String",
+            "UniqueName": "[Eats Ops Info Measure].[Eats Ops Info Measure].[Source Table]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Last Updated"
+            },
+            "Index": 2,
+            "Name": "Last Updated",
+            "Type": "String",
+            "UniqueName": "[Eats Ops Info Measure].[Eats Ops Info Measure].[Last Updated]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Pipeline"
+            },
+            "Index": 3,
+            "Name": "Pipeline",
+            "Type": "String",
+            "UniqueName": "[Eats Ops Info Measure].[Eats Ops Info Measure].[Pipeline]"
+        }
+    ],
+    "Name": "Eats Ops Info Measure",
+    "Subsets": [],
+    "UniqueName": "[Eats Ops Info Measure].[Eats Ops Info Measure]"
+}

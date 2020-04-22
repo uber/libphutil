@@ -1,0 +1,310 @@
+{
+    "DefaultMember": {
+        "Attributes": {
+            "Caption": "Total Rides Flow Type"
+        },
+        "IsPlaceholder": false,
+        "Name": "Total Rides Flow Type",
+        "Ordinal": 1,
+        "Type": "Regular",
+        "UniqueName": "[Rides Flow Type].[Rides Flow Type].[Total Rides Flow Type]",
+        "Weight": 0
+    },
+    "Edges": [
+        {
+            "ComponentName": "P2P",
+            "ParentName": "Total Rides Flow Type",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Non P2P",
+            "ParentName": "Total Rides Flow Type",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Unspecified Flow Type",
+            "ParentName": "Total Rides Flow Type",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "ATC",
+            "ParentName": "Total Rides Flow Type",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Black",
+            "ParentName": "Non P2P",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Logistics",
+            "ParentName": "Non P2P",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Other",
+            "ParentName": "Non P2P",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Taxi",
+            "ParentName": "Non P2P",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "UberEats",
+            "ParentName": "Non P2P",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Suburbs",
+            "ParentName": "Non P2P",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "UberX",
+            "ParentName": "Non P2P",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Motorbike",
+            "ParentName": "Non P2P",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Commute",
+            "ParentName": "Non P2P",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "SUV",
+            "ParentName": "Non P2P",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Onboarder",
+            "ParentName": "Non P2P",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Remote",
+            "ParentName": "Non P2P",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Temporary",
+            "ParentName": "Non P2P",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Fleet",
+            "ParentName": "Non P2P",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Fleetoperator",
+            "ParentName": "Non P2P",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Uberfreight",
+            "ParentName": "Non P2P",
+            "Weight": 1
+        }
+    ],
+    "ElementAttributes": [],
+    "Elements": [
+        {
+            "Attributes": {
+                "Caption": "Total Rides Flow Type"
+            },
+            "Index": 1,
+            "Name": "Total Rides Flow Type",
+            "Type": "Consolidated",
+            "UniqueName": "[Rides Flow Type].[Rides Flow Type].[Total Rides Flow Type]"
+        },
+        {
+            "Attributes": {
+                "Caption": "P2P"
+            },
+            "Index": 2,
+            "Name": "P2P",
+            "Type": "Numeric",
+            "UniqueName": "[Rides Flow Type].[Rides Flow Type].[P2P]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Non P2P"
+            },
+            "Index": 3,
+            "Name": "Non P2P",
+            "Type": "Consolidated",
+            "UniqueName": "[Rides Flow Type].[Rides Flow Type].[Non P2P]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Black"
+            },
+            "Index": 4,
+            "Name": "Black",
+            "Type": "Numeric",
+            "UniqueName": "[Rides Flow Type].[Rides Flow Type].[Black]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Logistics"
+            },
+            "Index": 5,
+            "Name": "Logistics",
+            "Type": "Numeric",
+            "UniqueName": "[Rides Flow Type].[Rides Flow Type].[Logistics]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Other"
+            },
+            "Index": 6,
+            "Name": "Other",
+            "Type": "Numeric",
+            "UniqueName": "[Rides Flow Type].[Rides Flow Type].[Other]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Taxi"
+            },
+            "Index": 7,
+            "Name": "Taxi",
+            "Type": "Numeric",
+            "UniqueName": "[Rides Flow Type].[Rides Flow Type].[Taxi]"
+        },
+        {
+            "Attributes": {
+                "Caption": "UberEats"
+            },
+            "Index": 8,
+            "Name": "UberEats",
+            "Type": "Numeric",
+            "UniqueName": "[Rides Flow Type].[Rides Flow Type].[UberEats]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Suburbs"
+            },
+            "Index": 9,
+            "Name": "Suburbs",
+            "Type": "Numeric",
+            "UniqueName": "[Rides Flow Type].[Rides Flow Type].[Suburbs]"
+        },
+        {
+            "Attributes": {
+                "Caption": "UberX"
+            },
+            "Index": 10,
+            "Name": "UberX",
+            "Type": "Numeric",
+            "UniqueName": "[Rides Flow Type].[Rides Flow Type].[UberX]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Motorbike"
+            },
+            "Index": 11,
+            "Name": "Motorbike",
+            "Type": "Numeric",
+            "UniqueName": "[Rides Flow Type].[Rides Flow Type].[Motorbike]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Commute"
+            },
+            "Index": 12,
+            "Name": "Commute",
+            "Type": "Numeric",
+            "UniqueName": "[Rides Flow Type].[Rides Flow Type].[Commute]"
+        },
+        {
+            "Attributes": {
+                "Caption": "SUV"
+            },
+            "Index": 13,
+            "Name": "SUV",
+            "Type": "Numeric",
+            "UniqueName": "[Rides Flow Type].[Rides Flow Type].[SUV]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Onboarder"
+            },
+            "Index": 14,
+            "Name": "Onboarder",
+            "Type": "Numeric",
+            "UniqueName": "[Rides Flow Type].[Rides Flow Type].[Onboarder]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Remote"
+            },
+            "Index": 15,
+            "Name": "Remote",
+            "Type": "Numeric",
+            "UniqueName": "[Rides Flow Type].[Rides Flow Type].[Remote]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Temporary"
+            },
+            "Index": 16,
+            "Name": "Temporary",
+            "Type": "Numeric",
+            "UniqueName": "[Rides Flow Type].[Rides Flow Type].[Temporary]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Fleet"
+            },
+            "Index": 17,
+            "Name": "Fleet",
+            "Type": "Numeric",
+            "UniqueName": "[Rides Flow Type].[Rides Flow Type].[Fleet]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Fleetoperator"
+            },
+            "Index": 18,
+            "Name": "Fleetoperator",
+            "Type": "Numeric",
+            "UniqueName": "[Rides Flow Type].[Rides Flow Type].[Fleetoperator]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Uberfreight"
+            },
+            "Index": 19,
+            "Name": "Uberfreight",
+            "Type": "Numeric",
+            "UniqueName": "[Rides Flow Type].[Rides Flow Type].[Uberfreight]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Unspecified Flow Type"
+            },
+            "Index": 20,
+            "Name": "Unspecified Flow Type",
+            "Type": "Numeric",
+            "UniqueName": "[Rides Flow Type].[Rides Flow Type].[Unspecified Flow Type]"
+        },
+        {
+            "Attributes": {
+                "Caption": "ATC"
+            },
+            "Index": 21,
+            "Name": "ATC",
+            "Type": "Numeric",
+            "UniqueName": "[Rides Flow Type].[Rides Flow Type].[ATC]"
+        }
+    ],
+    "Name": "Rides Flow Type",
+    "Subsets": [],
+    "UniqueName": "[Rides Flow Type].[Rides Flow Type]"
+}

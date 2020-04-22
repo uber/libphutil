@@ -1,0 +1,35 @@
+{
+    "Dimensions": [
+        {
+            "Name": "Version"
+        },
+        {
+            "Name": "Period"
+        },
+        {
+            "Name": "Source"
+        },
+        {
+            "Name": "Currency"
+        },
+        {
+            "Name": "Rate Type"
+        },
+        {
+            "Name": "Location"
+        },
+        {
+            "Name": "Eats Product Type"
+        },
+        {
+            "Name": "Eats Restaurant Type"
+        },
+        {
+            "Name": "Eats Ops Metric"
+        },
+        {
+            "Name": "Eats Ops Staging Measure"
+        }
+    ],
+    "Name": "Eats Ops Staging"
+}

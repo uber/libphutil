@@ -1,0 +1,547 @@
+{
+    "DefaultMember": {
+        "Attributes": {
+            "Alt Name": "Total Rides Car Type",
+            "Caption": "Total Rides Car Type"
+        },
+        "IsPlaceholder": false,
+        "Name": "Total Rides Car Type",
+        "Ordinal": 1,
+        "Type": "Regular",
+        "UniqueName": "[Rides Car Type].[Rides Car Type].[Total Rides Car Type]",
+        "Weight": 0
+    },
+    "Edges": [
+        {
+            "ComponentName": "Premium-Tier",
+            "ParentName": "Total Rides Car Type",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Mid-Tier",
+            "ParentName": "Total Rides Car Type",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Low Cost",
+            "ParentName": "Total Rides Car Type",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Not Specified",
+            "ParentName": "Total Rides Car Type",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Others",
+            "ParentName": "Total Rides Car Type",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Black Rides",
+            "ParentName": "Premium-Tier",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Comfort Rides",
+            "ParentName": "Premium-Tier",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Black Car",
+            "ParentName": "Black Rides",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "SUV",
+            "ParentName": "Black Rides",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Select",
+            "ParentName": "Comfort Rides",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Van",
+            "ParentName": "Comfort Rides",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Premier",
+            "ParentName": "Comfort Rides",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Hire",
+            "ParentName": "Comfort Rides",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Comfort",
+            "ParentName": "Comfort Rides",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Intercity",
+            "ParentName": "Comfort Rides",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "UberX Rides",
+            "ParentName": "Mid-Tier",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "UberX",
+            "ParentName": "UberX Rides",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "UberXL",
+            "ParentName": "UberX Rides",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Listen/Soporte",
+            "ParentName": "UberX Rides",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Go",
+            "ParentName": "UberX Rides",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "WAV",
+            "ParentName": "UberX Rides",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Shared Rides",
+            "ParentName": "Low Cost",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Ride Hail",
+            "ParentName": "Low Cost",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "HCV",
+            "ParentName": "Shared Rides",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Expresspool",
+            "ParentName": "Shared Rides",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Pool",
+            "ParentName": "Shared Rides",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Uberpool",
+            "ParentName": "Shared Rides",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Moto",
+            "ParentName": "Ride Hail",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Taxi",
+            "ParentName": "Ride Hail",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Auto",
+            "ParentName": "Ride Hail",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Stunt",
+            "ParentName": "Others",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Other",
+            "ParentName": "Others",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Elevate",
+            "ParentName": "Others",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Emobility",
+            "ParentName": "Others",
+            "Weight": 1
+        }
+    ],
+    "ElementAttributes": [
+        {
+            "Name": "Alt Name",
+            "Type": "Alias"
+        }
+    ],
+    "Elements": [
+        {
+            "Attributes": {
+                "Alt Name": "Total Rides Car Type",
+                "Caption": "Total Rides Car Type"
+            },
+            "Index": 1,
+            "Name": "Total Rides Car Type",
+            "Type": "Consolidated",
+            "UniqueName": "[Rides Car Type].[Rides Car Type].[Total Rides Car Type]"
+        },
+        {
+            "Attributes": {
+                "Alt Name": "Premium-Tier",
+                "Caption": "Premium-Tier"
+            },
+            "Index": 2,
+            "Name": "Premium-Tier",
+            "Type": "Consolidated",
+            "UniqueName": "[Rides Car Type].[Rides Car Type].[Premium-Tier]"
+        },
+        {
+            "Attributes": {
+                "Alt Name": "Black Rides",
+                "Caption": "Black Rides"
+            },
+            "Index": 3,
+            "Name": "Black Rides",
+            "Type": "Consolidated",
+            "UniqueName": "[Rides Car Type].[Rides Car Type].[Black Rides]"
+        },
+        {
+            "Attributes": {
+                "Alt Name": "black",
+                "Caption": "Black Car"
+            },
+            "Index": 4,
+            "Name": "Black Car",
+            "Type": "Numeric",
+            "UniqueName": "[Rides Car Type].[Rides Car Type].[Black Car]"
+        },
+        {
+            "Attributes": {
+                "Alt Name": "SUV",
+                "Caption": "SUV"
+            },
+            "Index": 5,
+            "Name": "SUV",
+            "Type": "Numeric",
+            "UniqueName": "[Rides Car Type].[Rides Car Type].[SUV]"
+        },
+        {
+            "Attributes": {
+                "Alt Name": "Comfort Rides",
+                "Caption": "Comfort Rides"
+            },
+            "Index": 6,
+            "Name": "Comfort Rides",
+            "Type": "Consolidated",
+            "UniqueName": "[Rides Car Type].[Rides Car Type].[Comfort Rides]"
+        },
+        {
+            "Attributes": {
+                "Alt Name": "Select",
+                "Caption": "Select"
+            },
+            "Index": 7,
+            "Name": "Select",
+            "Type": "Numeric",
+            "UniqueName": "[Rides Car Type].[Rides Car Type].[Select]"
+        },
+        {
+            "Attributes": {
+                "Alt Name": "Van",
+                "Caption": "Van"
+            },
+            "Index": 8,
+            "Name": "Van",
+            "Type": "Numeric",
+            "UniqueName": "[Rides Car Type].[Rides Car Type].[Van]"
+        },
+        {
+            "Attributes": {
+                "Alt Name": "Premier",
+                "Caption": "Premier"
+            },
+            "Index": 9,
+            "Name": "Premier",
+            "Type": "Numeric",
+            "UniqueName": "[Rides Car Type].[Rides Car Type].[Premier]"
+        },
+        {
+            "Attributes": {
+                "Alt Name": "Hire",
+                "Caption": "Hire"
+            },
+            "Index": 10,
+            "Name": "Hire",
+            "Type": "Numeric",
+            "UniqueName": "[Rides Car Type].[Rides Car Type].[Hire]"
+        },
+        {
+            "Attributes": {
+                "Alt Name": "Comfort",
+                "Caption": "Comfort"
+            },
+            "Index": 11,
+            "Name": "Comfort",
+            "Type": "Numeric",
+            "UniqueName": "[Rides Car Type].[Rides Car Type].[Comfort]"
+        },
+        {
+            "Attributes": {
+                "Alt Name": "Intercity",
+                "Caption": "Intercity"
+            },
+            "Index": 12,
+            "Name": "Intercity",
+            "Type": "Numeric",
+            "UniqueName": "[Rides Car Type].[Rides Car Type].[Intercity]"
+        },
+        {
+            "Attributes": {
+                "Alt Name": "Mid-Tier",
+                "Caption": "Mid-Tier"
+            },
+            "Index": 13,
+            "Name": "Mid-Tier",
+            "Type": "Consolidated",
+            "UniqueName": "[Rides Car Type].[Rides Car Type].[Mid-Tier]"
+        },
+        {
+            "Attributes": {
+                "Alt Name": "UberX Rides",
+                "Caption": "UberX Rides"
+            },
+            "Index": 14,
+            "Name": "UberX Rides",
+            "Type": "Consolidated",
+            "UniqueName": "[Rides Car Type].[Rides Car Type].[UberX Rides]"
+        },
+        {
+            "Attributes": {
+                "Alt Name": "UberX",
+                "Caption": "UberX"
+            },
+            "Index": 15,
+            "Name": "UberX",
+            "Type": "Numeric",
+            "UniqueName": "[Rides Car Type].[Rides Car Type].[UberX]"
+        },
+        {
+            "Attributes": {
+                "Alt Name": "UberXL",
+                "Caption": "UberXL"
+            },
+            "Index": 16,
+            "Name": "UberXL",
+            "Type": "Numeric",
+            "UniqueName": "[Rides Car Type].[Rides Car Type].[UberXL]"
+        },
+        {
+            "Attributes": {
+                "Alt Name": "Listen/Soporte",
+                "Caption": "Listen/Soporte"
+            },
+            "Index": 17,
+            "Name": "Listen/Soporte",
+            "Type": "Numeric",
+            "UniqueName": "[Rides Car Type].[Rides Car Type].[Listen/Soporte]"
+        },
+        {
+            "Attributes": {
+                "Alt Name": "Go",
+                "Caption": "Go"
+            },
+            "Index": 18,
+            "Name": "Go",
+            "Type": "Numeric",
+            "UniqueName": "[Rides Car Type].[Rides Car Type].[Go]"
+        },
+        {
+            "Attributes": {
+                "Alt Name": "WAV",
+                "Caption": "WAV"
+            },
+            "Index": 19,
+            "Name": "WAV",
+            "Type": "Numeric",
+            "UniqueName": "[Rides Car Type].[Rides Car Type].[WAV]"
+        },
+        {
+            "Attributes": {
+                "Alt Name": "Low Cost",
+                "Caption": "Low Cost"
+            },
+            "Index": 20,
+            "Name": "Low Cost",
+            "Type": "Consolidated",
+            "UniqueName": "[Rides Car Type].[Rides Car Type].[Low Cost]"
+        },
+        {
+            "Attributes": {
+                "Alt Name": "Shared Rides",
+                "Caption": "Shared Rides"
+            },
+            "Index": 21,
+            "Name": "Shared Rides",
+            "Type": "Consolidated",
+            "UniqueName": "[Rides Car Type].[Rides Car Type].[Shared Rides]"
+        },
+        {
+            "Attributes": {
+                "Alt Name": "HCV",
+                "Caption": "HCV"
+            },
+            "Index": 22,
+            "Name": "HCV",
+            "Type": "Numeric",
+            "UniqueName": "[Rides Car Type].[Rides Car Type].[HCV]"
+        },
+        {
+            "Attributes": {
+                "Alt Name": "Expresspool",
+                "Caption": "Expresspool"
+            },
+            "Index": 23,
+            "Name": "Expresspool",
+            "Type": "Numeric",
+            "UniqueName": "[Rides Car Type].[Rides Car Type].[Expresspool]"
+        },
+        {
+            "Attributes": {
+                "Alt Name": "Pool",
+                "Caption": "Pool"
+            },
+            "Index": 24,
+            "Name": "Pool",
+            "Type": "Numeric",
+            "UniqueName": "[Rides Car Type].[Rides Car Type].[Pool]"
+        },
+        {
+            "Attributes": {
+                "Alt Name": "Uberpool",
+                "Caption": "Uberpool"
+            },
+            "Index": 25,
+            "Name": "Uberpool",
+            "Type": "Numeric",
+            "UniqueName": "[Rides Car Type].[Rides Car Type].[Uberpool]"
+        },
+        {
+            "Attributes": {
+                "Alt Name": "Ride Hail",
+                "Caption": "Ride Hail"
+            },
+            "Index": 26,
+            "Name": "Ride Hail",
+            "Type": "Consolidated",
+            "UniqueName": "[Rides Car Type].[Rides Car Type].[Ride Hail]"
+        },
+        {
+            "Attributes": {
+                "Alt Name": "Moto",
+                "Caption": "Moto"
+            },
+            "Index": 27,
+            "Name": "Moto",
+            "Type": "Numeric",
+            "UniqueName": "[Rides Car Type].[Rides Car Type].[Moto]"
+        },
+        {
+            "Attributes": {
+                "Alt Name": "Taxi",
+                "Caption": "Taxi"
+            },
+            "Index": 28,
+            "Name": "Taxi",
+            "Type": "Numeric",
+            "UniqueName": "[Rides Car Type].[Rides Car Type].[Taxi]"
+        },
+        {
+            "Attributes": {
+                "Alt Name": "Auto",
+                "Caption": "Auto"
+            },
+            "Index": 29,
+            "Name": "Auto",
+            "Type": "Numeric",
+            "UniqueName": "[Rides Car Type].[Rides Car Type].[Auto]"
+        },
+        {
+            "Attributes": {
+                "Alt Name": "Not Specified",
+                "Caption": "Not Specified"
+            },
+            "Index": 30,
+            "Name": "Not Specified",
+            "Type": "Numeric",
+            "UniqueName": "[Rides Car Type].[Rides Car Type].[Not Specified]"
+        },
+        {
+            "Attributes": {
+                "Alt Name": "Others",
+                "Caption": "Others"
+            },
+            "Index": 31,
+            "Name": "Others",
+            "Type": "Consolidated",
+            "UniqueName": "[Rides Car Type].[Rides Car Type].[Others]"
+        },
+        {
+            "Attributes": {
+                "Alt Name": "Stunt",
+                "Caption": "Stunt"
+            },
+            "Index": 32,
+            "Name": "Stunt",
+            "Type": "Numeric",
+            "UniqueName": "[Rides Car Type].[Rides Car Type].[Stunt]"
+        },
+        {
+            "Attributes": {
+                "Alt Name": "Other",
+                "Caption": "Other"
+            },
+            "Index": 33,
+            "Name": "Other",
+            "Type": "Numeric",
+            "UniqueName": "[Rides Car Type].[Rides Car Type].[Other]"
+        },
+        {
+            "Attributes": {
+                "Alt Name": "Elevate",
+                "Caption": "Elevate"
+            },
+            "Index": 34,
+            "Name": "Elevate",
+            "Type": "Numeric",
+            "UniqueName": "[Rides Car Type].[Rides Car Type].[Elevate]"
+        },
+        {
+            "Attributes": {
+                "Alt Name": "Emobility",
+                "Caption": "Emobility"
+            },
+            "Index": 35,
+            "Name": "Emobility",
+            "Type": "Numeric",
+            "UniqueName": "[Rides Car Type].[Rides Car Type].[Emobility]"
+        }
+    ],
+    "Name": "Rides Car Type",
+    "Subsets": [],
+    "UniqueName": "[Rides Car Type].[Rides Car Type]"
+}

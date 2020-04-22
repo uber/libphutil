@@ -1,0 +1,143 @@
+###############################################################################
+### Cube: Eats Ops
+### Dimensions:
+###     1: Version
+###     2: Period
+###     3: Source
+###     4. Rate Type
+###     5: Location
+###     6: Eats Product Type
+###     7. Eats Restaurant Type
+###     8: Eats Ops Metric
+###     9: Eats Ops Measure
+###############################################################################
+
+FEEDSTRINGS;
+SKIPCHECK;
+
+[ ] =
+   IF(
+      ATTRS ( 'Version', !Version, 'Active' ) @= ''
+   ,
+      STET
+   ,
+      CONTINUE
+   );
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=- #
+# Budget Data from Planning
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=- #
+
+['Version' : {'2020 Plan',  'Forecast Excl Actuals'}] =  STET;
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=- #
+# Consolidation  and N Level  Calcs
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=- #
+
+['Actual', '% of Orders'] = ['Completed Deliveries'] \ DB('Eats Ops',!Version,!Period,!Source,!Rate Type,!Location,!Eats Product Type,'Total Eats Restaurant Type','Completed Deliveries',!Eats Ops Measure);
+
+['Actual','% of Restos'] = ['Active Restaurants'] \ DB('Eats Ops',!Version,!Period,!Source,!Rate Type,!Location,!Eats Product Type,'Total Eats Restaurant Type','Active Restaurants',!Eats Ops Measure);
+
+['Actual','% of GB'] = ['Total Bookings'] \ DB('Eats Ops',!Version,!Period,!Source,!Rate Type,!Location,!Eats Product Type,'Total Eats Restaurant Type','Total Bookings',!Eats Ops Measure);
+
+['Actual', 'TpE'] = IF(ATTRS('Period',!Period,'Level') @= 'Week', ['Completed Deliveries'] \ ['Weekly Active Eaters'], ['Completed Deliveries'] \ ['Active Eaters']);
+
+['Actual', 'ANR Margin'] = ['Adjusted Net Revenue']\ ['Total Bookings'];
+
+['Actual','Avg. Basket Size'] = ['Basket'] \ ['Completed Deliveries'];
+
+['Actual','Marketplace Fee %'] = 1 + ( ['MPF'] \ ['Basket'] );
+
+['Actual','Promo % of GB'] = ['Total Eater Promos'] \ ['Total Bookings'];
+
+['Actual','TpR'] = ['Completed Deliveries'] \ ['Active Restaurants'];
+
+['Actual', '% of Trips Promoed'] = ['Promo Trips'] \ ['Completed Deliveries'];
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=- #
+# Consolidation  Level  Calcs
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=- #
+
+['Eats Ops Measure':'Amount' ] = C:
+   IF(
+      ATTRS('Eats Ops Metric', !Eats Ops Metric, 'Aggregate_Location_Flag') @= 'Y'
+   ,
+      IF(
+         ELLEV('Period', !Period) > 0
+      ,
+         0
+      ,
+         IF(
+            (ELLEV ('Location', !Location) > 0)
+         ,
+            DB('Eats Ops', !Version, !Period, !Source, !Rate Type, 'CustomLeaf':!Location | ' Input', !Eats Product Type, !Eats Restaurant Type, !Eats Ops Metric, 'Amount')
+         ,
+            STET
+         )
+      )
+   ,
+      CONTINUE
+   );
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=- #
+# Leaf Level  Calcs
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=- #
+
+['Eats Ops Measure' : 'Amount' ] = N:
+   IF(
+      ATTRS('Eats Ops Metric', !Eats OPS Metric, 'Fx_Flag') @= 'Y'
+   ,
+      DB('Eats Ops Staging', !Version, !Period, !Source, 'Total Currency', !Rate Type, !Location, !Eats Product Type, !Eats Restaurant Type, !Eats OPS Metric, 'Amount')
+   ,
+      STET
+   );
+
+
+FEEDERS;
+
+['Actual', 'Completed Deliveries'] => ['% of Orders'] , ['TpE'], ['Avg. Basket Size'], ['TpR'], ['% of Trips Promoed'], ['% of GB'], ['ANR Margin'], ['Marketplace Fee %'], ['Promo % of GB'];
+
+['Actual','Active Restaurants'] => ['% of Restos'];
+
+## Feed Ops
+
+['Amount'] => DB('Ops',!Version,!Period,!Source,!Rate Type,!Location,'2001','Eats',!Eats Ops Metric,'Amount');
+
+['Actual', 'FDP', 'Total Eats Product Type', 'Total Eats Restaurant Type', 'Completed Deliveries', 'Amount'] =>DB('Ops', 'Actual', !Period, 'FDP', !Rate Type, !Location, '2001', 'EATS', 'Completed Trips', 'Amount');
+
+['Actual', 'FDP', 'Unspecified Eats Product Type', 'Unspecified Restaurant Type', 'Active Eaters', 'Amount'] =>DB('Ops', 'Actual', !Period, 'FDP', !Rate Type, !Location, '2001', 'EATS', 'Active Riders', 'Amount');
+
+['Actual', 'FDP', 'Unspecified Eats Product Type', 'Unspecified Restaurant Type', 'Active Eaters L28', 'Amount'] =>DB('Ops', 'Actual', !Period, 'FDP', !Rate Type, !Location, '2001', 'EATS', 'Active Riders L28', 'Amount');
+
+['Actual', 'FDP', 'Unspecified Eats Product Type', 'Unspecified Restaurant Type', 'Weekly Active Eaters', 'Amount'] =>DB('Ops', 'Actual', !Period, 'FDP', !Rate Type, !Location, '2001', 'EATS', 'Weekly Active Riders', 'Amount');
+
+['Actual', 'FDP', 'Unspecified Eats Product Type', 'Unspecified Restaurant Type', 'New Eaters', 'Amount'] =>DB('Ops', 'Actual', !Period, 'FDP', !Rate Type, !Location, '2001', 'EATS', 'New Riders', 'Amount');
+
+['Actual', 'FDP', 'Unspecified Eats Product Type', 'Unspecified Restaurant Type', 'New Eater Deliveries', 'Amount'] =>DB('Ops', 'Actual', !Period, 'FDP', !Rate Type, !Location, '2001', 'EATS', 'New Rider Trips', 'Amount');
+
+['Actual', 'FDP', 'Unspecified Eats Product Type', 'Unspecified Restaurant Type', 'Resurrected Eaters', 'Amount'] =>DB('Ops', 'Actual', !Period, 'FDP', !Rate Type, !Location, '2001', 'EATS', 'Resurrected Riders', 'Amount');
+
+['Actual', 'FDP', 'Unspecified Eats Product Type', 'Unspecified Restaurant Type', '84 Day Inactive Eaters', 'Amount'] =>DB('Ops', 'Actual', !Period, 'FDP', !Rate Type, !Location, '2001', 'EATS', '84 Day Inactive Riders', 'Amount');
+
+['Actual', 'FDP', 'Unspecified Eats Product Type', 'Unspecified Restaurant Type', 'Continuing Eaters', 'Amount'] =>DB('Ops', 'Actual', !Period, 'FDP', !Rate Type, !Location, '2001', 'EATS', 'Continuing Riders', 'Amount');
+
+['Actual', 'FDP', 'Unspecified Eats Product Type', 'Unspecified Restaurant Type', 'Continuing Eater Deliveries', 'Amount'] =>DB('Ops', 'Actual', !Period, 'FDP', !Rate Type, !Location, '2001', 'EATS', 'Continuing Rider Trips', 'Amount');
+
+['Actual', 'FDP', 'Unspecified Eats Product Type', 'Unspecified Restaurant Type', 'Active Couriers', 'Amount'] =>DB('Ops', 'Actual', !Period, 'FDP', !Rate Type, !Location, '2001', 'EATS', 'Active Drivers', 'Amount');
+
+['Actual', 'FDP', 'Unspecified Eats Product Type', 'Unspecified Restaurant Type', 'Active Couriers L28', 'Amount'] =>DB('Ops', 'Actual', !Period, 'FDP', !Rate Type, !Location, '2001', 'EATS', 'Active Drivers L28', 'Amount');
+
+['Actual', 'FDP', 'Unspecified Eats Product Type', 'Unspecified Restaurant Type', 'Weekly Active Couriers', 'Amount'] =>DB('Ops', 'Actual', !Period, 'FDP', !Rate Type, !Location, '2001', 'EATS', 'Weekly Active Drivers', 'Amount');
+
+['Actual', 'FDP', 'Unspecified Eats Product Type', 'Unspecified Restaurant Type', 'New Couriers', 'Amount'] =>DB('Ops', 'Actual', !Period, 'FDP', !Rate Type, !Location, '2001', 'EATS', 'New Drivers', 'Amount');
+
+['Actual', 'FDP', 'Unspecified Eats Product Type', 'Unspecified Restaurant Type', 'New Courier Deliveries', 'Amount'] =>DB('Ops', 'Actual', !Period, 'FDP', !Rate Type, !Location, '2001', 'EATS', 'New Driver Trips', 'Amount');
+
+['Actual', 'FDP', 'Unspecified Eats Product Type', 'Unspecified Restaurant Type', 'Continuing Couriers', 'Amount'] =>DB('Ops', 'Actual', !Period, 'FDP', !Rate Type, !Location, '2001', 'EATS', 'Continuing Drivers', 'Amount');
+
+['Actual', 'FDP', 'Unspecified Eats Product Type', 'Unspecified Restaurant Type', 'Continuing Courier Deliveries', 'Amount'] =>DB('Ops', 'Actual', !Period, 'FDP', !Rate Type, !Location, '2001', 'EATS', 'Continuing Driver Trips', 'Amount');
+
+['Actual', 'FDP', 'Unspecified Eats Product Type', 'Unspecified Restaurant Type', 'Rider Miles', 'Amount'] =>DB('Ops', 'Actual', !Period, 'FDP', !Rate Type, !Location, '2001', 'EATS', 'P2P Rider Miles', 'Amount');
+
+

@@ -1,0 +1,86 @@
+{
+    "DefaultMember": {
+        "Attributes": {
+            "Caption": "Total Source"
+        },
+        "IsPlaceholder": false,
+        "Name": "Total Source",
+        "Ordinal": 1,
+        "Type": "Regular",
+        "UniqueName": "[Source].[Source].[Total Source]",
+        "Weight": 0
+    },
+    "Edges": [
+        {
+            "ComponentName": "FDP",
+            "ParentName": "Total Source",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Adjustment",
+            "ParentName": "Total Source",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Revenue",
+            "ParentName": "Total Source",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Cost Model",
+            "ParentName": "Total Source",
+            "Weight": 1
+        }
+    ],
+    "ElementAttributes": [],
+    "Elements": [
+        {
+            "Attributes": {
+                "Caption": "Total Source"
+            },
+            "Index": 1,
+            "Name": "Total Source",
+            "Type": "Consolidated",
+            "UniqueName": "[Source].[Source].[Total Source]"
+        },
+        {
+            "Attributes": {
+                "Caption": "FDP"
+            },
+            "Index": 2,
+            "Name": "FDP",
+            "Type": "Numeric",
+            "UniqueName": "[Source].[Source].[FDP]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Adjustment"
+            },
+            "Index": 3,
+            "Name": "Adjustment",
+            "Type": "Numeric",
+            "UniqueName": "[Source].[Source].[Adjustment]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Revenue"
+            },
+            "Index": 4,
+            "Name": "Revenue",
+            "Type": "Numeric",
+            "UniqueName": "[Source].[Source].[Revenue]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Cost Model"
+            },
+            "Index": 5,
+            "Name": "Cost Model",
+            "Type": "Numeric",
+            "UniqueName": "[Source].[Source].[Cost Model]"
+        }
+    ],
+    "Name": "Source",
+    "Subsets": [],
+    "UniqueName": "[Source].[Source]"
+}

@@ -1,0 +1,47 @@
+{
+    "DefaultMember": {
+        "Attributes": {
+            "Caption": "Allocation Method"
+        },
+        "IsPlaceholder": false,
+        "Name": "Allocation Method",
+        "Ordinal": 1,
+        "Type": "Regular",
+        "UniqueName": "[GL By Product Allocation Measure].[GL By Product Allocation Measure].[Allocation Method]",
+        "Weight": 0
+    },
+    "Edges": [],
+    "ElementAttributes": [],
+    "Elements": [
+        {
+            "Attributes": {
+                "Caption": "Allocation Method"
+            },
+            "Index": 1,
+            "Name": "Allocation Method",
+            "Type": "String",
+            "UniqueName": "[GL By Product Allocation Measure].[GL By Product Allocation Measure].[Allocation Method]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Allocation Method Override"
+            },
+            "Index": 2,
+            "Name": "Allocation Method Override",
+            "Type": "String",
+            "UniqueName": "[GL By Product Allocation Measure].[GL By Product Allocation Measure].[Allocation Method Override]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Allocation %"
+            },
+            "Index": 3,
+            "Name": "Allocation %",
+            "Type": "Numeric",
+            "UniqueName": "[GL By Product Allocation Measure].[GL By Product Allocation Measure].[Allocation %]"
+        }
+    ],
+    "Name": "GL By Product Allocation Measure",
+    "Subsets": [],
+    "UniqueName": "[GL By Product Allocation Measure].[GL By Product Allocation Measure]"
+}

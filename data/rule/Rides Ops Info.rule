@@ -1,0 +1,1 @@
+['Net Inflows','Last Updated']=S: DB('Rides Ops Info','41105',!Period,'Last Updated');

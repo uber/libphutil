@@ -1,0 +1,11 @@
+{
+    "Dimensions": [
+        {
+            "Name": "System Info Parameter"
+        },
+        {
+            "Name": "System Info Measure"
+        }
+    ],
+    "Name": "System Info"
+}

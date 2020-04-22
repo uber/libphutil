@@ -1,0 +1,38 @@
+{
+    "DefaultMember": {
+        "Attributes": {
+            "Caption": "String"
+        },
+        "IsPlaceholder": false,
+        "Name": "String",
+        "Ordinal": 1,
+        "Type": "Regular",
+        "UniqueName": "[System Info Measure].[System Info Measure].[String]",
+        "Weight": 0
+    },
+    "Edges": [],
+    "ElementAttributes": [],
+    "Elements": [
+        {
+            "Attributes": {
+                "Caption": "String"
+            },
+            "Index": 1,
+            "Name": "String",
+            "Type": "String",
+            "UniqueName": "[System Info Measure].[System Info Measure].[String]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Numeric"
+            },
+            "Index": 2,
+            "Name": "Numeric",
+            "Type": "Numeric",
+            "UniqueName": "[System Info Measure].[System Info Measure].[Numeric]"
+        }
+    ],
+    "Name": "System Info Measure",
+    "Subsets": [],
+    "UniqueName": "[System Info Measure].[System Info Measure]"
+}

@@ -1,0 +1,142 @@
+{
+    "DefaultMember": {
+        "Attributes": {
+            "Caption": "Total Eats Product Type"
+        },
+        "IsPlaceholder": false,
+        "Name": "Total Eats Product Type",
+        "Ordinal": 1,
+        "Type": "Regular",
+        "UniqueName": "[Eats Product Type].[Eats Product Type].[Total Eats Product Type]",
+        "Weight": 0
+    },
+    "Edges": [
+        {
+            "ComponentName": "Marketplace",
+            "ParentName": "Total Eats Product Type",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Aggregator",
+            "ParentName": "Total Eats Product Type",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "3P",
+            "ParentName": "Total Eats Product Type",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "OTT",
+            "ParentName": "Total Eats Product Type",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Grocery",
+            "ParentName": "Total Eats Product Type",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Pickup",
+            "ParentName": "Total Eats Product Type",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "BYOC",
+            "ParentName": "Total Eats Product Type",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Unspecified Eats Product Type",
+            "ParentName": "Total Eats Product Type",
+            "Weight": 1
+        }
+    ],
+    "ElementAttributes": [],
+    "Elements": [
+        {
+            "Attributes": {
+                "Caption": "Total Eats Product Type"
+            },
+            "Index": 1,
+            "Name": "Total Eats Product Type",
+            "Type": "Consolidated",
+            "UniqueName": "[Eats Product Type].[Eats Product Type].[Total Eats Product Type]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Marketplace"
+            },
+            "Index": 2,
+            "Name": "Marketplace",
+            "Type": "Numeric",
+            "UniqueName": "[Eats Product Type].[Eats Product Type].[Marketplace]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Aggregator"
+            },
+            "Index": 3,
+            "Name": "Aggregator",
+            "Type": "Numeric",
+            "UniqueName": "[Eats Product Type].[Eats Product Type].[Aggregator]"
+        },
+        {
+            "Attributes": {
+                "Caption": "3P"
+            },
+            "Index": 4,
+            "Name": "3P",
+            "Type": "Numeric",
+            "UniqueName": "[Eats Product Type].[Eats Product Type].[3P]"
+        },
+        {
+            "Attributes": {
+                "Caption": "OTT"
+            },
+            "Index": 5,
+            "Name": "OTT",
+            "Type": "Numeric",
+            "UniqueName": "[Eats Product Type].[Eats Product Type].[OTT]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Grocery"
+            },
+            "Index": 6,
+            "Name": "Grocery",
+            "Type": "Numeric",
+            "UniqueName": "[Eats Product Type].[Eats Product Type].[Grocery]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Pickup"
+            },
+            "Index": 7,
+            "Name": "Pickup",
+            "Type": "Numeric",
+            "UniqueName": "[Eats Product Type].[Eats Product Type].[Pickup]"
+        },
+        {
+            "Attributes": {
+                "Caption": "BYOC"
+            },
+            "Index": 8,
+            "Name": "BYOC",
+            "Type": "Numeric",
+            "UniqueName": "[Eats Product Type].[Eats Product Type].[BYOC]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Unspecified Eats Product Type"
+            },
+            "Index": 9,
+            "Name": "Unspecified Eats Product Type",
+            "Type": "Numeric",
+            "UniqueName": "[Eats Product Type].[Eats Product Type].[Unspecified Eats Product Type]"
+        }
+    ],
+    "Name": "Eats Product Type",
+    "Subsets": [],
+    "UniqueName": "[Eats Product Type].[Eats Product Type]"
+}

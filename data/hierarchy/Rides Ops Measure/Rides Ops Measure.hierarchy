@@ -1,0 +1,29 @@
+{
+    "DefaultMember": {
+        "Attributes": {
+            "Caption": "Amount"
+        },
+        "IsPlaceholder": false,
+        "Name": "Amount",
+        "Ordinal": 1,
+        "Type": "Regular",
+        "UniqueName": "[Rides Ops Measure].[Rides Ops Measure].[Amount]",
+        "Weight": 0
+    },
+    "Edges": [],
+    "ElementAttributes": [],
+    "Elements": [
+        {
+            "Attributes": {
+                "Caption": "Amount"
+            },
+            "Index": 1,
+            "Name": "Amount",
+            "Type": "Numeric",
+            "UniqueName": "[Rides Ops Measure].[Rides Ops Measure].[Amount]"
+        }
+    ],
+    "Name": "Rides Ops Measure",
+    "Subsets": [],
+    "UniqueName": "[Rides Ops Measure].[Rides Ops Measure]"
+}

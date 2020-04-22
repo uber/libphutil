@@ -1,0 +1,35 @@
+{
+    "Dimensions": [
+        {
+            "Name": "Version"
+        },
+        {
+            "Name": "Period"
+        },
+        {
+            "Name": "Source"
+        },
+        {
+            "Name": "Currency"
+        },
+        {
+            "Name": "Rate Type"
+        },
+        {
+            "Name": "Location"
+        },
+        {
+            "Name": "Rides Flow Type"
+        },
+        {
+            "Name": "Rides Car Type"
+        },
+        {
+            "Name": "Rides Ops Metric"
+        },
+        {
+            "Name": "Rides Ops Staging Measure"
+        }
+    ],
+    "Name": "Rides Ops Staging"
+}

@@ -1,0 +1,261 @@
+###############################################################################
+### Cube: Ops
+### Dimensions:
+###     1: Version
+###     2: Period
+###     3: Source
+###     4. Rate Type
+###     5: Location
+###     6: Line of Business
+###     7. Product Type
+###     8: Ops Metric
+###     9: Ops Measure
+###############################################################################
+
+FEEDSTRINGS;
+SKIPCHECK;
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=- #
+# Eats C-level rules
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=- #
+
+['Actual', 'Line of Business':'2001', 'TpE'] = C: IF(ATTRS('Period',!Period,'Level') @= 'Week', ['Completed Trips'] \ ['Weekly Active Riders'], ['Completed Trips'] \ ['Active Riders']);
+
+['Actual', 'Line of Business':'2001', 'ANR Margin'] = C: ['Adjusted Net Revenue']\ ['Total Bookings'];
+
+['Actual',  'Line of Business':'2001', 'Avg. Basket Size'] = C: ['Fares'] \ ['Completed Trips'];
+
+['Actual',  'Line of Business':'2001', 'Marketplace Fee %'] = C: 1 + ( ['MPF'] \ ['Fares'] );
+
+['Actual',  'Line of Business':'2001',  'Promo % of GB'] = C: ['Promos'] \ ['Total Bookings'];
+
+['Actual',  'Line of Business':'2001', 'TpR'] = C: ['Completed Trips'] \ ['Active Restaurants'];
+
+['Actual',  'Line of Business':'2001', '% of Trips Promoed'] = C: ['Promo Trips'] \ ['Completed Trips'];
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=- #
+#Total Rides & Eats C-level rules
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=- #
+
+['Ops Measure':'Amount' ] = C:
+   IF(
+      ATTRS('Ops Metric', !Ops Metric, 'Aggregate_LOB_Flag') @= 'Y' &
+      ATTRS('Ops Metric', !Ops Metric, 'Aggregate_Location_Flag') @= 'Y'
+   ,
+      IF(
+         ELLEV('Period', !Period) > 0
+      ,
+         0
+     ,
+         IF(
+            (ELLEV ('Line of Business', !Line of Business) > 0) &
+            (ELLEV ('Location', !Location) > 0)
+         ,
+            DB('Ops', !Version, !Period, !Source, !Rate Type,  'CustomLeaf':!Location | ' Input', 'CustomLeaf: Total Rides & Eats Input', !Product Type, !Ops Metric, 'Amount')
+         ,
+            CONTINUE
+        )
+      )
+   ,
+      CONTINUE
+   );
+
+['Ops Measure':'Amount' ] = C:
+   IF(
+      ATTRS('Ops Metric', !Ops Metric, 'Aggregate_LOB_Flag') @= 'Y'
+   ,
+      IF(
+         ELLEV('Period', !Period) > 0
+      ,
+         0
+     ,
+         IF(
+            (ELLEV ('Line of Business', !Line of Business) >0 & !Line of Business @= 'Total Rides & Eats')
+         ,
+            DB('Ops', !Version, !Period, !Source, !Rate Type, !Location, 'CustomLeaf: Total Rides & Eats Input', !Product Type, !Ops Metric, 'Amount')
+         ,
+           CONTINUE
+        )
+      )
+   ,
+      CONTINUE
+   );
+
+['Ops Measure':'Amount',  'Line of Business':'1001'] = C:
+   IF(
+      ATTRS('Ops Metric', !Ops Metric, 'Aggregate_Location_Flag') @= 'Y'
+   ,
+      IF(
+         ELLEV('Period', !Period) > 0
+      ,
+         0
+     ,
+         IF(
+            (ELLEV ('Location', !Location) > 0)
+         ,
+            DB('Rides Ops', !Version, !Period, !Source, !Rate Type, !Location,  'Total Rides Flow Type','Total Rides Car Type', !Ops Metric, 'Amount')
+         ,
+            STET
+        )
+      )
+   ,
+      CONTINUE
+   );
+
+['Ops Measure':'Amount',  'Line of Business':'2001'] = C:
+   IF(
+      ATTRS('Ops Metric', !Ops Metric, 'Aggregate_Location_Flag') @= 'Y'
+   ,
+      IF(
+         ELLEV('Period', !Period) > 0
+      ,
+         0
+     ,
+         IF(
+            (ELLEV ('Location', !Location) > 0)
+         ,
+            DB('Eats Ops', !Version, !Period, !Source, !Rate Type, !Location,  'Total Eats Product Type','Total Eats Restaurant Type', !Ops Metric, 'Amount')
+         ,
+            STET
+        )
+      )
+   ,
+      CONTINUE
+   );
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=- #
+# Rides N-level rules
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=- #
+
+['Version' : 'Actual', 'Line of Business':'1002', 'Product Type' : {'Expresspool', 'Pool'}, 'Ops Metric' : 'P2P Rider Miles'] = N :
+
+   DB('Rides Ops', !Version, !Period, !Source, !Rate Type, !Location, 'P2P', !Product Type, 'Rider Miles', 'Amount');
+
+['Version' : 'Actual', 'Line of Business':'1002', 'Product Type' : {'Expresspool', 'Pool'}, 'Ops Metric' : 'Non-P2P Rider Miles'] = N :
+
+   DB('Rides Ops', !Version, !Period, !Source, !Rate Type, !Location, 'Non P2P', !Product Type,  'Rider Miles', 'Amount');
+
+['Version' : 'Actual', 'Line of Business':'1002', 'Product Type' : {'Expresspool', 'Pool'}] = N :
+
+   IF(
+      ELISANC('OPS Metric', 'Rides and Eats Metrics', !OPS Metric) = 1 % ELISANC('OPS Metric', 'Rides Only Metrics', !OPS Metric)=1
+   ,
+      DB('Rides Ops', !Version, !Period, !Source, !Rate Type, !Location, 'Total Rides Flow Type', !Product Type, !Ops Metric, 'Amount')
+   ,
+      CONTINUE
+   );
+
+
+['Version' : 'Actual', 'Line of Business':'1001',  'Ops Metric' : 'P2P Rider Miles'] = N :
+
+   IF(
+      (!Product Type @<> 'Expresspool' & !Product Type @<> 'Pool')
+   ,
+      DB('Rides Ops', !Version, !Period, !Source, !Rate Type, !Location, 'P2P', !Product Type, 'Rider Miles', 'Amount')
+   ,
+      CONTINUE
+   );
+
+['Version' : 'Actual', 'Line of Business':'1001',  'Ops Metric' : 'Non-P2P Rider Miles'] = N :
+
+   IF(
+      (!Product Type @<> 'Expresspool' & !Product Type @<> 'Pool')
+   ,
+      DB('Rides Ops', !Version, !Period, !Source, !Rate Type, !Location, 'Non P2P', !Product Type, 'Rider Miles', 'Amount')
+   ,
+      CONTINUE
+   );
+
+
+['Version' : 'Actual', 'Line of Business':'1001'] = N :
+
+   IF(
+      ELISANC('OPS Metric', 'Rides and Eats Metrics', !OPS Metric) = 1 % ELISANC('OPS Metric', 'Rides Only Metrics', !OPS Metric)=1
+   ,
+      IF((!Product Type @<> 'Expresspool' & !Product Type @<> 'Pool')
+      ,
+         DB('Rides Ops', !Version, !Period, !Source, !Rate Type, !Location, 'Total Rides Flow Type', !Product Type, !Ops Metric, 'Amount')
+      ,
+         STET
+      )
+   ,
+      CONTINUE
+   );
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=- #
+# Eats N-level rules
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=- #
+
+['Version' : 'Actual', 'Line of Business':'2001', 'Product Type' : 'Eats', 'Completed Trips'] = N:
+   DB('Eats Ops', !Version, !Period, !Source, !Rate Type, !Location, 'Total Eats Product Type', 'Total Eats Restaurant Type', 'Completed Deliveries', 'Amount');
+
+['Version' : 'Actual', 'Line of Business':'2001', 'Product Type' : 'Eats', 'Active Riders'] = N:
+   DB('Eats Ops', !Version, !Period, !Source, !Rate Type, !Location, 'Total Eats Product Type', 'Total Eats Restaurant Type', 'Active Eaters', 'Amount');
+
+['Version' : 'Actual', 'Line of Business':'2001', 'Product Type' : 'Eats', 'Active Riders L28'] = N:
+   DB('Eats Ops', !Version, !Period, !Source, !Rate Type, !Location, 'Total Eats Product Type', 'Total Eats Restaurant Type', 'Active Eaters L28', 'Amount');
+
+['Version' : 'Actual', 'Line of Business':'2001', 'Product Type' : 'Eats', 'Weekly Active Riders'] = N:
+   DB('Eats Ops', !Version, !Period, !Source, !Rate Type, !Location, 'Total Eats Product Type', 'Total Eats Restaurant Type', 'Weekly Active Eaters', 'Amount');
+
+['Version' : 'Actual', 'Line of Business':'2001', 'Product Type' : 'Eats', 'New Riders'] = N:
+   DB('Eats Ops', !Version, !Period, !Source, !Rate Type, !Location, 'Total Eats Product Type', 'Total Eats Restaurant Type', 'New Eaters', 'Amount');
+
+['Version' : 'Actual', 'Line of Business':'2001', 'Product Type' : 'Eats', 'New Rider Trips'] = N:
+   DB('Eats Ops', !Version, !Period, !Source, !Rate Type, !Location, 'Total Eats Product Type', 'Total Eats Restaurant Type', 'New Eater Deliveries', 'Amount');
+
+['Version' : 'Actual', 'Line of Business':'2001', 'Product Type' : 'Eats', 'Resurrected Riders'] = N:
+   DB('Eats Ops', !Version, !Period, !Source, !Rate Type, !Location, 'Total Eats Product Type', 'Total Eats Restaurant Type', 'Resurrected Eaters', 'Amount');
+
+['Version' : 'Actual', 'Line of Business':'2001', 'Product Type' : 'Eats', '84 Day Inactive Riders'] = N:
+   DB('Eats Ops', !Version, !Period, !Source, !Rate Type, !Location, 'Total Eats Product Type', 'Total Eats Restaurant Type', '84 Day Inactive Eaters', 'Amount');
+
+['Version' : 'Actual', 'Line of Business':'2001', 'Product Type' : 'Eats', 'Continuing Riders'] = N:
+   DB('Eats Ops', !Version, !Period, !Source, !Rate Type, !Location, 'Total Eats Product Type', 'Total Eats Restaurant Type', 'Continuing Eaters', 'Amount');
+
+['Version' : 'Actual', 'Line of Business':'2001', 'Product Type' : 'Eats', 'Continuing Rider Trips'] = N:
+   DB('Eats Ops', !Version, !Period, !Source, !Rate Type, !Location, 'Total Eats Product Type', 'Total Eats Restaurant Type', 'Continuing Eater Deliveries', 'Amount');
+
+['Version' : 'Actual', 'Line of Business':'2001', 'Product Type' : 'Eats', 'Active Drivers'] = N:
+   DB('Eats Ops', !Version, !Period, !Source, !Rate Type, !Location, 'Total Eats Product Type', 'Total Eats Restaurant Type', 'Active Couriers', 'Amount');
+
+['Version' : 'Actual', 'Line of Business':'2001', 'Product Type' : 'Eats', 'Active Drivers L28'] = N:
+   DB('Eats Ops', !Version, !Period, !Source, !Rate Type, !Location, 'Total Eats Product Type', 'Total Eats Restaurant Type', 'Active Couriers L28', 'Amount');
+
+['Version' : 'Actual', 'Line of Business':'2001', 'Product Type' : 'Eats', 'Weekly Active Drivers'] = N:
+   DB('Eats Ops', !Version, !Period, !Source, !Rate Type, !Location, 'Total Eats Product Type', 'Total Eats Restaurant Type', 'Weekly Active Couriers', 'Amount');
+
+['Version' : 'Actual', 'Line of Business':'2001', 'Product Type' : 'Eats', 'New Drivers'] = N:
+   DB('Eats Ops', !Version, !Period, !Source, !Rate Type, !Location, 'Total Eats Product Type',  'Total Eats Restaurant Type', 'New Couriers', 'Amount');
+
+['Version' : 'Actual', 'Line of Business':'2001', 'Product Type' : 'Eats', 'New Driver Trips'] = N:
+   DB('Eats Ops', !Version, !Period, !Source, !Rate Type, !Location, 'Total Eats Product Type', 'Total Eats Restaurant Type', 'New Courier Deliveries', 'Amount');
+
+['Version' : 'Actual', 'Line of Business':'2001', 'Product Type' : 'Eats', 'Continuing Drivers'] = N:
+   DB('Eats Ops', !Version, !Period, !Source, !Rate Type, !Location, 'Total Eats Product Type', 'Total Eats Restaurant Type', 'Continuing Couriers', 'Amount');
+
+['Version' : 'Actual', 'Line of Business':'2001', 'Product Type' : 'Eats', 'Continuing Driver Trips'] = N:
+   DB('Eats Ops', !Version, !Period, !Source, !Rate Type, !Location, 'Total Eats Product Type', 'Total Eats Restaurant Type', 'Continuing Courier Deliveries', 'Amount');
+
+['Version' : 'Actual', 'Line of Business':'2001', 'Product Type' : 'Eats', 'P2P Rider Miles'] = N:
+   DB('Eats Ops', !Version, !Period, !Source, !Rate Type, !Location, 'Total Eats Product Type', 'Total Eats Restaurant Type', 'Rider Miles', 'Amount');
+
+
+['Version' : 'Actual', 'Line of Business':'2001', 'Product Type' : 'Eats'] = N:
+
+   IF(
+      ELISANC('OPS Metric', 'Rides and Eats Metrics', !OPS Metric) = 1 % ELISANC('OPS Metric', 'Eats Only Metrics', !OPS Metric)=1
+   ,
+     DB('Eats Ops', !Version, !Period, !Source, !Rate Type, !Location, 'Total Eats Product Type', 'Total Eats Restaurant Type', !Ops Metric, 'Amount')
+   ,
+      STET
+   );
+
+
+FEEDERS;
+
+
+
+

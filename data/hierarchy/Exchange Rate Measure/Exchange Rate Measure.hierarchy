@@ -1,0 +1,47 @@
+{
+    "DefaultMember": {
+        "Attributes": {
+            "Caption": "Rate"
+        },
+        "IsPlaceholder": false,
+        "Name": "Rate",
+        "Ordinal": 1,
+        "Type": "Regular",
+        "UniqueName": "[Exchange Rate Measure].[Exchange Rate Measure].[Rate]",
+        "Weight": 0
+    },
+    "Edges": [],
+    "ElementAttributes": [],
+    "Elements": [
+        {
+            "Attributes": {
+                "Caption": "Rate"
+            },
+            "Index": 1,
+            "Name": "Rate",
+            "Type": "Numeric",
+            "UniqueName": "[Exchange Rate Measure].[Exchange Rate Measure].[Rate]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Month End Rate"
+            },
+            "Index": 2,
+            "Name": "Month End Rate",
+            "Type": "Numeric",
+            "UniqueName": "[Exchange Rate Measure].[Exchange Rate Measure].[Month End Rate]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Budget Rate"
+            },
+            "Index": 3,
+            "Name": "Budget Rate",
+            "Type": "Numeric",
+            "UniqueName": "[Exchange Rate Measure].[Exchange Rate Measure].[Budget Rate]"
+        }
+    ],
+    "Name": "Exchange Rate Measure",
+    "Subsets": [],
+    "UniqueName": "[Exchange Rate Measure].[Exchange Rate Measure]"
+}

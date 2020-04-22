@@ -1,0 +1,14 @@
+{
+    "Dimensions": [
+        {
+            "Name": "Rides Ops Metric"
+        },
+        {
+            "Name": "Period"
+        },
+        {
+            "Name": "Rides Ops Info Measure"
+        }
+    ],
+    "Name": "Rides Ops Info"
+}

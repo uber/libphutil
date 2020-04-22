@@ -1,0 +1,84 @@
+###############################################################################
+### Cube: Rides Ops
+### Dimensions:
+###     1: Version
+###     2: Period
+###     3: Source
+###     4. Rate Type
+###     5: Location
+###     6: Rides Flow Type
+###     7. Rides Car Type
+###     8: Rides Ops Metric
+###     9: Rides Ops Measure
+###############################################################################
+
+FEEDSTRINGS;
+SKIPCHECK;
+
+[ ] =
+   IF(
+      ATTRS ( 'Version', !Version, 'Active' ) @= ''
+   ,
+      STET
+   ,
+      CONTINUE
+   );
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=- #
+# Budget Data from Planning
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=- #
+
+['Version' : {'2020 Plan',  'Forecast Excl Actuals'}] =  STET;
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=- #
+# Consolidation  Level  Calcs
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=- #
+
+['Rides Ops Measure':'Amount' ] = C:
+   IF(
+      ATTRS('Rides Ops Metric', !Rides Ops Metric, 'Aggregate_Location_Flag') @= 'Y'
+   ,
+      IF(
+         ELLEV('Period', !Period) > 0
+      ,
+         0
+     ,
+         IF(
+            (ELLEV ('Location', !Location) > 0)
+         ,
+            DB('Rides Ops', !Version, !Period, !Source, !Rate Type, 'CustomLeaf':!Location | ' Input', !Rides Flow Type, !Rides Car Type, !Rides Ops Metric, 'Amount')
+         ,
+            STET
+        )
+      )
+   ,
+      CONTINUE
+   );
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=- #
+# Leaf Level  Calcs
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=- #
+
+['Rides Ops Measure' : 'Amount' ] = N:
+   IF(
+      ATTRS('Rides Ops Metric', !Rides OPS Metric, 'Fx_Flag') @= 'Y'
+   ,
+      DB('Rides Ops Staging', !Version, !Period, !Source, 'Total Currency', !Rate Type, !Location, !Rides Flow Type, !Rides Car Type, !Rides OPS Metric, 'Amount')
+   ,
+      STET
+   );
+
+FEEDERS;
+
+#['Location':'CustomLeaf':'Total Location']=> DB('Rides Ops',!Version,!Period,!Source,!Rate Type,!Location,!Rides Flow Type,!Rides Car Type,'Active Drivers',!Rides Ops Measure);
+
+## Feed Ops
+
+['Amount'] => DB('Ops', !Version, !Period, !Source, !Rate Type, !Location, '1001', !Rides Car Type, !Rides Ops Metric,'Amount');
+['Expresspool','Amount'] => DB('Ops', !Version, !Period, !Source, !Rate Type, !Location, '1002', !Rides Car Type, !Rides Ops Metric,'Amount');
+['Pool','Amount'] => DB('Ops', !Version, !Period, !Source, !Rate Type, !Location, '1002', !Rides Car Type, !Rides Ops Metric,'Amount');
+['P2P','Rider Miles', 'Amount'] => DB('Ops',!Version,!Period,!Source,!Rate Type,!Location,'1001',!Rides Car Type,'P2P Rider Miles','Amount');
+['Non P2P','Rider Miles', 'Amount'] => DB('Ops',!Version,!Period,!Source,!Rate Type,!Location,'1001',!Rides Car Type,'Non-P2P Rider Miles','Amount');
+
+

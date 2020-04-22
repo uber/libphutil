@@ -1,0 +1,172 @@
+{
+    "DefaultMember": {
+        "Attributes": {
+            "AltName": "Total Eats Restaurant Type",
+            "Caption": "Total Eats Restaurant Type"
+        },
+        "IsPlaceholder": false,
+        "Name": "Total Eats Restaurant Type",
+        "Ordinal": 1,
+        "Type": "Regular",
+        "UniqueName": "[Eats Restaurant Type].[Eats Restaurant Type].[Total Eats Restaurant Type]",
+        "Weight": 0
+    },
+    "Edges": [
+        {
+            "ComponentName": "Enterprise",
+            "ParentName": "Total Eats Restaurant Type",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Strategic",
+            "ParentName": "Total Eats Restaurant Type",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "McDonalds",
+            "ParentName": "Total Eats Restaurant Type",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Total SMB",
+            "ParentName": "Total Eats Restaurant Type",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Unspecified Restaurant Type",
+            "ParentName": "Total Eats Restaurant Type",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "SMB.Self-Service",
+            "ParentName": "Total SMB",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "SMB.Outbound",
+            "ParentName": "Total SMB",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "SMB.Inbound",
+            "ParentName": "Total SMB",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "SMB.Aggregator",
+            "ParentName": "Total SMB",
+            "Weight": 1
+        }
+    ],
+    "ElementAttributes": [
+        {
+            "Name": "AltName",
+            "Type": "Alias"
+        }
+    ],
+    "Elements": [
+        {
+            "Attributes": {
+                "AltName": "Total Eats Restaurant Type",
+                "Caption": "Total Eats Restaurant Type"
+            },
+            "Index": 1,
+            "Name": "Total Eats Restaurant Type",
+            "Type": "Consolidated",
+            "UniqueName": "[Eats Restaurant Type].[Eats Restaurant Type].[Total Eats Restaurant Type]"
+        },
+        {
+            "Attributes": {
+                "AltName": "Enterprise",
+                "Caption": "Enterprise"
+            },
+            "Index": 2,
+            "Name": "Enterprise",
+            "Type": "Numeric",
+            "UniqueName": "[Eats Restaurant Type].[Eats Restaurant Type].[Enterprise]"
+        },
+        {
+            "Attributes": {
+                "AltName": "Non-McD Strategic",
+                "Caption": "Strategic"
+            },
+            "Index": 3,
+            "Name": "Strategic",
+            "Type": "Numeric",
+            "UniqueName": "[Eats Restaurant Type].[Eats Restaurant Type].[Strategic]"
+        },
+        {
+            "Attributes": {
+                "AltName": "McD",
+                "Caption": "McDonalds"
+            },
+            "Index": 4,
+            "Name": "McDonalds",
+            "Type": "Numeric",
+            "UniqueName": "[Eats Restaurant Type].[Eats Restaurant Type].[McDonalds]"
+        },
+        {
+            "Attributes": {
+                "AltName": "Total SMB",
+                "Caption": "Total SMB"
+            },
+            "Index": 5,
+            "Name": "Total SMB",
+            "Type": "Consolidated",
+            "UniqueName": "[Eats Restaurant Type].[Eats Restaurant Type].[Total SMB]"
+        },
+        {
+            "Attributes": {
+                "AltName": "SMB",
+                "Caption": "SMB.Self-Service"
+            },
+            "Index": 6,
+            "Name": "SMB.Self-Service",
+            "Type": "Numeric",
+            "UniqueName": "[Eats Restaurant Type].[Eats Restaurant Type].[SMB.Self-Service]"
+        },
+        {
+            "Attributes": {
+                "AltName": "SMB.Outbound",
+                "Caption": "SMB.Outbound"
+            },
+            "Index": 7,
+            "Name": "SMB.Outbound",
+            "Type": "Numeric",
+            "UniqueName": "[Eats Restaurant Type].[Eats Restaurant Type].[SMB.Outbound]"
+        },
+        {
+            "Attributes": {
+                "AltName": "SMB.Inbound",
+                "Caption": "SMB.Inbound"
+            },
+            "Index": 8,
+            "Name": "SMB.Inbound",
+            "Type": "Numeric",
+            "UniqueName": "[Eats Restaurant Type].[Eats Restaurant Type].[SMB.Inbound]"
+        },
+        {
+            "Attributes": {
+                "AltName": "SMB.Aggregator",
+                "Caption": "SMB.Aggregator"
+            },
+            "Index": 9,
+            "Name": "SMB.Aggregator",
+            "Type": "Numeric",
+            "UniqueName": "[Eats Restaurant Type].[Eats Restaurant Type].[SMB.Aggregator]"
+        },
+        {
+            "Attributes": {
+                "AltName": "Unspecified Restaurant Type",
+                "Caption": "Unspecified Restaurant Type"
+            },
+            "Index": 10,
+            "Name": "Unspecified Restaurant Type",
+            "Type": "Numeric",
+            "UniqueName": "[Eats Restaurant Type].[Eats Restaurant Type].[Unspecified Restaurant Type]"
+        }
+    ],
+    "Name": "Eats Restaurant Type",
+    "Subsets": [],
+    "UniqueName": "[Eats Restaurant Type].[Eats Restaurant Type]"
+}

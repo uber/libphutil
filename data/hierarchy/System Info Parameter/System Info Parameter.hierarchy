@@ -1,0 +1,74 @@
+{
+    "DefaultMember": {
+        "Attributes": {
+            "Caption": "Current Week"
+        },
+        "IsPlaceholder": false,
+        "Name": "Current Week",
+        "Ordinal": 1,
+        "Type": "Regular",
+        "UniqueName": "[System Info Parameter].[System Info Parameter].[Current Week]",
+        "Weight": 0
+    },
+    "Edges": [],
+    "ElementAttributes": [],
+    "Elements": [
+        {
+            "Attributes": {
+                "Caption": "Current Week"
+            },
+            "Index": 1,
+            "Name": "Current Week",
+            "Type": "Numeric",
+            "UniqueName": "[System Info Parameter].[System Info Parameter].[Current Week]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Current Month"
+            },
+            "Index": 2,
+            "Name": "Current Month",
+            "Type": "Numeric",
+            "UniqueName": "[System Info Parameter].[System Info Parameter].[Current Month]"
+        },
+        {
+            "Attributes": {
+                "Caption": "SQL User Name GL Transactions"
+            },
+            "Index": 3,
+            "Name": "SQL User Name GL Transactions",
+            "Type": "Numeric",
+            "UniqueName": "[System Info Parameter].[System Info Parameter].[SQL User Name GL Transactions]"
+        },
+        {
+            "Attributes": {
+                "Caption": "SQL Password GL Transactions"
+            },
+            "Index": 4,
+            "Name": "SQL Password GL Transactions",
+            "Type": "Numeric",
+            "UniqueName": "[System Info Parameter].[System Info Parameter].[SQL Password GL Transactions]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Oracle User Name"
+            },
+            "Index": 5,
+            "Name": "Oracle User Name",
+            "Type": "Numeric",
+            "UniqueName": "[System Info Parameter].[System Info Parameter].[Oracle User Name]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Oracle Password"
+            },
+            "Index": 6,
+            "Name": "Oracle Password",
+            "Type": "Numeric",
+            "UniqueName": "[System Info Parameter].[System Info Parameter].[Oracle Password]"
+        }
+    ],
+    "Name": "System Info Parameter",
+    "Subsets": [],
+    "UniqueName": "[System Info Parameter].[System Info Parameter]"
+}

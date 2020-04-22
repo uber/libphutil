@@ -1,0 +1,47 @@
+{
+    "DefaultMember": {
+        "Attributes": {
+            "Caption": "Pipeline"
+        },
+        "IsPlaceholder": false,
+        "Name": "Pipeline",
+        "Ordinal": 1,
+        "Type": "Regular",
+        "UniqueName": "[Rides Ops Info Measure].[Rides Ops Info Measure].[Pipeline]",
+        "Weight": 0
+    },
+    "Edges": [],
+    "ElementAttributes": [],
+    "Elements": [
+        {
+            "Attributes": {
+                "Caption": "Pipeline"
+            },
+            "Index": 1,
+            "Name": "Pipeline",
+            "Type": "String",
+            "UniqueName": "[Rides Ops Info Measure].[Rides Ops Info Measure].[Pipeline]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Source Table"
+            },
+            "Index": 2,
+            "Name": "Source Table",
+            "Type": "String",
+            "UniqueName": "[Rides Ops Info Measure].[Rides Ops Info Measure].[Source Table]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Last Updated"
+            },
+            "Index": 3,
+            "Name": "Last Updated",
+            "Type": "String",
+            "UniqueName": "[Rides Ops Info Measure].[Rides Ops Info Measure].[Last Updated]"
+        }
+    ],
+    "Name": "Rides Ops Info Measure",
+    "Subsets": [],
+    "UniqueName": "[Rides Ops Info Measure].[Rides Ops Info Measure]"
+}

@@ -1,0 +1,29 @@
+{
+    "DefaultMember": {
+        "Attributes": {
+            "Caption": "Amount"
+        },
+        "IsPlaceholder": false,
+        "Name": "Amount",
+        "Ordinal": 1,
+        "Type": "Regular",
+        "UniqueName": "[Exchange Rate by Rate Type Measure].[Exchange Rate by Rate Type Measure].[Amount]",
+        "Weight": 0
+    },
+    "Edges": [],
+    "ElementAttributes": [],
+    "Elements": [
+        {
+            "Attributes": {
+                "Caption": "Amount"
+            },
+            "Index": 1,
+            "Name": "Amount",
+            "Type": "Numeric",
+            "UniqueName": "[Exchange Rate by Rate Type Measure].[Exchange Rate by Rate Type Measure].[Amount]"
+        }
+    ],
+    "Name": "Exchange Rate by Rate Type Measure",
+    "Subsets": [],
+    "UniqueName": "[Exchange Rate by Rate Type Measure].[Exchange Rate by Rate Type Measure]"
+}

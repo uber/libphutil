@@ -1,0 +1,14 @@
+{
+    "Dimensions": [
+        {
+            "Name": "Eats Ops Metric"
+        },
+        {
+            "Name": "Period"
+        },
+        {
+            "Name": "Eats Ops Info Measure"
+        }
+    ],
+    "Name": "Eats Ops Info"
+}
