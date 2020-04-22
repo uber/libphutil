@@ -1,0 +1,330 @@
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: PROPERTIES                                                           #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+{
+    "DataSource": {
+        "Type": "ASCII",
+        "asciiDecimalSeparator": ".",
+        "asciiDelimiterChar": ",",
+        "asciiDelimiterType": "Character",
+        "asciiHeaderRecords": 1,
+        "asciiQuoteCharacter": "\"",
+        "asciiThousandSeparator": ",",
+        "dataSourceNameForClient": "C:\\Users\\priyam.aneja\\Documents\\product_pl.txt.cma",
+        "dataSourceNameForServer": "C:\\Users\\priyam.aneja\\Documents\\product_pl.txt.cma"
+    },
+    "HasSecurityAccess": false,
+    "Name": "Ops.GL Product Allocation.Sync.From.Analytics",
+    "Parameters": [
+        {
+            "Name": "pVersion",
+            "Prompt": "",
+            "Type": "String",
+            "Value": "Actual"
+        },
+        {
+            "Name": "pPeriod",
+            "Prompt": "",
+            "Type": "String",
+            "Value": "2018-11"
+        },
+        {
+            "Name": "pInstance",
+            "Prompt": "",
+            "Type": "String",
+            "Value": "Analytics"
+        }
+    ],
+    "UIData": "CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
+    "Variables": [
+        {
+            "EndByte": 0,
+            "Name": "vCube",
+            "Position": 1,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vVersion",
+            "Position": 2,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vMonth",
+            "Position": 3,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vLOB",
+            "Position": 4,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vLocation",
+            "Position": 5,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vProductType",
+            "Position": 6,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vAccount",
+            "Position": 7,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vMeasure",
+            "Position": 8,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vValue",
+            "Position": 9,
+            "StartByte": 0,
+            "Type": "String"
+        }
+    ],
+    "VariablesUIData": [
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "IgnoredInputVarName=V10\fVarType=33\fColType=1165\f"
+    ]
+}
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: PROPERTIES                                                             #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: PROLOG PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+# ==================================================================== #
+# === Process: OPS.GL Product Allocation.Sync.From.Analytics
+# === Purpose: Import Product Allocation from Analytics
+# ==================================================================== #
+
+
+# ==================================================================== #
+# Define Constants
+# ==================================================================== #
+
+cVersion = TRIM(pVersion);
+cPeriod = TRIM(pPeriod);
+cInstance = TRIM(pInstance);
+
+cImportCube = 'GL By Product Allocation';
+cTAPSysInfoCube = 'TAP System Info';
+cTapAppInfoCube = 'Tap Application Info';
+
+cDimensionDelim = '&';
+cElementStartDelim = ':';
+cElementDelim = '+';
+cFilter = '';
+cSkipRules = 0;
+cSkipCons = 1;
+cZeroSource = 0;
+cDebug = 0;
+
+cExportCube = 'GL By Product Allocation';
+cVersionDim = 'Version';
+cPeriodDim = 'Month';
+cMsrDim = 'GL By Product Allocation Measure';
+cMsrEle1 = 'Allocation Method';
+cMsrEle2 = 'Allocation Method Override';
+
+
+
+# ==================================================================== #
+# Script Variables
+# ==================================================================== #
+
+cSyncFrom = LOWER(pInstance);
+
+cServer = CELLGETS(cTapAppInfoCube, cSyncFrom, 'Endpoint');
+cPortNumber = '443';
+
+cPath = CELLGETS(cTAPSysInfoCube, 'Files Shared Path', 'Value') | '/ops';
+cPythonExe = CELLGETS(cTAPSysInfoCube, 'Python Executable', 'Value');
+
+cScriptRun = CELLGETS(cTAPSysInfoCube, 'Scripts Local Path', 'Value') | '/data-move.py';
+
+cBatchUser = CELLGETS(cTAPSysInfoCube, 'Batch Username', 'Value');
+cBatchPassword = CELLGETS(cTAPSysInfoCube, 'Batch Password', 'Value');
+cBatchNamespace = CELLGETS(cTAPSysInfoCube, 'Batch Namespace', 'Value');
+
+cFilePath = '/var/tm1/' | cSyncFrom | '/files/shared/ops/';
+
+cFileName = LOWER(cExportCube | '_' | 'export.txt');
+
+cView = '';
+
+cFilter = cVersionDim | cElementStartDelim | pVersion | cDimensionDelim | cPeriodDim | cElementStartDelim | pPeriod | cDimensionDelim | cMsrDim | cElementStartDelim | cMsrEle1 | cElementDelim | cMsrEle2;
+
+
+# ==================================================================== #
+# Create Export Process Variables
+# ==================================================================== #
+
+cTemplateScriptRun = '%cPythonExe% "%cScriptRun%"  
+--server="%cServer%" 
+--port="%cPortNumber%" 
+--user="%cBatchUser%" 
+--password=''%cBatchPassword%'' 
+--namespace="%cBatchNamespace%" 
+--pCube="%cExportCube%" 
+--pView="%cView%" 
+--pFilter="%cFilter%" 
+--pDimensionDelim="%cDimensionDelim%" 
+--pElementStartDelim="%cElementStartDelim%" 
+--pElementDelim="%cElementDelim%" 
+--pSkipRules="%cSkipRules%" 
+--pSkipCons="%cSkipCons%" 
+--pZeroSource="%cZeroSource%" 
+--pFilePath="%cFilePath%" 
+--pFileName="%cFileName%" 
+--pDebug="%cDebug%" 
+ ';
+
+# ==================================================================== #
+# Run Command
+# ==================================================================== #
+
+sCommand = EXPAND(cTemplateScriptRun);
+EXECUTECOMMAND(sCommand, 1);
+
+# ==================================================================== #
+# Break if no file
+# ==================================================================== #
+cPath = CELLGETS('TAP System Info', 'Files Shared Path', 'Value');
+sFile = cPath | '/ops/';
+sFile = sFile | cFileName;
+
+IF(FILEEXISTS(sFile) = 0);
+   PROCESSERROR();
+ENDIF;
+
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+# Target View Zero Out
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+
+cRandomIntA = NUMBERTOSTRING(INT(RAND() * 100000));
+
+cViewName = '}zTemp.' | GETPROCESSNAME() | '.' | cRandomIntA;
+cSubsetName = '}zTemp.' | GETPROCESSNAME() | '.' | cRandomIntA;
+
+VIEWCREATE(cImportCube, cViewName, 1);
+nCtr = 1;
+nMax = CUBEDIMENSIONCOUNTGET(cImportCube);
+WHILE(nCtr <= nMax);
+   sDim = TABDIM(cImportCube, nCtr);
+   IF(sDim @= 'Version');
+      sElement = pVersion;
+      SUBSETCREATE(sDim, cSubsetName, 1);
+      SUBSETELEMENTINSERT(sDim, cSubsetName, sElement, 1);
+      VIEWSUBSETASSIGN(cImportCube, cViewName, sDim, cSubsetName);
+   ELSEIF(sDim @= 'Period');
+      sElement = pPeriod;
+      sMDX = '{TM1SORT( {TM1FILTERBYLEVEL({Descendants([ ' | sDim | '].[' | sElement | '])}, 0)}, ASC)}';
+      SUBSETCREATEBYMDX(cSubsetName, sMdx, 1);
+      VIEWSUBSETASSIGN(cImportCube, cViewName, sDim, cSubsetName);
+   ENDIF;
+
+   nCtr = nCtr + 1;
+END;
+
+VIEWZEROOUT(cImportCube, cViewName);
+
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+# Define Source
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+
+
+sBaseFilesPath = CELLGETS('TAP System Info', 'Files Shared Path', 'Value');
+
+sFilePath = sBaseFilesPath | '/ops/';
+sFile = sFilePath | cFileName;
+
+DatasourceNameForClient = sFile;
+DatasourceNameForServer = sFile;
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: PROLOG PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: METADATA PROCEDURE                                                   #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: METADATA PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: DATA PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+# ==================================================================== #
+# Load Data
+# ==================================================================== #
+
+IF(vAccount @= 'Ride Insurance');
+   CELLPUTS('P2P Rider Miles', cImportCube, cVersion, cPeriod, vLOB, vLocation, vProductType, vAccount, vMeasure);
+ELSE;
+   CELLPUTS(vValue, cImportCube, cVersion, cPeriod, vLOB, vLocation, vProductType, vAccount, vMeasure);
+ENDIF;
+
+
+
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: DATA PROCEDURE                                                         #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: EPILOG PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: EPILOG PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #

@@ -1,0 +1,202 @@
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: PROPERTIES                                                           #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+{
+    "DataSource": {
+        "Type": "None"
+    },
+    "HasSecurityAccess": false,
+    "Name": "Global.Dim.Period.Build Hierarchy",
+    "Parameters": [],
+    "UIData": "CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
+    "Variables": [],
+    "VariablesUIData": []
+}
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: PROPERTIES                                                             #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: PROLOG PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+# ==================================================================== #
+# Globals
+# ==================================================================== #
+
+cDim = 'Period';
+cHier = 'Period';
+
+cTopEleMonth = 'Total Time - Month';
+cTopEleWeek = 'Total Time - Week';
+
+cRand = NUMBERTOSTRING(ROUND(RAND() * 100000));
+cRand = FILL('0', 6 - LONG(cRand)) | cRand;
+
+cView = EXPAND('zzTemp.%cRand%');
+cSub = EXPAND('zzTemp.%cRand%');
+
+# ==================================================================== #
+# Create Subsets
+# ==================================================================== #
+
+sDim = cDim;
+sHier = cHier;
+sDimHier = sDim;
+
+sSub = cSub | '.Month';
+sMDX = EXPAND('{TM1SORT( EXCEPT( {TM1FILTERBYPATTERN( [%sDim%].[%sDim%].Members, "????-??")},' | 'UNION({TM1FILTERBYPATTERN( [%sDim%].[%sDim%].Members, "????-H?")}, {TM1FILTERBYPATTERN( [%sDim%].[%sDim%].Members' | ', "????-Q?")})), ASC)}');
+
+SUBSETCREATE(sDimHier, sSub, 1);
+SUBSETMDXSET(sDimHier, sSub, sMDX);
+SUBSETMDXSET(sDimHier, sSub, '');
+
+sSub = cSub | '.Week';
+sMDX = EXPAND('{TM1SORT( {TM1FILTERBYPATTERN( { [%sDim%].Members }, "WS ????-??-??")}, ASC)}');
+
+SUBSETCREATE(sDimHier, sSub, 1);
+SUBSETMDXSET(sDimHier, sSub, sMDX);
+SUBSETMDXSET(sDimHier, sSub, '');
+
+# ==================================================================== #
+# Delete Consolidations
+# ==================================================================== #
+
+sHier = cDim;
+
+i = DIMSIZ(sHier);
+WHILE(i > 0);
+   sEle = DIMNM(sHier, i);
+   IF(DTYPE(sHier, sEle) @= 'C');
+      DIMENSIONELEMENTDELETE(sHier, sEle);
+   ENDIF;
+
+   i = i - 1;
+END;
+
+# ==================================================================== #
+# Create Top Month Element
+# ==================================================================== #
+
+sEle = cTopEleMonth;
+
+DIMENSIONELEMENTINSERT(sDim, DIMNM(sHier, 1), sEle, 'C');
+
+# ==================================================================== #
+# Create Rollups
+# ==================================================================== #
+
+sSub = cSub | '.Month';
+sHier = cDim;
+
+i = 1;
+WHILE(i <= SUBSETGETSIZE(sHier, sSub));
+   sEleLeaf = SUBSETGETELEMENTNAME(sHier, sSub, i);
+
+   # Top/Year Element Relationship
+   sElePar = cTopEleMonth;
+   sEle = ATTRS(sHier, sEleLeaf, 'Year Element');
+   DIMENSIONELEMENTINSERT(sHier, '', sEle, 'C');
+   DIMENSIONELEMENTCOMPONENTADD(sDim, sElePar, sEle, 1);
+
+   # Year/Half Element Relationship
+   sElePar = sEle;
+   sEle = ATTRS(sHier, sEleLeaf, 'Half Element');
+   DIMENSIONELEMENTINSERT(sHier, '', sElePar, 'C');
+   DIMENSIONELEMENTINSERT(sHier, '', sEle, 'C');
+   DIMENSIONELEMENTCOMPONENTADD(sHier, sElePar, sEle, 1);
+
+   # Half/Quarter Element Relationship
+   sElePar = sEle;
+   sEle = ATTRS(sHier, sEleLeaf, 'Quarter Element');
+   DIMENSIONELEMENTINSERT(sHier, '', sElePar, 'C');
+   DIMENSIONELEMENTINSERT(sHier, '', sEle, 'C');
+   DIMENSIONELEMENTCOMPONENTADD(sHier, sElePar, sEle, 1);
+
+   # Quarter/Month Element Relationship
+   sElePar = sEle;
+   sEle = ATTRS(sHier, sEleLeaf, 'Month Element');
+   DIMENSIONELEMENTINSERT(sHier, '', sElePar, 'C');
+   DIMENSIONELEMENTINSERT(sHier, '', sEle, 'C');
+   DIMENSIONELEMENTCOMPONENTADD(sHier, sElePar, sEle, 1);
+
+   i = i + 1;
+END;
+
+# ==================================================================== #
+# Create Week Element
+# ==================================================================== #
+
+DIMENSIONELEMENTINSERT(sDim, '', cTopEleWeek, 'C');
+
+# ==================================================================== #
+# Create Rollups
+# ==================================================================== #
+
+sSub = cSub | '.Week';
+sHier = cDim;
+
+
+i = 1;
+WHILE(i <= SUBSETGETSIZE(sHier, sSub));
+
+   sEleLeaf = SUBSETGETELEMENTNAME(sHier, sSub, i);
+
+   # Top/Year Element Relationship
+   sElePar = cTopEleWeek;
+   sEle = 'Week ' | ATTRS(sHier, sEleLeaf, 'Year Element');
+   DIMENSIONELEMENTINSERT(sDim, '', sEle, 'C');
+   DIMENSIONELEMENTCOMPONENTADD(sDim, sElePar, sEle, 1);
+
+   # Year/Half Element Relationship
+   sElePar = sEle;
+   sEle = ATTRS(sHier, sEleLeaf, 'Week Element');
+   DIMENSIONELEMENTINSERT(sDim, '', sElePar, 'C');
+   DIMENSIONELEMENTINSERT(sDim, '', sEle, 'C');
+   DIMENSIONELEMENTCOMPONENTADD(sDim, sElePar, sEle, 1);
+
+   i = i + 1;
+END;
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: PROLOG PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: METADATA PROCEDURE                                                   #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: METADATA PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: DATA PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: DATA PROCEDURE                                                         #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: EPILOG PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: EPILOG PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #

@@ -1,0 +1,240 @@
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: PROPERTIES                                                           #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+{
+    "DataSource": {
+        "Type": "TM1DimensionSubset",
+        "dataSourceNameForClient": "Location",
+        "dataSourceNameForServer": "Location",
+        "subset": "Level0"
+    },
+    "HasSecurityAccess": false,
+    "Name": "Metadata.Location.Update ATTRS",
+    "Parameters": [],
+    "UIData": "CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
+    "Variables": [
+        {
+            "EndByte": 0,
+            "Name": "vLoc",
+            "Position": 1,
+            "StartByte": 0,
+            "Type": "String"
+        }
+    ],
+    "VariablesUIData": [
+        "VarType=32\fColType=827\f"
+    ]
+}
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: PROPERTIES                                                             #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: PROLOG PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#=================================================#
+# Add ATTRS
+#=================================================#
+ATTRINSERT('Location', '', 'Location L1', 'S');
+ATTRINSERT('Location', '', 'Location L2', 'S');
+ATTRINSERT('Location', '', 'Location L3', 'S');
+ATTRINSERT('Location', '', 'Location L4', 'S');
+ATTRINSERT('Location', '', 'Location L5', 'S');
+ATTRINSERT('Location', '', 'Location L6', 'S');
+ATTRINSERT('Location', '', 'Location L7', 'S');
+
+ATTRINSERT('Location', '', 'EATS L1', 'S');
+ATTRINSERT('Location', '', 'EATS L2', 'S');
+ATTRINSERT('Location', '', 'EATS L3', 'S');
+ATTRINSERT('Location', '', 'EATS L4', 'S');
+ATTRINSERT('Location', '', 'EATS L5', 'S');
+ATTRINSERT('Location', '', 'EATS L6', 'S');
+ATTRINSERT('Location', '', 'EATS L7', 'S');
+
+#=================================================#
+# Initialise Constants               
+#=================================================#
+
+cTargetCube = '}ElementAttributes_Location';
+#=================================================#
+
+## Clear Target View                  
+#=================================================#
+
+sTargetFilter = '}ElementAttributes_Location:  OPS Name';
+
+sProcess = 'Bedrock.Cube.Data.Clear';
+EXECUTEPROCESS(sProcess
+   , 'pCube', cTargetCube
+   , 'pView', ''
+   , 'pFilter', sTargetFilter
+   , 'pDimensionDelim', '&'
+   , 'pElementStartDelim', ':'
+   , 'pElementDelim', '+'
+   , 'pDestroyTempObj', 1
+   , 'pDebug', 0
+);
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: PROLOG PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: METADATA PROCEDURE                                                   #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: METADATA PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: DATA PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#=================================================#
+# Update Location L2 to L7
+#=================================================#
+
+sLocL1 = ATTRS('Location', vLoc, 'Location L1');
+
+#Location L2
+IF(sLocL1 @= '');
+   sLocL2 = '';
+ELSE;
+   sLocL2 = ATTRS('Location', sLocL1, 'Location L1');
+ENDIF;
+
+#Location L3
+IF(sLocL2 @= '');
+   sLocL3 = '';
+ELSE;
+   sLocL3 = ATTRS('Location', sLocL2, 'Location L1');
+ENDIF;
+
+#Location L4 
+IF(sLocL3 @= '');
+   sLocL4 = '';
+ELSE;
+   sLocL4 = ATTRS('Location', sLocL3, 'Location L1');
+ENDIF;
+
+#Location L5
+IF(sLocL4 @= '');
+   sLocL5 = '';
+ELSE;
+   sLocL5 = ATTRS('Location', sLocL4, 'Location L1');
+ENDIF;
+
+#Location L6
+IF(sLocL5 @= '');
+   sLocL6 = '';
+ELSE;
+   sLocL6 = ATTRS('Location', sLocL5, 'Location L1');
+ENDIF;
+
+#Location L7
+IF(sLocL6 @= '');
+   sLocL7 = '';
+ELSE;
+   sLocL7 = ATTRS('Location', sLocL6, 'Location L1');
+ENDIF;
+
+ATTRPUTS(sLocL2, 'Location', vLoc, 'Location L2');
+ATTRPUTS(sLocL3, 'Location', vLoc, 'Location L3');
+ATTRPUTS(sLocL4, 'Location', vLoc, 'Location L4');
+ATTRPUTS(sLocL5, 'Location', vLoc, 'Location L5');
+ATTRPUTS(sLocL6, 'Location', vLoc, 'Location L6');
+ATTRPUTS(sLocL7, 'Location', vLoc, 'Location L7');
+
+#=================================================#
+# Update EATS Location L2 to L7
+#=================================================#
+
+sLocL1 = ATTRS('Location', vLoc, 'EATS L1');
+
+#EATS L2
+IF(sLocL1 @= '');
+   sLocL2 = '';
+ELSE;
+   sLocL2 = ATTRS('Location', sLocL1, 'EATS L1');
+ENDIF;
+
+#EATS L3
+IF(sLocL2 @= '');
+   sLocL3 = '';
+ELSE;
+   sLocL3 = ATTRS('Location', sLocL2, 'EATS L1');
+ENDIF;
+
+#EATS L4 
+IF(sLocL3 @= '');
+   sLocL4 = '';
+ELSE;
+   sLocL4 = ATTRS('Location', sLocL3, 'EATS L1');
+ENDIF;
+
+#EATS L5
+IF(sLocL4 @= '');
+   sLocL5 = '';
+ELSE;
+   sLocL5 = ATTRS('Location', sLocL4, 'EATS L1');
+ENDIF;
+
+#EATS L6
+IF(sLocL5 @= '');
+   sLocL6 = '';
+ELSE;
+   sLocL6 = ATTRS('Location', sLocL5, 'EATS L1');
+ENDIF;
+
+#Location L7
+IF(sLocL6 @= '');
+   sLocL7 = '';
+ELSE;
+   sLocL7 = ATTRS('Location', sLocL6, 'EATS L1');
+ENDIF;
+
+ATTRPUTS(sLocL2, 'Location', vLoc, 'EATS L2');
+ATTRPUTS(sLocL3, 'Location', vLoc, 'EATS L3');
+ATTRPUTS(sLocL4, 'Location', vLoc, 'EATS L4');
+ATTRPUTS(sLocL5, 'Location', vLoc, 'EATS L5');
+ATTRPUTS(sLocL6, 'Location', vLoc, 'EATS L6');
+ATTRPUTS(sLocL7, 'Location', vLoc, 'EATS L7');
+
+#=================================================#
+# Update OPS
+#=================================================#
+
+sOPSLoc = 'v' | ATTRS('Location', vLoc, 'locationToolsid');
+IF(sOPSLoc @= 'v-1000' % sOPSLoc @= 'v');
+   ITEMSKIP;
+ENDIF;
+
+ATTRPUTS(sOPSLoc, 'Location', vLoc, 'OPS Name');
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: DATA PROCEDURE                                                         #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: EPILOG PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: EPILOG PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #

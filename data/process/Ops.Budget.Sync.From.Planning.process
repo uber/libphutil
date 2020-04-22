@@ -1,0 +1,405 @@
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: PROPERTIES                                                           #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+{
+    "DataSource": {
+        "Type": "ASCII",
+        "asciiDecimalSeparator": ".",
+        "asciiDelimiterChar": ",",
+        "asciiDelimiterType": "Character",
+        "asciiHeaderRecords": 1,
+        "asciiQuoteCharacter": "\"",
+        "asciiThousandSeparator": ",",
+        "dataSourceNameForClient": "C:\\Users\\priyam.aneja\\Documents\\pl plan_export.csv",
+        "dataSourceNameForServer": "C:\\Users\\priyam.aneja\\Documents\\pl plan_export.csv"
+    },
+    "HasSecurityAccess": false,
+    "Name": "Ops.Budget.Sync.From.Planning",
+    "Parameters": [
+        {
+            "Name": "pVersion",
+            "Prompt": "",
+            "Type": "String",
+            "Value": "2020 Plan"
+        },
+        {
+            "Name": "pPeriod",
+            "Prompt": "",
+            "Type": "String",
+            "Value": "2020"
+        },
+        {
+            "Name": "pInstance",
+            "Prompt": "",
+            "Type": "String",
+            "Value": "Planning"
+        },
+        {
+            "Name": "pPlanVersion",
+            "Prompt": "",
+            "Type": "String",
+            "Value": "Plan 1"
+        },
+        {
+            "Name": "pLevel",
+            "Prompt": "",
+            "Type": "String",
+            "Value": "Month"
+        }
+    ],
+    "UIData": "CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
+    "Variables": [
+        {
+            "EndByte": 0,
+            "Name": "vCube",
+            "Position": 1,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vVersion",
+            "Position": 2,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vPeriod",
+            "Position": 3,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vLOB",
+            "Position": 4,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vDep",
+            "Position": 5,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vLocation",
+            "Position": 6,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vMetric",
+            "Position": 7,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vInitiative",
+            "Position": 8,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vProductType",
+            "Position": 9,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vPlanModel",
+            "Position": 10,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vTransfer",
+            "Position": 11,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vCurrencyType",
+            "Position": 12,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vMeasure",
+            "Position": 13,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vValue",
+            "Position": 14,
+            "StartByte": 0,
+            "Type": "Numeric"
+        }
+    ],
+    "VariablesUIData": [
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=33\fColType=827\f"
+    ]
+}
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: PROPERTIES                                                             #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: PROLOG PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+# ==================================================================== #
+# === Process: OPS.Budget.Sync.From.Planning
+# === Purpose: Import Forecast data from Planning
+# ==================================================================== #
+
+
+# ==================================================================== #
+# Define Constants
+# ==================================================================== #
+
+cVersion = TRIM(pVersion);
+cPlanVersion = TRIM(pPlanVersion);
+cPeriod = TRIM(pPeriod);
+cInstance = TRIM(pInstance);
+
+cImportCube = 'Ops';
+cTAPSysInfoCube = 'TAP System Info';
+cTapAppInfoCube = 'Tap Application Info';
+
+cDimensionDelim = '&';
+cElementStartDelim = ':';
+cElementDelim = '+';
+cFilter = '';
+cSkipRules = 0;
+cSkipCons = 1;
+cZeroSource = 0;
+cDebug = 0;
+
+cPlanVersionDim = 'Plan Version';
+cPlanModelDim = 'Plan Model';
+cModelEle1 = 'Revenue';
+cModelEle2 = 'Cost Model';
+cModelEle3 = 'Adjustment';
+cPlanActDim = 'Account';
+cActEle1 = 'Net Inflows';
+cActEle2 = 'OPS Model';
+cMsrEle1 = 'Amount';
+
+IF(pLevel @= 'Month');
+   cExportCube = 'PL Plan';
+   cPlanMonthDim = 'Month';
+   cPlanMsrDim = 'PL Plan Measure';
+ELSE;
+   cExportCube = 'PL Plan Weekly';
+   cPlanMonthDim = 'Week';
+   cPlanMsrDim = 'PL Plan Weekly Measure';
+ENDIF;
+
+# ==================================================================== #
+# Script Variables
+# ==================================================================== #
+
+cSyncFrom = LOWER(pInstance);
+
+cServer = CELLGETS(cTapAppInfoCube, cSyncFrom, 'Endpoint');
+cPortNumber = '443';
+
+cPath = CELLGETS(cTAPSysInfoCube, 'Files Shared Path', 'Value') | '/ops';
+cPythonExe = CELLGETS(cTAPSysInfoCube, 'Python Executable', 'Value');
+
+cScriptRun = CELLGETS(cTAPSysInfoCube, 'Scripts Local Path', 'Value') | '/data-move.py';
+
+cBatchUser = CELLGETS(cTAPSysInfoCube, 'Batch Username', 'Value');
+cBatchPassword = CELLGETS(cTAPSysInfoCube, 'Batch Password', 'Value');
+cBatchNamespace = CELLGETS(cTAPSysInfoCube, 'Batch Namespace', 'Value');
+
+cFilePath = '/var/tm1/' | cSyncFrom | '/files/shared/ops/';
+
+cFileName = LOWER(cExportCube | '_' | 'export.txt');
+
+cView = '';
+
+cFilter = cPlanVersionDim | cElementStartDelim | pPlanVersion | cDimensionDelim | cPlanMonthDim | cElementStartDelim | pPeriod | cDimensionDelim | cPlanModelDim | cElementStartDelim | cModelEle1 | cElementDelim | cModelEle2 | cElementDelim | cModelEle3 | cDimensionDelim | cPlanActDim | cElementStartDelim | cActEle1 | cElementDelim | cActEle2 | cDimensionDelim | cPlanMsrDim | cElementStartDelim | cMsrEle1;
+
+
+# ==================================================================== #
+# Create Export Process Variables
+# ==================================================================== #
+
+cTemplateScriptRun = '%cPythonExe% "%cScriptRun%"  
+--server="%cServer%" 
+--port="%cPortNumber%" 
+--user="%cBatchUser%" 
+--password=''%cBatchPassword%'' 
+--namespace="%cBatchNamespace%" 
+--pCube="%cExportCube%" 
+--pView="%cView%" 
+--pFilter="%cFilter%" 
+--pDimensionDelim="%cDimensionDelim%" 
+--pElementStartDelim="%cElementStartDelim%" 
+--pElementDelim="%cElementDelim%" 
+--pSkipRules="%cSkipRules%" 
+--pSkipCons="%cSkipCons%" 
+--pZeroSource="%cZeroSource%" 
+--pFilePath="%cFilePath%" 
+--pFileName="%cFileName%" 
+--pDebug="%cDebug%" 
+ ';
+
+# ==================================================================== #
+# Run Command
+# ==================================================================== #
+
+sCommand = EXPAND(cTemplateScriptRun);
+EXECUTECOMMAND(sCommand, 1);
+
+# ==================================================================== #
+# Break if no file
+# ==================================================================== #
+cPath = CELLGETS('TAP System Info', 'Files Shared Path', 'Value');
+sFile = cPath | '/ops/';
+sFile = sFile | cFileName;
+
+IF(FILEEXISTS(sFile) = 0);
+   PROCESSERROR();
+ENDIF;
+
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+# Target View Zero Out
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+
+cRandomIntA = NUMBERTOSTRING(INT(RAND() * 100000));
+
+cViewName = '}zTemp.' | GETPROCESSNAME() | '.' | cRandomIntA;
+cSubsetName = '}zTemp.' | GETPROCESSNAME() | '.' | cRandomIntA;
+
+VIEWCREATE(cImportCube, cViewName, 1);
+nCtr = 1;
+nMax = CUBEDIMENSIONCOUNTGET(cImportCube);
+WHILE(nCtr <= nMax);
+   sDim = TABDIM(cImportCube, nCtr);
+   IF(sDim @= 'Version');
+      sElement = pVersion;
+      SUBSETCREATE(sDim, cSubsetName, 1);
+      SUBSETELEMENTINSERT(sDim, cSubsetName, sElement, 1);
+      VIEWSUBSETASSIGN(cImportCube, cViewName, sDim, cSubsetName);
+   ELSEIF(sDim @= 'Period');
+      IF(pLevel @= 'Week');
+         sElement = 'Week ' | pPeriod;
+      ELSE;
+         sElement = pPeriod;
+      ENDIF;
+      sMDX = '{TM1SORT( {TM1FILTERBYLEVEL({Descendants([ ' | sDim | '].[' | sElement | '])}, 0)}, ASC)}';
+      SUBSETCREATEBYMDX(cSubsetName, sMdx, 1);
+      VIEWSUBSETASSIGN(cImportCube, cViewName, sDim, cSubsetName);
+   ENDIF;
+
+   nCtr = nCtr + 1;
+END;
+
+VIEWZEROOUT(cImportCube, cViewName);
+
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+# Define Source
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+
+
+sBaseFilesPath = CELLGETS('TAP System Info', 'Files Shared Path', 'Value');
+
+sFilePath = sBaseFilesPath | '/ops/';
+sFile = sFilePath | cFileName;
+
+DatasourceNameForClient = sFile;
+DatasourceNameForServer = sFile;
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: PROLOG PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: METADATA PROCEDURE                                                   #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: METADATA PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: DATA PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+# ==================================================================== #
+# Load Budget Data
+# ==================================================================== #
+
+IF(pLevel @= 'Week');
+   sPeriod = 'WS ' | vPeriod;
+ELSE;
+   sPeriod = vPeriod;
+ENDIF;
+
+
+IF(DIMIX('Rate Type', vCurrencyType) = 0 % DIMIX('OPS Metric', vMetric) = 0);
+   ASCIIOUTPUT('month.txt', '1');
+   ITEMSKIP;
+ENDIF;
+
+CELLINCREMENTN(vValue, cImportCube, cVersion, sPeriod, vPlanModel, vCurrencyType, vLocation, vLOB, vProductType, vMetric, vMeasure);
+
+
+
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: DATA PROCEDURE                                                         #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: EPILOG PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: EPILOG PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #

@@ -1,0 +1,370 @@
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: PROPERTIES                                                           #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+{
+    "DataSource": {
+        "Type": "None"
+    },
+    "HasSecurityAccess": false,
+    "Name": "Global.Dim.Period.Update Input Attributes",
+    "Parameters": [],
+    "UIData": "CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
+    "Variables": [],
+    "VariablesUIData": []
+}
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: PROPERTIES                                                             #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: PROLOG PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+cDim = 'Period';
+
+cRand = NUMBERTOSTRING(ROUND(RAND() * 100000));
+cRand = FILL('0', 6 - LONG(cRand)) | cRand;
+
+cView = EXPAND('zzTemp.%cRand%');
+cSub = EXPAND('zzTemp.%cRand%');
+
+# ==================================================================== #
+# Create Month Subsets
+# ==================================================================== #
+
+sDim = cDim;
+sHier = EXPAND('%sDim%');
+
+sSub = cSub | '.Month';
+sMDX = EXPAND('{TM1SORT( EXCEPT( {TM1FILTERBYPATTERN( [%sDim%].[%sDim%].Members, "????-??")},' | 'UNION({TM1FILTERBYPATTERN( [%sDim%].[%sDim%].Members, "????-H?")}, {TM1FILTERBYPATTERN( [%sDim%].[%sDim%].Members' | ', "????-Q?")})), ASC)}');
+SUBSETCREATE(sHier, sSub, 0);
+SUBSETMDXSET(sHier, sSub, sMDX);
+SUBSETMDXSET(sHier, sSub, '');
+
+
+# ==================================================================== #
+# Update Attribute - Month
+# ==================================================================== #
+
+i = 1;
+
+sSub = cSub | '.Month';
+sHier = EXPAND('%sDim%');
+
+WHILE(i <= SUBSETGETSIZE(sHier, sSub));
+   sEle = SUBSETGETELEMENTNAME(sHier, sSub, i);
+
+   nYear = NUMBR(SUBST(sEle, 1, 4));
+   nMonth = NUMBR(SUBST(sEle, 6, 2));
+
+   sAttr = 'Year Element';
+   sAttrVal = SUBST(sEle, 1, 4);
+   ATTRPUTS(sAttrVal, sHier, sEle, sAttr);
+
+   sAttr = 'Half Element';
+   IF(NUMBR(SUBST(sEle, 6, 2)) <= 6);
+      sAttrVal = SUBST(sEle, 1, 4) | '-H1';
+   ELSE;
+      sAttrVal = SUBST(sEle, 1, 4) | '-H2';
+   ENDIF;
+   ATTRPUTS(sAttrVal, sHier, sEle, sAttr);
+
+   sAttr = 'Quarter Element';
+   IF(NUMBR(SUBST(sEle, 6, 2)) <= 3);
+      sAttrVal = SUBST(sEle, 1, 4) | '-Q1';
+   ELSEIF(NUMBR(SUBST(sEle, 6, 2)) <= 6);
+      sAttrVal = SUBST(sEle, 1, 4) | '-Q2';
+   ELSEIF(NUMBR(SUBST(sEle, 6, 2)) <= 9);
+      sAttrVal = SUBST(sEle, 1, 4) | '-Q3';
+   ELSE;
+      sAttrVal = SUBST(sEle, 1, 4) | '-Q4';
+   ENDIF;
+   ATTRPUTS(sAttrVal, sHier, sEle, sAttr);
+
+   sAttr = 'Month Element';
+   sAttrVal = SUBST(sEle, 1, 7);
+   ATTRPUTS(sAttrVal, sHier, sEle, sAttr);
+
+
+   sAttr = 'Level';
+   sAttrVal = 'Input';
+   ATTRPUTS(sAttrVal, sHier, sEle, sAttr);
+
+   sAttr = 'Prior Period';
+   nIndex = i - 1;
+   IF(nIndex > 0 & nIndex <= SUBSETGETSIZE(sHier, sSub));
+      sAttrVal = SUBSETGETELEMENTNAME(sHier, sSub, nIndex);
+      ATTRPUTS(sAttrVal, sHier, sEle, sAttr);
+   ENDIF;
+
+   sAttr = 'Next Period';
+   nIndex = i + 1;
+   IF(nIndex > 0 & nIndex <= SUBSETGETSIZE(sHier, sSub));
+      sAttrVal = SUBSETGETELEMENTNAME(sHier, sSub, nIndex);
+      ATTRPUTS(sAttrVal, sHier, sEle, sAttr);
+   ENDIF;
+
+   sAttr = 'Start of Period';
+   nAttrVal = DAYNO(SUBST(sEle, 1, 7) | '-01') + 21916;
+   ATTRPUTN(nAttrVal, sHier, sEle, sAttr);
+
+   IF(nMonth = 12);
+      sAttr = 'End of Period';
+      nAttrVal = DAYNO(NUMBERTOSTRING(nYear + 1) | '-01-01') + 21916 - 1;
+      ATTRPUTN(nAttrVal, sHier, sEle, sAttr);
+   ELSE;
+      sAttr = 'End of Period';
+      nAttrVal = DAYNO(NUMBERTOSTRING(nYear) | '-' | FILL('0', 2 - LONG(NUMBERTOSTRING(nMonth + 1))) | NUMBERTOSTRING(nMonth + 1) | '-01') + 21916 - 1;
+      ATTRPUTN(nAttrVal, sHier, sEle, sAttr);
+   ENDIF;
+
+   sAttr = 'Calendar Day';
+   nAttrVal = ATTRN(sHier, sEle, 'End of Period') - ATTRN(sHier, sEle, 'Start of Period') + 1;
+   ATTRPUTN(nAttrVal, sHier, sEle, sAttr);
+
+   sAttr = 'Business Day';
+   p = ATTRN(sHier, sEle, 'Start of Period');
+   nEnd = ATTRN(sHier, sEle, 'End of Period');
+   nAttrVal = 0;
+   WHILE(p <= nEnd);
+      IF(MOD(p, 7) > 1 & MOD(p, 7) <= 6);
+         nAttrVal = nAttrVal + 1;
+      ENDIF;
+      p = p + 1;
+   END;
+   ATTRPUTN(nAttrVal, sHier, sEle, sAttr);
+
+   p = -25;
+   WHILE(p <= 25);
+      sSign = IF(p < 0, '-', '+');
+      IF(p <> 0);
+         sAttr = 'Period' | sSign | NUMBERTOSTRING(ABS(p));
+         nIndex = i + p;
+         IF(nIndex > 0 & nIndex <= SUBSETGETSIZE(sHier, sSub));
+            sAttrVal = SUBSETGETELEMENTNAME(sHier, sSub, nIndex);
+            ATTRPUTS(sAttrVal, sHier, sEle, sAttr);
+         ENDIF;
+      ENDIF;
+      p = p + 1;
+   END;
+
+   p = -12;
+   WHILE(p <= 12);
+      sSign = IF(p < 0, '-', '+');
+      IF(p <> 0);
+         sAttr = 'Month' | sSign | NUMBERTOSTRING(ABS(p));
+         nIndex = i + p;
+         IF(nIndex > 0 & nIndex <= SUBSETGETSIZE(sHier, sSub));
+            sAttrVal = SUBSETGETELEMENTNAME(sHier, sSub, nIndex);
+            ATTRPUTS(sAttrVal, sHier, sEle, sAttr);
+         ENDIF;
+      ENDIF;
+      p = p + 1;
+   END;
+
+   p = -4;
+   WHILE(p <= 4);
+      sSign = IF(p < 0, '-', '+');
+      IF(p <> 0);
+         sAttr = 'Quarter' | sSign | NUMBERTOSTRING(ABS(p));
+         nIndex = i + (p * 3);
+         IF(nIndex > 0 & nIndex <= SUBSETGETSIZE(sHier, sSub));
+            sAttrVal = SUBSETGETELEMENTNAME(sHier, sSub, nIndex);
+            ATTRPUTS(sAttrVal, sHier, sEle, sAttr);
+         ENDIF;
+      ENDIF;
+      p = p + 1;
+   END;
+
+   p = -1;
+   WHILE(p <= 1);
+      sSign = IF(p < 0, '-', '+');
+      IF(p <> 0);
+         sAttr = 'Half' | sSign | NUMBERTOSTRING(ABS(p));
+         nIndex = i + (p * 6);
+         IF(nIndex > 0 & nIndex <= SUBSETGETSIZE(sHier, sSub));
+            sAttrVal = SUBSETGETELEMENTNAME(sHier, sSub, nIndex);
+            ATTRPUTS(sAttrVal, sHier, sEle, sAttr);
+         ENDIF;
+      ENDIF;
+      p = p + 1;
+   END;
+
+   p = -10;
+   WHILE(p <= 10);
+      sSign = IF(p < 0, '-', '+');
+      IF(p <> 0);
+         sAttr = 'Year' | sSign | NUMBERTOSTRING(ABS(p));
+         nIndex = i + (p * 12);
+         IF(nIndex > 0 & nIndex <= SUBSETGETSIZE(sHier, sSub));
+            sAttrVal = SUBSETGETELEMENTNAME(sHier, sSub, nIndex);
+            ATTRPUTS(sAttrVal, sHier, sEle, sAttr);
+         ENDIF;
+      ENDIF;
+      p = p + 1;
+   END;
+
+   i = i + 1;
+END;
+
+
+# ==================================================================== #
+# Create Week Subsets
+# ==================================================================== #
+
+sDim = cDim;
+sHier = EXPAND('%sDim%');
+
+sSub = cSub | '.Week';
+sMDX = EXPAND('{TM1SORT( {TM1FILTERBYPATTERN( { [%sDim%].[%sDim%].Members }, "WS ????-??-??")}, ASC)}');
+SUBSETCREATE(sHier, sSub, 0);
+SUBSETMDXSET(sHier, sSub, sMDX);
+SUBSETMDXSET(sHier, sSub, '');
+
+
+# ==================================================================== #
+# Update Attribute - Week
+# ==================================================================== #
+
+i = 1;
+
+sSub = cSub | '.Week';
+sHier = EXPAND('%sDim%');
+
+WHILE(i <= SUBSETGETSIZE(sHier, sSub));
+   sEle = SUBSETGETELEMENTNAME(sHier, sSub, i);
+
+   nYear = NUMBR(SUBST(sEle, 4, 4));
+
+
+   sAttr = 'Year Element';
+   sAttrVal = SUBST(sEle, 4, 4);
+   ATTRPUTS(sAttrVal, sHier, sEle, sAttr);
+
+   sAttr = 'Week Element';
+   sAttrVal = SUBST(sEle, 1, 13);
+   ATTRPUTS(sAttrVal, sHier, sEle, sAttr);
+
+   sAttr = 'Level';
+   sAttrVal = 'Input';
+   ATTRPUTS(sAttrVal, sHier, sEle, sAttr);
+
+   sAttr = 'Prior Period';
+   nIndex = i - 1;
+   IF(nIndex > 0 & nIndex <= SUBSETGETSIZE(sHier, sSub));
+      sAttrVal = SUBSETGETELEMENTNAME(sHier, sSub, nIndex);
+      ATTRPUTS(sAttrVal, sHier, sEle, sAttr);
+   ENDIF;
+
+   sAttr = 'Next Period';
+   nIndex = i + 1;
+   IF(nIndex > 0 & nIndex <= SUBSETGETSIZE(sHier, sSub));
+      sAttrVal = SUBSETGETELEMENTNAME(sHier, sSub, nIndex);
+      ATTRPUTS(sAttrVal, sHier, sEle, sAttr);
+   ENDIF;
+
+   sAttr = 'Calendar Day';
+   nAttrVal = ATTRN(sHier, sEle, 'End of Period') - ATTRN(sHier, sEle, 'Start of Period') + 1;
+   ATTRPUTN(nAttrVal, sHier, sEle, sAttr);
+
+   sAttr = 'Business Day';
+   p = ATTRN(sHier, sEle, 'Start of Period');
+   nEnd = ATTRN(sHier, sEle, 'End of Period');
+   nAttrVal = 0;
+   WHILE(p <= nEnd);
+      IF(MOD(p, 7) > 1 & MOD(p, 7) <= 6);
+         nAttrVal = nAttrVal + 1;
+      ENDIF;
+      p = p + 1;
+   END;
+   ATTRPUTN(nAttrVal, sHier, sEle, sAttr);
+
+   p = -25;
+   WHILE(p <= 25);
+      sSign = IF(p < 0, '-', '+');
+      IF(p <> 0);
+         sAttr = 'Period' | sSign | NUMBERTOSTRING(ABS(p));
+         nIndex = i + p;
+         IF(nIndex > 0 & nIndex <= SUBSETGETSIZE(sHier, sSub));
+            sAttrVal = SUBSETGETELEMENTNAME(sHier, sSub, nIndex);
+            ATTRPUTS(sAttrVal, sHier, sEle, sAttr);
+         ENDIF;
+      ENDIF;
+      p = p + 1;
+   END;
+
+   p = -53;
+   WHILE(p <= 53);
+      sSign = IF(p < 0, '-', '+');
+      IF(p <> 0);
+         sAttr = 'Week' | sSign | NUMBERTOSTRING(ABS(p));
+         nIndex = i + p;
+         IF(nIndex > 0 & nIndex <= SUBSETGETSIZE(sHier, sSub));
+            sAttrVal = SUBSETGETELEMENTNAME(sHier, sSub, nIndex);
+            ATTRPUTS(sAttrVal, sHier, sEle, sAttr);
+         ENDIF;
+      ENDIF;
+      p = p + 1;
+   END;
+
+   p = -10;
+   WHILE(p <= 10);
+      sSign = IF(p < 0, '-', '+');
+      IF(p <> 0);
+         sAttr = 'Year' | sSign | NUMBERTOSTRING(ABS(p));
+         sYear = NUMBERTOSTRING(nYear + p);
+         nIndex = i + (p * 12);
+         IF(nIndex > 0 & nIndex <= SUBSETGETSIZE(sHier, sSub));
+            sAttrVal = SUBSETGETELEMENTNAME(sHier, sSub, nIndex);
+            ATTRPUTS(sAttrVal, sHier, sEle, sAttr);
+         ENDIF;
+      ENDIF;
+      p = p + 1;
+   END;
+
+   i = i + 1;
+END;
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: PROLOG PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: METADATA PROCEDURE                                                   #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: METADATA PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: DATA PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: DATA PROCEDURE                                                         #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: EPILOG PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: EPILOG PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #

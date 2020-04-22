@@ -1,0 +1,330 @@
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: PROPERTIES                                                           #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+{
+    "DataSource": {
+        "Type": "ODBC",
+        "dataSourceNameForClient": "TM1TEGRATOR",
+        "dataSourceNameForServer": "TM1TEGRATOR",
+        "query": "select * from \"pipe.rides_ops_tm1_monthly_operational.20200324160115.ZPT95K\"",
+        "userName": "epm",
+        "usesUnicode": true
+    },
+    "HasSecurityAccess": false,
+    "Name": "Ops.Rides Ops.Load.From.FDS",
+    "Parameters": [
+        {
+            "Name": "pTable",
+            "Prompt": "",
+            "Type": "String",
+            "Value": "pipe.ops_tm1_monthly_financials.20200219215020.EIX8JN"
+        },
+        {
+            "Name": "pLevel",
+            "Prompt": "",
+            "Type": "String",
+            "Value": "Month"
+        }
+    ],
+    "UIData": "CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
+    "Variables": [
+        {
+            "EndByte": 0,
+            "Name": "vCarType",
+            "Position": 1,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vLocation",
+            "Position": 2,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vCurrency",
+            "Position": 3,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vFlowType",
+            "Position": 4,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vMetric",
+            "Position": 5,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vPeriod",
+            "Position": 6,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vValue",
+            "Position": 7,
+            "StartByte": 0,
+            "Type": "Numeric"
+        }
+    ],
+    "VariablesUIData": [
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=33\fColType=827\f"
+    ]
+}
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: PROPERTIES                                                             #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: PROLOG PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+# Process to load Rides opartional metrics from FDS to Rid Ops cube
+
+
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+# Define Constants
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+
+cCube = 'Rides Ops';
+cVersion = 'Actual';
+cRateType = 'USD';
+cMeasure = 'Amount';
+cSource = 'FDP';
+nRecords = 1;
+
+cPeriodMetricString = '';
+
+nDate = NOW;
+NEWDATEFORMATTER('', 'PST', 'serial', 'full', 'datetime', '');
+sOutputString = FORMATDATE(nDate, 0);
+
+nStart = 1;
+nCurPos = 1;
+
+cUser = CELLGETS('System Info', 'SQL User Name GL Transactions', 'String');
+cPassword = CELLGETS('System Info', 'SQL Password GL Transactions', 'String');
+
+
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+# Set Query
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+
+DatasourceUsername = cUser;
+DatasourcePassword = cPassword;
+sQuery = EXPAND('SELECT * FROM "%pTable%"');
+DatasourceQuery = sQuery;
+
+
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: PROLOG PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: METADATA PROCEDURE                                                   #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: METADATA PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: DATA PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+# Transformation
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+
+# Month and Week
+
+IF(pLevel @= 'Month');
+   sPeriod = SUBST(vPeriod, 1, 7);
+ELSE;
+   sPeriod = 'WS ' | SUBST(vPeriod, 1, 10);
+ENDIF;
+
+# Location
+sDim = 'Location';
+IF(vLocation @= '\N' % vLocation @= '');
+   ITEMSKIP;
+ENDIF;
+sLocation = 'V' | vLocation;
+
+IF((ELISANC(sDim, 'Total Location by Country', vLocation) = 1 & ELLEV(sDim, vLocation) <> 0) % (ELISANC(sDim, 'Custom Consolidations', vLocation) = 1 & ELLEV(sDim, vLocation) <> 0) % (ELISANC(sDim, 'Total Location', vLocation) = 1 & ELLEV(sDim, vLocation) <> 0));
+   sLocation = vLocation;
+ELSEIF(vLocation @= 'global');
+   sLocation = 'Total Location';
+ELSEIF(vLocation @= 'global_ex_sea_and_russia');
+   sLocation = 'Total Location ex SEA & Russia';
+ELSE;
+   sLocation = 'V' | vLocation;
+ENDIF;
+
+IF(DIMIX('Location', sLocation) = 0);
+   ITEMSKIP;
+ENDIF;
+
+# Flow Type
+sDim = 'Rides Flow Type';
+IF(vFlowType @= 'uber_eats' % vFlowType @= 'nemoearner');
+   ITEMSKIP;
+ELSEIF(vFlowType @= '\N' % vFlowType @= '' % vFlowType @= 'None');
+   sFlowType = 'Unspecified Flow Type';
+ELSE;
+   sFlowType = vFlowType;
+ENDIF;
+
+# Car Type
+sDim = 'Rides Car Type';
+IF(vCarType @= 'uber_eats');
+   ITEMSKIP;
+ELSEIF(vCarType @= '\N' % vCarType @= '');
+   sCarType = 'Not Specified';
+ELSE;
+   sCarType = vCarType;
+ENDIF;
+
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+# Clear Target View
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+#Scanning the Input to find Period and metric combination to be zeroed out
+
+sMetric = vMetric;
+
+IF(SCAN(sPeriod | '_' | sMetric, cPeriodMetricString) = 0);
+
+   IF(LONG(cPeriodMetricString) = 0);
+      cPeriodMetricString = sPeriod | '_' | sMetric;
+   ELSE;
+      cPeriodMetricString = cPeriodMetricString | '|' | sPeriod | '_' | sMetric;
+   ENDIF;
+
+   sLoopString = TRIM(cPeriodMetricString);
+   sLoopString = sLoopString | IF(SUBST(sLoopString, LONG(sLoopString), 1) @<> '|', '|', '');
+
+   WHILE(nCurPos <= LONG(sLoopString));
+      sCurChar = SUBST(sLoopString, nCurPos, 1);
+      IF(sCurChar @= '|');
+         sPeriodMetricElement = SUBST(sLoopString, nStart, nCurPos - nStart);
+         nSplit = SCAN('_', sPeriodMetricElement);
+         sPeriodElement = SUBST(sPeriodMetricElement, 1, (nSplit - 1));
+         sMetricElement = SUBST(sPeriodMetricElement, (nSplit + 1), LONG(sPeriodMetricElement) - nSplit);
+
+         cRandomIntA = NUMBERTOSTRING(INT(RAND() * 100000));
+         cViewName = '}zTemp.' | GETPROCESSNAME() | '.' | cRandomIntA;
+         cSubsetName = '}zTemp.' | GETPROCESSNAME() | '.' | cRandomIntA;
+
+         VIEWCREATE(cCube, cViewName, 1);
+         nCtr = 1;
+         nMax = CUBEDIMENSIONCOUNTGET(cCube);
+         WHILE(nCtr <= nMax);
+            sDim = TABDIM(cCube, nCtr);
+            IF(sDim @= 'Version');
+               sElement = 'Actual';
+               SUBSETCREATE(sDim, cSubsetName, 1);
+               SUBSETELEMENTINSERT(sDim, cSubsetName, sElement, 1);
+               VIEWSUBSETASSIGN(cCube, cViewName, sDim, cSubsetName);
+            ELSEIF(sDim @= 'Period');
+               sElement = sPeriodElement;
+               SUBSETCREATE(sDim, cSubsetName, 1);
+               SUBSETELEMENTINSERT(sDim, cSubsetName, sElement, 1);
+               VIEWSUBSETASSIGN(cCube, cViewName, sDim, cSubsetName);
+            ELSEIF(sDim @= 'Rate Type');
+               sElement = 'USD';
+               SUBSETCREATE(sDim, cSubsetName, 1);
+               SUBSETELEMENTINSERT(sDim, cSubsetName, sElement, 1);
+               VIEWSUBSETASSIGN(cCube, cViewName, sDim, cSubsetName);
+            ELSEIF(sDim @= 'Source');
+               sElement = 'FDP';
+               SUBSETCREATE(sDim, cSubsetName, 1);
+               SUBSETELEMENTINSERT(sDim, cSubsetName, sElement, 1);
+               VIEWSUBSETASSIGN(cCube, cViewName, sDim, cSubsetName);
+            ELSEIF(sDim @= 'Rides Ops Metric');
+               sElement = sMetricElement;
+               SUBSETCREATE(sDim, cSubsetName, 1);
+               SUBSETELEMENTINSERT(sDim, cSubsetName, sElement, 1);
+               VIEWSUBSETASSIGN(cCube, cViewName, sDim, cSubsetName);
+            ELSE;
+               sMDX = '{TM1SORT( {TM1FILTERBYLEVEL({TM1SUBSETALL([ ' | sDim | '] )}, 0)}, ASC)}';
+               SUBSETCREATEBYMDX(cSubsetName, sMdx, 1);
+               VIEWSUBSETASSIGN(cCube, cViewName, sDim, cSubsetName);
+            ENDIF;
+            nCtr = nCtr + 1;
+         END;
+         VIEWZEROOUT(cCube, cViewName);
+         nStart = nCurPos + 1;
+      ENDIF;
+      nCurPos = nCurPos + 1;
+   END;
+ENDIF;
+
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+# Load Data
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+
+IF(pLevel @= 'Month');
+   IF(sMetric @= 'Active Riders L28' % sMetric @= 'Weekly Active Riders' % sMetric @= 'Active Drivers L28' % sMetric @= 'Weekly Active Drivers');
+      ITEMSKIP;
+   ENDIF;
+ELSE;
+   IF(sMetric @= 'Active Riders' % sMetric @= 'Active Drivers');
+      ITEMSKIP;
+   ENDIF;
+ENDIF;
+
+IF(ELLEV('Location', sLocation) > 0);
+   CELLPUTN(vValue, cCube, cVersion, sPeriod, cSource, cRatetype, 'CustomLeaf:' | sLocation | ' Input', sFlowType, sCarType, vMetric, cMeasure);
+ELSE;
+   CELLPUTN(vValue, cCube, cVersion, sPeriod, cSource, cRatetype, sLocation, sFlowType, sCarType, vMetric, cMeasure);
+   ASCIIOUTPUT('rides.txt', cCube, cVersion, sPeriod, cSource, cRatetype, sLocation, sFlowType, sCarType, vMetric, cMeasure);
+   CELLPUTS(sOutputstring, 'Rides Ops Info', sMetric, sPeriod, 'Last Updated');
+ENDIF;
+
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: DATA PROCEDURE                                                         #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: EPILOG PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: EPILOG PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #

@@ -1,0 +1,148 @@
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: PROPERTIES                                                           #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+{
+    "DataSource": {
+        "Type": "TM1DimensionSubset",
+        "dataSourceNameForClient": "Location",
+        "dataSourceNameForServer": "Location",
+        "subset": "All"
+    },
+    "HasSecurityAccess": false,
+    "Name": "Dim.Location.CustomLeaf.Build Hierarchy",
+    "Parameters": [
+        {
+            "Name": "pDebug",
+            "Prompt": "",
+            "Type": "Numeric",
+            "Value": 0
+        }
+    ],
+    "UIData": "CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
+    "Variables": [
+        {
+            "EndByte": 0,
+            "Name": "vLocation",
+            "Position": 1,
+            "StartByte": 0,
+            "Type": "String"
+        }
+    ],
+    "VariablesUIData": [
+        "VarType=32\fColType=827\f"
+    ]
+}
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: PROPERTIES                                                             #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: PROLOG PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+# ==================================================================== #
+# Globals
+# ==================================================================== #
+
+pSourceDim = 'Location';
+pTargetDim = 'Location:CustomLeaf';
+
+
+EXECUTEPROCESS('Bedrock.Dim.Hierarchy.Unwind.All'
+   , 'pDimension', pTargetDim
+   , 'pDebug', pDebug
+);
+
+# ==================================================================== #
+# Create N-level elements in target hierarchy
+# ==================================================================== #
+
+nSourceDimSize = DIMSIZ(pSourceDim);
+nIndex = 1;
+WHILE(nIndex <= nSourceDimSize);
+   sElName = DIMNM(pSourceDim, nIndex);
+   sElType = DTYPE(pSourceDim, sElName);
+
+   IF(pDebug <= 1);
+      DIMENSIONELEMENTINSERT(pTargetDim, '', sElName, sElType);
+   ENDIF;
+   nIndex = nIndex + 1;
+END;
+
+# ==================================================================== #
+# Assign data source
+# ==================================================================== #
+
+DatasourceNameForServer = pSourceDim;
+DatasourceNameForClient = pSourceDim;
+DatasourceType = 'SUBSET';
+DatasourceDimensionSubset = 'All';
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: PROLOG PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: METADATA PROCEDURE                                                   #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+# ==================================================================== #
+# Build hierarchy - Add Elements to target hierarchy
+# ==================================================================== #
+
+vLevel = ATTRS(pSourceDim, vLocation, 'level');
+
+IF(pDebug <= 1);
+   sElType = DTYPE(pSourceDim, vLocation);
+   IF(sELTYPE @= 'C' & ELCOMPN(pSourceDim, vLocation) > 0);
+      nChildren = ELCOMPN(pSourceDim, vLocation);
+      IF(vLevel @= 'All' % vLevel @= 'Mega Region' % vLevel @= 'Region' % vLevel @= 'Sub Region' % vLocation @= 'Total Location ex SEA & Russia' % SUBST(vLocation, 1, 9) @= 'Country -');
+         DIMENSIONELEMENTINSERT(pTargetDim, '', vLocation | ' Input', 'N');
+         DIMENSIONELEMENTCOMPONENTADD(pTargetDim, vLocation, vLocation | ' Input', 1);
+      ENDIF;
+      nCount = 1;
+      WHILE(nCount <= nChildren);
+         sChildElement = ELCOMP(pSourceDim, vLocation, nCount);
+         sChildWeight = ELWEIGHT(pSourceDim, vLocation, sChildElement);
+         DIMENSIONELEMENTCOMPONENTADD(pTargetDim, vLocation, sChildElement, sChildWeight);
+         nCount = nCount + 1;
+      END;
+   ENDIF;
+ENDIF;
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: METADATA PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: DATA PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: DATA PROCEDURE                                                         #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: EPILOG PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: EPILOG PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #

@@ -1,0 +1,329 @@
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: PROPERTIES                                                           #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+{
+    "DataSource": {
+        "Type": "ODBC",
+        "dataSourceNameForClient": "ORACLE-PRD",
+        "dataSourceNameForServer": "ORACLE-PRD",
+        "query": "select \r\n\tmonthend.yr \"vYear\",\r\n\tmonthend.mth \"vMonth\",\r\n\tmonthend.from_currency \"vFromCurrency\",\r\n\tmonthend.to_currency \"vToCurrency\",\r\n\tMonthend.rate \"vMonthEndRate\",\r\n\tavg.rate \"vAverageRate\" \r\nfrom \r\n(\r\nselect to_char(conversion_date,'YYYY') Yr,to_char(conversion_date,'MON') Mth,from_currency,to_currency,conversion_rate rate\r\nfrom apps.gl_daily_rates\r\nwhere CONVERSION_TYPE in ('1001')\r\nand conversion_date between '?sStart?' and '?sEnd?'\r\nand to_currency = 'USD'\r\n) monthend,\r\n(\r\nselect to_char(conversion_date,'YYYY') Yr,to_char(conversion_date,'MON') Mth,from_currency,to_currency,conversion_rate rate\r\nfrom apps.gl_daily_rates\r\nwhere CONVERSION_TYPE in ('1000')\r\nand conversion_date between '?sStart?' and '?sEnd?'\r\nand to_currency = 'USD'\r\n) avg\r\nwhere monthend.from_currency = avg.from_currency\r\nand monthend.mth = avg.mth\r\nand monthend.yr = avg.Yr",
+        "userName": "TM1_USER",
+        "usesUnicode": true
+    },
+    "HasSecurityAccess": false,
+    "Name": "Exchange Rate.Load.From.ODBC",
+    "Parameters": [
+        {
+            "Name": "pVersion",
+            "Prompt": "Version to load to",
+            "Type": "String",
+            "Value": "Actual"
+        },
+        {
+            "Name": "pMonth",
+            "Prompt": "",
+            "Type": "String",
+            "Value": ""
+        },
+        {
+            "Name": "pDebug",
+            "Prompt": "",
+            "Type": "Numeric",
+            "Value": 0
+        }
+    ],
+    "UIData": "CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
+    "Variables": [
+        {
+            "EndByte": 0,
+            "Name": "vYear",
+            "Position": 1,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vMonth",
+            "Position": 2,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vFromCurrency",
+            "Position": 3,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vToCurrency",
+            "Position": 4,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vMonthEndRate",
+            "Position": 5,
+            "StartByte": 0,
+            "Type": "Numeric"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vAverageRate",
+            "Position": 6,
+            "StartByte": 0,
+            "Type": "Numeric"
+        }
+    ],
+    "VariablesUIData": [
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=33\fColType=827\f",
+        "VarType=33\fColType=827\f"
+    ]
+}
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: PROPERTIES                                                             #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: PROLOG PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+## Purpose:Load exchange rates from Oracle.
+
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+## Initialise Constants               
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+
+cTAPSysInfo = 'TAP System Info';
+cLogDir = CELLGETS(cTAPSysInfo, 'Logs Path', 'Value') | '/';
+cDebugFile = cLogDir | GETPROCESSNAME() | '.Debug.csv';
+cDimCurrency = 'Currency';
+cDimCurrencyTo = 'Currency To';
+cMeasureAverageRate = 'Rate';
+cMeasureMonthEndRate = 'Month End Rate';
+cVersion = pVersion;
+
+cTimeStamp = TIMST(NOW, '\Y\m\d\h\i\s');
+
+sCube = 'Exchange Rate';
+
+cClient = TM1USER();
+
+nErrors = 0;
+
+IF(pMonth @= '');
+   pMonth = CELLGETS('System Info', 'Current Month', 'String');
+ENDIF;
+
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+##  Validate parameters		            
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+
+## pMonth	 Must be valid.
+IF(DIMIX('Month', pMonth) = 0);
+
+   nErrors = 1;
+   sMessage = 'Month ' | pMonth | ' not found';
+
+   DatasourceType = 'NULL';
+   ITEMREJECT(sMessage);
+   PROCESSBREAK;
+
+ENDIF;
+
+## pVersion	Must be valid.
+IF(DIMIX('Version', pVersion) = 0);
+
+   nErrors = 1;
+   sMessage = 'Version ' | pVersion | ' not found';
+
+   DatasourceType = 'NULL';
+   ITEMREJECT(sMessage);
+   PROCESSBREAK;
+
+ENDIF;
+
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+##  Build the query parameters	      ##
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+
+cPeriod = UPPER(ATTRS('Month', pMonth, 'Month Name'));
+cYear = ATTRS('Month', pMonth, 'Year');
+nMonthDays = ATTRN('Month', pMonth, 'Calendar Day');
+
+sStart = '01-' | cPeriod | '-' | ATTRS('Month', pMonth, 'Year');
+sEnd = NUMBERTOSTRING(nMonthDays) | '-' | cPeriod | '-' | cYear;
+
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+## Clear Exchange Rates Cube
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+
+sProcess = 'Bedrock.Cube.Data.Clear';
+EXECUTEPROCESS(sProcess
+   , 'pCube', sCube
+   , 'pView', ''
+   , 'pFilter', 'Month:' | pMonth | '&Version:' | cVersion | '&Exchange Rate Measure:' | cMeasureAverageRate | '+' | cMeasureMonthEndRate
+   , 'pDebug', pDebug
+);
+
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+## Put 1 for USD
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+CELLPUTN(1, sCube, cVersion, pMonth, 'USD', 'USD', cMeasureAverageRate);
+
+CELLPUTN(1, sCube, cVersion, pMonth, 'USD', 'USD', cMeasureMonthEndRate);
+
+sOracleUserName = CELLGETS('System Info', 'Oracle Username', 'String');
+sOraclePassword = CELLGETS('System Info', 'Oracle Password', 'String');
+
+DatasourceUsername = sOracleUserName;
+DatasourcePassword = sOraclePassword;
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: PROLOG PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: METADATA PROCEDURE                                                   #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: METADATA PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: DATA PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+##  Validate Currencies		            
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+
+IF(DIMIX(cDimCurrency, vFromCurrency) = 0);
+   sItemRejectMsg = 'Invalid Currency From: ' | vFromCurrency;
+   ITEMREJECT(sItemRejectMsg);
+ENDIF;
+
+IF(DIMIX(cDimCurrencyTo, vToCurrency) = 0);
+   sItemRejectMsg = 'Invalid Currency From: ' | vToCurrency;
+   ITEMREJECT(sItemRejectMsg);
+ENDIF;
+
+
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+## Error Check
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+
+sMeasure = cMeasureAverageRate;
+nRate = vAverageRate;
+
+IF(CELLISUPDATEABLE(sCube, cVersion, pMonth, vToCurrency, vFromCurrency, sMeasure) = 1);
+
+   #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+   ##  Load to Exchange Rates cube	      ##
+   #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#  
+
+   CELLPUTN(1 / nRate, sCube, cVersion, pMonth, vToCurrency, vFromCurrency, sMeasure);
+   CELLPUTN(nRate, sCube, cVersion, pMonth, vFromCurrency, vToCurrency, sMeasure);
+
+   sMeasure = cMeasureMonthEndRate;
+   nRate = vMonthEndRate;
+
+   CELLPUTN(1 / nRate, sCube, cVersion, pMonth, vToCurrency, vFromCurrency, sMeasure);
+
+   CELLPUTN(nRate, sCube, cVersion, pMonth, vFromCurrency, vToCurrency, sMeasure);
+
+ENDIF;
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: DATA PROCEDURE                                                         #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: EPILOG PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+##  Calculate all other exchange rates using to/from USD  ##
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+
+sDimCurrencyFrom = 'Currency From';
+nMaxCurrencyFrom = DIMSIZ(sDimCurrencyFrom);
+nCountCurrencyFrom = 1;
+WHILE(nCountCurrencyFrom <= nMaxCurrencyFrom);
+
+   sCurrencyFrom = DIMNM(sDimCurrencyFrom, nCountCurrencyFrom);
+
+   IF(ELLEV(sDimCurrencyFrom, sCurrencyFrom) = 0 & sCurrencyFrom @<> 'USD');
+
+      sDimCurrencyTo = 'Currency To';
+      nMaxCurrencyTo = DIMSIZ(sDimCurrencyTo);
+      nCountCurrencyTo = 1;
+      WHILE(nCountCurrencyTo <= nMaxCurrencyTo);
+
+         sCurrencyTo = DIMNM(sDimCurrencyTo, nCountCurrencyTo);
+
+         IF(ELLEV(sDimCurrencyTo, sCurrencyTo) = 0 & sCurrencyTo @<> 'USD');
+
+            #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+            ## Average Rate
+            #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#				
+
+            sMeasure = cMeasureAverageRate;
+            nCurr1 = CELLGETN(sCube, cVersion, pMonth, 'USD', sCurrencyTo, sMeasure);
+            nCurr2 = CELLGETN(sCube, cVersion, pMonth, 'USD', sCurrencyFrom, sMeasure);
+            nRate = nCurr1 \ nCurr2;
+            CELLPUTN(nRate, sCube, cVersion, pMonth, sCurrencyFrom, sCurrencyTo, sMeasure);
+
+            #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+            ## Month End Rate
+            #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+
+            sMeasure = cMeasureMonthEndRate;
+            nCurr1 = CELLGETN(sCube, cVersion, pMonth, 'USD', sCurrencyTo, sMeasure);
+            nCurr2 = CELLGETN(sCube, cVersion, pMonth, 'USD', sCurrencyFrom, sMeasure);
+            nRate = nCurr1 \ nCurr2;
+            CELLPUTN(nRate, sCube, cVersion, pMonth, sCurrencyFrom, sCurrencyTo, sMeasure);
+         ENDIF;
+
+         nCountCurrencyTo = nCountCurrencyTo + 1;
+      END;
+
+   ENDIF;
+   nCountCurrencyFrom = nCountCurrencyFrom + 1;
+END;
+
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+## Put 1 for USD
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+
+CELLPUTN(1, sCube, cVersion, pMonth, 'USD', 'USD', cMeasureAverageRate);
+CELLPUTN(1, sCube, cVersion, pMonth, 'USD', 'USD', cMeasureMonthEndRate);
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: EPILOG PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #

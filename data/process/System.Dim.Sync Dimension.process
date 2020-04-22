@@ -1,0 +1,174 @@
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: PROPERTIES                                                           #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+{
+    "DataSource": {
+        "Type": "None"
+    },
+    "HasSecurityAccess": false,
+    "Name": "System.Dim.Sync Dimension",
+    "Parameters": [
+        {
+            "Name": "pDimension",
+            "Prompt": "REQ: Dimension Name",
+            "Type": "String",
+            "Value": "Currency"
+        },
+        {
+            "Name": "pInstance",
+            "Prompt": "REQ: Instance NameREQ: Instance Name",
+            "Type": "String",
+            "Value": "Analytics"
+        }
+    ],
+    "UIData": "CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
+    "Variables": [],
+    "VariablesUIData": []
+}
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: PROPERTIES                                                             #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: PROLOG PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+
+# ==================================================================== #
+# Globals
+# ==================================================================== #
+
+cRand = NUMBERTOSTRING(ROUND(RAND() * 100000));
+cRand = FILL('0', 6 - LONG(cRand)) | cRand;
+cRand = NUMBERTOSTRING(NOW()) | '.' | cRand;
+
+cView = 'zzTemp' | '.' | cRand;
+cSub = 'zzTemp' | '.' | cRand;
+
+cPythonExe = CELLGETS('TAP System Info', 'Python Executable', 'Value');
+
+cScriptRun = CELLGETS('TAP System Info', 'Scripts Shared Path', 'Value') | '/tap/' | 'system-dimension-sync.py';
+
+cBatchUser = CELLGETS('TAP System Info', 'Batch Username', 'Value');
+cBatchPassword = CELLGETS('TAP System Info', 'Batch Password', 'Value');
+cBatchNamespace = CELLGETS('TAP System Info', 'Batch Namespace', 'Value');
+
+cServer = CELLGETS('TAP Application Info', LOWER(EXPAND('%pInstance%')), 'Endpoint');
+cPort = '443';
+
+cDimension = TRIM(pDimension);
+cPath = '/var/tm1/' | LOWER(EXPAND('%pInstance%')) | '/files/shared' | '/' | CELLGETS('TAP System Info', 'Service Name', 'Value');
+cFile = LOWER(EXPAND('%cRand%_%cDimension%.txt'));
+
+cTemplateScriptRun = '%cPythonExe% "%cScriptRun%" --server="%cServer%" --port="%cPort%" --user="%cBatchUser%" --password=''%cBatchPassword%'' --namespace="%cBatchNamespace%" --dimension="%cDimension%" --path="%cPath%" --file="%cFile%" ';
+
+cNow = NOW();
+
+# ==================================================================== #
+# Run Command
+# ==================================================================== #
+
+sCommand = EXPAND(cTemplateScriptRun);
+EXECUTECOMMAND(sCommand, 1);
+
+# ==================================================================== #
+# Break if no file
+# ==================================================================== #
+cPath = '/var/tm1/planning/files/shared/ops';
+sFile = cPath | '/' | cFile;
+IF(FILEEXISTS(sFile) = 0);
+   PROCESSERROR();
+ENDIF;
+
+# ==================================================================== #
+# Clear Data
+# ==================================================================== #
+
+sEleString = '';
+
+sCube = '}ElementAttributes_' | cDimension;
+sDim = sCube;
+
+IF(CUBEEXISTS(sCube) = 1);
+   i = 1;
+   WHILE(i <= DIMSIZ(sDim));
+      sEle = DIMNM(sDim, i);
+      IF(SUBST(sEle, 1, 1) @<> '_');
+         IF(LONG(sEleString) = 0);
+            sEleString = sEle;
+         ELSE;
+            sEleString = sEleString | '+' | sEle;
+         ENDIF;
+      ENDIF;
+      i = i + 1;
+   END;
+
+   IF(LONG(sEleString) > 0);
+      EXECUTEPROCESS('Bedrock.Cube.Data.Clear'
+         , 'pCube', sCube
+         , 'pView', cView
+         , 'pFilter', EXPAND('%sDim%: %sEleString%')
+         , 'pDimensionDelim', '|'
+         , 'pElementStartDelim', ':'
+         , 'pElementDelim', '+'
+         , 'pDestroyTempObj', 1
+         , 'pDebug', 0
+      );
+   ENDIF;
+ENDIF;
+
+# ==================================================================== #
+# Clear Existing Attributes, Load File
+# ==================================================================== #
+
+EXECUTEPROCESS('Bedrock.Dim.Import'
+   , 'pSourceDir', cPath
+   , 'pSourceFile', cFile
+   , 'pDimension', cDimension
+   , 'pDebug', 0
+);
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: PROLOG PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: METADATA PROCEDURE                                                   #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: METADATA PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: DATA PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: DATA PROCEDURE                                                         #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: EPILOG PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: EPILOG PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #

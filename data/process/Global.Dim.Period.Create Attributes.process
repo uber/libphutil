@@ -1,0 +1,153 @@
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: PROPERTIES                                                           #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+{
+    "DataSource": {
+        "Type": "None"
+    },
+    "HasSecurityAccess": false,
+    "Name": "Global.Dim.Period.Create Attributes",
+    "Parameters": [],
+    "UIData": "CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
+    "Variables": [],
+    "VariablesUIData": []
+}
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: PROPERTIES                                                             #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: PROLOG PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+cDim = 'Period';
+sDim = cDim;
+
+i = 10;
+WHILE(i >= -10);
+   sSign = IF(i < 0, '-', '+');
+   IF(i <> 0);
+      sAttr = 'Year' | sSign | NUMBERTOSTRING(ABS(i));
+      ATTRINSERT(sDim, '', sAttr, 'S');
+   ENDIF;
+   i = i - 1;
+END;
+
+i = 1;
+WHILE(i >= -1);
+   sSign = IF(i < 0, '-', '+');
+   IF(i <> 0);
+      sAttr = 'Half' | sSign | NUMBERTOSTRING(ABS(i));
+      ATTRINSERT(sDim, '', sAttr, 'S');
+   ENDIF;
+   i = i - 1;
+END;
+
+i = 4;
+WHILE(i >= -4);
+   sSign = IF(i < 0, '-', '+');
+   IF(i <> 0);
+      sAttr = 'Quarter' | sSign | NUMBERTOSTRING(ABS(i));
+      ATTRINSERT(sDim, '', sAttr, 'S');
+   ENDIF;
+   i = i - 1;
+END;
+
+i = 12;
+WHILE(i >= -12);
+   sSign = IF(i < 0, '-', '+');
+   IF(i <> 0);
+      sAttr = 'Month' | sSign | NUMBERTOSTRING(ABS(i));
+      ATTRINSERT(sDim, '', sAttr, 'S');
+   ENDIF;
+   i = i - 1;
+END;
+
+i = 53;
+WHILE(i >= -53);
+   sSign = IF(i < 0, '-', '+');
+   IF(i <> 0);
+      sAttr = 'Week' | sSign | NUMBERTOSTRING(ABS(i));
+      ATTRINSERT(sDim, '', sAttr, 'S');
+   ENDIF;
+   i = i - 1;
+END;
+
+i = 25;
+WHILE(i >= -25);
+   sSign = IF(i < 0, '-', '+');
+   IF(i <> 0);
+      sAttr = 'Period' | sSign | NUMBERTOSTRING(ABS(i));
+      ATTRINSERT(sDim, '', sAttr, 'S');
+   ENDIF;
+   i = i - 1;
+END;
+
+
+ATTRINSERT(sDim, '', 'Week Element', 'S');
+ATTRINSERT(sDim, '', 'Year Element', 'S');
+ATTRINSERT(sDim, '', 'Half Element', 'S');
+ATTRINSERT(sDim, '', 'Quarter Element', 'S');
+ATTRINSERT(sDim, '', 'Month Element', 'S');
+
+ATTRINSERT(sDim, '', 'Level', 'S');
+
+ATTRINSERT(sDim, '', 'Next Period', 'S');
+ATTRINSERT(sDim, '', 'Prior Period', 'S');
+ATTRINSERT(sDim, '', 'End of Period', 'N');
+ATTRINSERT(sDim, '', 'Start of Period', 'N');
+ATTRINSERT(sDim, '', 'Last Leaf', 'S');
+ATTRINSERT(sDim, '', 'First Leaf', 'S');
+
+ATTRINSERT(sDim, '', 'Calendar Day', 'N');
+ATTRINSERT(sDim, '', 'Business Day', 'N');
+ATTRINSERT(sDim, '', 'Week Day', 'N');
+
+ATTRINSERT(sDim, '', 'Month Name', 'S');
+
+ATTRINSERT(sDim, '', 'AltName', 'A');
+ATTRINSERT(sDim, '', 'InputName', 'A');
+ATTRINSERT(sDim, '', 'Caption', 'S');
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: PROLOG PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: METADATA PROCEDURE                                                   #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: METADATA PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: DATA PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: DATA PROCEDURE                                                         #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: EPILOG PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: EPILOG PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
