@@ -51,6 +51,10 @@
         "TAP*",
         "}Stats*",
         "SecMeta*",
+        "Account",
+        "Currency",
+        "Currency To",
+        "Period",
         "}*"
     ],
     "exclude_dimension_hierarchy": [
