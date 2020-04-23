@@ -71,8 +71,10 @@
         "Currency/*",
         "Currency To/*",
         "Product Type/*",
-        "Rate Type/*"
-
+        "Rate Type/*",
+        "Ops Metric/*",
+        "Rides Ops Metric/*",
+        "Eats Ops Metric/*"
 
     ],
     "exclude_dimension_hierarchy_element": "",
