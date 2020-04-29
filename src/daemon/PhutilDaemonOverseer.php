@@ -145,7 +145,7 @@ EOHELP
       // at normal priority outside which might cause issues on highly loaded
       // machines which mix web requests with daemon and on purpose run daemon
       // at lower priority to improve background processing throughput
-      if (pcntl_getpriority() != 0) {
+      if (function_exists('pcntl_getpriority') && pcntl_getpriority() != 0) {
         @file_put_contents('/proc/self/autogroup', ''.pcntl_getpriority());
       }
       // UBER CODE END
