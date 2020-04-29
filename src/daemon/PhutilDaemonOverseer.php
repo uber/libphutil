@@ -146,7 +146,7 @@ EOHELP
       // machines which mix web requests with daemon and on purpose run daemon
       // at lower priority to improve background processing throughput
       if (pcntl_getpriority() != 0) {
-        @file_put_contents("/proc/self/autogroup", "".pcntl_getpriority());
+        @file_put_contents('/proc/self/autogroup', ''.pcntl_getpriority());
       }
       // UBER CODE END
     }
