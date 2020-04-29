@@ -14,6 +14,16 @@ if (!posix_isatty(STDOUT)) {
   if ($sid <= 0) {
     throw new Exception(pht('Failed to create new process session!'));
   }
+  // UBER CODE
+  // if we have lowered process priority then also lower autogroup priority
+  // otherwise it is running at lower priority inside autogroup but actually
+  // at normal priority outside which might cause issues on highly loaded
+  // machines which mix web requests with daemon and on purpose run daemon
+  // at lower priority to improve background processing throughput
+  if (function_exists('pcntl_getpriority') && pcntl_getpriority() != 0) {
+    @file_put_contents('/proc/self/autogroup', ''.pcntl_getpriority());
+  }
+  // UBER CODE END
 }
 
 $args = new PhutilArgumentParser($argv);
