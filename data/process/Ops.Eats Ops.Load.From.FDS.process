@@ -210,7 +210,7 @@ ELSE;
 ENDIF;
 
 # Eats Restaurant Type
-sDim = 'Rides Car Type';
+sDim = 'Eats Restaurant Type';
 IF(vRestType @= '\N' % vRestType @= '');
    sRestType = 'Unspecified Restaurant Type';
 ELSE;

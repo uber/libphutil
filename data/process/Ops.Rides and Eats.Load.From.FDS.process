@@ -119,7 +119,8 @@ cMeasure = 'Amount';
 cSource = 'FDP';
 nRecords = 1;
 
-cPeriodMetricString = '';
+cPeriodMetricLOBString = '';
+
 
 nStart = 1;
 nCurPos = 1;
@@ -200,6 +201,15 @@ IF(DIMIX('Location', sLocation) = 0);
    ITEMSKIP;
 ENDIF;
 
+# LOB
+sDim = 'Line of Business';
+IF(vLOB @= '\N' % vLOB @= '' % vLOB @= 'NULL' % vLOB @= '0');
+   sLOB = '0000';
+ELSE;
+   sLOB = vLOB;
+ENDIF;
+
+
 # Product Type
 sDim = 'Product Type';
 IF(vProductType @= 'uber_eats');
@@ -213,28 +223,29 @@ ENDIF;
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
 # Clear Target View
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
-#Scanning the Input to find Period and metric combination to be zeroed out
+#Scanning the Input to find Period , LOB and metric combination to be zeroed out
 
 sMetric = vMetric;
-
-IF(SCAN(sPeriod | '_' | sMetric, cPeriodMetricString) = 0);
-
-   IF(LONG(cPeriodMetricString) = 0);
-      cPeriodMetricString = sPeriod | '_' | sMetric;
+IF(SCAN(sPeriod | '_' | sMetric | '_' | sLOB, cPeriodMetricLOBString) = 0);
+   IF(LONG(cPeriodMetricLOBString) = 0);
+      cPeriodMetricLOBString = sPeriod | '_' | sMetric | '_' | sLOB;
    ELSE;
-      cPeriodMetricString = cPeriodMetricString | '|' | sPeriod | '_' | sMetric;
+      cPeriodMetricLOBString = cPeriodMetricLOBString | '|' | sPeriod | '_' | sMetric | '_' | sLOB;
    ENDIF;
 
-   sLoopString = TRIM(cPeriodMetricString);
+   sLoopString = TRIM(cPeriodMetricLOBString);
    sLoopString = sLoopString | IF(SUBST(sLoopString, LONG(sLoopString), 1) @<> '|', '|', '');
 
    WHILE(nCurPos <= LONG(sLoopString));
       sCurChar = SUBST(sLoopString, nCurPos, 1);
       IF(sCurChar @= '|');
-         sPeriodMetricElement = SUBST(sLoopString, nStart, nCurPos - nStart);
-         nSplit = SCAN('_', sPeriodMetricElement);
-         sPeriodElement = SUBST(sPeriodMetricElement, 1, (nSplit - 1));
-         sMetricElement = SUBST(sPeriodMetricElement, (nSplit + 1), LONG(sPeriodMetricElement) - nSplit);
+         sPeriodMetricLOBElement = SUBST(sLoopString, nStart, nCurPos - nStart);
+         nSplit_1 = SCAN('_', sPeriodMetricLOBElement);
+         sPeriodElement = SUBST(sPeriodMetricLOBElement, 1, (nSplit_1 - 1));
+         sMetricLOBElement = SUBST(sPeriodMetricLOBElement, (nSplit_1 + 1), LONG(sPeriodMetricLOBElement) - nSplit_1);
+         nSplit_2 = SCAN('_', sMetricLOBElement);
+         sMetricElement = SUBST(sMetricLOBElement, 1, (nSplit_2 - 1));
+         sLOBElement = SUBST(sMetricLOBElement, (nSplit_2 + 1), LONG(sMetricLOBElement) - nSplit_2);
 
          cRandomIntA = NUMBERTOSTRING(INT(RAND() * 100000));
          cViewName = '}zTemp.' | GETPROCESSNAME() | '.' | cRandomIntA;
@@ -265,6 +276,11 @@ IF(SCAN(sPeriod | '_' | sMetric, cPeriodMetricString) = 0);
                SUBSETCREATE(sDim, cSubsetName, 1);
                SUBSETELEMENTINSERT(sDim, cSubsetName, sElement, 1);
                VIEWSUBSETASSIGN(cCube, cViewName, sDim, cSubsetName);
+            ELSEIF(sDim @= 'Line of Business');
+               sElement = sLOBElement;
+               SUBSETCREATE(sDim, cSubsetName, 1);
+               SUBSETELEMENTINSERT(sDim, cSubsetName, sElement, 1);
+               VIEWSUBSETASSIGN(cCube, cViewName, sDim, cSubsetName);
             ELSEIF(sDim @= 'Ops Metric');
                sElement = sMetricElement;
                SUBSETCREATE(sDim, cSubsetName, 1);
@@ -283,6 +299,7 @@ IF(SCAN(sPeriod | '_' | sMetric, cPeriodMetricString) = 0);
       nCurPos = nCurPos + 1;
    END;
 ENDIF;
+
 
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
 # Load Data
@@ -303,6 +320,8 @@ IF(ELLEV('Line of Business', vLOB) > 0 & ELLEV('Location', sLocation) > 0);
    CELLPUTN(vValue, cCube, cVersion, sPeriod, cSource, cRatetype, 'CustomLeaf:' | sLocation | ' Input', 'CustomLeaf:Total Rides & Eats Input', sProductType, vMetric, cMeasure);
 ELSEIF(ELLEV('Line of Business', vLOB) > 0 & ELLEV('Location', sLocation) = 0);
    CELLPUTN(vValue, cCube, cVersion, sPeriod, cSource, cRatetype, sLocation, 'CustomLeaf:Total Rides & Eats Input', sProductType, vMetric, cMeasure);
+ELSEIF(ELLEV('Line of Business', vLOB) = 0 & ELLEV('Location', sLocation) > 0);
+   CELLPUTN(vValue, cCube, cVersion, sPeriod, cSource, cRatetype, 'CustomLeaf:' | sLocation | ' Input', sLOB, sProductType, vMetric, cMeasure);
 ELSE;
    ITEMSKIP;
 ENDIF;

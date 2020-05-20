@@ -46,16 +46,6 @@ EXECUTEPROCESS('Bedrock.Cube.Data.Clear'
    , 'pDebug', 0
 );
 
-EXECUTEPROCESS('Bedrock.Cube.Data.Clear'
-   , 'pCube', '}ElementAttributes_Department'
-   , 'pView', ''
-   , 'pFilter', '}ElementAttributes_Department:Descr+Code - Description'
-   , 'pDimensionDelim', '&'
-   , 'pElementStartDelim', ':'
-   , 'pElementDelim', '+'
-   , 'pDestroyTempObj', 1
-   , 'pDebug', 0
-);
 
 EXECUTEPROCESS('Bedrock.Cube.Data.Clear'
    , 'pCube', '}ElementAttributes_Account'

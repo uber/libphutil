@@ -91,7 +91,7 @@ WHILE(i <= SUBSETGETSIZE(sHier, sSub));
 
 
    sAttr = 'Level';
-   sAttrVal = 'Input';
+   sAttrVal = 'Month';
    ATTRPUTS(sAttrVal, sHier, sEle, sAttr);
 
    sAttr = 'Prior Period';
@@ -250,7 +250,7 @@ WHILE(i <= SUBSETGETSIZE(sHier, sSub));
    ATTRPUTS(sAttrVal, sHier, sEle, sAttr);
 
    sAttr = 'Level';
-   sAttrVal = 'Input';
+   sAttrVal = 'Week';
    ATTRPUTS(sAttrVal, sHier, sEle, sAttr);
 
    sAttr = 'Prior Period';
