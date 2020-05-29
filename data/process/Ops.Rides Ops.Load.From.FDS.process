@@ -197,7 +197,7 @@ ENDIF;
 
 # Flow Type
 sDim = 'Rides Flow Type';
-IF(vFlowType @= 'uber_eats' % vFlowType @= 'nemoearner');
+IF(vFlowType @= 'nemoearner');
    ITEMSKIP;
 ELSEIF(vFlowType @= '\N' % vFlowType @= '' % vFlowType @= 'None');
    sFlowType = 'Unspecified Flow Type';
@@ -307,6 +307,7 @@ IF(ELLEV('Location', sLocation) > 0);
    CELLPUTN(vValue, cCube, cVersion, sPeriod, cSource, cRatetype, 'CustomLeaf:' | sLocation | ' Input', sFlowType, sCarType, vMetric, cMeasure);
 ELSE;
    CELLPUTN(vValue, cCube, cVersion, sPeriod, cSource, cRatetype, sLocation, sFlowType, sCarType, vMetric, cMeasure);
+   ASCIIOUTPUT('rides.txt', cCube, cVersion, sPeriod, cSource, cRatetype, sLocation, sFlowType, sCarType, vMetric, cMeasure);
    CELLPUTS(sOutputstring, 'Rides Ops Info', sMetric, sPeriod, 'Last Updated');
 ENDIF;
 

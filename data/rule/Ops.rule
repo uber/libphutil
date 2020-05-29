@@ -150,15 +150,15 @@ SKIPCHECK;
 # Rides N-level rules
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=- #
 
-['Version' : 'Actual', 'Line of Business':'1002', 'Product Type' : {'Expresspool', 'Pool', 'HCV'}, 'Ops Metric' : 'P2P Rider Miles'] = N :
+['Version' : 'Actual', 'Line of Business':'1002', 'Product Type' : {'Expresspool', 'Pool'}, 'Ops Metric' : 'P2P Rider Miles'] = N :
 
    DB('Rides Ops', !Version, !Period, !Source, !Rate Type, !Location, 'P2P', !Product Type, 'Rider Miles', 'Amount');
 
-['Version' : 'Actual', 'Line of Business':'1002', 'Product Type' : {'Expresspool', 'Pool', 'HCV'}, 'Ops Metric' : 'Non-P2P Rider Miles'] = N :
+['Version' : 'Actual', 'Line of Business':'1002', 'Product Type' : {'Expresspool', 'Pool'}, 'Ops Metric' : 'Non-P2P Rider Miles'] = N :
 
    DB('Rides Ops', !Version, !Period, !Source, !Rate Type, !Location, 'Non P2P', !Product Type,  'Rider Miles', 'Amount');
 
-['Version' : 'Actual', 'Line of Business':'1002', 'Product Type' : {'Expresspool', 'Pool', 'HCV'}] = N :
+['Version' : 'Actual', 'Line of Business':'1002', 'Product Type' : {'Expresspool', 'Pool'}] = N :
 
    IF(
       ELISANC('OPS Metric', 'Rides and Eats Metrics', !OPS Metric) = 1 % ELISANC('OPS Metric', 'Rides Only Metrics', !OPS Metric)=1
@@ -172,7 +172,7 @@ SKIPCHECK;
 ['Version' : 'Actual', 'Line of Business':'1001',  'Ops Metric' : 'P2P Rider Miles'] = N :
 
    IF(
-      (!Product Type @<> 'Expresspool' & !Product Type @<> 'Pool' & !Product Type @<> 'HCV')
+      (!Product Type @<> 'Expresspool' & !Product Type @<> 'Pool')
    ,
       DB('Rides Ops', !Version, !Period, !Source, !Rate Type, !Location, 'P2P', !Product Type, 'Rider Miles', 'Amount')
    ,
@@ -182,7 +182,7 @@ SKIPCHECK;
 ['Version' : 'Actual', 'Line of Business':'1001',  'Ops Metric' : 'Non-P2P Rider Miles'] = N :
 
    IF(
-      (!Product Type @<> 'Expresspool' & !Product Type @<> 'Pool' & !Product Type @<> 'HCV' )
+      (!Product Type @<> 'Expresspool' & !Product Type @<> 'Pool')
    ,
       DB('Rides Ops', !Version, !Period, !Source, !Rate Type, !Location, 'Non P2P', !Product Type, 'Rider Miles', 'Amount')
    ,
@@ -195,7 +195,7 @@ SKIPCHECK;
    IF(
       ELISANC('OPS Metric', 'Rides and Eats Metrics', !OPS Metric) = 1 % ELISANC('OPS Metric', 'Rides Only Metrics', !OPS Metric)=1
    ,
-      IF((!Product Type @<> 'Expresspool' & !Product Type @<> 'Pool' & !Product Type @<> 'HCV' )
+      IF((!Product Type @<> 'Expresspool' & !Product Type @<> 'Pool')
       ,
          DB('Rides Ops', !Version, !Period, !Source, !Rate Type, !Location, 'Total Rides Flow Type', !Product Type, !Ops Metric, 'Amount')
       ,
