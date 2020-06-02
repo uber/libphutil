@@ -15,6 +15,12 @@
 FEEDSTRINGS;
 SKIPCHECK;
 
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=- =-=-=-#
+# Skip Support Contacts - loading via process
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- #
+
+[{'Support Contacts - Virtual', 'Support Contacts - Greenlight'}] = N: STET;
+
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=- #
 # Eats C-level rules
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=- #

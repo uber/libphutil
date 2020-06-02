@@ -191,6 +191,7 @@ cDebug = 0;
 cPlanVersionDim = 'Plan Version';
 cPlanModelDim = 'Plan Model';
 cModelEle1 = 'Adjustment';
+cModelEle2 = 'Cost Model';
 cPlanActDim = 'Account';
 cActEle1 = 'Net Inflows';
 cActEle2 = 'OPS Model';
@@ -252,7 +253,7 @@ cFileName = LOWER(cExportCube | '_' | 'export.txt');
 
 cView = '';
 
-cFilter = cPlanVersionDim | cElementStartDelim | pPlanVersion | cDimensionDelim | cPlanMonthDim | cElementStartDelim | pPeriod | cDimensionDelim | cPlanModelDim | cElementStartDelim | cModelEle1 | cDimensionDelim | cPlanActDim | cElementStartDelim | cActEle1 | cElementDelim | cActEle2 | cDimensionDelim | cPlanMsrDim | cElementStartDelim | cMsrEle1;
+cFilter = cPlanVersionDim | cElementStartDelim | pPlanVersion | cDimensionDelim | cPlanMonthDim | cElementStartDelim | pPeriod | cDimensionDelim | cPlanModelDim | cElementStartDelim | cModelEle1 | cElementDelim | cModelEle2 | cDimensionDelim | cPlanActDim | cElementStartDelim | cActEle1 | cElementDelim | cActEle2 | cDimensionDelim | cPlanMsrDim | cElementStartDelim | cMsrEle1;
 
 
 #cFilter = 'Plan Version : Plan 3 & Plan Model : Adjustment';
@@ -372,16 +373,31 @@ DatasourceNameForServer = sFile;
 # Load Forecast Data
 # ==================================================================== #
 
+IF(v6 @= 'BPO Contacts');
+   v6 = 'Support Contacts - Virtual';
+   v7 = 'BPO';
+ELSEIF(v6 @= 'COE Contacts');
+   v6 = 'Support Contacts - Virtual';
+   v7 = 'COE';
+ELSEIF(v6 @= 'Pre-FT Greenlight Contacts');
+   v6 = 'Support Contacts - Greenlight';
+   v7 = 'PRE-FT';
+ELSEIF(v6 @= 'Post-FT Greenlight Contacts');
+   v6 = 'Support Contacts - Greenlight';
+   v7 = 'POST-FT';
+ENDIF;
+
 
 IF(pLevel @= 'Month');
    IF(DIMIX('Rate Type', v9) = 0 % DIMIX('OPS Metric', v6) = 0);
+
       ITEMSKIP;
    ENDIF;
 ELSE;
    IF(DIMIX('Rate Type', v8) = 0 % DIMIX('OPS Metric', v5) = 0);
       ITEMSKIP;
    ENDIF;
-   IF(v2 @= cCurrWeek % DIMIX('Period', v2) < DIMIX('Period', cCurrWeek));
+   IF(DIMIX('Period', v2) < DIMIX('Period', cCurrWeek));
       ITEMSKIP;
    ENDIF;
 ENDIF;

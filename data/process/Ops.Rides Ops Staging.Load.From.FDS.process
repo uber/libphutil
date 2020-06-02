@@ -300,7 +300,7 @@ ENDIF;
 # Load Data
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
 
-IF(ELISANC('Ops Metric', 'Net Inflows', vMetric) = 0 & SCAN('_usd', vMetric) = 0);
+IF(ELISANC('Rides Ops Metric', 'Net Inflows', vMetric) = 0 & SCAN('_usd', vMetric) = 0);
    IF(pLevel @= 'Month');
       vUSDValue = vValue * CELLGETN('Exchange Rate', cVersion, sPeriod, vCurrency, 'USD', 'Rate');
    ELSE;
@@ -309,6 +309,7 @@ IF(ELISANC('Ops Metric', 'Net Inflows', vMetric) = 0 & SCAN('_usd', vMetric) = 0
    ENDIF;
 
    CELLINCREMENTN(vValue, cCube, cVersion, sPeriod, cSource, vCurrency, cRateType, sLocation, sFlowType, sCarType, vMetric, cMeasure);
+   CELLINCREMENTN(vUSDValue, cCube, cVersion, sPeriod, cSource, vCurrency, 'USD', sLocation, sFlowType, sCarType, vMetric, cMeasure);
    CELLPUTS(sOutputstring, 'Rides Ops Info', vMetric, sPeriod, 'Last Updated');
 
 ELSEIF(SCAN('_usd', vMetric) = 0);
