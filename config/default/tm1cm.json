@@ -74,7 +74,14 @@
         "Rate Type/*",
         "Ops Metric/*",
         "Rides Ops Metric/*",
-        "Eats Ops Metric/*"
+        "Rides Car Type/*",
+        "Rides Flow Type/*",
+        "Eats Ops Metric/*",
+        "Eats Product Type/*",
+        "Eats Restaurant Type/*",
+        "Freight Ops Metric/*",
+        "Freight Shipper/*",
+
 
     ],
     "exclude_dimension_hierarchy_element": "",
