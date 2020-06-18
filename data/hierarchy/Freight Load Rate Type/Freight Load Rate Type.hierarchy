@@ -1,0 +1,72 @@
+{
+    "DefaultMember": {
+        "Attributes": {
+            "Caption": "Total Freight Load Rate Type"
+        },
+        "IsPlaceholder": false,
+        "Name": "Total Freight Load Rate Type",
+        "Ordinal": 1,
+        "Type": "Regular",
+        "UniqueName": "[Freight Load Rate Type].[Freight Load Rate Type].[Total Freight Load Rate Type]",
+        "Weight": 0
+    },
+    "Edges": [
+        {
+            "ComponentName": "Contract",
+            "ParentName": "Total Freight Load Rate Type",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Spot",
+            "ParentName": "Total Freight Load Rate Type",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Unspecified Freight Load Rate Type",
+            "ParentName": "Total Freight Load Rate Type",
+            "Weight": 1
+        }
+    ],
+    "ElementAttributes": [],
+    "Elements": [
+        {
+            "Attributes": {
+                "Caption": "Total Freight Load Rate Type"
+            },
+            "Index": 1,
+            "Name": "Total Freight Load Rate Type",
+            "Type": "Consolidated",
+            "UniqueName": "[Freight Load Rate Type].[Freight Load Rate Type].[Total Freight Load Rate Type]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Contract"
+            },
+            "Index": 2,
+            "Name": "Contract",
+            "Type": "Numeric",
+            "UniqueName": "[Freight Load Rate Type].[Freight Load Rate Type].[Contract]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Spot"
+            },
+            "Index": 3,
+            "Name": "Spot",
+            "Type": "Numeric",
+            "UniqueName": "[Freight Load Rate Type].[Freight Load Rate Type].[Spot]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Unspecified Freight Load Rate Type"
+            },
+            "Index": 4,
+            "Name": "Unspecified Freight Load Rate Type",
+            "Type": "Numeric",
+            "UniqueName": "[Freight Load Rate Type].[Freight Load Rate Type].[Unspecified Freight Load Rate Type]"
+        }
+    ],
+    "Name": "Freight Load Rate Type",
+    "Subsets": [],
+    "UniqueName": "[Freight Load Rate Type].[Freight Load Rate Type]"
+}

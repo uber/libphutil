@@ -1,0 +1,114 @@
+{
+    "DefaultMember": {
+        "Attributes": {
+            "Caption": "Total Freight Carrier Segment"
+        },
+        "IsPlaceholder": false,
+        "Name": "Total Freight Carrier Segment",
+        "Ordinal": 1,
+        "Type": "Regular",
+        "UniqueName": "[Freight Carrier Segment].[Freight Carrier Segment].[Total Freight Carrier Segment]",
+        "Weight": 0
+    },
+    "Edges": [
+        {
+            "ComponentName": "Small-Medium (4-11)",
+            "ParentName": "Total Freight Carrier Segment",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Medium-Large (50-299)",
+            "ParentName": "Total Freight Carrier Segment",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Extra Large (300+)",
+            "ParentName": "Total Freight Carrier Segment",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "O/O (1-3)",
+            "ParentName": "Total Freight Carrier Segment",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Medium (12-49)",
+            "ParentName": "Total Freight Carrier Segment",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Unspecified Freight Carrier Segment",
+            "ParentName": "Total Freight Carrier Segment",
+            "Weight": 1
+        }
+    ],
+    "ElementAttributes": [],
+    "Elements": [
+        {
+            "Attributes": {
+                "Caption": "Total Freight Carrier Segment"
+            },
+            "Index": 1,
+            "Name": "Total Freight Carrier Segment",
+            "Type": "Consolidated",
+            "UniqueName": "[Freight Carrier Segment].[Freight Carrier Segment].[Total Freight Carrier Segment]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Small-Medium (4-11)"
+            },
+            "Index": 2,
+            "Name": "Small-Medium (4-11)",
+            "Type": "Numeric",
+            "UniqueName": "[Freight Carrier Segment].[Freight Carrier Segment].[Small-Medium (4-11)]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Medium-Large (50-299)"
+            },
+            "Index": 3,
+            "Name": "Medium-Large (50-299)",
+            "Type": "Numeric",
+            "UniqueName": "[Freight Carrier Segment].[Freight Carrier Segment].[Medium-Large (50-299)]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Extra Large (300+)"
+            },
+            "Index": 4,
+            "Name": "Extra Large (300+)",
+            "Type": "Numeric",
+            "UniqueName": "[Freight Carrier Segment].[Freight Carrier Segment].[Extra Large (300+)]"
+        },
+        {
+            "Attributes": {
+                "Caption": "O/O (1-3)"
+            },
+            "Index": 5,
+            "Name": "O/O (1-3)",
+            "Type": "Numeric",
+            "UniqueName": "[Freight Carrier Segment].[Freight Carrier Segment].[O/O (1-3)]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Medium (12-49)"
+            },
+            "Index": 6,
+            "Name": "Medium (12-49)",
+            "Type": "Numeric",
+            "UniqueName": "[Freight Carrier Segment].[Freight Carrier Segment].[Medium (12-49)]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Unspecified Freight Carrier Segment"
+            },
+            "Index": 7,
+            "Name": "Unspecified Freight Carrier Segment",
+            "Type": "Numeric",
+            "UniqueName": "[Freight Carrier Segment].[Freight Carrier Segment].[Unspecified Freight Carrier Segment]"
+        }
+    ],
+    "Name": "Freight Carrier Segment",
+    "Subsets": [],
+    "UniqueName": "[Freight Carrier Segment].[Freight Carrier Segment]"
+}

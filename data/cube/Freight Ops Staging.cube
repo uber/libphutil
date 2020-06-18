@@ -1,0 +1,44 @@
+{
+    "Dimensions": [
+        {
+            "Name": "Version"
+        },
+        {
+            "Name": "Period"
+        },
+        {
+            "Name": "Source"
+        },
+        {
+            "Name": "Currency"
+        },
+        {
+            "Name": "Rate Type"
+        },
+        {
+            "Name": "Location"
+        },
+        {
+            "Name": "Freight Shipper"
+        },
+        {
+            "Name": "Freight Load Rate Type"
+        },
+        {
+            "Name": "Freight Service Type"
+        },
+        {
+            "Name": "Freight Booking Channel"
+        },
+        {
+            "Name": "Freight Carrier Segment"
+        },
+        {
+            "Name": "Freight Ops Metric"
+        },
+        {
+            "Name": "Freight Ops Staging Measure"
+        }
+    ],
+    "Name": "Freight Ops Staging"
+}

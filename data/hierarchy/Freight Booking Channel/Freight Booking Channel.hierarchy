@@ -1,0 +1,86 @@
+{
+    "DefaultMember": {
+        "Attributes": {
+            "Caption": "Total Freight Booking Channel"
+        },
+        "IsPlaceholder": false,
+        "Name": "Total Freight Booking Channel",
+        "Ordinal": 1,
+        "Type": "Regular",
+        "UniqueName": "[Freight Booking Channel].[Freight Booking Channel].[Total Freight Booking Channel]",
+        "Weight": 0
+    },
+    "Edges": [
+        {
+            "ComponentName": "EDI",
+            "ParentName": "Total Freight Booking Channel",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Freight_Ops",
+            "ParentName": "Total Freight Booking Channel",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Shipper_Tool",
+            "ParentName": "Total Freight Booking Channel",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Unspecified Freight Booking Channel",
+            "ParentName": "Total Freight Booking Channel",
+            "Weight": 1
+        }
+    ],
+    "ElementAttributes": [],
+    "Elements": [
+        {
+            "Attributes": {
+                "Caption": "Total Freight Booking Channel"
+            },
+            "Index": 1,
+            "Name": "Total Freight Booking Channel",
+            "Type": "Consolidated",
+            "UniqueName": "[Freight Booking Channel].[Freight Booking Channel].[Total Freight Booking Channel]"
+        },
+        {
+            "Attributes": {
+                "Caption": "EDI"
+            },
+            "Index": 2,
+            "Name": "EDI",
+            "Type": "Numeric",
+            "UniqueName": "[Freight Booking Channel].[Freight Booking Channel].[EDI]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Freight_Ops"
+            },
+            "Index": 3,
+            "Name": "Freight_Ops",
+            "Type": "Numeric",
+            "UniqueName": "[Freight Booking Channel].[Freight Booking Channel].[Freight_Ops]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Shipper_Tool"
+            },
+            "Index": 4,
+            "Name": "Shipper_Tool",
+            "Type": "Numeric",
+            "UniqueName": "[Freight Booking Channel].[Freight Booking Channel].[Shipper_Tool]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Unspecified Freight Booking Channel"
+            },
+            "Index": 5,
+            "Name": "Unspecified Freight Booking Channel",
+            "Type": "Numeric",
+            "UniqueName": "[Freight Booking Channel].[Freight Booking Channel].[Unspecified Freight Booking Channel]"
+        }
+    ],
+    "Name": "Freight Booking Channel",
+    "Subsets": [],
+    "UniqueName": "[Freight Booking Channel].[Freight Booking Channel]"
+}

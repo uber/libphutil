@@ -37,6 +37,7 @@
         "}ElementAttributes_Currency",
         "}ElementAttributes_Currency To",
         "}ElementAttributes_Rate Type",
+        "}ElementAttributes_Freight Shipper",
         "}Capabilities",
         "}CubeSecurityProperties",
         "}CubeSecurity",
@@ -80,8 +81,7 @@
         "Eats Product Type/*",
         "Eats Restaurant Type/*",
         "Freight Ops Metric/*",
-        "Freight Shipper/*",
-
+        "Freight Shipper/*"
 
     ],
     "exclude_dimension_hierarchy_element": "",

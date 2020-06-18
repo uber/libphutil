@@ -1,0 +1,170 @@
+{
+    "DefaultMember": {
+        "Attributes": {
+            "Caption": "Total Freight Service Type"
+        },
+        "IsPlaceholder": false,
+        "Name": "Total Freight Service Type",
+        "Ordinal": 1,
+        "Type": "Regular",
+        "UniqueName": "[Freight Service Type].[Freight Service Type].[Total Freight Service Type]",
+        "Weight": 0
+    },
+    "Edges": [
+        {
+            "ComponentName": "Box",
+            "ParentName": "Total Freight Service Type",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Van",
+            "ParentName": "Total Freight Service Type",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Flatbed",
+            "ParentName": "Total Freight Service Type",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Reefer",
+            "ParentName": "Total Freight Service Type",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "TautLiner",
+            "ParentName": "Total Freight Service Type",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Power_Only",
+            "ParentName": "Total Freight Service Type",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Powerloop",
+            "ParentName": "Total Freight Service Type",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "MegaTrailer",
+            "ParentName": "Total Freight Service Type",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Tilt",
+            "ParentName": "Total Freight Service Type",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Unspecified Freight Service Type",
+            "ParentName": "Total Freight Service Type",
+            "Weight": 1
+        }
+    ],
+    "ElementAttributes": [],
+    "Elements": [
+        {
+            "Attributes": {
+                "Caption": "Total Freight Service Type"
+            },
+            "Index": 1,
+            "Name": "Total Freight Service Type",
+            "Type": "Consolidated",
+            "UniqueName": "[Freight Service Type].[Freight Service Type].[Total Freight Service Type]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Box"
+            },
+            "Index": 2,
+            "Name": "Box",
+            "Type": "Numeric",
+            "UniqueName": "[Freight Service Type].[Freight Service Type].[Box]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Van"
+            },
+            "Index": 3,
+            "Name": "Van",
+            "Type": "Numeric",
+            "UniqueName": "[Freight Service Type].[Freight Service Type].[Van]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Flatbed"
+            },
+            "Index": 4,
+            "Name": "Flatbed",
+            "Type": "Numeric",
+            "UniqueName": "[Freight Service Type].[Freight Service Type].[Flatbed]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Reefer"
+            },
+            "Index": 5,
+            "Name": "Reefer",
+            "Type": "Numeric",
+            "UniqueName": "[Freight Service Type].[Freight Service Type].[Reefer]"
+        },
+        {
+            "Attributes": {
+                "Caption": "TautLiner"
+            },
+            "Index": 6,
+            "Name": "TautLiner",
+            "Type": "Numeric",
+            "UniqueName": "[Freight Service Type].[Freight Service Type].[TautLiner]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Power_Only"
+            },
+            "Index": 7,
+            "Name": "Power_Only",
+            "Type": "Numeric",
+            "UniqueName": "[Freight Service Type].[Freight Service Type].[Power_Only]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Powerloop"
+            },
+            "Index": 8,
+            "Name": "Powerloop",
+            "Type": "Numeric",
+            "UniqueName": "[Freight Service Type].[Freight Service Type].[Powerloop]"
+        },
+        {
+            "Attributes": {
+                "Caption": "MegaTrailer"
+            },
+            "Index": 9,
+            "Name": "MegaTrailer",
+            "Type": "Numeric",
+            "UniqueName": "[Freight Service Type].[Freight Service Type].[MegaTrailer]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Tilt"
+            },
+            "Index": 10,
+            "Name": "Tilt",
+            "Type": "Numeric",
+            "UniqueName": "[Freight Service Type].[Freight Service Type].[Tilt]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Unspecified Freight Service Type"
+            },
+            "Index": 11,
+            "Name": "Unspecified Freight Service Type",
+            "Type": "Numeric",
+            "UniqueName": "[Freight Service Type].[Freight Service Type].[Unspecified Freight Service Type]"
+        }
+    ],
+    "Name": "Freight Service Type",
+    "Subsets": [],
+    "UniqueName": "[Freight Service Type].[Freight Service Type]"
+}

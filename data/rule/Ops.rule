@@ -40,6 +40,15 @@ SKIPCHECK;
 ['Actual',  'Line of Business':'2001', '% of Trips Promoed'] = C: ['Promo Trips'] \ ['Completed Trips'];
 
 
+['Actual', 'Line of Business':'8001', 'Load Margin'] = ['Gross Bookings - Shipper Revenue'] - ['Carrier Payout'];
+
+['Actual', 'Line of Business':'8001', 'Shipper Revenue per Load'] = ['Gross Bookings - Shipper Revenue'] \ ['Load Volume'];
+
+['Actual', 'Line of Business':'8001', 'OTP per OTD Carrier'] = ['OTP Carrier'] \ ['OTD Carrier'];
+
+['Actual', 'Line of Business':'8001', 'OTP per OTD Customer'] = ['OTP Customer'] \ ['OTD Customer'];
+
+
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=- #
 #Total Rides & Eats C-level rules
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=- #
@@ -88,27 +97,6 @@ SKIPCHECK;
       CONTINUE
    );
 
-['Ops Measure':'Amount' ] = C:
-   IF(
-      ATTRS('Ops Metric', !Ops Metric, 'Aggregate_Location_Flag') @= 'Y'
-   ,
-      IF(
-         ELLEV('Period', !Period) > 0
-      ,
-         0
-     ,
-         IF(
-            (ELLEV ('Location', !Location) >0)
-         ,
-            DB('Ops', !Version, !Period, !Source, !Rate Type, 'CustomLeaf':!Location | ' Input', !Line of Business, !Product Type, !Ops Metric, 'Amount')
-         ,
-           CONTINUE
-        )
-      )
-   ,
-      CONTINUE
-   );
-
 ['Ops Measure':'Amount',  'Line of Business':'1001'] = C:
    IF(
       ATTRS('Ops Metric', !Ops Metric, 'Aggregate_Location_Flag') @= 'Y'
@@ -117,14 +105,14 @@ SKIPCHECK;
          ELLEV('Period', !Period) > 0
       ,
          0
-     ,
+      ,
          IF(
             (ELLEV ('Location', !Location) > 0)
          ,
             DB('Rides Ops', !Version, !Period, !Source, !Rate Type, !Location,  'Total Rides Flow Type','Total Rides Car Type', !Ops Metric, 'Amount')
          ,
             STET
-        )
+         )
       )
    ,
       CONTINUE
@@ -146,6 +134,33 @@ SKIPCHECK;
          ,
             STET
         )
+      )
+   ,
+      CONTINUE
+   );
+
+['Ops Measure':'Amount' ] = C:
+   IF(
+       DIMIX('Period', !Period) <= DIMIX('Period', DB('System Info','Current Month','String'))
+   ,
+      IF(
+         ATTRS('Ops Metric', !Ops Metric, 'Aggregate_Location_Flag') @= 'Y'
+      ,
+         IF(
+            ELLEV('Period', !Period) > 0
+         ,
+            0
+         ,
+            IF(
+               (ELLEV ('Location', !Location) >0)
+            ,
+               DB('Ops', !Version, !Period, !Source, !Rate Type, 'CustomLeaf':!Location | ' Input', !Line of Business, !Product Type, !Ops Metric, 'Amount')
+            ,
+               CONTINUE
+            )
+        )
+      ,
+         CONTINUE
       )
    ,
       CONTINUE
@@ -280,8 +295,28 @@ SKIPCHECK;
       STET
    );
 
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=- #
+# Freight N-level rules
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=- #
+
+['Version' : 'Actual', 'Line of Business':'8001', 'Product Type' : 'Not Specified', 'Completed Trips'] = N:
+   DB('Freight Ops',!Version,!Period,!Source,!Rate Type,!Location,'Total Freight Shipper','Total Freight Load Rate Type','Total Freight Service Type','Total Freight Booking Channel','Total Freight Carrier Segment','Load Volume','Amount');
+
+['Version' : 'Actual', 'Line of Business':'8001', 'Product Type' : 'Not Specified'] = N:
+
+    IF(
+      ELISANC('OPS Metric', 'Freight Only Metrics', !OPS Metric)=1
+   ,
+     DB('Freight Ops', !Version, !Period, 'FDP', !Rate Type, !Location, 'Total Freight Shipper', 'Total Freight Load Rate Type', 'Total Freight Service Type', 'Total Freight Booking Channel', 'Total Freight Carrier Segment', !Ops Metric, 'Amount')
+   ,
+      STET
+   );
+
 
 FEEDERS;
+
+#['Actual','FDP','USD','Line of Business':'1001','Completed Trips','Amount']=>DB('GL By Product Allocation','Actual',!Period,'Core Rides',!Location,'Total Product Type Excl Other','GAAP Contribution','Allocation %');
+
 
 
 

@@ -1,0 +1,88 @@
+###############################################################################
+### Cube: Freight Ops
+### Dimensions:
+###     1: Version
+###     2: Period
+###     3: Source
+###     4. Rate Type
+###     5: Location
+###     6: Freight Shipper
+###     7: Freight Load Rate Type
+###     8: Freight Service Type
+###     9: Freight Booking Channel
+###   10: Freight Carrier Segment
+###   11: Freight Ops Metric
+###   12: Freight Ops Measure
+###############################################################################
+
+FEEDSTRINGS;
+SKIPCHECK;
+
+[ ] =
+   IF(
+      ATTRS ( 'Version', !Version, 'Active' ) @= ''
+   ,
+      STET
+   ,
+      CONTINUE
+   );
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=- #
+# Budget Data from Planning
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=- #
+
+['Version' : {'2020 Plan',  'Forecast Excl Actuals'}] =  STET;
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=- #
+# N & C Level  Calcs
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=- #
+
+['Load Margin'] = ['Gross Bookings - Shipper Revenue'] - ['Carrier Payout'];
+
+['Shipper Revenue per Load'] = ['Gross Bookings - Shipper Revenue'] \ ['Load Volume'];
+
+['OTP per OTD Carrier'] = ['OTP Carrier'] \ ['OTD Carrier'];
+
+['OTP per OTD Customer'] = ['OTP Customer'] \ ['OTD Customer'];
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=- #
+# C Level  Calcs
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=- #
+
+#[{'Buy to Market', 'Sell to Market'}] = C : 0;
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=- #
+# Leaf Level  Calcs
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=- #
+
+['Freight Ops Measure' : 'Amount' ] = N:
+   IF(
+      ATTRS('Freight Ops Metric', !Freight OPS Metric, 'Fx_Flag') @= 'Y'
+   ,
+     DB('Freight Ops Staging',!Version,!Period,!Source, 'Total Currency',!Rate Type,!Location,!Freight Shipper,!Freight Load Rate Type,!Freight Service Type,!Freight Booking Channel,!Freight Carrier Segment,!Freight Ops Metric,'Amount')
+   ,
+      STET
+   );
+
+FEEDERS;
+
+['Load Volume'] => ['Shipper Revenue per Load'];
+['Carrier Payout'] => ['Load Margin'];
+['Line Haul'] => ['Load Margin'];
+['Accessorials'] => ['Load Margin'];
+['OTP Carrier'] => ['OTP per OTD Carrier'];
+['OTP Customer'] => ['OTP per OTD Customer'];
+
+
+## Feed Ops
+
+['Amount'] => DB('Ops',!Version,!Period,!Source,!Rate Type,!Location,'8001','Not Specified',!Freight Ops Metric,'Amount');
+
+['Actual', 'FDP', 'Unspecified Freight Shipper','Unspecified Freight Load Rate Type', 'Unspecified Freight Service Type', 'Unspecified Freight Booking Channel','Unspecified Freight Carrier Segment','Active Shippers','Amount'] => DB('Ops','Actual',!Period,'FDP',!Rate Type,!Location,'8001','Not Specified','Completed Trips','Amount');
+
+
+
+
+
+

@@ -6,18 +6,24 @@
         "Type": "ODBC",
         "dataSourceNameForClient": "TM1TEGRATOR",
         "dataSourceNameForServer": "TM1TEGRATOR",
-        "query": "select * from \"pipe.rides_ops_tm1_monthly_operational.20200324160115.ZPT95K\"",
+        "query": "select * from \"pipe.freight_ops_tm1_monthly_financial.20200604150739.59XPTH\"",
         "userName": "epm",
         "usesUnicode": true
     },
     "HasSecurityAccess": false,
-    "Name": "Ops.Rides Ops.Load.From.FDS",
+    "Name": "Ops.Freight Ops Staging.Load.From.FDS",
     "Parameters": [
         {
             "Name": "pTable",
             "Prompt": "",
             "Type": "String",
-            "Value": "pipe.ops_tm1_monthly_financials.20200219215020.EIX8JN"
+            "Value": "pipe.freight_ops_tm1_monthly_financial.20200604150739.59XPTH"
+        },
+        {
+            "Name": "pDebug",
+            "Prompt": "",
+            "Type": "Numeric",
+            "Value": 0
         },
         {
             "Name": "pLevel",
@@ -30,55 +36,79 @@
     "Variables": [
         {
             "EndByte": 0,
-            "Name": "vCarType",
+            "Name": "vArea",
             "Position": 1,
             "StartByte": 0,
             "Type": "String"
         },
         {
             "EndByte": 0,
-            "Name": "vLocation",
+            "Name": "vChannel",
             "Position": 2,
             "StartByte": 0,
             "Type": "String"
         },
         {
             "EndByte": 0,
-            "Name": "vCurrency",
+            "Name": "vCarrierSeg",
             "Position": 3,
             "StartByte": 0,
             "Type": "String"
         },
         {
             "EndByte": 0,
-            "Name": "vFlowType",
+            "Name": "vCurrency",
             "Position": 4,
             "StartByte": 0,
             "Type": "String"
         },
         {
             "EndByte": 0,
-            "Name": "vMetric",
+            "Name": "vLoadRateType",
             "Position": 5,
             "StartByte": 0,
             "Type": "String"
         },
         {
             "EndByte": 0,
-            "Name": "vPeriod",
+            "Name": "vMetric",
             "Position": 6,
             "StartByte": 0,
             "Type": "String"
         },
         {
             "EndByte": 0,
-            "Name": "vValue",
+            "Name": "vPeriod",
             "Position": 7,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vServiceType",
+            "Position": 8,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vShipperUUID",
+            "Position": 9,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vValue",
+            "Position": 10,
             "StartByte": 0,
             "Type": "Numeric"
         }
     ],
     "VariablesUIData": [
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
         "VarType=32\fColType=827\f",
         "VarType=32\fColType=827\f",
         "VarType=32\fColType=827\f",
@@ -99,28 +129,27 @@
 #****Begin: Generated Statements***
 #****End: Generated Statements****
 
-# Process to load Rides opartional metrics from FDS to Rid Ops cube
-
+# Process to load Freight financial metrics from Freight Ops Staging cube
 
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
 # Define Constants
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
 
-cCube = 'Rides Ops';
+cCube = 'Freight Ops Staging';
 cVersion = 'Actual';
-cRateType = 'USD';
+cRateType = 'No Rate Type';
 cMeasure = 'Amount';
 cSource = 'FDP';
 nRecords = 1;
 
 cPeriodMetricString = '';
 
+nStart = 1;
+nCurPos = 1;
+
 nDate = NOW;
 NEWDATEFORMATTER('', 'PST', 'serial', 'full', 'datetime', '');
 sOutputString = FORMATDATE(nDate, 0);
-
-nStart = 1;
-nCurPos = 1;
 
 cUser = CELLGETS('System Info', 'SQL User Name GL Transactions', 'String');
 cPassword = CELLGETS('System Info', 'SQL Password GL Transactions', 'String');
@@ -134,9 +163,6 @@ DatasourceUsername = cUser;
 DatasourcePassword = cPassword;
 sQuery = EXPAND('SELECT * FROM "%pTable%"');
 DatasourceQuery = sQuery;
-
-
-
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
 # END: PROLOG PROCEDURE                                                       #
@@ -171,49 +197,68 @@ DatasourceQuery = sQuery;
 IF(pLevel @= 'Month');
    sPeriod = SUBST(vPeriod, 1, 7);
 ELSE;
-   sPeriod = 'WS ' | SUBST(vPeriod, 1, 10);
+   sPeriod = 'WS ' | vPeriod;
 ENDIF;
 
 # Location
 sDim = 'Location';
-IF(vLocation @= '\N' % vLocation @= '');
+IF(vArea @= '\N' % vArea @= '');
    ITEMSKIP;
 ENDIF;
-sLocation = 'V' | vLocation;
 
-IF((ELISANC(sDim, 'Total Location by Country', vLocation) = 1 & ELLEV(sDim, vLocation) <> 0) % (ELISANC(sDim, 'Custom Consolidations', vLocation) = 1 & ELLEV(sDim, vLocation) <> 0) % (ELISANC(sDim, 'Total Location', vLocation) = 1 & ELLEV(sDim, vLocation) <> 0));
-   sLocation = vLocation;
-ELSEIF(vLocation @= 'global');
-   sLocation = 'Total Location';
-ELSEIF(vLocation @= 'global_ex_sea_and_russia');
-   sLocation = 'Total Location ex SEA & Russia';
+IF(vArea @= 'CANADA');
+   sArea = 'v13';
+ELSEIF(vArea @= 'US');
+   sArea = 'v7';
+ELSEIF(vArea @= 'EU');
+   sArea = 'v34';
+ENDIF;
+
+# Currency
+IF(vCurrency @= '\N' % vCurrency @= '');
+   ITEMSKIP;
+ENDIF;
+
+# Freight Shipper
+sDim = 'Freight Shipper';
+IF(vShipperUUID @= '\N' % vShipperUUID @= '' % vShipperUUID @= 'None');
+   sShipperUUID = 'Unspecified Freight Shipper';
 ELSE;
-   sLocation = 'V' | vLocation;
+   sShipperUUID = vShipperUUID;
 ENDIF;
 
-IF(DIMIX('Location', sLocation) = 0);
-   ITEMSKIP;
-ENDIF;
-
-# Flow Type
-sDim = 'Rides Flow Type';
-IF(vFlowType @= 'nemoearner');
-   ITEMSKIP;
-ELSEIF(vFlowType @= '\N' % vFlowType @= '' % vFlowType @= 'None');
-   sFlowType = 'Unspecified Flow Type';
+# Freight Load Rate Type
+sDim = 'Freight Load Rate Type';
+IF(vLoadRateType @= '\N' % vLoadRateType @= '');
+   sLoadRateType = 'Unspecified Freight Load Rate Type';
 ELSE;
-   sFlowType = vFlowType;
+   sLoadRateType = vLoadRateType;
 ENDIF;
 
-# Car Type
-sDim = 'Rides Car Type';
-IF(vCarType @= 'uber_eats');
-   ITEMSKIP;
-ELSEIF(vCarType @= '\N' % vCarType @= '');
-   sCarType = 'Not Specified';
+#Freight Service Type
+sDim = 'Freight Service Type';
+IF(vServiceType @= '\N' % vServiceType @= '');
+   sServiceType = 'Unspecified Freight Service Type';
 ELSE;
-   sCarType = vCarType;
+   sServiceType = vServiceType;
 ENDIF;
+
+# Freight Booking Channel
+sDim = 'Freight Booking Channel';
+IF(vChannel @= '\N' % vChannel @= '');
+   sChannel = 'Unspecified Freight Booking Channel';
+ELSE;
+   sChannel = vChannel;
+ENDIF;
+
+# Freight Carrier Segment
+sDim = 'Freight Carrier Segment';
+IF(vCarrierSeg @= '\N' % vCarrierSeg @= '' % vCarrierSeg @= 'Unknown');
+   sCarrierSeg = 'Unspecified Freight Carrier Segment';
+ELSE;
+   sCarrierSeg = vCarrierSeg;
+ENDIF;
+
 
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
 # Clear Target View
@@ -222,12 +267,12 @@ ENDIF;
 
 sMetric = vMetric;
 
-IF(SCAN(sPeriod | '_' | sMetric, cPeriodMetricString) = 0);
+IF(SCAN(sPeriod | '$' | sMetric, cPeriodMetricString) = 0);
 
    IF(LONG(cPeriodMetricString) = 0);
-      cPeriodMetricString = sPeriod | '_' | sMetric;
+      cPeriodMetricString = sPeriod | '$' | sMetric;
    ELSE;
-      cPeriodMetricString = cPeriodMetricString | '|' | sPeriod | '_' | sMetric;
+      cPeriodMetricString = cPeriodMetricString | '|' | sPeriod | '$' | sMetric;
    ENDIF;
 
    sLoopString = TRIM(cPeriodMetricString);
@@ -237,14 +282,13 @@ IF(SCAN(sPeriod | '_' | sMetric, cPeriodMetricString) = 0);
       sCurChar = SUBST(sLoopString, nCurPos, 1);
       IF(sCurChar @= '|');
          sPeriodMetricElement = SUBST(sLoopString, nStart, nCurPos - nStart);
-         nSplit = SCAN('_', sPeriodMetricElement);
+         nSplit = SCAN('$', sPeriodMetricElement);
          sPeriodElement = SUBST(sPeriodMetricElement, 1, (nSplit - 1));
          sMetricElement = SUBST(sPeriodMetricElement, (nSplit + 1), LONG(sPeriodMetricElement) - nSplit);
 
          cRandomIntA = NUMBERTOSTRING(INT(RAND() * 100000));
          cViewName = '}zTemp.' | GETPROCESSNAME() | '.' | cRandomIntA;
          cSubsetName = '}zTemp.' | GETPROCESSNAME() | '.' | cRandomIntA;
-
          VIEWCREATE(cCube, cViewName, 1);
          nCtr = 1;
          nMax = CUBEDIMENSIONCOUNTGET(cCube);
@@ -260,17 +304,7 @@ IF(SCAN(sPeriod | '_' | sMetric, cPeriodMetricString) = 0);
                SUBSETCREATE(sDim, cSubsetName, 1);
                SUBSETELEMENTINSERT(sDim, cSubsetName, sElement, 1);
                VIEWSUBSETASSIGN(cCube, cViewName, sDim, cSubsetName);
-            ELSEIF(sDim @= 'Rate Type');
-               sElement = 'USD';
-               SUBSETCREATE(sDim, cSubsetName, 1);
-               SUBSETELEMENTINSERT(sDim, cSubsetName, sElement, 1);
-               VIEWSUBSETASSIGN(cCube, cViewName, sDim, cSubsetName);
-            ELSEIF(sDim @= 'Source');
-               sElement = 'FDP';
-               SUBSETCREATE(sDim, cSubsetName, 1);
-               SUBSETELEMENTINSERT(sDim, cSubsetName, sElement, 1);
-               VIEWSUBSETASSIGN(cCube, cViewName, sDim, cSubsetName);
-            ELSEIF(sDim @= 'Rides Ops Metric');
+            ELSEIF(sDim @= 'Freight Ops Metric');
                sElement = sMetricElement;
                SUBSETCREATE(sDim, cSubsetName, 1);
                SUBSETELEMENTINSERT(sDim, cSubsetName, sElement, 1);
@@ -294,22 +328,15 @@ ENDIF;
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
 
 IF(pLevel @= 'Month');
-   IF(sMetric @= 'Active Riders L28' % sMetric @= 'Weekly Active Riders' % sMetric @= 'Active Drivers L28' % sMetric @= 'Weekly Active Drivers');
-      ITEMSKIP;
-   ENDIF;
+   vUSDValue = vValue * CELLGETN('Exchange Rate', cVersion, sPeriod, vCurrency, 'USD', 'Rate');
 ELSE;
-   IF(sMetric @= 'Active Riders' % sMetric @= 'Active Drivers');
-      ITEMSKIP;
-   ENDIF;
+   sMonth = SUBST(sPeriod, 4, 7);
+   vUSDValue = vValue * CELLGETN('Exchange Rate', cVersion, ATTRS('Period', sMonth, 'Period-1'), vCurrency, 'USD', 'Month End Rate');
 ENDIF;
 
-IF(ELLEV('Location', sLocation) > 0);
-   CELLPUTN(vValue, cCube, cVersion, sPeriod, cSource, cRatetype, 'CustomLeaf:' | sLocation | ' Input', sFlowType, sCarType, vMetric, cMeasure);
-ELSE;
-   CELLPUTN(vValue, cCube, cVersion, sPeriod, cSource, cRatetype, sLocation, sFlowType, sCarType, vMetric, cMeasure);
-   CELLPUTS(sOutputstring, 'Rides Ops Info', sMetric, sPeriod, 'Last Updated');
-ENDIF;
-
+CELLINCREMENTN(vValue, cCube, cVersion, sPeriod, cSource, vCurrency, cRateType, sArea, sShipperUUID, sLoadRateType, sServiceType, sChannel, sCarrierSeg, vMetric, cMeasure);
+CELLINCREMENTN(vUSDValue, cCube, cVersion, sPeriod, cSource, vCurrency, 'USD', sArea, sShipperUUID, sLoadRateType, sServiceType, sChannel, sCarrierSeg, vMetric, cMeasure);
+CELLPUTS(sOutputstring, 'Freight Ops Info', vMetric, sPeriod, 'Last Updated');
 
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #

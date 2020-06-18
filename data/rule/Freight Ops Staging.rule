@@ -1,0 +1,67 @@
+###############################################################################
+### Cube: Freight Ops Staging
+### Dimensions:
+###     1: Version
+###     2: Period
+###     3: Source
+### .   4: Currency
+###     5: Rate Type
+###     6: Location
+###     7: Freight Shipper
+###     8: Freight Load Rate Type
+###     9: Freight Service Type
+###   10: Freight Booking Channel
+###   11: Freight Carrier Segment
+###   12: Freight Ops Metric
+###   13: Freight Ops Staging Measure
+###############################################################################
+
+SKIPCHECK;
+
+## USD and No Rate Type will be loaded into
+['Rate Type':{'USD', 'No Rate Type'}, 'Amount'] = STET;
+
+## Calculate Currency Conversion to Local Currency
+['Local', 'Amount'] = N:
+   IF(
+      ATTRS('Location', !Location, 'Currency') @= !Currency
+   ,
+      IF(
+         ATTRS('Period', !Period, 'Level') @= 'Month'
+      ,
+         ['Rate Type':'USD','Currency':'Total Currency','Amount'] /
+         DB('Exchange Rate', 'Actual', !Period, ATTRS('Location', !Location, 'Currency'),'USD', 'Rate')
+      ,
+         ['Rate Type':'USD','Currency':'Total Currency','Amount'] /
+         DB('Exchange Rate', 'Actual', Subst(!Period, 4, 7), ATTRS('Location', !Location, 'Currency'),'USD', 'Rate')
+      )
+   ,
+      CONTINUE
+   );
+
+## Calculate FX Variance
+['Amount'] = N:
+   ['No Rate Type','Amount'] *
+   IF(
+      ATTRS('Period', !Period, 'Level') @= 'Month'
+   ,
+      DB('Exchange Rate by Rate Type', !Version, !Period, !Currency, !Rate Type, 'Amount')
+   ,
+      DB('Exchange Rate by Rate Type',!Version, Subst(!Period, 4, 7), !Currency, !Rate Type, 'Amount')
+   );
+
+
+
+FEEDERS;
+
+##Feed Eats Ops
+
+['Amount'] =>
+   DB('Freight Ops',!Version,!Period,!Source,!Rate Type,!Location,!Freight Shipper,!Freight Load Rate Type,!Freight Service Type,!Freight Booking Channel,!Freight Carrier Segment,!Freight Ops Metric,'Amount');
+
+
+## Feed FX
+['No Rate Type'] =>
+   ['FX Rates'];
+['Rate Type':'USD'] =>
+   ['Local'];

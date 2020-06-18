@@ -1,0 +1,14 @@
+{
+    "Dimensions": [
+        {
+            "Name": "Freight Ops Metric"
+        },
+        {
+            "Name": "Period"
+        },
+        {
+            "Name": "Freight Ops Info Measure"
+        }
+    ],
+    "Name": "Freight Ops Info"
+}

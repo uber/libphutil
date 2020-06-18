@@ -1,0 +1,29 @@
+{
+    "DefaultMember": {
+        "Attributes": {
+            "Caption": "Amount"
+        },
+        "IsPlaceholder": false,
+        "Name": "Amount",
+        "Ordinal": 1,
+        "Type": "Regular",
+        "UniqueName": "[Freight Ops Staging Measure].[Freight Ops Staging Measure].[Amount]",
+        "Weight": 0
+    },
+    "Edges": [],
+    "ElementAttributes": [],
+    "Elements": [
+        {
+            "Attributes": {
+                "Caption": "Amount"
+            },
+            "Index": 1,
+            "Name": "Amount",
+            "Type": "Numeric",
+            "UniqueName": "[Freight Ops Staging Measure].[Freight Ops Staging Measure].[Amount]"
+        }
+    ],
+    "Name": "Freight Ops Staging Measure",
+    "Subsets": [],
+    "UniqueName": "[Freight Ops Staging Measure].[Freight Ops Staging Measure]"
+}
