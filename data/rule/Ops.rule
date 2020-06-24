@@ -53,7 +53,7 @@ SKIPCHECK;
 #Total Rides & Eats C-level rules
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=- #
 
-['Ops Measure':'Amount' ] = C:
+['Ops Measure':'Amount', 'Line of Business' : 'Line of Business' : 'Total Rides & Eats' ] = C:
    IF(
       ATTRS('Ops Metric', !Ops Metric, 'Aggregate_LOB_Flag') @= 'Y' &
       ATTRS('Ops Metric', !Ops Metric, 'Aggregate_Location_Flag') @= 'Y'
@@ -86,7 +86,7 @@ SKIPCHECK;
          0
      ,
          IF(
-            (ELLEV ('Line of Business', !Line of Business) >0 & !Line of Business @= 'Total Rides & Eats')
+             (ELLEV('Line of Business', !Line of Business) >0 & !Line of Business @= 'Total Rides & Eats')
          ,
             DB('Ops', !Version, !Period, !Source, !Rate Type, !Location, 'CustomLeaf: Total Rides & Eats Input', !Product Type, !Ops Metric, 'Amount')
          ,
@@ -141,7 +141,7 @@ SKIPCHECK;
 
 ['Ops Measure':'Amount' ] = C:
    IF(
-       DIMIX('Period', !Period) <= DIMIX('Period', DB('System Info','Current Month','String'))
+       (DIMIX('Period', !Period) <= DIMIX('Period', DB('System Info','Current Month','String')) % ATTRS('Period', !Period, 'Level') @= 'Week')
    ,
       IF(
          ATTRS('Ops Metric', !Ops Metric, 'Aggregate_Location_Flag') @= 'Y'
@@ -160,10 +160,10 @@ SKIPCHECK;
             )
         )
       ,
-         CONTINUE
+         STET
       )
    ,
-      CONTINUE
+     STET
    );
 
 

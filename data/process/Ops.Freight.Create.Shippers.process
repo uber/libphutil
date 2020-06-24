@@ -166,8 +166,11 @@ DIMENSIONELEMENTCOMPONENTADDDIRECT(sDim, vMasterSegment, vMasterUUID, 1);
 # ==================================================================== #
 
 sAttr = 'Shipper Name';
-ATTRPUTS(vMasterName, sDim, vMasterUUID, sAttr);
-
+IF(DIMIX('Freight Shipper', vMasterName) = 0);
+   ATTRPUTS(vMasterName, sDim, vMasterUUID, sAttr);
+ELSE;
+   ITEMSKIP;
+ENDIF;
 sAttr = 'First Load Date,';
 ATTRPUTS(vShipperDFL, sDim, vMasterUUID, sAttr);
 

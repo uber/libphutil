@@ -237,7 +237,7 @@ ENDIF;
 
 #Freight Service Type
 sDim = 'Freight Service Type';
-IF(vServiceType @= '\N' % vServiceType @= '');
+IF(vServiceType @= '\N' % vServiceType @= '' % DIMIX('Freight Service Type', vServiceType) = 0);
    sServiceType = 'Unspecified Freight Service Type';
 ELSE;
    sServiceType = vServiceType;
