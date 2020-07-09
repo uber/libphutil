@@ -221,7 +221,7 @@ ENDIF;
 
 # Freight Shipper
 sDim = 'Freight Shipper';
-IF(vShipperUUID @= '\N' % vShipperUUID @= '' % vShipperUUID @= 'None');
+IF(vShipperUUID @= '\N' % vShipperUUID @= '' % vShipperUUID @= 'None' % DIMIX('Freight Shipper', vShipperUUID) = 0);
    sShipperUUID = 'Unspecified Freight Shipper';
 ELSE;
    sShipperUUID = vShipperUUID;

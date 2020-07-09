@@ -24,6 +24,18 @@
             "Prompt": "",
             "Type": "String",
             "Value": "Month"
+        },
+        {
+            "Name": "pUser",
+            "Prompt": "",
+            "Type": "String",
+            "Value": ""
+        },
+        {
+            "Name": "pPWord",
+            "Prompt": "",
+            "Type": "String",
+            "Value": ""
         }
     ],
     "UIData": "CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
@@ -112,6 +124,11 @@ cRateType = 'USD';
 cMeasure = 'Amount';
 cSource = 'FDP';
 nRecords = 1;
+
+sPassword = 'corpfin';
+IF(pPWord @<> sPassword);
+   PROCESSQUIT;
+ENDIF;
 
 cPeriodMetricLOBString = '';
 

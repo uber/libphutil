@@ -33,9 +33,18 @@
         },
         {
             "Attributes": {
-                "Caption": "Last Updated"
+                "Caption": "Source Table Override"
             },
             "Index": 3,
+            "Name": "Source Table Override",
+            "Type": "String",
+            "UniqueName": "[Rides Ops Info Measure].[Rides Ops Info Measure].[Source Table Override]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Last Updated"
+            },
+            "Index": 4,
             "Name": "Last Updated",
             "Type": "String",
             "UniqueName": "[Rides Ops Info Measure].[Rides Ops Info Measure].[Last Updated]"

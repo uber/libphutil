@@ -220,7 +220,7 @@ ELSE;
 ENDIF;
 
 # Eats Restaurant Type
-sDim = 'Rides Car Type';
+sDim = 'Eats Restaurant Type';
 IF(vRestType @= '\N' % vRestType @= '');
    sRestType = 'Unspecified Restaurant Type';
 ELSE;
@@ -328,6 +328,9 @@ ELSE;
       sMetric = '41519';
    ENDIF;
 
+   IF(sMetric @= 'Restaurant Payments');
+      sMetric = 'Restaurant Payment';
+   ENDIF;
    CELLINCREMENTN(vValue, cCube, cVersion, sPeriod, cSource, vCurrency, 'USD', sLocation, sProductType, sRestType, sMetric, cMeasure);
 ENDIF;
 

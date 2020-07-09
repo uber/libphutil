@@ -17,7 +17,7 @@
             "Name": "pTable",
             "Prompt": "",
             "Type": "String",
-            "Value": "pipe.ops_tm1_monthly_financials.20200219215020.EIX8JN"
+            "Value": "pipe.rides_eats_ops_tm1_monthly.20200707221351.YT0BIT"
         },
         {
             "Name": "pDebug",
@@ -121,7 +121,6 @@ nRecords = 1;
 
 cPeriodMetricLOBString = '';
 
-
 nStart = 1;
 nCurPos = 1;
 
@@ -186,19 +185,21 @@ ENDIF;
 sLocation = 'V' | vLocation;
 
 
+IF(vMetric @<> 'Support Contacts - Virtual' & vMetric @<> 'Support Contacts - Greenlight');
+   IF((ELISANC(sDim, 'Total Location by Country', vLocation) = 1 & ELLEV(sDim, vLocation) <> 0) % (ELISANC(sDim, 'Custom Consolidations', vLocation) = 1 & ELLEV(sDim, vLocation) <> 0) % (ELISANC(sDim, 'Total Location', vLocation) = 1 & ELLEV(sDim, vLocation) <> 0));
+      sLocation = vLocation;
+   ELSEIF(vLocation @= 'global');
+      sLocation = 'Total Location';
+   ELSEIF(vLocation @= 'global_ex_sea_and_russia');
+      sLocation = 'Total Location ex SEA & Russia';
+   ELSE;
+      sLocation = 'V' | vLocation;
+   ENDIF;
 
-IF((ELISANC(sDim, 'Total Location by Country', vLocation) = 1 & ELLEV(sDim, vLocation) <> 0) % (ELISANC(sDim, 'Custom Consolidations', vLocation) = 1 & ELLEV(sDim, vLocation) <> 0) % (ELISANC(sDim, 'Total Location', vLocation) = 1 & ELLEV(sDim, vLocation) <> 0));
-   sLocation = vLocation;
-ELSEIF(vLocation @= 'global');
-   sLocation = 'Total Location';
-ELSEIF(vLocation @= 'global_ex_sea_and_russia');
-   sLocation = 'Total Location ex SEA & Russia';
-ELSE;
-   sLocation = 'V' | vLocation;
-ENDIF;
+   IF(DIMIX('Location', sLocation) = 0);
+      ITEMSKIP;
+   ENDIF;
 
-IF(DIMIX('Location', sLocation) = 0);
-   ITEMSKIP;
 ENDIF;
 
 # LOB
@@ -208,7 +209,6 @@ IF(vLOB @= '\N' % vLOB @= '' % vLOB @= 'NULL' % vLOB @= '0');
 ELSE;
    sLOB = vLOB;
 ENDIF;
-
 
 # Product Type
 sDim = 'Product Type';
@@ -300,7 +300,6 @@ IF(SCAN(sPeriod | '_' | sMetric | '_' | sLOB, cPeriodMetricLOBString) = 0);
    END;
 ENDIF;
 
-
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
 # Load Data
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
@@ -315,17 +314,32 @@ ELSE;
    ENDIF;
 ENDIF;
 
-IF(ELLEV('Line of Business', vLOB) > 0 & ELLEV('Location', sLocation) > 0);
-   ASCIIOUTPUT('rides_eats.txt', '1');
-   CELLPUTN(vValue, cCube, cVersion, sPeriod, cSource, cRatetype, 'CustomLeaf:' | sLocation | ' Input', 'CustomLeaf:Total Rides & Eats Input', sProductType, vMetric, cMeasure);
-ELSEIF(ELLEV('Line of Business', vLOB) > 0 & ELLEV('Location', sLocation) = 0);
-   CELLPUTN(vValue, cCube, cVersion, sPeriod, cSource, cRatetype, sLocation, 'CustomLeaf:Total Rides & Eats Input', sProductType, vMetric, cMeasure);
-ELSEIF(ELLEV('Line of Business', vLOB) = 0 & ELLEV('Location', sLocation) > 0);
-   CELLPUTN(vValue, cCube, cVersion, sPeriod, cSource, cRatetype, 'CustomLeaf:' | sLocation | ' Input', sLOB, sProductType, vMetric, cMeasure);
-ELSE;
-   ITEMSKIP;
-ENDIF;
 
+IF(vMetric @= 'Support Contacts - Virtual' % vMetric @= 'Support Contacts - Greenlight');
+   sDim = 'Location';
+   sLen = LONG(vLocation);
+   sLocation = SUBST(vLocation, 11, (sLen - 9)) | ' (Country)';
+   IF(DIMIX(sDim, sLocation) = 0);
+      sLocation = '0000';
+   ELSE;
+      sLocation = sLocation;
+   ENDIF;
+
+   CELLINCREMENTN(vValue, cCube, cVersion, sPeriod, cSource, cRatetype, sLocation, sLOB, sProductType, vMetric, cMeasure);
+ELSE;
+
+   IF(ELLEV('Line of Business', vLOB) > 0 & ELLEV('Location', sLocation) > 0);
+
+      CELLPUTN(vValue, cCube, cVersion, sPeriod, cSource, cRatetype, 'CustomLeaf:' | sLocation | ' Input', 'CustomLeaf:Total Rides & Eats Input', sProductType, vMetric, cMeasure);
+   ELSEIF(ELLEV('Line of Business', vLOB) > 0 & ELLEV('Location', sLocation) = 0);
+      CELLPUTN(vValue, cCube, cVersion, sPeriod, cSource, cRatetype, sLocation, 'CustomLeaf:Total Rides & Eats Input', sProductType, vMetric, cMeasure);
+   ELSEIF(ELLEV('Line of Business', vLOB) = 0 & ELLEV('Location', sLocation) > 0);
+      CELLPUTN(vValue, cCube, cVersion, sPeriod, cSource, cRatetype, 'CustomLeaf:' | sLocation | ' Input', sLOB, sProductType, vMetric, cMeasure);
+   ELSE;
+      ITEMSKIP;
+   ENDIF;
+
+ENDIF;
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
 # END: DATA PROCEDURE                                                         #

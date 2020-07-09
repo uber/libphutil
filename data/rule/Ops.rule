@@ -15,6 +15,20 @@
 FEEDSTRINGS;
 SKIPCHECK;
 
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=- =-=-=-=-=-=-=-=-#
+# STET Freight monthly completed trips - 2020 onwards
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+
+['Actual','FDP','Line of Business' : '8001','Completed Trips','Amount'] = N:
+   IF(
+      ATTRS('Period', !Period, 'Level') @= 'Month' &
+      DIMIX('Period', !Period) >= DIMIX('Period', '2020-01')
+   ,
+      STET
+   ,
+      CONTINUE
+   );
+
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=- =-=-=-#
 # Skip Support Contacts - loading via process
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- #
@@ -42,7 +56,7 @@ SKIPCHECK;
 
 ['Actual', 'Line of Business':'8001', 'Load Margin'] = ['Gross Bookings - Shipper Revenue'] - ['Carrier Payout'];
 
-['Actual', 'Line of Business':'8001', 'Shipper Revenue per Load'] = ['Gross Bookings - Shipper Revenue'] \ ['Load Volume'];
+['Actual', 'Line of Business':'8001', 'Shipper Revenue per Load'] = ['Gross Bookings - Shipper Revenue'] \ ['Completed Trips'];
 
 ['Actual', 'Line of Business':'8001', 'OTP per OTD Carrier'] = ['OTP Carrier'] \ ['OTD Carrier'];
 
@@ -53,7 +67,7 @@ SKIPCHECK;
 #Total Rides & Eats C-level rules
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=- #
 
-['Ops Measure':'Amount', 'Line of Business' : 'Line of Business' : 'Total Rides & Eats' ] = C:
+['Ops Measure':'Amount' ] = C:
    IF(
       ATTRS('Ops Metric', !Ops Metric, 'Aggregate_LOB_Flag') @= 'Y' &
       ATTRS('Ops Metric', !Ops Metric, 'Aggregate_Location_Flag') @= 'Y'
@@ -64,12 +78,12 @@ SKIPCHECK;
          0
      ,
          IF(
-            (ELLEV ('Line of Business', !Line of Business) > 0) &
+            (!Line of Business @= 'Total Rides & Eats') &
             (ELLEV ('Location', !Location) > 0)
          ,
             DB('Ops', !Version, !Period, !Source, !Rate Type,  'CustomLeaf':!Location | ' Input', 'CustomLeaf: Total Rides & Eats Input', !Product Type, !Ops Metric, 'Amount')
          ,
-            CONTINUE
+           CONTINUE
         )
       )
    ,
@@ -86,7 +100,7 @@ SKIPCHECK;
          0
      ,
          IF(
-             (ELLEV('Line of Business', !Line of Business) >0 & !Line of Business @= 'Total Rides & Eats')
+             (!Line of Business @= 'Total Rides & Eats')
          ,
             DB('Ops', !Version, !Period, !Source, !Rate Type, !Location, 'CustomLeaf: Total Rides & Eats Input', !Product Type, !Ops Metric, 'Amount')
          ,
@@ -139,31 +153,21 @@ SKIPCHECK;
       CONTINUE
    );
 
-['Ops Measure':'Amount' ] = C:
+['Ops Measure':'Amount'] = C:
+
    IF(
-       (DIMIX('Period', !Period) <= DIMIX('Period', DB('System Info','Current Month','String')) % ATTRS('Period', !Period, 'Level') @= 'Week')
+      ATTRS('Ops Metric', !Ops Metric, 'Aggregate_LOB_Flag') @= 'Y' %
+      ATTRS('Ops Metric', !Ops Metric, 'Aggregate_Location_Flag') @= 'Y'
    ,
       IF(
-         ATTRS('Ops Metric', !Ops Metric, 'Aggregate_Location_Flag') @= 'Y'
+         ELLEV('Line of Business', !Line of Business) > 0 %  ELLEV('Location', !Location) > 0
       ,
-         IF(
-            ELLEV('Period', !Period) > 0
-         ,
-            0
-         ,
-            IF(
-               (ELLEV ('Location', !Location) >0)
-            ,
-               DB('Ops', !Version, !Period, !Source, !Rate Type, 'CustomLeaf':!Location | ' Input', !Line of Business, !Product Type, !Ops Metric, 'Amount')
-            ,
-               CONTINUE
-            )
-        )
-      ,
-         STET
-      )
+         0
+     ,
+      STET
+     )
    ,
-     STET
+      STET
    );
 
 

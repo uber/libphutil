@@ -211,7 +211,7 @@ ENDIF;
 
 # Eats Restaurant Type
 sDim = 'Eats Restaurant Type';
-IF(vRestType @= '\N' % vRestType @= '');
+IF(vRestType @= '\N' % vRestType @= '' % vRestType @= 'Not Classified');
    sRestType = 'Unspecified Restaurant Type';
 ELSE;
    sRestType = vRestType;

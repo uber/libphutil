@@ -1,1 +1,12 @@
+FEEDSTRINGS;
+SKIPCHECK;
+
 ['Net Inflows','Last Updated']=S: DB('Rides Ops Info','41105',!Period,'Last Updated');
+
+
+['Source Table'] = S:
+   IF(DB('Rides Ops Info',!Rides Ops Metric,!Period,'Source Table Override') @<> '',
+      DB('Rides Ops Info',!Rides Ops Metric,!Period,'Source Table Override'), CONTINUE);
+
+['Source Table'] = S:
+   IF(ATTRS('Period', !Period, 'Level') @= 'Month', DB('Rides Ops Info',!Rides Ops Metric,'2018-01','Source Table Override'), DB('Rides Ops Info',!Rides Ops Metric,'WS 2018-01-01','Source Table Override'));

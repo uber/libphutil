@@ -1,0 +1,11 @@
+FEEDSTRINGS;
+SKIPCHECK;
+
+['Source Table'] = S:
+   IF(DB('Freight Ops Info',!Freight Ops Metric,!Period,'Source Table Override') @<> '',
+      DB('Freight Ops Info',!Freight Ops Metric,!Period,'Source Table Override'), CONTINUE);
+
+['Source Table'] = S:
+   IF(ATTRS('Period', !Period, 'Level') @= 'Month', DB('Freight Ops Info',!Freight Ops Metric,'2018-01','Source Table Override'), DB('Freight Ops Info',!Freight Ops Metric,'WS 2018-01-01','Source Table Override'));
+
+

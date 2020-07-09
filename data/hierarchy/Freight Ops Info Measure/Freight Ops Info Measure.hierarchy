@@ -24,9 +24,18 @@
         },
         {
             "Attributes": {
-                "Caption": "Last Updated"
+                "Caption": "Source Table Override"
             },
             "Index": 2,
+            "Name": "Source Table Override",
+            "Type": "String",
+            "UniqueName": "[Freight Ops Info Measure].[Freight Ops Info Measure].[Source Table Override]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Last Updated"
+            },
+            "Index": 3,
             "Name": "Last Updated",
             "Type": "String",
             "UniqueName": "[Freight Ops Info Measure].[Freight Ops Info Measure].[Last Updated]"
@@ -35,7 +44,7 @@
             "Attributes": {
                 "Caption": "Pipeline"
             },
-            "Index": 3,
+            "Index": 4,
             "Name": "Pipeline",
             "Type": "String",
             "UniqueName": "[Freight Ops Info Measure].[Freight Ops Info Measure].[Pipeline]"
