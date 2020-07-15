@@ -156,11 +156,45 @@ SKIPCHECK;
 ['Ops Measure':'Amount'] = C:
 
    IF(
-      ATTRS('Ops Metric', !Ops Metric, 'Aggregate_LOB_Flag') @= 'Y' %
+      ATTRS('Ops Metric', !Ops Metric, 'Aggregate_LOB_Flag') @= 'Y' &
       ATTRS('Ops Metric', !Ops Metric, 'Aggregate_Location_Flag') @= 'Y'
    ,
       IF(
          ELLEV('Line of Business', !Line of Business) > 0 %  ELLEV('Location', !Location) > 0
+      ,
+         0
+     ,
+      STET
+     )
+   ,
+     CONTINUE
+   );
+
+['Ops Measure':'Amount'] = C:
+
+   IF(
+      ATTRS('Ops Metric', !Ops Metric, 'Aggregate_LOB_Flag') @= 'Y' &
+      ATTRS('Ops Metric', !Ops Metric, 'Aggregate_Location_Flag') @<> 'Y'
+   ,
+      IF(
+         ELLEV('Line of Business', !Line of Business) > 0
+      ,
+         0
+     ,
+      STET
+     )
+   ,
+      CONTINUE
+   );
+
+['Ops Measure':'Amount'] = C:
+
+   IF(
+      ATTRS('Ops Metric', !Ops Metric, 'Aggregate_LOB_Flag') @<> 'Y' &
+      ATTRS('Ops Metric', !Ops Metric, 'Aggregate_Location_Flag') @= 'Y'
+   ,
+      IF(
+         ELLEV('Location', !Location) > 0
       ,
          0
      ,

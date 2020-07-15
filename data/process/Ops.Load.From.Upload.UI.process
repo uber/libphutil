@@ -166,6 +166,10 @@ DatasourceQuery = sQuery;
 #****Begin: Generated Statements***
 #****End: Generated Statements****
 
+IF(vMetric @= 'Completed Trips' % vMetric @= 'Rider Miles');
+   nGLOPS = 1;
+ENDIF;
+
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
 # END: METADATA PROCEDURE                                                     #
@@ -344,6 +348,15 @@ ENDIF;
 
 #****Begin: Generated Statements***
 #****End: Generated Statements****
+
+IF(nGLOps = 1);
+   EXECUTEPROCESS('Ops.DIQ.GL Reporting.Sync'
+      , 'pInstance', 'PAC'
+      , 'pProcess', 'DIQ.Call.Batch'
+      , 'pParams', '[{"Name":"pDIQBatch","Value":"Batch - 1015"}]'
+   );
+ENDIF;
+
 
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
