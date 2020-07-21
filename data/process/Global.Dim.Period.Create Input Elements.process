@@ -30,7 +30,7 @@
 
 cDim = 'Period';
 
-cYearStart = '2017';
+cYearStart = '2010';
 cWeek2018 = 53;
 cWeek2019 = 52;
 cWeek2020 = 52;
@@ -70,8 +70,8 @@ WHILE(i <= NUMBR(cYearEnd));
       sEle = cPrefix | NUMBERTOSTRING(i) | '-' | FILL('0', 2 - LONG(NUMBERTOSTRING(p))) | NUMBERTOSTRING(p);
       # Month Input
       #DIMENSIONELEMENTINSERT(sDim, '', sEle, 'C');
-      IF(p = 1 & i = 2017);
-         n = 2;
+      IF(p = 1 & i = 2010);
+         n = 4;
          d = 31;
       ELSE;
          IF(ATTRN('Month', ATTRS('Month', sEle, 'Period-1'), 'Calendar Day') = 31 & ATTRN('Month', sEle, 'Calendar Day') = 31);

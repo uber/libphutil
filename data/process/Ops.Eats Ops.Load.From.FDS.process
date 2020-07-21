@@ -155,8 +155,10 @@ DatasourceQuery = sQuery;
 #****Begin: Generated Statements***
 #****End: Generated Statements****
 
-IF(vMetric @= 'Completed Deliveries');
-   nGLOPS = 1;
+IF(pLevel @= 'Month');
+   IF(vMetric @= 'Completed Deliveries');
+      nGLOPS = 1;
+   ENDIF;
 ENDIF;
 
 
