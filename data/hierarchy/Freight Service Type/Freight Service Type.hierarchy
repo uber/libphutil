@@ -60,6 +60,11 @@
             "ComponentName": "Unspecified Freight Service Type",
             "ParentName": "Total Freight Service Type",
             "Weight": 1
+        },
+        {
+            "ComponentName": "Jumbo",
+            "ParentName": "Total Freight Service Type",
+            "Weight": 1
         }
     ],
     "ElementAttributes": [],
@@ -156,9 +161,18 @@
         },
         {
             "Attributes": {
-                "Caption": "Unspecified Freight Service Type"
+                "Caption": "Jumbo"
             },
             "Index": 11,
+            "Name": "Jumbo",
+            "Type": "Numeric",
+            "UniqueName": "[Freight Service Type].[Freight Service Type].[Jumbo]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Unspecified Freight Service Type"
+            },
+            "Index": 12,
             "Name": "Unspecified Freight Service Type",
             "Type": "Numeric",
             "UniqueName": "[Freight Service Type].[Freight Service Type].[Unspecified Freight Service Type]"

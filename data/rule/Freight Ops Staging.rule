@@ -27,7 +27,7 @@ SKIPCHECK;
       ATTRS('Location', !Location, 'Currency') @= !Currency
    ,
       IF(
-         ATTRS('Period', !Period, 'Level') @= 'Month'
+         ELISANC('Period', 'Total Time - Month', !Period)=1
       ,
          ['Rate Type':'USD','Currency':'Total Currency','Amount'] /
          DB('Exchange Rate', 'Actual', !Period, ATTRS('Location', !Location, 'Currency'),'USD', 'Rate')
@@ -43,7 +43,7 @@ SKIPCHECK;
 ['Amount'] = N:
    ['No Rate Type','Amount'] *
    IF(
-      ATTRS('Period', !Period, 'Level') @= 'Month'
+      ELISANC('Period', 'Total Time - Month', !Period)=1
    ,
       DB('Exchange Rate by Rate Type', !Version, !Period, !Currency, !Rate Type, 'Amount')
    ,

@@ -6,7 +6,7 @@
         "Type": "ODBC",
         "dataSourceNameForClient": "TM1TEGRATOR",
         "dataSourceNameForServer": "TM1TEGRATOR",
-        "query": "select * from \"pipe.freight_ops_tm1_shippers.20200605001249.W88R81\"",
+        "query": "select * from \"pipe.freight_ops_tm1_shippers.20200728235433.MZ8AXO\"",
         "userName": "epm",
         "usesUnicode": true
     },
@@ -24,28 +24,28 @@
     "Variables": [
         {
             "EndByte": 0,
-            "Name": "vMasterName",
+            "Name": "vShipperDFL",
             "Position": 1,
             "StartByte": 0,
             "Type": "String"
         },
         {
             "EndByte": 0,
-            "Name": "vMasterSegment",
+            "Name": "vMasterName",
             "Position": 2,
             "StartByte": 0,
             "Type": "String"
         },
         {
             "EndByte": 0,
-            "Name": "vMasterUUID",
+            "Name": "vMasterSegment",
             "Position": 3,
             "StartByte": 0,
             "Type": "String"
         },
         {
             "EndByte": 0,
-            "Name": "vShipperDFL",
+            "Name": "vMasterUUID",
             "Position": 4,
             "StartByte": 0,
             "Type": "String"
@@ -136,6 +136,10 @@ DatasourceQuery = sQuery;
 # Create Shippers with Segments
 # ==================================================================== #
 
+IF(vMasterUUID @= '' % vMasterSegment @= '');
+   ITEMSKIP;
+ENDIF;
+
 cParent = 'Total Freight Shipper';
 
 DIMENSIONELEMENTINSERTDIRECT(sDim, '', cParent, 'C');
@@ -164,6 +168,11 @@ DIMENSIONELEMENTCOMPONENTADDDIRECT(sDim, vMasterSegment, vMasterUUID, 1);
 # ==================================================================== #
 # Update Attributes 
 # ==================================================================== #
+
+IF(vMasterUUID @= '' % vMasterSegment @= '');
+   ITEMSKIP;
+ENDIF;
+
 
 sAttr = 'Shipper Name';
 IF(DIMIX('Freight Shipper', vMasterName) = 0);

@@ -15,13 +15,14 @@
 FEEDSTRINGS;
 SKIPCHECK;
 
+
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=- =-=-=-=-=-=-=-=-#
 # STET Freight monthly completed trips - 2020 onwards
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
 
 ['Actual','FDP','Line of Business' : '8001','Completed Trips','Amount'] = N:
    IF(
-      ATTRS('Period', !Period, 'Level') @= 'Month' &
+      ELISANC('Period', 'Total Time - Month', !Period)=1 &
       DIMIX('Period', !Period) >= DIMIX('Period', '2020-01')
    ,
       STET
@@ -78,12 +79,12 @@ SKIPCHECK;
          0
      ,
          IF(
-            (!Line of Business @= 'Total Rides & Eats') &
+            (!Line of Business @= 'Total Rides & Eats' % !Line of Business @= 'Total Careem') &
             (ELLEV ('Location', !Location) > 0)
          ,
-            DB('Ops', !Version, !Period, !Source, !Rate Type,  'CustomLeaf':!Location | ' Input', 'CustomLeaf: Total Rides & Eats Input', !Product Type, !Ops Metric, 'Amount')
+            DB('Ops', !Version, !Period, !Source, !Rate Type,  'CustomLeaf':!Location | ' Input', 'CustomLeaf:' | !Line of Business | 'Input', !Product Type, !Ops Metric, 'Amount')
          ,
-           CONTINUE
+          CONTINUE
         )
       )
    ,
@@ -110,6 +111,7 @@ SKIPCHECK;
    ,
       CONTINUE
    );
+
 
 ['Ops Measure':'Amount',  'Line of Business':'1001'] = C:
    IF(
@@ -153,6 +155,21 @@ SKIPCHECK;
       CONTINUE
    );
 
+['Ops Measure':'Amount',  'Line of Business':{'1004', '2002'}, 'Ops Metric' : 'Active Riders'] = C:
+      IF(
+         ELLEV('Period', !Period) > 0
+      ,
+         0
+      ,
+         IF(
+            (ELLEV ('Location', !Location) > 0)
+         ,
+            DB('Ops', !Version, !Period, !Source, !Rate Type,  'CustomLeaf':!Location | ' Input', !Line of Business, !Product Type, !Ops Metric, 'Amount')
+         ,
+           STET
+         )
+   );
+
 ['Ops Measure':'Amount'] = C:
 
    IF(
@@ -160,15 +177,23 @@ SKIPCHECK;
       ATTRS('Ops Metric', !Ops Metric, 'Aggregate_Location_Flag') @= 'Y'
    ,
       IF(
-         ELLEV('Line of Business', !Line of Business) > 0 %  ELLEV('Location', !Location) > 0
-      ,
-         0
+           ELLEV('Line of Business', !Line of Business) > 0 %  ELLEV('Location', !Location) > 0
+           ,
+           IF(
+               SCAN('Rides', !Line of Business) = 0 & SCAN('Eats', !Line of Business) = 0
+               ,
+                  0
+               ,
+               CONSOLIDATECHILDREN('Line of Business')
+            )
      ,
       STET
      )
    ,
      CONTINUE
    );
+
+
 
 ['Ops Measure':'Amount'] = C:
 
@@ -177,7 +202,7 @@ SKIPCHECK;
       ATTRS('Ops Metric', !Ops Metric, 'Aggregate_Location_Flag') @<> 'Y'
    ,
       IF(
-         ELLEV('Line of Business', !Line of Business) > 0
+           ELLEV('Line of Business', !Line of Business) > 0
       ,
          0
      ,

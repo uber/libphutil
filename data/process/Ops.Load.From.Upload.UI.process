@@ -329,7 +329,7 @@ ELSE;
 ENDIF;
 
 IF(ELLEV('Line of Business', vLOB) > 0 & ELLEV('Location', sLocation) > 0);
-   CELLPUTN(vValue, cCube, cVersion, sPeriod, cSource, cRatetype, 'CustomLeaf:' | sLocation | ' Input', 'CustomLeaf:Total Rides & Eats Input', sProductType, vMetric, cMeasure);
+   CELLPUTN(vValue, cCube, cVersion, sPeriod, cSource, cRatetype, 'CustomLeaf:' | sLocation | ' Input', 'CustomLeaf:' | vLOB | ' Input', sProductType, vMetric, cMeasure);
 ELSEIF(ELLEV('Line of Business', vLOB) > 0 & ELLEV('Location', sLocation) = 0);
    CELLPUTN(vValue, cCube, cVersion, sPeriod, cSource, cRatetype, sLocation, 'CustomLeaf:Total Rides & Eats Input', sProductType, vMetric, cMeasure);
 ELSEIF(ELLEV('Line of Business', vLOB) = 0 & ELLEV('Location', sLocation) > 0);
