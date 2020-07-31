@@ -1,0 +1,150 @@
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: PROPERTIES                                                           #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+{
+    "DataSource": {
+        "Type": "None"
+    },
+    "HasSecurityAccess": false,
+    "Name": "Ops.DIQ.GL Reporting.Sync",
+    "Parameters": [
+        {
+            "Name": "pInstance",
+            "Prompt": "",
+            "Type": "String",
+            "Value": "PAC"
+        },
+        {
+            "Name": "pProcess",
+            "Prompt": "",
+            "Type": "String",
+            "Value": "DIQ.Call.Batch"
+        },
+        {
+            "Name": "pParams",
+            "Prompt": "",
+            "Type": "String",
+            "Value": "[{\"Name\":\"pDIQBatch\",\"Value\":\"Batch - 1011\"}]"
+        }
+    ],
+    "UIData": "CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
+    "Variables": [],
+    "VariablesUIData": []
+}
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: PROPERTIES                                                             #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: PROLOG PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+# ==================================================================== #
+#Param FORMAT
+# ==================================================================== #
+##    sParams= '[{"Name":"pCube","Value":"GL Reporting"},{"Name":"pDebug","Value":1}]';
+##    ---- Sample End
+
+# ==================================================================== #
+# === Process: OPS.GL Reporting.Sync
+# === Purpose: Load Opss metrics to GL reporting
+# ==================================================================== #
+
+
+# ==================================================================== #
+# Define Constants
+# ==================================================================== #
+
+cInstance = TRIM(pInstance);
+
+cTAPSysInfoCube = 'TAP System Info';
+cTapAppInfoCube = 'Tap Application Info';
+
+
+# ==================================================================== #
+# Script Variables
+# ==================================================================== #
+
+cSyncFrom = TRIM(pInstance);
+
+sQte = CHAR(39);
+
+cServer = CELLGETS(cTapAppInfoCube, cSyncFrom, 'Endpoint');
+cPortNumber = '443';
+
+cPath = CELLGETS(cTAPSysInfoCube, 'Files Shared Path', 'Value') | '/ops';
+cPythonExe = CELLGETS(cTAPSysInfoCube, 'Python Executable', 'Value');
+
+cScriptRun = CELLGETS(cTAPSysInfoCube, 'Scripts Local Path', 'Value') | '/generic_process_call.py';
+
+cBatchUser = CELLGETS(cTAPSysInfoCube, 'Batch Username', 'Value');
+cBatchPassword = CELLGETS(cTAPSysInfoCube, 'Batch Password', 'Value');
+cBatchNamespace = CELLGETS(cTAPSysInfoCube, 'Batch Namespace', 'Value');
+
+cLogPath = CELLGETS(cTAPSysInfoCube, 'Logs Path', 'Value') | '/generic_process_call.log';
+
+# ==================================================================== #
+# Create Export Process Variables
+# ==================================================================== #
+
+cTemplateScriptRun = '%cPythonExe% "%cScriptRun%"  
+--server="%cServer%" 
+--port="%cPortNumber%" 
+--user="%cBatchUser%" 
+--password=''%cBatchPassword%'' 
+--namespace="%cBatchNamespace%" 
+--process="%pProcess%" 
+--pLogPath="%cLogPath%" 
+--parameter_dict=%sQte%%pParams%%sQte% 
+ ';
+
+# ==================================================================== #
+# Run Command
+# ==================================================================== #
+
+sCommand = EXPAND(cTemplateScriptRun);
+EXECUTECOMMAND(sCommand, 1);
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: PROLOG PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: METADATA PROCEDURE                                                   #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: METADATA PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: DATA PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: DATA PROCEDURE                                                         #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: EPILOG PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: EPILOG PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
