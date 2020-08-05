@@ -1,19 +1,18 @@
-from datetime import datetime
+import datetime
 
 from tm1tests.reconciliation import Reconciliation
 
 source_mdx = (
 "SELECT NON EMPTY "+
-    "{[Ops Metric].[New Riders], [Ops Metric].[Continuing Riders]," +
-    "[Ops Metric].[Active Riders], [Ops Metric].[New Drivers]," +
-    "[Ops Metric].[Continuing Drivers], [Ops Metric].[Active Drivers],"+
-    "[Ops Metric].[Completed Trips], [Ops Metric].[Vehicle Miles]," +
-    "[Ops Metric].[Rider Miles] " +
+    "{[Ops Metric].[Completed Trips], [Ops Metric].[Vehicle Miles]," +
+    "[Ops Metric].[P2P Rider Miles]," +
+    "[Ops Metric].[Non-P2P Rider Miles]," + 
+    "[Ops Metric].[Total Support Contacts]" +
     "} * "+
     "{[Line of Business].[Rides], [Line of Business].[Eats]," +
-    "[Line of Business].[8001]}"+
+    "[Line of Business].[Freight], [Line of Business].[Total Careem]}"+
 "ON ROWS,"+
-    "{[Period].[%s], [Period].[%s]} "+
+    "{[Period].[%s]} "+
 "ON COLUMNS "+
 "FROM "+
     "[Ops] "+
@@ -21,7 +20,7 @@ source_mdx = (
     "("+
     "[Version].[Actual], "+
     "[Location].[Total Location Incl Discontinued],"+
-    "[Source].[Total Source],"+
+    "[Source].[FDP],"+
     "[Rate Type].[USD],"+
     "[Product Type].[Total Product Type],"+
     "[Ops Measure].[Amount]"+
@@ -31,16 +30,15 @@ source_mdx = (
 target_mdx = (
 "WITH MEMBER [Account].[Rider Miles] AS [Account].[Total Rider Miles] "+
 "SELECT NON EMPTY "+
-    "{[Account].[New Riders], [Account].[Continuing Riders],"+
-    "[Account].[Active Riders], [Account].[New Drivers],"+
-    "[Account].[Continuing Drivers], [Account].[Active Drivers], "+
-    "[Account].[Completed Trips], [Account].[Vehicle Miles], "+
-    "[Account].[Rider Miles] "+
+    "{[Account].[Completed Trips], [Account].[Vehicle Miles]," +
+    "[Account].[P2P Rider Miles]," +
+    "[Account].[Non-P2P Rider Miles]," + 
+    "[Account].[Total Support Contacts]" +
     "} * "+
     "{[Line of Business].[Rides], [Line of Business].[Eats]," +
-    "[Line of Business].[8001]}"+
+    "[Line of Business].[Freight], [Line of Business].[Total Careem]}"+
 "ON ROWS,"+
-    "{[Month].[%s], [Month].[%s]} "+
+    "{[Month].[%s]} "+
 "ON COLUMNS "+
 "FROM "+
     "[GL Reporting] "+
@@ -59,19 +57,19 @@ target_mdx = (
 class Mytest(Reconciliation):
 
     name = 'Ops GL Metric Sync'
-    email_to = []
+    email_to = ['pa-eng@uber.com']
     email_from = 'pa-eng@uber.com'
     alert_level = {'email': 'error', 'page': 'critical'}
     source = [['ops', 'mdx', source_mdx]]
     target = [['analytics', 'mdx', target_mdx]]
-    #schedule = '0 9 1 * *' # First day of month 9AM
+    schedule = '0 9 2-5 * *'
     threshold = ('ge', 1)
     keyword = ['ops']
     
     def prepare(self):
         super().prepare()
-        now = datetime.now()
-        curr_year = str(now.year)
-        last_year = str(now.year -1)
-        self.source[0][2] = source_mdx %(curr_year, last_year)
-        self.target[0][2] = target_mdx %(curr_year, last_year)
+        today = datetime.date.today()
+        first = today.replace(day=1)
+        last_month = (first - datetime.timedelta(days=1)).strftime("%Y-%m")
+        self.source[0][2] = source_mdx %(last_month)
+        self.target[0][2] = target_mdx %(last_month)
