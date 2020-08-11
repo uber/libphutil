@@ -115,7 +115,7 @@ cCube = 'Eats Ops Staging';
 cVersion = 'Actual';
 cRateType = 'No Rate Type';
 cMeasure = 'Amount';
-cSource = 'FDP';
+cSource = 'FDS';
 nRecords = 1;
 
 cPeriodMetricString = '';

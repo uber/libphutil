@@ -1,0 +1,29 @@
+{
+    "Dimensions": [
+        {
+            "Name": "Version"
+        },
+        {
+            "Name": "Month"
+        },
+        {
+            "Name": "Line of Business"
+        },
+        {
+            "Name": "Location"
+        },
+        {
+            "Name": "Eats Product Type"
+        },
+        {
+            "Name": "Eats Restaurant Type"
+        },
+        {
+            "Name": "Account"
+        },
+        {
+            "Name": "Eats GL Allocation Measure"
+        }
+    ],
+    "Name": "Eats GL Allocation"
+}

@@ -1,0 +1,167 @@
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: PROPERTIES                                                           #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+{
+    "DataSource": {
+        "Type": "TM1DimensionSubset",
+        "dataSourceNameForClient": "ANALYTICS.Account",
+        "dataSourceNameForServer": "ANALYTICS.Account",
+        "subset": "All"
+    },
+    "HasSecurityAccess": false,
+    "Name": "Dim.Update.Eats Ops Metric.GAAP",
+    "Parameters": [],
+    "UIData": "CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
+    "Variables": [
+        {
+            "EndByte": 0,
+            "Name": "vAccount",
+            "Position": 1,
+            "StartByte": 0,
+            "Type": "String"
+        }
+    ],
+    "VariablesUIData": [
+        "VarType=32\fColType=827\f"
+    ]
+}
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: PROPERTIES                                                             #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: PROLOG PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+# ==================================================================== #
+# Globals
+# ==================================================================== #
+
+
+sSourceDim = 'ANALYTICS.Account';
+sTargetDim = 'Eats Ops Metric';
+cAccount = 'GAAP Contribution';
+
+IF(DIMENSIONELEMENTEXISTS(sTargetDim, cAccount) = 1);
+
+   EXECUTEPROCESS('Bedrock.Dim.Hierarchy.Unwind.Consolidation'
+      , 'pDimension', sTargetDim
+      , 'pConsol', cAccount
+      , 'pRecursive', 1
+      , 'pDebug', 0
+   );
+
+ENDIF;
+
+sSubset = 'GAAP';
+
+sMDX = '{TM1DRILLDOWNMEMBER( {[ ' | sSourceDim | '].[ ' | cAccount | ']}, ALL, RECURSIVE )}';
+SUBSETCREATEBYMDX(sSubset, sMdx, 1);
+
+
+# ==================================================================== #
+# Create N-level elements in target hierarchy
+# ==================================================================== #
+
+nSourceDimSize = SUBSETGETSIZE(sSourceDim, sSubset);
+nIndex = 1;
+WHILE(nIndex <= nSourceDimSize);
+   sElName = SUBSETGETELEMENTNAME(sSourceDim, sSubset, nIndex);
+   sElType = DTYPE(sSourceDim, sElName);
+   IF(sElName @= 'Variable Contribution' % sElName @= 'Adjusted Net Revenue' % sElName @= 'Total Contra Revenue' % sElName @= 'Total Other Revenue');
+      DIMENSIONELEMENTINSERT(sTargetDim, '', sElName | ' - GL', sElType);
+   ELSE;
+      DIMENSIONELEMENTINSERT(sTargetDim, '', sElName, sElType);
+   ENDIF;
+   nIndex = nIndex + 1;
+END;
+
+
+
+# ==================================================================== #
+# Assign data source
+# ==================================================================== #
+DatasourceType = 'SUBSET';
+DatasourceNameForServer = sSourceDim;
+DatasourceDimensionSubset = sSubset;
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: PROLOG PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: METADATA PROCEDURE                                                   #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+# ==================================================================== #
+# Build Consolidation in Target Cube
+# ==================================================================== 
+
+
+sElType = DTYPE(sSourceDim, vAccount);
+IF(sELTYPE @= 'C' & ELCOMPN(sSourceDim, vAccount) > 0);
+   nChildren = ELCOMPN(sSourceDim, vAccount);
+   nCount = 1;
+   WHILE(nCount <= nChildren);
+      sChildElement = ELCOMP(sSourceDim, vAccount, nCount);
+      sChildWeight = ELWEIGHT(sSourceDim, vAccount, sChildElement);
+      IF(vAccount @= 'Variable Contribution' % vAccount @= 'Adjusted Net Revenue' % vAccount @= 'Total Contra Revenue' % vAccount @= 'Total Other Revenue');
+         IF(sChildElement @= 'Variable Contribution' % sChildElement @= 'Adjusted Net Revenue' % sChildElement @= 'Total Contra Revenue' % sChildElement @= 'Total Other Revenue');
+            DIMENSIONELEMENTCOMPONENTADD(sTargetDim, vAccount | ' - GL', sChildElement | ' - GL', sChildWeight);
+         ELSE;
+            DIMENSIONELEMENTCOMPONENTADD(sTargetDim, vAccount | ' - GL', sChildElement, sChildWeight);
+         ENDIF;
+      ELSE;
+         IF(sChildElement @= 'Variable Contribution' % sChildElement @= 'Adjusted Net Revenue' % sChildElement @= 'Total Contra Revenue' % sChildElement @= 'Total Other Revenue');
+            DIMENSIONELEMENTCOMPONENTADD(sTargetDim, vAccount, sChildElement | ' - GL', sChildWeight);
+         ELSE;
+            DIMENSIONELEMENTCOMPONENTADD(sTargetDim, vAccount, sChildElement, sChildWeight);
+         ENDIF;
+      ENDIF;
+      nCount = nCount + 1;
+   END;
+ENDIF;
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: METADATA PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: DATA PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+# ==================================================================== #
+# Update Attributes 
+# ==================================================================== #
+
+sAttr = 'Code - Description';
+sVal = ATTRS(sSourceDim, vAccount, sAttr);
+ATTRPUTS(sVal, sTargetDim, vAccount, sAttr);
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: DATA PROCEDURE                                                         #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: EPILOG PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: EPILOG PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #

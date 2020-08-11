@@ -1,0 +1,53 @@
+{
+    "DefaultMember": {
+        "Attributes": {
+            "Caption": "Allocation Method"
+        },
+        "IsPlaceholder": false,
+        "Name": "Allocation Method",
+        "Ordinal": 1,
+        "Type": "Regular",
+        "UniqueName": "[Eats GL Allocation Measure].[Eats GL Allocation Measure].[Allocation Method]",
+        "Weight": 0
+    },
+    "Edges": [],
+    "ElementAttributes": [
+        {
+            "Name": "Format",
+            "Type": "String"
+        }
+    ],
+    "Elements": [
+        {
+            "Attributes": {
+                "Caption": "Allocation Method"
+            },
+            "Index": 1,
+            "Name": "Allocation Method",
+            "Type": "String",
+            "UniqueName": "[Eats GL Allocation Measure].[Eats GL Allocation Measure].[Allocation Method]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Allocation Method Override"
+            },
+            "Index": 2,
+            "Name": "Allocation Method Override",
+            "Type": "String",
+            "UniqueName": "[Eats GL Allocation Measure].[Eats GL Allocation Measure].[Allocation Method Override]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Allocation %",
+                "Format": "#,##0.0000;(#,##0.0000)"
+            },
+            "Index": 3,
+            "Name": "Allocation %",
+            "Type": "Numeric",
+            "UniqueName": "[Eats GL Allocation Measure].[Eats GL Allocation Measure].[Allocation %]"
+        }
+    ],
+    "Name": "Eats GL Allocation Measure",
+    "Subsets": [],
+    "UniqueName": "[Eats GL Allocation Measure].[Eats GL Allocation Measure]"
+}

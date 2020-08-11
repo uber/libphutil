@@ -1,0 +1,40 @@
+FORMAT==100
+##====================================================##
+# V1 Eats Product Resto P&L
+# The below rule file assumes no difference in Location
+##====================================================##
+
+FEEDSTRINGS;
+Skipcheck;
+
+['Allocation Method Override'] =S:
+  IF(!month @= '2018-11', continue,
+  DB('Eats GL Allocation', !Version, '2018-11', !Line of Business, !Location, !Eats Product Type, !Eats Restaurant Type, !Account, 'Allocation Method Override'));
+
+#== Override logic, If there is a value in the overide measure then override the value
+
+['Allocation Method'] =S:
+  IF(DB('Eats GL Allocation', !Version, !Month, !Line of Business, !Location, 'Unspecified Eats Product Type', 'Unspecified Restaurant Type', !Account, 'Allocation Method Override') @<> '',
+    DB('Eats GL Allocation', !Version, !Month, !Line of Business, !Location, !Eats Product Type,  !Eats Restaurant Type, !Account, 'Allocation Method Override'), Continue);
+
+['Location' : 'Location' :'Total Location Incl Discontinued','Allocation Method'] = S:
+  IF( DB('Eats GL Allocation', !Version, !Month, !Line of Business, !Location, 'Unspecified Eats Product Type', 'Unspecified Restaurant Type', !Account , 'Allocation Method Override') @= '',
+    DB('Eats GL Allocation', !Version, !Month, !Line of Business, !Location, 'Unspecified Eats Product Type', 'Unspecified Restaurant Type', ATTRS('Account', !Account, 'Account L1') ,'Allocation Method'), Continue);
+
+['Enterprise', '3P', 'Allocation %'] = N:  IF(SCAN('Actual', DB('Eats GL Allocation',!Version,!Month,!Line of Business,'Total Location Incl Discontinued', 'Unspecified Eats Product Type', 'Unspecified Restaurant Type', !Account ,'Allocation Method'))=0,
+   IF( DB('Eats Ops',!Version,!Month,'FDS', 'USD', !Location, 'Total Eats Product Type', 'Total Eats Restaurant Type',
+    DB('Eats GL Allocation',!Version,!Month,!Line of Business,'Total Location Incl Discontinued', 'Unspecified Eats Product Type', 'Unspecified Restaurant Type', !Account ,'Allocation Method'),
+    'Amount') = 0,
+   1, Continue), Continue);
+
+['Allocation %'] = N: IF(SCAN('Actual', DB('Eats GL Allocation',!Version,!Month,!Line of Business,'Total Location Incl Discontinued', 'Unspecified Eats Product Type', 'Unspecified Restaurant Type', !Account ,'Allocation Method'))=0,
+
+   DB('Eats Ops',!Version,!Month,'FDS','USD',!Location, !Eats Product Type, !Eats Restaurant Type,
+   DB('Eats GL Allocation',!Version,!Month,!Line of Business,'Total Location Incl Discontinued', 'Unspecified Eats Product Type', 'Unspecified Restaurant Type', !Account ,'Allocation Method'),
+   'Amount')
+   \
+   DB('Eats Ops',!Version,!Month,'FDS','USD',!Location,'Total Eats Product Type','Total Eats Restaurant Type',
+   DB('Eats GL Allocation',!Version,!Month,!Line of Business,'Total Location Incl Discontinued', 'Unspecified Eats Product Type', 'Unspecified Restaurant Type', !Account ,'Allocation Method'),
+    'Amount'),
+continue);
+

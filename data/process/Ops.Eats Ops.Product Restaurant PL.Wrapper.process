@@ -1,0 +1,201 @@
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: PROPERTIES                                                           #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+{
+    "DataSource": {
+        "Type": "None"
+    },
+    "HasSecurityAccess": false,
+    "Name": "Ops.Eats Ops.Product Restaurant PL.Wrapper",
+    "Parameters": [
+        {
+            "Name": "pVersion",
+            "Prompt": "",
+            "Type": "String",
+            "Value": "Actual"
+        },
+        {
+            "Name": "pMonth",
+            "Prompt": "Month: N-Level or C-Level, or BLANK;",
+            "Type": "String",
+            "Value": "2020-04"
+        },
+        {
+            "Name": "pRateType",
+            "Prompt": "Rate Type: N-Level, C-Level, or BLANK",
+            "Type": "String",
+            "Value": ""
+        }
+    ],
+    "UIData": "CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
+    "Variables": [],
+    "VariablesUIData": []
+}
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: PROPERTIES                                                             #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: PROLOG PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+# ==================================================================== #
+# Globals
+# ==================================================================== #
+
+cVersion = TRIM(pVersion);
+cMonth = TRIM(pMonth);
+cRateType = TRIM(pRateType);
+cAccount = 'GAAP Contribution';
+
+cRand = NUMBERTOSTRING(ROUND(RAND() * 100000));
+cRand = FILL('0', 6 - LONG(cRand)) | cRand;
+cRand = NUMBERTOSTRING(NOW()) | '.' | cRand;
+
+cSub = '}zTemp.' | cRand;
+
+cPythonExe = CELLGETS('TAP System Info', 'Python Executable', 'Value');
+
+cScriptRun = CELLGETS('TAP System Info', 'Scripts Shared Path', 'Value');
+cScriptRun = cScriptRun | '/tap/tap-runti-in-parallel.py';
+
+cBatchUser = CELLGETS('TAP System Info', 'Batch Username', 'Value');
+cBatchPassword = CELLGETS('TAP System Info', 'Batch Password', 'Value');
+cBatchNamespace = CELLGETS('TAP System Info', 'Batch Namespace', 'Value');
+cServer = CELLGETS('TAP Application Info', CELLGETS('TAP System Info', 'Service Name', 'Value'), 'Endpoint');
+cPort = '443';
+cThreads = '10';
+
+cTemplateScriptRun = '%cPythonExe% %cScriptRun% --server ''%cServer%'' --port %cPort% --user ''%cBatchUser%'' --password ''%cBatchPassword%'' --namespace ''%cBatchNamespace%'' --threads ''%cThreads%'' %sProcess%';
+cTemplateProcess = '--process ''Ops.Eats Ops.Product Restaurant PL'' pVersion ''%cVersion%'' pMonth ''%sMonth%'' pRateType ''%sRateType%'' pAccount ''%cAccount%'' ';
+
+# ==================================================================== #
+# Create Source Subsets
+# ==================================================================== #
+
+# Month
+sDim = 'Period';
+sSub = cSub;
+sEleAnc = IF(cMonth @= '', 'Total Time - Month', cMonth);
+
+IF(SUBSETEXISTS(sDim, sSub) = 0);
+   SUBSETCREATE(sDim, sSub);
+ENDIF;
+SUBSETDELETEALLELEMENTS(sDim, sSub);
+
+IF(DTYPE(sDim, sEleAnc) @= 'N');
+   sEle = sEleAnc;
+   SUBSETELEMENTINSERT(sDim, sSub, sEle, SUBSETGETSIZE(sDim, sSub) + 1);
+ELSE;
+   i = 1;
+   WHILE(i <= DIMSIZ(sDim));
+      sEle = DIMNM(sDim, i);
+      IF(DTYPE(sDim, sEle) @= 'N' & ELISANC(sDim, sEleAnc, sEle) = 1);
+         SUBSETELEMENTINSERT(sDim, sSub, sEle, SUBSETGETSIZE(sDim, sSub) + 1);
+      ENDIF;
+      i = i + 1;
+   END;
+ENDIF;
+
+# Rate Type
+sDim = 'Rate Type';
+sSub = cSub;
+sEleAnc = IF(cRateType @= '', 'FX Rates', cRateType);
+
+IF(SUBSETEXISTS(sDim, sSub) = 0);
+   SUBSETCREATE(sDim, sSub);
+ENDIF;
+SUBSETDELETEALLELEMENTS(sDim, sSub);
+
+IF(DTYPE(sDim, sEleAnc) @= 'N');
+   sEle = sEleAnc;
+   SUBSETELEMENTINSERT(sDim, sSub, sEle, SUBSETGETSIZE(sDim, sSub) + 1);
+ELSE;
+   i = 1;
+   WHILE(i <= DIMSIZ(sDim));
+      sEle = DIMNM(sDim, i);
+      IF(DTYPE(sDim, sEle) @= 'N' & ELISANC(sDim, sEleAnc, sEle) = 1);
+         SUBSETELEMENTINSERT(sDim, sSub, sEle, SUBSETGETSIZE(sDim, sSub) + 1);
+      ENDIF;
+      i = i + 1;
+   END;
+ENDIF;
+
+
+# ==================================================================== #
+# Iterate Subset, Setup parallel execution
+# ==================================================================== #
+
+sSub = cSub;
+sProcess = '';
+nCount = 0;
+i = 1;
+WHILE(i <= SUBSETGETSIZE('Rate Type', sSub));
+   sRateType = SUBSETGETELEMENTNAME('Rate Type', sSub, i);
+
+   p = 1;
+   WHILE(p <= SUBSETGETSIZE('Period', sSub));
+      nCount = nCount + 1;
+
+      sMonth = SUBSETGETELEMENTNAME('Period', sSub, p);
+      sProcess = sProcess | EXPAND(cTemplateProcess);
+
+      IF(MOD(nCount, 100) = 0);
+         sCommand = EXPAND(cTemplateScriptRun);
+         EXECUTECOMMAND(sCommand, 1);
+         sProcess = '';
+      ENDIF;
+
+      p = p + 1;
+   END;
+
+   i = i + 1;
+END;
+
+sCommand = EXPAND(cTemplateScriptRun);
+ASCIIOUTPUT('command.txt', sCommand);
+EXECUTECOMMAND(sCommand, 0);
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: PROLOG PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: METADATA PROCEDURE                                                   #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: METADATA PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: DATA PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: DATA PROCEDURE                                                         #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: EPILOG PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: EPILOG PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #

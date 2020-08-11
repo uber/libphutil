@@ -23,12 +23,28 @@ SKIPCHECK;
    ,
       CONTINUE
    );
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=- #
+# Pull Oracle data for VC
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=- #
+
+['Actual', 'Oracle', 'Unspecified Eats Product Type', 'Unspecified Restaurant Type', 'Amount'] = N:
+   IF(
+      ELISANC('Eats Ops Metric', 'GAAP Contribution', !Eats Ops Metric) = 1,
+     DB('ANALYTICS.GL reporting', 'Actual', !Period, 'Total Source Excl Sig Adj', !Rate Type, '2001', !Location, 'Total Department', 'Unspecified Product Type', !Eats Ops Metric, 'Amount'),
+     STET);
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=- #
 # Budget Data from Planning
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=- #
 
 ['Version' : {'2020 Plan',  'Forecast Excl Actuals'}] =  STET;
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=- #
+# PnL Data to be allocated
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=- #
+
+['Actual','Product PL','Completed Deliveries'] = N: ['Actual','FDP','Completed Deliveries'];
+['Source' : 'Product PL'] =  STET;
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=- #
 # Consolidation  and N Level  Calcs
@@ -38,17 +54,17 @@ SKIPCHECK;
 
 ['Actual','% of Restos'] = ['Active Restaurants'] \ DB('Eats Ops',!Version,!Period,!Source,!Rate Type,!Location,!Eats Product Type,'Total Eats Restaurant Type','Active Restaurants',!Eats Ops Measure);
 
-['Actual','% of GB'] = ['Total Bookings'] \ DB('Eats Ops',!Version,!Period,!Source,!Rate Type,!Location,!Eats Product Type,'Total Eats Restaurant Type','Total Bookings',!Eats Ops Measure);
+['Actual','% of GB'] = ['Gross Bookings'] \ DB('Eats Ops',!Version,!Period,!Source,!Rate Type,!Location,!Eats Product Type,'Total Eats Restaurant Type','Total Bookings',!Eats Ops Measure);
 
 ['Actual', 'TpE'] = IF(ATTRS('Period',!Period,'Level') @= 'Week', ['Completed Deliveries'] \ ['Weekly Active Eaters'], ['Completed Deliveries'] \ ['Active Eaters']);
 
-['Actual', 'ANR Margin'] = ['Adjusted Net Revenue']\ ['Total Bookings'];
+['Actual', 'ANR Margin'] = ['Adjusted Net Revenue']\ ['Gross Bookings'];
 
-['Actual','Avg. Basket Size'] = ['Basket'] \ ['Completed Deliveries'];
+['Actual','Avg. Basket Size'] = ['Fares'] \ ['Completed Deliveries'];
 
-['Actual','Marketplace Fee %'] = 1 + ( ['MPF'] \ ['Basket'] );
+['Actual','Marketplace Fee %'] = 1 + ( ['MPF'] \ ['Fares'] );
 
-['Actual','Promo % of GB'] = ['Total Eater Promos'] \ ['Total Bookings'];
+['Actual','Promo % of GB'] = ['Total Eater Promos'] \ ['Gross Bookings'];
 
 ['Actual','TpR'] = ['Completed Deliveries'] \ ['Active Restaurants'];
 
@@ -100,6 +116,8 @@ FEEDERS;
 
 ['Actual','Active Restaurants'] => ['% of Restos'];
 
+['Actual','FDP','Completed Deliveries'] => ['Actual','Product PL','Completed Deliveries'];
+
 ## Feed Ops
 
 ['Amount'] => DB('Ops',!Version,!Period,!Source,!Rate Type,!Location,'2001','Eats',!Eats Ops Metric,'Amount');
@@ -139,7 +157,5 @@ FEEDERS;
 ['Actual', 'FDP', 'Unspecified Eats Product Type', 'Unspecified Restaurant Type', 'Continuing Courier Deliveries', 'Amount'] =>DB('Ops', 'Actual', !Period, 'FDP', !Rate Type, !Location, '2001', 'EATS', 'Continuing Driver Trips', 'Amount');
 
 ['Actual', 'FDP', 'Unspecified Eats Product Type', 'Unspecified Restaurant Type', 'Rider Miles', 'Amount'] =>DB('Ops', 'Actual', !Period, 'FDP', !Rate Type, !Location, '2001', 'EATS', 'P2P Rider Miles', 'Amount');
-
-
 
 

@@ -122,7 +122,7 @@ cCube = 'Ops';
 cVersion = 'Actual';
 cRateType = 'USD';
 cMeasure = 'Amount';
-cSource = 'FDP';
+cSource = 'FDS';
 nRecords = 1;
 
 sPassword = 'corpfin';

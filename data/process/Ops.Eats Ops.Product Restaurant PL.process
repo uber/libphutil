@@ -1,0 +1,401 @@
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: PROPERTIES                                                           #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+{
+    "DataSource": {
+        "Type": "TM1CubeView",
+        "dataSourceNameForClient": "Eats Ops",
+        "dataSourceNameForServer": "Eats Ops",
+        "view": "Default"
+    },
+    "HasSecurityAccess": false,
+    "Name": "Ops.Eats Ops.Product Restaurant PL",
+    "Parameters": [
+        {
+            "Name": "pVersion",
+            "Prompt": "Version",
+            "Type": "String",
+            "Value": "Actual"
+        },
+        {
+            "Name": "pMonth",
+            "Prompt": "Month",
+            "Type": "String",
+            "Value": "2020-03"
+        },
+        {
+            "Name": "pAccount",
+            "Prompt": "Account",
+            "Type": "String",
+            "Value": ""
+        },
+        {
+            "Name": "pRateType",
+            "Prompt": "Rate Type (or blank)",
+            "Type": "String",
+            "Value": ""
+        }
+    ],
+    "UIData": "CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
+    "Variables": [
+        {
+            "EndByte": 0,
+            "Name": "vVersion",
+            "Position": 1,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vMeasure",
+            "Position": 9,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vSource",
+            "Position": 3,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vRateType",
+            "Position": 4,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vLocation",
+            "Position": 5,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vProductType",
+            "Position": 6,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vRestaurantType",
+            "Position": 7,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vAccount",
+            "Position": 8,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vPeriod",
+            "Position": 2,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vValue",
+            "Position": 10,
+            "StartByte": 0,
+            "Type": "Numeric"
+        }
+    ],
+    "VariablesUIData": [
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=33\fColType=827\f"
+    ]
+}
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: PROPERTIES                                                             #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: PROLOG PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+##====================================================##
+## Allocate Product and Restaurant based on Eats GL By Product Resto Allocation
+##====================================================##
+
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+## Initialise Constants               ##
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+
+cSourceCube = 'Eats Ops';
+cTargetCube = 'Eats Ops';
+cAllocCube = 'Eats GL Allocation';
+
+cRand = NUMBERTOSTRING(ROUND(RAND() * 100000));
+cRand = FILL('0', 6 - LONG(cRand)) | cRand;
+cRand = NUMBERTOSTRING(NOW()) | '.' | cRand;
+cRandomIntA = cRand;
+cViewName = '}zTemp.' | GETPROCESSNAME() | '.' | cRandomIntA;
+cSubsetName = '}zTemp.' | GETPROCESSNAME() | '.' | cRandomIntA;
+
+cVersion = pVersion;
+cMeasure = 'Amount';
+cTargetSource = 'Product PL';
+
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+## Clear Target View                  ##
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+
+cRandomIntA = NUMBERTOSTRING(INT(RAND() * 100000 * RAND()));
+cViewName = '}zTemp.' | GETPROCESSNAME() | '.' | cRandomIntA;
+cSubsetName = '}zTemp.' | GETPROCESSNAME() | '.' | cRandomIntA;
+
+cCube = cTargetCube;
+VIEWCREATE(cCube, cViewName, 1);
+nCtr = 1;
+nMax = CUBEDIMENSIONCOUNTGET(cCube);
+WHILE(nCtr <= nMax);
+   sDim = TABDIM(cCube, nCtr);
+   IF(sDim @= 'Version');
+      sElement = pVersion;
+      SUBSETCREATE(sDim, cSubsetName, 1);
+      SUBSETELEMENTINSERT(sDim, cSubsetName, sElement, 1);
+      VIEWSUBSETASSIGN(cCube, cViewName, sDim, cSubsetName);
+   ELSEIF(sDim @= 'Period');
+      IF(DTYPE(sDim, pMonth) @= 'N');
+         sElement = pMonth;
+         SUBSETCREATE(sDim, cSubsetName, 1);
+         SUBSETELEMENTINSERT(sDim, cSubsetName, sElement, 1);
+         VIEWSUBSETASSIGN(cCube, cViewName, sDim, cSubsetName);
+      ELSE;
+         sMDX = '{TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER( {[ ' | sDim | '].[ ' | pMonth | ']}, ALL, RECURSIVE )}, 0)}';
+         SUBSETCREATEBYMDX(cSubsetName, sMdx, 1);
+         VIEWSUBSETASSIGN(cCube, cViewName, sDim, cSubsetName);
+      ENDIF;
+   ELSEIF(sDim @= 'Source');
+      sElement = cTargetSource;
+      SUBSETCREATE(sDim, cSubsetName, 1);
+      SUBSETELEMENTINSERT(sDim, cSubsetName, sElement, 1);
+      VIEWSUBSETASSIGN(cCube, cViewName, sDim, cSubsetName);
+   ELSEIF(sDim @= 'Eats Ops Metric');
+      IF(DTYPE(sDim, pAccount) @= 'N');
+         sElement = pAccount;
+         SUBSETCREATE(sDim, cSubsetName, 1);
+         SUBSETELEMENTINSERT(sDim, cSubsetName, sElement, 1);
+         VIEWSUBSETASSIGN(cCube, cViewName, sDim, cSubsetName);
+      ELSE;
+         sMDX = '{TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER( {[ ' | sDim | '].[ ' | pAccount | ']}, ALL, RECURSIVE )}, 0)}';
+         SUBSETCREATEBYMDX(cSubsetName, sMdx, 1);
+         VIEWSUBSETASSIGN(cCube, cViewName, sDim, cSubsetName);
+      ENDIF;
+   ELSEIF(sDim @= 'Eats Product Type');
+      sMDX = '{TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER( {[ ' | sDim | '].[ ' | 'Total Eats Product Type' | ']}, ALL, RECURSIVE )}, 0)}';
+      SUBSETCREATEBYMDX(cSubsetName, sMdx, 1);
+      VIEWSUBSETASSIGN(cCube, cViewName, sDim, cSubsetName);
+   ELSEIF(sDim @= 'Eats Restaurant Type');
+      sMDX = '{TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER( {[ ' | sDim | '].[ ' | 'Total by Eats Restaurant Type' | ']}, ALL, RECURSIVE )}, 0)}';
+      SUBSETCREATEBYMDX(cSubsetName, sMdx, 1);
+      VIEWSUBSETASSIGN(cCube, cViewName, sDim, cSubsetName);
+   ELSEIF(sDim @= 'Rate Type');
+      IF(pRateType @= '');
+         sMDX = '{TM1SORT( {TM1FILTERBYLEVEL({TM1SUBSETALL([ ' | sDim | '] )}, 0)}, ASC)}';
+         SUBSETCREATEBYMDX(cSubsetName, sMdx, 1);
+      ELSE;
+         sElement = pRateType;
+         SUBSETCREATE(sDim, cSubsetName, 1);
+         SUBSETELEMENTINSERT(sDim, cSubsetName, sElement, 1);
+      ENDIF;
+      VIEWSUBSETASSIGN(cCube, cViewName, sDim, cSubsetName);
+   ELSE;
+      sMDX = '{TM1SORT( {TM1FILTERBYLEVEL({TM1SUBSETALL([ ' | sDim | '] )}, 0)}, ASC)}';
+      SUBSETCREATEBYMDX(cSubsetName, sMdx, 1);
+      VIEWSUBSETASSIGN(cCube, cViewName, sDim, cSubsetName);
+   ENDIF;
+
+   nCtr = nCtr + 1;
+END;
+
+VIEWZEROOUT(cCube, cViewName);
+
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+## Create Source View                 ##
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+
+cRand = NUMBERTOSTRING(ROUND(RAND() * 100000));
+cRand = FILL('0', 6 - LONG(cRand)) | cRand;
+cRand = NUMBERTOSTRING(NOW()) | '.' | cRand;
+cRandomIntA1 = cRand;
+cViewName1 = GETPROCESSNAME() | '.' | cRandomIntA;
+cSubsetName1 = GETPROCESSNAME() | '.' | cRandomIntA;
+
+cCube = cSourceCube;
+VIEWCREATE(cCube, cViewName1, 1);
+nCtr = 1;
+nMax = CUBEDIMENSIONCOUNTGET(cCube);
+WHILE(nCtr <= nMax);
+   sDim = TABDIM(cCube, nCtr);
+   IF(sDim @= 'Version');
+      sElement = pVersion;
+      SUBSETCREATE(sDim, cSubsetName1, 1);
+      SUBSETELEMENTINSERT(sDim, cSubsetName1, sElement, 1);
+      VIEWSUBSETASSIGN(cCube, cViewName1, sDim, cSubsetName1);
+   ELSEIF(sDim @= 'Eats Ops Measure');
+      sElement = 'Amount';
+      SUBSETCREATE(sDim, cSubsetName1, 1);
+      SUBSETELEMENTINSERT(sDim, cSubsetName1, sElement, 1);
+      VIEWSUBSETASSIGN(cCube, cViewName1, sDim, cSubsetName1);
+   ELSEIF(sDim @= 'Period');
+      IF(DTYPE(sDim, pMonth) @= 'N');
+         sElement = pMonth;
+         SUBSETCREATE(sDim, cSubsetName1, 1);
+         SUBSETELEMENTINSERT(sDim, cSubsetName1, sElement, 1);
+         VIEWSUBSETASSIGN(cCube, cViewName1, sDim, cSubsetName1);
+      ELSE;
+         sMDX = '{TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER( {[ ' | sDim | '].[ ' | pMonth | ']}, ALL, RECURSIVE )}, 0)}';
+         SUBSETCREATEBYMDX(cSubsetName1, sMdx, 1);
+         VIEWSUBSETASSIGN(cCube, cViewName, sDim, cSubsetName1);
+      ENDIF;
+   ELSEIF(sDim @= 'Source');
+      sElement = 'Oracle';
+      SUBSETCREATE(sDim, cSubsetName1, 1);
+      SUBSETELEMENTINSERT(sDim, cSubsetName1, sElement, 1);
+      VIEWSUBSETASSIGN(cCube, cViewName1, sDim, cSubsetName1);
+   ELSEIF(sDim @= 'Eats Ops Metric');
+      IF(DTYPE(sDim, pAccount) @= 'N');
+         sElement = pAccount;
+         SUBSETCREATE(sDim, cSubsetName1, 1);
+         SUBSETELEMENTINSERT(sDim, cSubsetName1, sElement, 1);
+         VIEWSUBSETASSIGN(cCube, cViewName1, sDim, cSubsetName1);
+      ELSE;
+         sMDX = '{TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER( {[ ' | sDim | '].[ ' | pAccount | ']}, ALL, RECURSIVE )}, 0)}';
+         SUBSETCREATEBYMDX(cSubsetName1, sMdx, 1);
+         VIEWSUBSETASSIGN(cCube, cViewName1, sDim, cSubsetName1);
+      ENDIF;
+   ELSEIF(sDim @= 'Eats Product Type');
+      sMDX = '{TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER( {[ ' | sDim | '].[ ' | 'Total Eats Product Type' | ']}, ALL, RECURSIVE )}, 0)}';
+      SUBSETCREATEBYMDX(cSubsetName1, sMdx, 1);
+      VIEWSUBSETASSIGN(cCube, cViewName1, sDim, cSubsetName1);
+   ELSEIF(sDim @= 'Eats Restaurant Type');
+      sMDX = '{TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER( {[ ' | sDim | '].[ ' | 'Total by Eats Restaurant Type' | ']}, ALL, RECURSIVE )}, 0)}';
+      SUBSETCREATEBYMDX(cSubsetName1, sMdx, 1);
+      VIEWSUBSETASSIGN(cCube, cViewName1, sDim, cSubsetName1);
+   ELSEIF(sDim @= 'Rate Type');
+      IF(pRateType @= '');
+         sMDX = '{TM1SORT( {TM1FILTERBYLEVEL({TM1SUBSETALL([ ' | sDim | '] )}, 0)}, ASC)}';
+         SUBSETCREATEBYMDX(cSubsetName1, sMdx, 1);
+      ELSE;
+         sMDX = '{TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER( {[ ' | sDim | '].[ ' | pRateType | ']}, ALL, RECURSIVE )}, 0)}';
+         SUBSETCREATEBYMDX(cSubsetName1, sMdx, 1);
+      ENDIF;
+      VIEWSUBSETASSIGN(cCube, cViewName1, sDim, cSubsetName1);
+   ELSE;
+      sMDX = '{TM1SORT( {TM1FILTERBYLEVEL({TM1SUBSETALL([ ' | sDim | '] )}, 0)}, ASC)}';
+      SUBSETCREATEBYMDX(cSubsetName1, sMdx, 1);
+      VIEWSUBSETASSIGN(cCube, cViewName1, sDim, cSubsetName1);
+   ENDIF;
+
+   nCtr = nCtr + 1;
+END;
+
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+## Set View as DataSource             ##
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+
+DatasourceNameForServer = cSourceCube;
+DatasourceType = 'VIEW';
+DatasourceCubeView = cViewName1;
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: PROLOG PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: METADATA PROCEDURE                                                   #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: METADATA PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: DATA PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+##====================================================##
+# 
+##====================================================##
+
+#sAllocMethod = CELLGETS(cAllocCube, vVersion, vPeriod, vLOB, 'Total Location Incl Discontinued', 'Unspecified Product Type', vAccount, 'Allocation Method');
+
+##====================================================##
+# Loop Through Products and Restaurants
+##====================================================##
+
+sDim1 = 'Eats Product Type';
+sPar1 = 'Total Eats Product Type';
+nCtr1 = ELCOMPN(sDim1, sPar1);
+
+sDim2 = 'Eats Restaurant Type';
+sPar2 = 'Total by Eats Restaurant Type';
+
+WHILE(nCtr1 > 0);
+   sEle1 = ELCOMP(sDim1, sPar1, nCtr1);
+   nCtr2 = ELCOMPN(sDim2, sPar2);
+   WHILE(nCtr2 > 0);
+      sEle2 = ELCOMP(sDim2, sPar2, nCtr2);
+
+      IF(ELLEV(sDim1, sEle1) = 0 & ELLEV(sDim2, sEle2) = 0);
+
+         nAllocPerc = CELLGETN('Eats GL Allocation', vVersion, vPeriod, '2001', vLocation, sEle1, sEle2, vAccount, 'Allocation %');
+
+         IF(SCAN('Actual', CELLGETS(cAllocCube, vVersion, vPeriod, '2001', 'Total Location Incl Discontinued', 'Unspecified Eats Product Type', 'Unspecified Restaurant Type', vAccount, 'Allocation Method')) = 0);
+            nVal = nAllocPerc * vValue;
+            IF(CELLISUPDATEABLE(cTargetCube, vVersion, vPeriod, cTargetSource, vRateType, vLocation, sEle1, sEle2, vAccount, 'Amount') = 1);
+               CELLINCREMENTN(nVal, cTargetCube, vVersion, vPeriod, cTargetSource, vRateType, vLocation, sEle1, sEle2, vAccount, 'Amount');
+               ASCIIOUTPUT('pl1.txt', cTargetCube, vVersion, vPeriod, cTargetSource, vRateType, vLocation, sEle1, sEle2, vAccount, NUMBERTOSTRING(nAllocPerc), NUMBERTOSTRING(vValue), NUMBERTOSTRING(nVal));
+            ENDIF;
+         ENDIF;
+      ENDIF;
+      nCtr2 = nCtr2 - 1;
+   END;
+   nCtr1 = nCtr1 - 1;
+END;
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: DATA PROCEDURE                                                         #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: EPILOG PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: EPILOG PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
