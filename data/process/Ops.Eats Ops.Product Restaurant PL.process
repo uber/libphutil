@@ -155,7 +155,7 @@ cSubsetName = '}zTemp.' | GETPROCESSNAME() | '.' | cRandomIntA;
 
 cVersion = pVersion;
 cMeasure = 'Amount';
-cTargetSource = 'Product PL';
+cTargetSource = 'Product Resto PL';
 
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
 ## Clear Target View                  ##
@@ -375,7 +375,6 @@ WHILE(nCtr1 > 0);
             nVal = nAllocPerc * vValue;
             IF(CELLISUPDATEABLE(cTargetCube, vVersion, vPeriod, cTargetSource, vRateType, vLocation, sEle1, sEle2, vAccount, 'Amount') = 1);
                CELLINCREMENTN(nVal, cTargetCube, vVersion, vPeriod, cTargetSource, vRateType, vLocation, sEle1, sEle2, vAccount, 'Amount');
-               ASCIIOUTPUT('pl1.txt', cTargetCube, vVersion, vPeriod, cTargetSource, vRateType, vLocation, sEle1, sEle2, vAccount, NUMBERTOSTRING(nAllocPerc), NUMBERTOSTRING(vValue), NUMBERTOSTRING(nVal));
             ENDIF;
          ENDIF;
       ENDIF;

@@ -43,8 +43,8 @@ SKIPCHECK;
 # PnL Data to be allocated
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=- #
 
-['Actual','Product PL','Completed Deliveries'] = N: ['Actual','FDP','Completed Deliveries'];
-['Source' : 'Product PL'] =  STET;
+['Actual','Product Resto PL','Completed Deliveries'] = N: ['Actual','FDP','Completed Deliveries'];
+['Source' : 'Product Resto PL'] =  STET;
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=- #
 # Consolidation  and N Level  Calcs
@@ -110,13 +110,16 @@ SKIPCHECK;
    );
 
 
+
+
+
 FEEDERS;
 
 ['Actual', 'Completed Deliveries'] => ['% of Orders'] , ['TpE'], ['Avg. Basket Size'], ['TpR'], ['% of Trips Promoed'], ['% of GB'], ['ANR Margin'], ['Marketplace Fee %'], ['Promo % of GB'];
 
 ['Actual','Active Restaurants'] => ['% of Restos'];
 
-['Actual','FDP','Completed Deliveries'] => ['Actual','Product PL','Completed Deliveries'];
+['Actual','FDP','Completed Deliveries'] => ['Actual','Product Resto PL','Completed Deliveries'];
 
 ## Feed Ops
 

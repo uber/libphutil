@@ -41,7 +41,10 @@
         "}Capabilities",
         "}CubeSecurityProperties",
         "}CubeSecurity",
-        "}ApplicationSecurity"
+        "}ApplicationSecurity",
+        "}ElementAttributes_ANALYTICS.*",
+        "ANALYTICS.*"
+
 
     ],
     "exclude_cube_view": "",
@@ -56,6 +59,8 @@
         "Currency",
         "Currency To",
         "Period",
+        "}ElementAttributes_ANALYTICS.*",
+        "ANALYTICS.*",
         "}*"
     ],
     "exclude_dimension_hierarchy": [
@@ -82,7 +87,6 @@
         "Eats Restaurant Type/*",
         "Freight Ops Metric/*",
         "Freight Shipper/*"
-
     ],
     "exclude_dimension_hierarchy_element": "",
     "exclude_dimension_hierarchy_subset": "",
