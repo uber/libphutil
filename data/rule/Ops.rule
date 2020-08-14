@@ -378,8 +378,7 @@ SKIPCHECK;
 
 FEEDERS;
 
-#['Actual','FDP','USD','Line of Business':'1001','Completed Trips','Amount']=>DB('GL By Product Allocation','Actual',!Period,'Core Rides',!Location,'Total Product Type Excl Other','GAAP Contribution','Allocation %');
-
+#['Actual','FDS','USD','Line of Business':'1001','Completed Trips','Amount']=>DB('GL By Product Allocation','Actual',!Period,'Core Rides',!Location,'Total Product Type Excl Other','GAAP Contribution','Allocation %');
 
 
 
