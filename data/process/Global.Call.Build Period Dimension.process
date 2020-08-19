@@ -29,6 +29,8 @@ EXECUTEPROCESS('Global.Dim.Period.Create Attributes');
 EXECUTEPROCESS('Global.Dim.Period.Create Input Elements');
 EXECUTEPROCESS('Global.Dim.Period.Update Input Attributes');
 EXECUTEPROCESS('Global.Dim.Period.Build Hierarchy');
+EXECUTEPROCESS('Global.Dim.Period.Hier.YTD.Ele.Update');
+EXECUTEPROCESS('Global.Dim.Period.Hier.QTD.Ele.Update');
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
 # END: PROLOG PROCEDURE                                                       #

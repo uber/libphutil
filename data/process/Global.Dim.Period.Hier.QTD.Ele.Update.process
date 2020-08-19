@@ -1,0 +1,188 @@
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: PROPERTIES                                                           #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+{
+    "DataSource": {
+        "Type": "None"
+    },
+    "HasSecurityAccess": false,
+    "Name": "Global.Dim.Period.Hier.QTD.Ele.Update",
+    "Parameters": [],
+    "UIData": "CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
+    "Variables": [],
+    "VariablesUIData": []
+}
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: PROPERTIES                                                             #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: PROLOG PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+cDimPeriod = 'Period';
+
+cRand = NUMBERTOSTRING(ROUND(RAND() * 100000));
+cRand = FILL('0', 6 - LONG(cRand)) | cRand;
+
+cView = EXPAND('zzTemp.%cRand%');
+cSub = EXPAND('zzTemp.%cRand%');
+
+# ==================================================================== #
+# Create Subsets
+# ==================================================================== #
+
+sDim = cDimPeriod;
+sDim1 = 'Month';
+sSub = cSub | '.Period';
+sMDX = EXPAND('{TM1SORT( EXCEPT( {TM1FILTERBYPATTERN( [%sDim%].[%sDim%].Members, "????-??")},' | 'UNION({TM1FILTERBYPATTERN( [%sDim%].[%sDim%].Members, "????-H?")}, {TM1FILTERBYPATTERN( [%sDim%].[%sDim%].Members' | ', "????-Q?")})), ASC)}');
+SUBSETCREATE(sDim, sSub, 0);
+SUBSETMDXSET(sDim, sSub, sMDX);
+SUBSETMDXSET(sDim, sSub, '');
+
+
+# ==================================================================== #
+# Create Rollups
+# ==================================================================== #
+
+sDim = cDimPeriod;
+sSub = cSub | '.Period';
+
+sSuffix = ' QTD';
+
+i = 1;
+WHILE(i <= SUBSETGETSIZE(sDim, sSub));
+   sEleLeaf = SUBSETGETELEMENTNAME(sDim, sSub, i);
+   sType = ATTRS(sDim1, sEleLeaf, 'Input Type');
+
+   IF(sType @= 'Month');
+      sYear = ATTRS(sDim1, sEleLeaf, 'Year');
+      sHalf = ATTRS(sDim1, sEleLeaf, 'Half');
+      sQuarter = ATTRS(sDim1, sEleLeaf, 'Quarter');
+      sMonth = ATTRS(sDim1, sEleLeaf, 'Month');
+
+      sElePar = 'Total Time - Month - Quarter to Date';
+      sEle = sYear | sSuffix;
+
+      IF(DIMIX(sDim, sElePar) = 0);
+
+         DIMENSIONELEMENTINSERT(sDim, '', sElePar, 'C');
+      ENDIF;
+      IF(DIMIX(sDim, sEle) = 0);
+
+         DIMENSIONELEMENTINSERT(sDim, '', sEle, 'C');
+      ENDIF;
+
+      DIMENSIONELEMENTCOMPONENTADD(sDim, sElePar, sEle, 0);
+
+      sElePar = sYear | sSuffix;
+      sEle = EXPAND('%sYear%-%sHalf%') | sSuffix;
+
+      IF(DIMIX(sDim, sElePar) = 0);
+
+         DIMENSIONELEMENTINSERT(sDim, '', sElePar, 'C');
+      ENDIF;
+      IF(DIMIX(sDim, sEle) = 0);
+
+         DIMENSIONELEMENTINSERT(sDim, '', sEle, 'C');
+      ENDIF;
+
+      nWeight = IF(SCAN('H2', sEle) > 0, 1, 0);
+
+      DIMENSIONELEMENTCOMPONENTADD(sDim, sElePar, sEle, nWeight);
+
+      sElePar = EXPAND('%sYear%-%sHalf%') | sSuffix;
+      sEle = EXPAND('%sYear%-%sQuarter%') | sSuffix;
+
+      IF(DIMIX(sDim, sElePar) = 0);
+
+         DIMENSIONELEMENTINSERT(sDim, '', sElePar, 'C');
+      ENDIF;
+      IF(DIMIX(sDim, sEle) = 0);
+
+         DIMENSIONELEMENTINSERT(sDim, '', sEle, 'C');
+      ENDIF;
+      nWeight = IF(SCAN('Q2', sEle) > 0 % SCAN('Q4', sEle) > 0, 1, 0);
+
+      DIMENSIONELEMENTCOMPONENTADD(sDim, sElePar, sEle, nWeight);
+
+
+      sElePar = EXPAND('%sYear%-%sQuarter%') | sSuffix;
+      sEle = sEleLeaf | sSuffix;
+
+      IF(DIMIX(sDim, sElePar) = 0);
+
+         DIMENSIONELEMENTINSERT(sDim, '', sElePar, 'C');
+      ENDIF;
+      IF(DIMIX(sDim, sEle) = 0);
+
+         DIMENSIONELEMENTINSERT(sDim, '', sEle, 'C');
+      ENDIF;
+      nWeight = IF(SCAN('-03', sEle) > 0 % SCAN('-06', sEle) > 0 % SCAN('-09', sEle) > 0 % SCAN('-12', sEle) > 0, 1, 0);
+
+      DIMENSIONELEMENTCOMPONENTADD(sDim, sElePar, sEle, nWeight);
+
+      sElePar = sEleLeaf | sSuffix;
+
+      IF(DIMIX(sDim, sElePar) = 0);
+
+         DIMENSIONELEMENTINSERT(sDim, '', sElePar, 'C');
+      ENDIF;
+
+      p = (((NUMBR(sQuarter) - 1) * 3) + 1);
+      WHILE(p <= NUMBR(sMonth));
+         sEle = sYear | '-' | FILL('0', 2 - LONG(NUMBERTOSTRING(p))) | NUMBERTOSTRING(p);
+         nWeight = 1;
+
+         DIMENSIONELEMENTCOMPONENTADD(sDim, sElePar, sEle, nWeight);
+
+         p = p + 1;
+      END;
+   ENDIF;
+
+   i = i + 1;
+END;
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: PROLOG PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: METADATA PROCEDURE                                                   #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: METADATA PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: DATA PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: DATA PROCEDURE                                                         #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: EPILOG PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: EPILOG PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
