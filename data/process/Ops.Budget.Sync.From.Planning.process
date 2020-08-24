@@ -20,7 +20,7 @@
             "Name": "pVersion",
             "Prompt": "",
             "Type": "String",
-            "Value": "2020 Plan"
+            "Value": "2020 Rebase"
         },
         {
             "Name": "pPeriod",
@@ -378,7 +378,6 @@ ENDIF;
 
 
 IF(DIMIX('Rate Type', vCurrencyType) = 0 % DIMIX('OPS Metric', vMetric) = 0);
-   ASCIIOUTPUT('month.txt', '1');
    ITEMSKIP;
 ENDIF;
 

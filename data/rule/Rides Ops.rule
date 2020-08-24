@@ -30,6 +30,76 @@ SKIPCHECK;
 
 ['Version' : {'2020 Plan',  'Forecast Excl Actuals'}] =  STET;
 
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=- =-=-=-=-=-=-=-=-=-=-=-=-=-=- =-=-=-= #
+# POP, YOY, POP %, YOY %, % of Gross Bookings, % of Adjusted Net Revenue
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=- =-=-=-=-=-=-=-=-=-=-=-=-=-=- =-=-=-= #
+
+['% of Gross Bookings'] = ['Amount'] \ ['Gross Bookings','Amount'];
+
+['% of Adjusted Net Revenue'] = ['Amount'] \ ['Adjusted Net Revenue', 'Amount'];
+
+
+['PoP Growth'] =
+   (
+     ['Amount'] -
+     DB('Rides Ops', !Version, ATTRS('Period', !Period, 'Period-1'), !Source, !Rate Type, !Location, !Rides Flow Type, !Rides Car Type, !Rides Ops Metric, 'Amount')
+   ) *
+      IF(
+      ATTRN('Rides Ops Metric', !Rides Ops Metric, 'Var Multiplier') = -1
+      ,
+      -1
+      ,
+      1);
+
+['YoY Growth'] =
+   (
+      ['Amount'] -
+      DB('Rides Ops', !Version, ATTRS('Period', !Period, 'Year-1'), !Source, !Rate Type, !Location, !Rides Flow Type, !Rides Car Type, !Rides Ops Metric, 'Amount')
+   ) *
+      IF(
+      ATTRN('Rides Ops Metric', !Rides Ops Metric, 'Var Multiplier') = -1
+      ,
+      -1
+      ,
+      1);
+
+['PoP Growth %'] =
+  MIN(
+    MAX(
+         ['PoP Growth'] \
+         ABS (DB('Rides Ops', !Version, ATTRS('Period', !Period, 'Period-1'), !Source, !Rate Type, !Location, !Rides Flow Type, !Rides Car Type, !Rides Ops Metric, 'Amount'))
+         ,
+        -9.99
+      )
+   ,
+    9.99
+  );
+
+['YoY Growth %'] =
+  MIN(
+    MAX(
+          ['YoY Growth'] \
+          ABS (DB('Rides Ops', !Version, ATTRS('Period', !Period, 'Year-1'), !Source, !Rate Type, !Location, !Rides Flow Type, !Rides Car Type, !Rides Ops Metric, 'Amount'))
+          ,
+         -9.99
+        )
+      ,
+    9.99
+  );
+
+
+#=-=-=-=-=-=-==-=-=-=-=-=-==-=-=-=-=-=-==-=-=-=-=-=-==-=-=-=-=-=-==-=-=-=-=-=-==-=-=-=-=-=-=-=-=-=-#
+#>--- Amount Measure in (K) & (M)
+#=-=-=-=-=-=-==-=-=-=-=-=-==-=-=-=-=-=-==-=-=-=-=-=-==-=-=-=-=-=-==-=-=-=-=-=-==-=-=-=-=-=-=-=-=-=-#
+
+['Rides Ops Measure':'Amount (K)'] = C:
+   ['Amount'] \ 1000;
+
+['Rides Ops Measure':'Amount (M)'] = C:
+    ['Amount'] \ 1000000;
+
+
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=- #
 # Consolidation  Level  Calcs
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=- #

@@ -43,8 +43,75 @@ SKIPCHECK;
 # PnL Data to be allocated
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=- #
 
-['Actual','Product Resto PL','Completed Deliveries'] = N: ['Actual','FDS','Completed Deliveries'];
+['Actual',{'Product Resto PL', 'Oracle'},'Completed Deliveries'] = N: ['Actual','FDS','Completed Deliveries'];
 ['Source' : 'Product Resto PL'] =  STET;
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=- =-=-=-=-=-=-=-=-=-=-=-=-=-=- =-=-=-= #
+# POP, YOY, POP %, YOY %, % of Gross Bookings, % of Adjusted Net Revenue
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=- =-=-=-=-=-=-=-=-=-=-=-=-=-=- =-=-=-= #
+
+['% of Gross Bookings'] = ['Amount'] \ ['Gross Bookings','Amount'];
+
+['% of Adjusted Net Revenue'] = ['Amount'] \ ['Adjusted Net Revenue'];
+
+['PoP Growth'] =
+   (
+     ['Amount'] -
+     DB('Eats Ops',!Version,ATTRS('Period', !Period, 'Period-1'),!Source,!Rate Type,!Location,!Eats Product Type,!Eats Restaurant Type,!Eats Ops Metric,'Amount')
+   ) *
+      IF(
+      ATTRN('Eats Ops Metric', !Eats Ops Metric, 'Var Multiplier') = -1
+      ,
+      -1
+      ,
+      1);
+
+['YoY Growth'] =
+   (
+      ['Amount'] -
+      DB('Eats Ops',!Version,ATTRS('Period', !Period, 'Year-1'),!Source,!Rate Type,!Location,!Eats Product Type,!Eats Restaurant Type,!Eats Ops Metric,'Amount')
+   ) *
+      IF(
+      ATTRN('Eats Ops Metric', !Eats Ops Metric, 'Var Multiplier') = -1
+      ,
+      -1
+      ,
+      1);
+
+['PoP Growth %'] =
+  MIN(
+    MAX(
+         ['PoP Growth'] \
+         ABS (DB('Eats Ops',!Version,ATTRS('Period', !Period, 'Period-1'),!Source,!Rate Type,!Location,!Eats Product Type,!Eats Restaurant Type,!Eats Ops Metric,'Amount'))
+         ,
+        -9.99
+      )
+   ,
+    9.99
+  );
+
+['YoY Growth %'] =
+  MIN(
+    MAX(
+          ['YoY Growth'] \
+          ABS (DB('Eats Ops',!Version,ATTRS('Period', !Period, 'Year-1'),!Source,!Rate Type,!Location,!Eats Product Type,!Eats Restaurant Type,!Eats Ops Metric,'Amount'))
+          ,
+         -9.99
+        )
+      ,
+    9.99
+  );
+
+#=-=-=-=-=-=-==-=-=-=-=-=-==-=-=-=-=-=-==-=-=-=-=-=-==-=-=-=-=-=-==-=-=-=-=-=-==-=-=-=-=-=-=-=-=-=-#
+#>--- Amount Measure in (K) & (M)
+#=-=-=-=-=-=-==-=-=-=-=-=-==-=-=-=-=-=-==-=-=-=-=-=-==-=-=-=-=-=-==-=-=-=-=-=-==-=-=-=-=-=-=-=-=-=-#
+
+['Eats Ops Measure':'Amount (K)'] = C:
+   ['Amount'] \ 1000;
+
+['Eats Ops Measure':'Amount (M)'] = C:
+    ['Amount'] \ 1000000;
+
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=- #
 # Consolidation  and N Level  Calcs
@@ -120,6 +187,7 @@ FEEDERS;
 ['Actual','Active Restaurants'] => ['% of Restos'];
 
 ['Actual','FDS','Completed Deliveries'] => ['Actual','Product Resto PL','Completed Deliveries'];
+['Actual','FDS','Completed Deliveries'] => ['Actual','Oracle','Completed Deliveries'];
 
 ## Feed Ops
 

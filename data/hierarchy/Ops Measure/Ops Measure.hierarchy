@@ -1,23 +1,150 @@
 {
     "DefaultMember": {
         "Attributes": {
-            "Caption": "Amount"
+            "Caption": "PoP Growth",
+            "Format": "#,##0;(#,##0)"
         },
         "IsPlaceholder": false,
-        "Name": "Amount",
+        "Name": "PoP Growth",
         "Ordinal": 1,
         "Type": "Regular",
-        "UniqueName": "[Ops Measure].[Ops Measure].[Amount]",
+        "UniqueName": "[Ops Measure].[Ops Measure].[PoP Growth]",
         "Weight": 0
     },
-    "Edges": [],
-    "ElementAttributes": [],
+    "Edges": [
+        {
+            "ComponentName": "Amount",
+            "ParentName": "PoP Growth",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Amount",
+            "ParentName": "PoP Growth %",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Amount",
+            "ParentName": "YoY Growth",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Amount",
+            "ParentName": "YoY Growth %",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Amount",
+            "ParentName": "% of Gross Bookings",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Amount",
+            "ParentName": "% of Adjusted Net Revenue",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Amount",
+            "ParentName": "Amount (K)",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Amount",
+            "ParentName": "Amount (M)",
+            "Weight": 1
+        }
+    ],
+    "ElementAttributes": [
+        {
+            "Name": "Format",
+            "Type": "String"
+        }
+    ],
     "Elements": [
+        {
+            "Attributes": {
+                "Caption": "PoP Growth",
+                "Format": "#,##0;(#,##0)"
+            },
+            "Index": 1,
+            "Name": "PoP Growth",
+            "Type": "Consolidated",
+            "UniqueName": "[Ops Measure].[Ops Measure].[PoP Growth]"
+        },
+        {
+            "Attributes": {
+                "Caption": "PoP Growth %",
+                "Format": "#.00%"
+            },
+            "Index": 2,
+            "Name": "PoP Growth %",
+            "Type": "Consolidated",
+            "UniqueName": "[Ops Measure].[Ops Measure].[PoP Growth %]"
+        },
+        {
+            "Attributes": {
+                "Caption": "YoY Growth",
+                "Format": "#,##0;(#,##0)"
+            },
+            "Index": 3,
+            "Name": "YoY Growth",
+            "Type": "Consolidated",
+            "UniqueName": "[Ops Measure].[Ops Measure].[YoY Growth]"
+        },
+        {
+            "Attributes": {
+                "Caption": "YoY Growth %",
+                "Format": "#.00%"
+            },
+            "Index": 4,
+            "Name": "YoY Growth %",
+            "Type": "Consolidated",
+            "UniqueName": "[Ops Measure].[Ops Measure].[YoY Growth %]"
+        },
+        {
+            "Attributes": {
+                "Caption": "% of Gross Bookings",
+                "Format": "#.00%"
+            },
+            "Index": 5,
+            "Name": "% of Gross Bookings",
+            "Type": "Consolidated",
+            "UniqueName": "[Ops Measure].[Ops Measure].[% of Gross Bookings]"
+        },
+        {
+            "Attributes": {
+                "Caption": "% of Adjusted Net Revenue",
+                "Format": "#,##0.00;(#,##0.00)"
+            },
+            "Index": 6,
+            "Name": "% of Adjusted Net Revenue",
+            "Type": "Consolidated",
+            "UniqueName": "[Ops Measure].[Ops Measure].[% of Adjusted Net Revenue]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Amount (K)",
+                "Format": "#,##0.00;(#,##0.00)"
+            },
+            "Index": 7,
+            "Name": "Amount (K)",
+            "Type": "Consolidated",
+            "UniqueName": "[Ops Measure].[Ops Measure].[Amount (K)]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Amount (M)",
+                "Format": "#,##0.00;(#,##0.00)"
+            },
+            "Index": 8,
+            "Name": "Amount (M)",
+            "Type": "Consolidated",
+            "UniqueName": "[Ops Measure].[Ops Measure].[Amount (M)]"
+        },
         {
             "Attributes": {
                 "Caption": "Amount"
             },
-            "Index": 1,
+            "Index": 9,
             "Name": "Amount",
             "Type": "Numeric",
             "UniqueName": "[Ops Measure].[Ops Measure].[Amount]"

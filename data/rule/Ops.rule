@@ -20,7 +20,7 @@ SKIPCHECK;
 # STET Freight monthly completed trips - 2020 onwards
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
 
-['Actual','FDP','Line of Business' : '8001','Completed Trips','Amount'] = N:
+['Actual','FDS','Line of Business' : '8001','Completed Trips','Amount'] = N:
    IF(
       ELISANC('Period', 'Total Time - Month', !Period)=1 &
       DIMIX('Period', !Period) >= DIMIX('Period', '2020-01')
@@ -35,6 +35,74 @@ SKIPCHECK;
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- #
 
 [{'Support Contacts - Virtual', 'Support Contacts - Greenlight'}] = N: STET;
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=- =-=-=-=-=-=-=-=-=-=-=-=-=-=- =-=-=-= #
+# POP, YOY, POP %, YOY %, % of Gross Bookings, % of Adjusted Net Revenue
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=- =-=-=-=-=-=-=-=-=-=-=-=-=-=- =-=-=-= #
+
+['% of Gross Bookings'] = ['Amount'] \ ['Gross Bookings','Amount'];
+
+['% of Adjusted Net Revenue'] = ['Amount'] \ ['Adjusted Net Revenue'];
+
+['PoP Growth'] =
+   (
+     ['Amount'] -
+     DB('Ops',!Version,ATTRS('Period', !Period, 'Period-1'),!Source,!Rate Type,!Location,!Line of Business,!Product Type,!Ops Metric,'Amount')
+   ) *
+      IF(
+      ATTRN('Ops Metric', !Ops Metric, 'Var Multiplier') = -1
+      ,
+      -1
+      ,
+      1);
+
+['YoY Growth'] =
+   (
+      ['Amount'] -
+      DB('Ops',!Version,ATTRS('Period', !Period, 'Year-1'),!Source,!Rate Type,!Location,!Line of Business,!Product Type,!Ops Metric,'Amount')
+   ) *
+      IF(
+      ATTRN('Ops Metric', !Ops Metric, 'Var Multiplier') = -1
+      ,
+      -1
+      ,
+      1);
+
+['PoP Growth %'] =
+  MIN(
+    MAX(
+         ['PoP Growth'] \
+         ABS (DB('Ops',!Version,ATTRS('Period', !Period, 'Period-1'),!Source,!Rate Type,!Location,!Line of Business,!Product Type,!Ops Metric,'Amount'))
+         ,
+        -9.99
+      )
+   ,
+    9.99
+  );
+
+['YoY Growth %'] =
+  MIN(
+    MAX(
+          ['YoY Growth'] \
+          ABS (DB('Ops',!Version,ATTRS('Period', !Period, 'Year-1'),!Source,!Rate Type,!Location,!Line of Business,!Product Type,!Ops Metric,'Amount'))
+          ,
+         -9.99
+        )
+      ,
+    9.99
+  );
+
+
+#=-=-=-=-=-=-==-=-=-=-=-=-==-=-=-=-=-=-==-=-=-=-=-=-==-=-=-=-=-=-==-=-=-=-=-=-==-=-=-=-=-=-=-=-=-=-#
+#>--- Amount Measure in (K) & (M)
+#=-=-=-=-=-=-==-=-=-=-=-=-==-=-=-=-=-=-==-=-=-=-=-=-==-=-=-=-=-=-==-=-=-=-=-=-==-=-=-=-=-=-=-=-=-=-#
+
+['Ops Measure':'Amount (K)'] = C:
+   ['Amount'] \ 1000;
+
+['Ops Measure':'Amount (M)'] = C:
+    ['Amount'] \ 1000000;
+
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=- #
 # Eats C-level rules
@@ -370,7 +438,7 @@ SKIPCHECK;
     IF(
       ELISANC('OPS Metric', 'Freight Only Metrics', !OPS Metric)=1
    ,
-     DB('Freight Ops', !Version, !Period, 'FDP', !Rate Type, !Location, 'Total Freight Shipper', 'Total Freight Load Rate Type', 'Total Freight Service Type', 'Total Freight Booking Channel', 'Total Freight Carrier Segment', !Ops Metric, 'Amount')
+     DB('Freight Ops', !Version, !Period, 'FDS', !Rate Type, !Location, 'Total Freight Shipper', 'Total Freight Load Rate Type', 'Total Freight Service Type', 'Total Freight Booking Channel', 'Total Freight Carrier Segment', !Ops Metric, 'Amount')
    ,
       STET
    );
