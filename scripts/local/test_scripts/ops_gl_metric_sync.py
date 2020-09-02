@@ -9,7 +9,7 @@ source_mdx = (
     "[Ops Metric].[Non-P2P Rider Miles]," + 
     "[Ops Metric].[Total Support Contacts]" +
     "} * "+
-    "{[Line of Business].[Rides], [Line of Business].[Eats]," +
+    "{[Line of Business].[Core Rides], [Line of Business].[Delivery ex M&A]," +
     "[Line of Business].[Freight], [Line of Business].[Total Careem]}"+
 "ON ROWS,"+
     "{[Period].[%s]} "+
@@ -35,7 +35,7 @@ target_mdx = (
     "[Account].[Non-P2P Rider Miles]," + 
     "[Account].[Total Support Contacts]" +
     "} * "+
-    "{[Line of Business].[Rides], [Line of Business].[Eats]," +
+    "{[Line of Business].[Core Rides], [Line of Business].[Delivery ex M&A]," +
     "[Line of Business].[Freight], [Line of Business].[Total Careem]}"+
 "ON ROWS,"+
     "{[Month].[%s]} "+
