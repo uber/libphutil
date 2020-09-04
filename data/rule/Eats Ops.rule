@@ -67,6 +67,8 @@ SKIPCHECK;
       1);
 
 ['YoY Growth'] =
+   IF(
+     ELISANC('Period', 'Total Time - Month', !Period)=1,
    (
       ['Amount'] -
       DB('Eats Ops',!Version,ATTRS('Period', !Period, 'Year-1'),!Source,!Rate Type,!Location,!Eats Product Type,!Eats Restaurant Type,!Eats Ops Metric,'Amount')
@@ -76,7 +78,8 @@ SKIPCHECK;
       ,
       -1
       ,
-      1);
+      1)
+     , 0);
 
 ['PoP Growth %'] =
   MIN(
@@ -91,6 +94,8 @@ SKIPCHECK;
   );
 
 ['YoY Growth %'] =
+   IF(
+     ELISANC('Period', 'Total Time - Month', !Period)=1,
   MIN(
     MAX(
           ['YoY Growth'] \
@@ -100,7 +105,7 @@ SKIPCHECK;
         )
       ,
     9.99
-  );
+  ),0);
 
 #=-=-=-=-=-=-==-=-=-=-=-=-==-=-=-=-=-=-==-=-=-=-=-=-==-=-=-=-=-=-==-=-=-=-=-=-==-=-=-=-=-=-=-=-=-=-#
 #>--- Amount Measure in (K) & (M)

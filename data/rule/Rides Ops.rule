@@ -53,6 +53,8 @@ SKIPCHECK;
       1);
 
 ['YoY Growth'] =
+   IF(
+     ELISANC('Period', 'Total Time - Month', !Period)=1,
    (
       ['Amount'] -
       DB('Rides Ops', !Version, ATTRS('Period', !Period, 'Year-1'), !Source, !Rate Type, !Location, !Rides Flow Type, !Rides Car Type, !Rides Ops Metric, 'Amount')
@@ -62,7 +64,7 @@ SKIPCHECK;
       ,
       -1
       ,
-      1);
+      1), 0);
 
 ['PoP Growth %'] =
   MIN(
@@ -77,6 +79,8 @@ SKIPCHECK;
   );
 
 ['YoY Growth %'] =
+   IF(
+     ELISANC('Period', 'Total Time - Month', !Period)=1,
   MIN(
     MAX(
           ['YoY Growth'] \
@@ -86,7 +90,7 @@ SKIPCHECK;
         )
       ,
     9.99
-  );
+  ), 0);
 
 
 #=-=-=-=-=-=-==-=-=-=-=-=-==-=-=-=-=-=-==-=-=-=-=-=-==-=-=-=-=-=-==-=-=-=-=-=-==-=-=-=-=-=-=-=-=-=-#

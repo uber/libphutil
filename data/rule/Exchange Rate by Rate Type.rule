@@ -1,39 +1,16 @@
 SKIPCHECK;
 
 #=-=-=-=-=-=-==-=-=-=-=-=-==-=-=-=-=-=-==-=-=-=-=-=-==-=-=-=-=-=-==-=-=-=-=-=-==-=-=-=-=-=-=-=-=-=-#
-##  Calcs are only true for rate types
+##  Calcs are only true for fx rate types
 #=-=-=-=-=-=-==-=-=-=-=-=-==-=-=-=-=-=-==-=-=-=-=-=-==-=-=-=-=-=-==-=-=-=-=-=-==-=-=-=-=-=-=-=-=-=-#
 
 [{'Local','Rate Type':'No Rate Type'},'Amount'] = N: STET;
 
+# ==================================================================== #
+# Link to PAC.Exchange Rate
+# ==================================================================== #
 
-#=-=-=-=-=-=-==-=-=-=-=-=-==-=-=-=-=-=-==-=-=-=-=-=-==-=-=-=-=-=-==-=-=-=-=-=-==-=-=-=-=-=-=-=-=-=-#
-##  Based on Rate Type ATTRS calc rate for specific month
-#=-=-=-=-=-=-==-=-=-=-=-=-==-=-=-=-=-=-==-=-=-=-=-=-==-=-=-=-=-=-==-=-=-=-=-=-==-=-=-=-=-=-=-=-=-=-#
-
-['Amount'] = N:
-   DB('Exchange Rate',
-   ATTRS('Rate Type', !Rate Type, 'Version'),
-   IF(
-      ATTRS('Rate Type', !Rate Type, 'Specific Month') @= ''
-   ,
-      IF(
-         ATTRS('Rate Type', !Rate Type, 'Specific Year') @= ''
-      ,
-         IF(
-            ATTRS('Rate Type', !Rate Type, 'Current Month -x') @=''
-         ,
-            ATTRS('Month', Subst( Today(1), 1, 7), 'Period-1')
-         ,
-            ATTRS('Month', !Month, ATTRS('Rate Type', !Rate Type, 'Current Month -x'))
-         )
-      ,
-         ATTRS('Rate Type', !Rate Type, 'Specific Year') | '-' | SUBST(!Month, 6, 2)
-      )
-   ,
-      ATTRS('Rate Type', !Rate Type, 'Specific Month')
-   ),
-   !Currency,'USD',
-   ATTRS('Rate Type', !Rate Type, 'Exchange Rate'));
+[] = DB('PAC.Exchange Rate by Rate Type',!Version,!Month,!Currency,!Rate Type,!Exchange Rate by Rate Type Measure);
 
 FEEDERS;
+

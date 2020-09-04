@@ -1,0 +1,187 @@
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: PROPERTIES                                                           #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+{
+    "DataSource": {
+        "Type": "None"
+    },
+    "HasSecurityAccess": false,
+    "Name": "Exchange Rate.Update Dimensions",
+    "Parameters": [],
+    "UIData": "CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
+    "Variables": [],
+    "VariablesUIData": []
+}
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: PROPERTIES                                                             #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: PROLOG PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+# ==================================================================== #
+# Step 1: Update Dimensions
+# ==================================================================== #
+
+# ==================================================================== #
+# Currency
+# ==================================================================== #
+
+sDimFrom = 'PAC.Currency';
+sDimTo = 'Currency';
+sElePar = 'Total Currency';
+
+# Delete elements not in sDimFrom
+i = DIMSIZ(sDimTo);
+WHILE(i > 0);
+   sEle = DIMNM(sDimTo, i);
+   IF(DTYPE(sDimTo, sEle) @= 'N' & DIMIX(sDimFrom, sEle) = 0);
+      DIMENSIONELEMENTDELETEDIRECT(sDimTo, sEle);
+   ENDIF;
+   i = i - 1;
+END;
+
+# Add elements not in sDimFrom
+i = 1;
+WHILE(i <= DIMSIZ(sDimFrom));
+   sEle = DIMNM(sDimFrom, i);
+   IF(DTYPE(sDimFrom, sEle) @= 'N' & DIMIX(sDimTo, sEle) = 0);
+      DIMENSIONELEMENTINSERTDIRECT(sDimTo, '', sEle, 'N');
+      DIMENSIONELEMENTCOMPONENTADDDIRECT(sDimTo, sElePar, sEle, 1);
+   ENDIF;
+   i = i + 1;
+END;
+
+# ==================================================================== #
+# Currency To
+# ==================================================================== #
+
+sDimFrom = 'PAC.Currency To';
+sDimTo = 'Currency To';
+sElePar = 'Total Currency To';
+
+# Delete elements not in sDimFrom
+i = DIMSIZ(sDimTo);
+WHILE(i > 0);
+   sEle = DIMNM(sDimTo, i);
+   IF(DTYPE(sDimTo, sEle) @= 'N' & DIMIX(sDimFrom, sEle) = 0);
+      DIMENSIONELEMENTDELETEDIRECT(sDimTo, sEle);
+   ENDIF;
+   i = i - 1;
+END;
+
+# Add elements not in sDimFrom
+i = 1;
+WHILE(i <= DIMSIZ(sDimFrom));
+   sEle = DIMNM(sDimFrom, i);
+   IF(DTYPE(sDimFrom, sEle) @= 'N' & DIMIX(sDimTo, sEle) = 0);
+
+      DIMENSIONELEMENTINSERTDIRECT(sDimTo, '', sEle, 'N');
+      DIMENSIONELEMENTCOMPONENTADDDIRECT(sDimTo, sElePar, sEle, 1);
+   ENDIF;
+   i = i + 1;
+END;
+
+# ==================================================================== #
+# Rate Type Dimension
+# ==================================================================== #
+
+sDimFrom = 'PAC.Rate Type';
+sDimTo = 'Rate Type';
+sElePar = 'FX Rates';
+
+# Delete elements not in sDimFrom
+i = DIMSIZ(sDimTo);
+WHILE(i > 0);
+   sEle = DIMNM(sDimTo, i);
+   sEle = IF(sEle @= 'No Rate Type', 'Input Rate Type', sEle);
+   IF(DTYPE(sDimTo, sEle) @= 'N' & DIMIX(sDimFrom, sEle) = 0);
+      DIMENSIONELEMENTDELETEDIRECT(sDimTo, sEle);
+   ENDIF;
+   i = i - 1;
+END;
+
+sRateTypeAdded = '';
+# Add elements not in sDimFrom
+i = 1;
+WHILE(i <= DIMSIZ(sDimFrom));
+   sEle = DIMNM(sDimFrom, i);
+   sEle = IF(sEle @= 'Input Rate Type', 'No Rate Type', sEle);
+   IF(DTYPE(sDimFrom, sEle) @= 'N' & DIMIX(sDimTo, sEle) = 0);
+      DIMENSIONELEMENTINSERTDIRECT(sDimTo, '', sEle, 'N');
+      DIMENSIONELEMENTCOMPONENTADDDIRECT(sDimTo, sElePar, sEle, 1);
+
+      sRateTypeAdded = sRateTypeAdded | sEle | '|';
+
+   ENDIF;
+   i = i + 1;
+END;
+
+# ==================================================================== #
+# Process Feeders, Update Data
+# ==================================================================== #
+
+IF(LONG(sRateTypeAdded) > 0);
+   sGroupId = NUMBERTOSTRING(ROUND(RAND() * 100000));
+   sGroupId = FILL('0', 6 - LONG(sGroupId)) | sGroupId;
+
+   sProcessName = 'Bedrock.Cube.ProcessFeeders';
+   sCube = 'Eats Ops Staging';
+   EXECUTEPROCESS('TAP.Call.Queue.Add Job To Queue'
+      , 'pProcess', sProcessName
+      , 'pParams', EXPAND('pCubeName: "%sCube%"')
+      , 'pGroupId', sGroupId
+   );
+   sCube = 'Rides Ops Staging';
+   EXECUTEPROCESS('TAP.Call.Queue.Add Job To Queue'
+      , 'pProcess', sProcessName
+      , 'pParams', EXPAND('pCubeName: "%sCube%"')
+      , 'pGroupId', sGroupId
+   );
+
+ENDIF;
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: PROLOG PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: METADATA PROCEDURE                                                   #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: METADATA PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: DATA PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: DATA PROCEDURE                                                         #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: EPILOG PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: EPILOG PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #

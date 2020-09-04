@@ -1,0 +1,9 @@
+SKIPCHECK;
+
+# ==================================================================== #
+# Link to PAC.Exchange Rate
+# ==================================================================== #
+
+[] = DB('PAC.Exchange Rate', !Version, !Month, !Currency, !Currency To, !Exchange Rate Measure);
+
+FEEDERS;
