@@ -59,6 +59,14 @@ ATTRINSERT('Location', '', 'EATS L7', 'S');
 # Initialise Constants               
 #=================================================#
 
+
+sDim = 'Location';
+
+sSubset = 'All Level 0';
+
+sMDX = 'TM1SORT({TM1FilterByLevel( TM1SubsetAll( [ ' | sDim | ' ] ), 0 )},ASC)';
+SUBSETCREATEBYMDX(sSubset, sMdx, 1);
+
 cTargetCube = '}ElementAttributes_Location';
 #=================================================#
 
@@ -78,6 +86,13 @@ EXECUTEPROCESS(sProcess
    , 'pDestroyTempObj', 1
    , 'pDebug', 0
 );
+# ==================================================================== #
+# Assign data source
+# ==================================================================== #
+DatasourceType = 'SUBSET';
+DatasourceNameForServer = sDim;
+DatasourceDimensionSubset = sSubset;
+
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
 # END: PROLOG PROCEDURE                                                       #
