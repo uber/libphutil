@@ -1,0 +1,126 @@
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: PROPERTIES                                                           #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+{
+    "DataSource": {
+        "Type": "None"
+    },
+    "HasSecurityAccess": false,
+    "Name": "Ops.Call.Eats Ops.Product Restaurant PL",
+    "Parameters": [],
+    "UIData": "CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
+    "Variables": [],
+    "VariablesUIData": []
+}
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: PROPERTIES                                                             #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: PROLOG PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+## Derive current month and date ##
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+
+nDate = NOW;
+NEWDATEFORMATTER('', 'PST', 'serial', 'medium', 'date', '');
+sOutputString = FORMATDATE(nDate, 0);
+
+currMonth = SUBST(sOutputstring, LONG(sOutputstring) - 3, 4) | '-' | SUBST(sOutputstring, 1, 3);
+prevMonth = ATTRS('Month', currMonth, 'Period-1');
+
+BD3 = ATTRN('Month', currMonth, 'BD3');
+BD10 = ATTRN('Month', currMonth, 'BD10');
+
+IF(SCAN(',', sOutputString) = 6);
+   currDay = STRINGTONUMBER(SUBST(sOutputString, 5, 1));
+ELSE;
+   currDay = STRINGTONUMBER(SUBST(sOutputString, 5, 2));
+ENDIF;
+
+
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+## Run Eats Product Resto PL for GB and Trips on BD3
+##        and for all accounts on BD10               
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+
+IF(currDay = BD3);
+
+   # Eats Product Resto PL
+   EXECUTEPROCESS('Ops.DIQ.GL Reporting.Sync'
+      , 'pInstance', 'PAC'
+      , 'pProcess', 'DIQ.Call.Batch'
+      , 'pParams', '[{"Name":"pDIQBatch","Value":"Batch - 1017"}]'
+   );
+
+   # Rides Product PL
+   EXECUTEPROCESS('Ops.DIQ.GL Reporting.Sync'
+      , 'pInstance', 'PAC'
+      , 'pProcess', 'DIQ.Call.Batch'
+      , 'pParams', '[{"Name":"pDIQBatch","Value":"Batch - 1014"}]'
+   );
+
+   # Eats Product Resto PL
+ELSEIF(currDay = BD10);
+   EXECUTEPROCESS('Ops.DIQ.GL Reporting.Sync'
+      , 'pInstance', 'PAC'
+      , 'pProcess', 'DIQ.Call.Batch'
+      , 'pParams', '[{"Name":"pDIQBatch","Value":"Batch - 1018"}]'
+   );
+
+   # Rides Product PL
+   EXECUTEPROCESS('Ops.DIQ.GL Reporting.Sync'
+      , 'pInstance', 'PAC'
+      , 'pProcess', 'DIQ.Call.Batch'
+      , 'pParams', '[{"Name":"pDIQBatch","Value":"Batch - 1023"}]'
+   );
+ENDIF;
+
+
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: PROLOG PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: METADATA PROCEDURE                                                   #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: METADATA PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: DATA PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: DATA PROCEDURE                                                         #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: EPILOG PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: EPILOG PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
