@@ -51,7 +51,7 @@ final class PhutilExecPassthru extends PhutilExecutableFuture {
    *
    * @task command
    */
-  public function execute() {
+  public function execute($spec=null, $pipes=null) { // UBER CODE
     $command = $this->command;
 
     $profiler = PhutilServiceProfiler::getInstance();
@@ -61,9 +61,14 @@ final class PhutilExecPassthru extends PhutilExecutableFuture {
         'subtype' => 'passthru',
         'command' => $command,
       ));
-
-    $spec  = array(STDIN, STDOUT, STDERR);
-    $pipes = array();
+    // UBER CODE
+    if (!$spec) {
+      $spec  = array(STDIN, STDOUT, STDERR);
+    }
+    if (!$pipes) {
+      $pipes = array();
+    }
+    // UBER CODE END
 
     if ($command instanceof PhutilCommandString) {
       $unmasked_command = $command->getUnmaskedString();
