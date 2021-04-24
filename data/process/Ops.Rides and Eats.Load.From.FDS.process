@@ -273,11 +273,6 @@ IF(SCAN(sPeriod | '_' | sMetric | '_' | sLOB, cPeriodMetricLOBString) = 0);
                SUBSETCREATE(sDim, cSubsetName, 1);
                SUBSETELEMENTINSERT(sDim, cSubsetName, sElement, 1);
                VIEWSUBSETASSIGN(cCube, cViewName, sDim, cSubsetName);
-            ELSEIF(sDim @= 'Rate Type');
-               sElement = 'USD';
-               SUBSETCREATE(sDim, cSubsetName, 1);
-               SUBSETELEMENTINSERT(sDim, cSubsetName, sElement, 1);
-               VIEWSUBSETASSIGN(cCube, cViewName, sDim, cSubsetName);
             ELSEIF(sDim @= 'Source');
                sElement = 'FDP';
                SUBSETCREATE(sDim, cSubsetName, 1);
@@ -332,20 +327,33 @@ IF(vMetric @= 'Support Contacts - Virtual' % vMetric @= 'Support Contacts - Gree
       sLocation = sLocation;
    ENDIF;
 
-   CELLINCREMENTN(vValue, cCube, cVersion, sPeriod, cSource, cRatetype, sLocation, sLOB, sProductType, vMetric, cMeasure);
+   sDim = 'Rate Type';
+   p = 1;
+   WHILE(p <= DIMSIZ(sDim));
+      sRateType = DIMNM(sDim, p);
+      IF(ELLEV(sDim, sRateType) = 0);
+         CELLINCREMENTN(vValue, cCube, cVersion, sPeriod, cSource, sRatetype, sLocation, sLOB, sProductType, vMetric, cMeasure);
+      ENDIF;
+      p = p + 1;
+   END;
+
 ELSE;
-
-   IF(ELLEV('Line of Business', vLOB) > 0 & ELLEV('Location', sLocation) > 0);
-
-      CELLPUTN(vValue, cCube, cVersion, sPeriod, cSource, cRatetype, 'CustomLeaf:' | sLocation | ' Input', 'CustomLeaf:Total Rides & Eats Input', sProductType, vMetric, cMeasure);
-   ELSEIF(ELLEV('Line of Business', vLOB) > 0 & ELLEV('Location', sLocation) = 0);
-      CELLPUTN(vValue, cCube, cVersion, sPeriod, cSource, cRatetype, sLocation, 'CustomLeaf:Total Rides & Eats Input', sProductType, vMetric, cMeasure);
-   ELSEIF(ELLEV('Line of Business', vLOB) = 0 & ELLEV('Location', sLocation) > 0);
-      CELLPUTN(vValue, cCube, cVersion, sPeriod, cSource, cRatetype, 'CustomLeaf:' | sLocation | ' Input', sLOB, sProductType, vMetric, cMeasure);
-   ELSE;
-      ITEMSKIP;
-   ENDIF;
-
+   p = 1;
+   WHILE(p <= DIMSIZ(sDim));
+      sRateType = DIMNM(sDim, p);
+      IF(ELLEV(sDim, sRateType) = 0);
+         IF(ELLEV('Line of Business', vLOB) > 0 & ELLEV('Location', sLocation) > 0);
+            CELLPUTN(vValue, cCube, cVersion, sPeriod, cSource, sRatetype, 'CustomLeaf:' | sLocation | ' Input', 'CustomLeaf:Total Rides & Eats Input', sProductType, vMetric, cMeasure);
+         ELSEIF(ELLEV('Line of Business', vLOB) > 0 & ELLEV('Location', sLocation) = 0);
+            CELLPUTN(vValue, cCube, cVersion, sPeriod, cSource, sRatetype, sLocation, 'CustomLeaf:Total Rides & Eats Input', sProductType, vMetric, cMeasure);
+         ELSEIF(ELLEV('Line of Business', vLOB) = 0 & ELLEV('Location', sLocation) > 0);
+            CELLPUTN(vValue, cCube, cVersion, sPeriod, cSource, sRatetype, 'CustomLeaf:' | sLocation | ' Input', sLOB, sProductType, vMetric, cMeasure);
+         ELSE;
+            ITEMSKIP;
+         ENDIF;
+      ENDIF;
+      p = p + 1;
+   END;
 ENDIF;
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #

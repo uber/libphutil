@@ -78,7 +78,7 @@ cPortNumber = '443';
 cPath = CELLGETS(cTAPSysInfoCube, 'Files Shared Path', 'Value') | '/ops';
 cPythonExe = CELLGETS(cTAPSysInfoCube, 'Python Executable', 'Value');
 
-cScriptRun = CELLGETS(cTAPSysInfoCube, 'Scripts Shared Path', 'Value') | '/generic_process_call.py';
+cScriptRun = CELLGETS(cTAPSysInfoCube, 'Scripts Local Path', 'Value') | '/generic_process_call.py';
 
 cBatchUser = CELLGETS(cTAPSysInfoCube, 'Batch Username', 'Value');
 cBatchPassword = CELLGETS(cTAPSysInfoCube, 'Batch Password', 'Value');
