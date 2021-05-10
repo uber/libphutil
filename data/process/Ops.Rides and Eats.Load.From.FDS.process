@@ -338,6 +338,7 @@ IF(vMetric @= 'Support Contacts - Virtual' % vMetric @= 'Support Contacts - Gree
    END;
 
 ELSE;
+   sDim = 'Rate Type';
    p = 1;
    WHILE(p <= DIMSIZ(sDim));
       sRateType = DIMNM(sDim, p);
