@@ -57,7 +57,8 @@ SUBSETMDXSET(sDim, sSub, '');
 sDim = cDimPeriod;
 sSub = cSub | '.Period';
 
-sSuffix = ' YTG';
+
+sSuffix = ' ROY';
 
 i = 1;
 WHILE(i <= SUBSETGETSIZE(sDim, sSub));
@@ -70,7 +71,8 @@ WHILE(i <= SUBSETGETSIZE(sDim, sSub));
       sQuarter = ATTRS(sDim1, sEleLeaf, 'Quarter');
       sMonth = ATTRS(sDim1, sEleLeaf, 'Month');
 
-      sElePar = 'Total Time - Month - Year to Go';
+
+      sElePar = 'Total Time - Month - Rest of Year';
       sEle = sYear | sSuffix;
 
       IF(DIMIX(sDim, sElePar) = 0);
@@ -137,8 +139,8 @@ WHILE(i <= SUBSETGETSIZE(sDim, sSub));
          DIMENSIONELEMENTINSERT(sDim, '', sElePar, 'C');
       ENDIF;
 
-      p = 1;
-      WHILE(p <= NUMBR(sMonth));
+      p = NUMBR(sMonth);
+      WHILE(p <= 12);
          sEle = sYear | '-' | FILL('0', 2 - LONG(NUMBERTOSTRING(p))) | NUMBERTOSTRING(p);
          nWeight = 1;
 
@@ -150,6 +152,7 @@ WHILE(i <= SUBSETGETSIZE(sDim, sSub));
 
    i = i + 1;
 END;
+# ================= TAPTOOLS: END GENERATED CODE ===================== #
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
 # END: PROLOG PROCEDURE                                                       #
