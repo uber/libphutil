@@ -152,7 +152,7 @@ DatasourceQuery = sQuery;
 #****End: Generated Statements****
 
 IF(pLevel @= 'Month');
-   IF(vMetric @= 'Support Contacts - Virtual' % vMetric @= 'Support Contacts - Greenlight');
+   IF(vMetric @= 'Support Contacts - Virtual' % vMetric @= 'Support Contacts - Greenlight' % vMetric @= 'Support Contacts - Automation');
       nGLOPS = 1;
    ENDIF;
 ENDIF;
@@ -190,7 +190,7 @@ ENDIF;
 sLocation = 'V' | vLocation;
 
 
-IF(vMetric @<> 'Support Contacts - Virtual' & vMetric @<> 'Support Contacts - Greenlight');
+IF(vMetric @<> 'Support Contacts - Virtual' & vMetric @<> 'Support Contacts - Greenlight' & vMetric @<> 'Support Contacts - Automation');
    IF((ELISANC(sDim, 'Total Location by Country', vLocation) = 1 & ELLEV(sDim, vLocation) <> 0) % (ELISANC(sDim, 'Custom Consolidations', vLocation) = 1 & ELLEV(sDim, vLocation) <> 0) % (ELISANC(sDim, 'Total Location', vLocation) = 1 & ELLEV(sDim, vLocation) <> 0));
       sLocation = vLocation;
    ELSEIF(vLocation @= 'global');
@@ -317,7 +317,7 @@ ELSE;
 ENDIF;
 
 
-IF(vMetric @= 'Support Contacts - Virtual' % vMetric @= 'Support Contacts - Greenlight');
+IF(vMetric @= 'Support Contacts - Virtual' % vMetric @= 'Support Contacts - Greenlight' % vMetric @= 'Support Contacts - Automation');
    sDim = 'Location';
    sLen = LONG(vLocation);
    sLocation = SUBST(vLocation, 11, (sLen - 9)) | ' (Country)';
