@@ -156,7 +156,7 @@ DatasourceQuery = sQuery;
 #****End: Generated Statements****
 
 IF(pLevel @= 'Month');
-   IF(vMetric @= 'Completed Deliveries');
+   IF(vMetric @= 'Completed Deliveries' % vMetric @= 'Rider Miles');
       nGLOPS = 1;
    ENDIF;
 ENDIF;

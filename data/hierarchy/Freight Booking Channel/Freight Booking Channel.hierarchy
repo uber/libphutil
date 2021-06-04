@@ -30,6 +30,11 @@
             "ComponentName": "Unspecified Freight Booking Channel",
             "ParentName": "Total Freight Booking Channel",
             "Weight": 1
+        },
+        {
+            "ComponentName": "API",
+            "ParentName": "Total Freight Booking Channel",
+            "Weight": 1
         }
     ],
     "ElementAttributes": [],
@@ -78,6 +83,15 @@
             "Name": "Unspecified Freight Booking Channel",
             "Type": "Numeric",
             "UniqueName": "[Freight Booking Channel].[Freight Booking Channel].[Unspecified Freight Booking Channel]"
+        },
+        {
+            "Attributes": {
+                "Caption": "API"
+            },
+            "Index": 6,
+            "Name": "API",
+            "Type": "Numeric",
+            "UniqueName": "[Freight Booking Channel].[Freight Booking Channel].[API]"
         }
     ],
     "Name": "Freight Booking Channel",
