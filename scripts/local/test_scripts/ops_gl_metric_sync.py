@@ -3,11 +3,12 @@ import datetime
 from tm1tests.reconciliation import Reconciliation
 
 source_mdx = (
+"WITH MEMBER [Ops Metric].[Total_Support_Contacts] AS [Ops Metric].[Total Support Contacts]"+
 "SELECT NON EMPTY "+
     "{[Ops Metric].[Completed Trips], [Ops Metric].[Vehicle Miles]," +
     "[Ops Metric].[P2P Rider Miles]," +
     "[Ops Metric].[Non-P2P Rider Miles]," + 
-    "[Ops Metric].[Total Support Contacts]" +
+    "[Ops Metric].[Total_Support_Contacts]" +
     "} * "+
     "{[Line of Business].[Core Rides], [Line of Business].[Delivery ex M&A]," +
     "[Line of Business].[Freight], [Line of Business].[Total Careem]}"+
@@ -28,12 +29,13 @@ source_mdx = (
 )
 
 target_mdx = (
-"WITH MEMBER [Account].[Rider Miles] AS [Account].[Total Rider Miles] "+
+"WITH MEMBER [Account].[Rider Miles] AS [Account].[Total Rider Miles]"+
+     "MEMBER [Account].[Total_Support_Contacts] AS [Account].[Total Support Defects]"+
 "SELECT NON EMPTY "+
     "{[Account].[Completed Trips], [Account].[Vehicle Miles]," +
     "[Account].[P2P Rider Miles]," +
     "[Account].[Non-P2P Rider Miles]," + 
-    "[Account].[Total Support Contacts]" +
+    "[Account].[Total_Support_Contacts]" +
     "} * "+
     "{[Line of Business].[Core Rides], [Line of Business].[Delivery ex M&A]," +
     "[Line of Business].[Freight], [Line of Business].[Total Careem]}"+
