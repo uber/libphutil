@@ -64,7 +64,7 @@ class Mytest(Reconciliation):
     alert_level = {'email': 'error', 'page': 'critical'}
     source = [['ops', 'mdx', source_mdx]]
     target = [['analytics', 'mdx', target_mdx]]
-    schedule = '0 * * * *'
+    schedule = '0 9 * * *'
     threshold = ('ge', 1)
     keyword = ['ops']
     
