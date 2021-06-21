@@ -1,0 +1,161 @@
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: PROPERTIES                                                           #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+{
+    "DataSource": {
+        "Type": "None"
+    },
+    "HasSecurityAccess": false,
+    "Name": "System.Send Email",
+    "Parameters": [
+        {
+            "Name": "pFrom",
+            "Prompt": "From which mailing address (empty = instancename@uber.com)",
+            "Type": "String",
+            "Value": "analytics@uber.com"
+        },
+        {
+            "Name": "pTo",
+            "Prompt": "Mailing Address",
+            "Type": "String",
+            "Value": "pa-eng@uber.com"
+        },
+        {
+            "Name": "pSubject",
+            "Prompt": "Subject of Mail",
+            "Type": "String",
+            "Value": "Tetsing"
+        },
+        {
+            "Name": "phtmlContent",
+            "Prompt": "Link",
+            "Type": "String",
+            "Value": "<a href=\"https://web.tm1dev.awscorp.uberinternal.com/tm1web/UrlApi.jsp#Action=Open&Type=WebSheet&Workbook=Applications/Admin%20Playbook/Analytics%20Admin%20Playbook&AdminHost=usw2-tm1-dev-adm01&TM1Server=Analytics.test\" target=\"_blank\">Click me Mark!!!</a>"
+        }
+    ],
+    "UIData": "CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
+    "Variables": [],
+    "VariablesUIData": []
+}
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: PROPERTIES                                                             #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: PROLOG PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+################################################################################
+## System.SendEmail
+##
+## This process is used to kickoff a Python script that sends an email with
+## HTML content to an email address or multiple email address.
+##
+## pFrom:         Email address used to send this email.
+## pTo:           String of email(s) to send content to separated by a pipe.
+## pSubject:      The subject of the email. HTML is not suppported.
+## pHTMLContent:  HTML content to be used in the body of the email. Exclude
+##                commas as this breaks the script command.
+##
+################################################################################
+
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+## Initialise Constants               
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+
+cCube = 'TAP System Info';
+cInstance = CELLGETS(cCube, 'Application Name', 'Value');
+cPythonExe = CELLGETS(cCube, 'Python Executable', 'Value');
+cScriptPath = CELLGETS(cCube, 'Scripts Local Path', 'Value');
+cScript = cScriptPath | '/sendemail.py';
+cLogsPath = CELLGETS(cCube, 'Logs Path', 'Value') | '/sendemail.log';
+
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+## Validate Parameters         
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+
+IF(pFrom @= '');
+   pFrom = cInstance | '@uber.com';
+ENDIF;
+
+sEmailsArg = '--to_emails ';
+IF(pTo @= '');
+   PROCESSQUIT;
+ELSEIF(SCAN('|', pTo) > 0);
+   sSubst = pTo;
+   WHILE(SCAN('|', sSubst) <> 0);
+      n = SCAN('|', sSubst);
+      sEmail = CHAR(34) | SUBST(sSubst, 1, n - 1) | CHAR(34);
+      sSubst = SUBST(sSubst, n + 1, LONG(sSubst));
+      sEmailsArg = sEmailsArg | CHAR(39) | sEmail | CHAR(39);
+      IF(SCAN('|', sSubst) = 0);
+         sEmailsArg = sEmailsArg | CHAR(34) | '%sSubst%' | CHAR(34);
+      ENDIF;
+   END;
+ELSE;
+   sEmailsArg = sEmailsArg | ' "%pTo%"';
+ENDIF;
+sEmailsArg = EXPAND(sEmailsArg);
+
+sHTMLContent = CHAR(39) | pHTMLContent | CHAR(39);
+
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+## Prepare Command and Execute       
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+
+cScriptTemplate = '%cPythonExe% "%cScript%" 
+--from_email "%pFrom%" 
+%sEmailsArg% 
+--subject "%pSubject%" 
+--html_content %sHTMLContent% 
+--logs_path "%cLogsPath%"
+';
+
+sCommand = EXPAND(cScriptTemplate);
+LOGOUTPUT('INFO', 'PYTHON SCRIPT EXECUTION -- START -- ASYNCHRONOUS');
+sLogCommand = IF(LONG(sCommand) > 600, SUBST(sCommand, 1, 600) | '. . . (600 char max)', sCommand);
+LOGOUTPUT('INFO', EXPAND('PYTHON SCRIPT COMMAND: %sLogCommand%'));
+EXECUTECOMMAND(sCommand, 0);
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: PROLOG PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: METADATA PROCEDURE                                                   #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: METADATA PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: DATA PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: DATA PROCEDURE                                                         #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: EPILOG PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: EPILOG PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
