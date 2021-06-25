@@ -146,7 +146,7 @@ WHILE(i <= SUBSETGETSIZE(sDim, sSub));
 
    i = i + 1;
 END;
-   # ================= TAPTOOLS: END GENERATED CODE ===================== #
+# ================= TAPTOOLS: END GENERATED CODE ===================== #
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
 # END: PROLOG PROCEDURE                                                       #

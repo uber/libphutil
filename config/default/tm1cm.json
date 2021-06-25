@@ -46,7 +46,8 @@
         "}ElementAttributes_ANALYTICS.*",
         "ANALYTICS.*",
         "}ElementAttributes_PAC.*",
-        "PAC.*"
+        "PAC.*",
+        "}ElementAttributes_SecMeta*"
 
     ],
     "exclude_cube_view": "",
