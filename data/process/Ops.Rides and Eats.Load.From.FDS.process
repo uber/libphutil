@@ -191,7 +191,7 @@ sLocation = 'V' | vLocation;
 
 
 IF(vMetric @<> 'Support Contacts - Virtual' & vMetric @<> 'Support Contacts - Greenlight' & vMetric @<> 'Support Contacts - Automation');
-   IF((ELISANC(sDim, 'Total Location by Country', vLocation) = 1 & ELLEV(sDim, vLocation) <> 0) % (ELISANC(sDim, 'Custom Consolidations', vLocation) = 1 & ELLEV(sDim, vLocation) <> 0) % (ELISANC(sDim, 'Total Location', vLocation) = 1 & ELLEV(sDim, vLocation) <> 0));
+   IF((ELISANC(sDim, 'Total Location by Country', vLocation) = 1 & ELLEV(sDim, vLocation) <> 0) % (ELISANC(sDim, 'Custom Consolidations', vLocation) = 1 & ELLEV(sDim, vLocation) <> 0) % (ELISANC(sDim, 'Total Location', vLocation) = 1 & ELLEV(sDim, vLocation) <> 0) % SCAN('(Country)', vLocation) > 0);
       sLocation = vLocation;
    ELSEIF(vLocation @= 'global');
       sLocation = 'Total Location';

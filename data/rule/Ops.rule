@@ -21,6 +21,11 @@ SKIPCHECK;
 
 ['Actual', 'Avg. Fare', 'Amount'] = C: ['Fares'] \ ['Completed Trips'];
 
+['Actual', 'TPU', 'Amount'] = C:  ['Completed Trips'] \ ['Active Riders'];
+
+['Actual', 'X-Platform Users %', 'Amount'] = ['X-Platform Users'] \ DB('Ops',!Version, !Period, !Source,!Rate Type, 'Total Location By Country', !Line of Business,!Product Type, 'X-Platform Users','Amount');
+
+
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=- =-=-=-=-=-=-=-=-#
 # STET Freight monthly completed trips - 2020 onwards
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
@@ -130,6 +135,9 @@ SKIPCHECK;
 ['Actual',  'Line of Business':'2001', 'TpR'] = C: ['Completed Trips'] \ ['Active Restaurants'];
 
 ['Actual',  'Line of Business':'2001', '% of Trips Promoed'] = C: ['Promo Trips'] \ ['Completed Trips'];
+
+['CPT',  'Amount'] =  (['Existing Driver Incentives'] + ['Total Driver Payments']) \ ['Completed Trips'];
+
 
 
 ['Actual', 'Line of Business':'8001', 'Load Margin'] = ['Gross Bookings - Shipper Revenue'] - ['Carrier Payout'];
@@ -456,6 +464,9 @@ SKIPCHECK;
 FEEDERS;
 
 #['Actual','FDS','USD','Line of Business':'1001','Completed Trips','Amount']=>DB('GL By Product Allocation','Actual',!Period,'Core Rides',!Location,'Total Product Type Excl Other','GAAP Contribution','Allocation %');
+
+['Completed Trips',  'Amount'] => ['CPT'];
+
 
 
 

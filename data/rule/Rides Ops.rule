@@ -30,15 +30,22 @@ SKIPCHECK;
 
 ['Version' : {'2020 Plan',  'Forecast Excl Actuals'}] =  STET;
 
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=- =-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+# Calculated Rides Metrics: Avg.Fare, TPU
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- #
 
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=- =-=-=-=-=-=-=-=-=-=-=-=-=-=- =-=-=-= #
+['Avg.Fare', 'Amount'] = C: ['Gross Bookings'] \ ['Completed Trips'];
+
+['TPU', 'Amount'] = C:  ['Completed Trips'] \ ['Active Riders'];
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=- =-=-=-=-=-=-=-=-=-=-=-=-=-=- =-=-=-= -=-=-=-=- =-=-=-=#
 # POP, YOY, POP %, YOY %, % of Gross Bookings, % of Adjusted Net Revenue
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=- =-=-=-=-=-=-=-=-=-=-=-=-=-=- =-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=- =-=-=-=-=-=-=-=-=-=-=-=-=-=- =-=-=-=-=-=-=-=- =-=-=-= #
 
 ['% of Gross Bookings'] = ['Amount'] \ ['Gross Bookings','Amount'];
 
 ['% of Adjusted Net Revenue'] = ['Amount'] \ ['Adjusted Net Revenue', 'Amount'];
-
 
 ['PoP Growth'] =
    (
@@ -142,6 +149,8 @@ SKIPCHECK;
    ,
       STET
    );
+
+
 
 FEEDERS;
 

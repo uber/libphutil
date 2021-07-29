@@ -46,6 +46,12 @@ SKIPCHECK;
 ['Actual',{'Product Resto PL', 'Oracle'},'Completed Deliveries'] = N: ['Actual','FDS','Completed Deliveries'];
 ['Source' : 'Product Resto PL'] =  STET;
 
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-  =-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+# Eats Ops Calculated Metrics: CPT
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=- =-=-=-=-=-=-=-=-=-=-=-=-=-=- #
+
+['CPT', 'Amount'] = C: (['Existing Driver Incentives'] + ['Total Driver Payments']) \ ['Completed Deliveries'];
+
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=- =-=-=-=-=-=-=-=-=-=-=-=-=-=- =-=-=-= #
 # POP, YOY, POP %, YOY %, % of Gross Bookings, % of Adjusted Net Revenue
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=- =-=-=-=-=-=-=-=-=-=-=-=-=-=- =-=-=-= #

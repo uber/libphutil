@@ -6,7 +6,7 @@
         "Type": "ODBC",
         "dataSourceNameForClient": "TM1TEGRATOR",
         "dataSourceNameForServer": "TM1TEGRATOR",
-        "query": "select * from \"pipe.eats_ops_tm1_monthly_financial.20200402004515.WFCKMN\"",
+        "query": "select * from \"pipe.eats_ops_tm1_monthly_operational.20210716014133.FFXR3Z\";",
         "userName": "epm",
         "usesUnicode": true
     },
@@ -43,28 +43,28 @@
         },
         {
             "EndByte": 0,
-            "Name": "vCurrency",
+            "Name": "vcurrency",
             "Position": 2,
             "StartByte": 0,
             "Type": "String"
         },
         {
             "EndByte": 0,
-            "Name": "vMetric",
+            "Name": "vmetric",
             "Position": 3,
             "StartByte": 0,
             "Type": "String"
         },
         {
             "EndByte": 0,
-            "Name": "vPeriod",
+            "Name": "vperiod",
             "Position": 4,
             "StartByte": 0,
             "Type": "String"
         },
         {
             "EndByte": 0,
-            "Name": "vProductType",
+            "Name": "vproducttype",
             "Position": 5,
             "StartByte": 0,
             "Type": "String"
@@ -78,7 +78,7 @@
         },
         {
             "EndByte": 0,
-            "Name": "vValue",
+            "Name": "vvalue",
             "Position": 7,
             "StartByte": 0,
             "Type": "Numeric"
