@@ -443,6 +443,32 @@ SKIPCHECK;
       STET
    );
 
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=#
+#  Postmates and Uber Grocery data
+#-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=#
+
+['Version' : 'Actual', 'Line of Business':'2004', 'Product Type' : 'Eats'] = N:
+
+   IF(
+      ELISANC('OPS Metric', 'Rides and Eats Metrics', !OPS Metric) = 1 % ELISANC('OPS Metric', 'Eats Only Metrics', !OPS Metric)=1
+   ,
+     DB('Eats Ops', !Version, !Period, !Source, !Rate Type, !Location, 'UberGrocery', 'Total Eats Restaurant Type', !Ops Metric, 'Amount')
+   ,
+      STET
+   );
+
+
+['Version' : 'Actual', 'Line of Business':'2006', 'Product Type' : 'Eats'] = N:
+
+   IF(
+      ELISANC('OPS Metric', 'Rides and Eats Metrics', !OPS Metric) = 1 % ELISANC('OPS Metric', 'Eats Only Metrics', !OPS Metric)=1
+   ,
+     DB('Eats Ops', !Version, !Period, !Source, !Rate Type, !Location, 'Postmates', 'Total Eats Restaurant Type', !Ops Metric, 'Amount')
+   ,
+      STET
+   );
+
+
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=- #
 # Freight N-level rules
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=- #

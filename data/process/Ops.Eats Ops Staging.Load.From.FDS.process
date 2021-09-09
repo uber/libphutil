@@ -6,7 +6,7 @@
         "Type": "ODBC",
         "dataSourceNameForClient": "TM1TEGRATOR",
         "dataSourceNameForServer": "TM1TEGRATOR",
-        "query": "select * from \"pipe.eats_ops_tm1_monthly_financial.20200402004515.WFCKMN\"",
+        "query": "SELECT * FROM \"pipe.eats_ops_tm1_daily_financial.20210818170638.4XG9DG\"",
         "userName": "epm",
         "usesUnicode": true
     },
@@ -17,7 +17,7 @@
             "Name": "pTable",
             "Prompt": "",
             "Type": "String",
-            "Value": "pipe.ops_tm1_monthly_financials.20200219215020.EIX8JN"
+            "Value": "pipe.eats_ops_tm1_daily_financial.20210815181627.A705MN"
         },
         {
             "Name": "pDebug",
@@ -29,7 +29,19 @@
             "Name": "pLevel",
             "Prompt": "",
             "Type": "String",
-            "Value": "Month"
+            "Value": "day"
+        },
+        {
+            "Name": "pStartDate",
+            "Prompt": "",
+            "Type": "String",
+            "Value": ""
+        },
+        {
+            "Name": "pEndDate",
+            "Prompt": "",
+            "Type": "String",
+            "Value": ""
         }
     ],
     "UIData": "CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
@@ -118,7 +130,7 @@ cMeasure = 'Amount';
 cSource = 'FDS';
 nRecords = 1;
 
-cPeriodMetricString = '';
+cMetricString = '';
 
 nStart = 1;
 nCurPos = 1;
@@ -139,6 +151,51 @@ DatasourceUsername = cUser;
 DatasourcePassword = cPassword;
 sQuery = EXPAND('SELECT * FROM "%pTable%"');
 DatasourceQuery = sQuery;
+
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+# Subsets for View Zero Out
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+
+cRandomIntA = NUMBERTOSTRING(INT(RAND() * 100000));
+cSubset = '}zTemp.' | GETPROCESSNAME() | '.' | cRandomIntA;
+cViewName = '}zTemp.' | GETPROCESSNAME() | '.' | cRandomIntA;
+VIEWCREATE(cCube, cViewName, 1);
+
+nCtr = 1;
+nMax = CUBEDIMENSIONCOUNTGET(cCube);
+
+WHILE(nCtr <= nMax);
+   sDim = TABDIM(cCube, nCtr);
+
+   IF(sDim @= 'Version');
+      sElement = 'Actual';
+      SUBSETCREATE(sDim, cSubset, 1);
+      SUBSETELEMENTINSERT(sDim, cSubset, sElement, 1);
+      VIEWSUBSETASSIGN(cCube, cViewName, sDim, cSubset);
+   ELSEIF(sDim @= 'Period');
+      SUBSETCREATE(sDim, cSubset, 1);
+      IF(pStartDate @<> '' & pEndDate @<> '' & pLevel @= 'Day');
+         nStartday = DAYNO(SUBST(pStartDate, 1, 10));
+         nEndday = DAYNO(SUBST(pEndDate, 1, 10));
+         WHILE(nStartday <= nEndDay);
+            sDay = DATE(nStartday, 1);
+            SUBSETELEMENTINSERT(sDim, cSubset, sDay, 1);
+            nStartday = nStartday + 1;
+         END;
+      ENDIF;
+      VIEWSUBSETASSIGN(cCube, cViewName, sDim, cSubset);
+   ELSEIF(sDim @= 'Eats Ops Metric');
+      SUBSETCREATE(sDim, cSubset, 1);
+      VIEWSUBSETASSIGN(cCube, cViewName, sDim, cSubset);
+   ELSE;
+      sMDX = '{TM1SORT( {TM1FILTERBYLEVEL({TM1SUBSETALL([ ' | sDim | '] )}, 0)}, ASC)}';
+      SUBSETCREATEBYMDX(cSubset, sMdx, 1);
+      VIEWSUBSETASSIGN(cCube, cViewName, sDim, cSubset);
+   ENDIF;
+
+   nCtr = nCtr + 1;
+END;
+
 
 
 
@@ -175,6 +232,8 @@ DatasourceQuery = sQuery;
 
 IF(pLevel @= 'Month');
    sPeriod = SUBST(vPeriod, 1, 7);
+ELSEIF(pLevel @= 'Day');
+   sPeriod = vPeriod;
 ELSE;
    sPeriod = 'WS ' | vPeriod;
 ENDIF;
@@ -230,66 +289,18 @@ ENDIF;
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
 # Clear Target View
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
-#Scanning the Input to find Period and metric combination to be zeroed out
+#Scanning the Input to find  metrics to be zeroed out
 
 IF(SCAN('_usd', vMetric) = 0);
    sMetric = vMetric;
 
-   IF(SCAN(sPeriod | '_' | sMetric, cPeriodMetricString) = 0);
-
-      IF(LONG(cPeriodMetricString) = 0);
-         cPeriodMetricString = sPeriod | '_' | sMetric;
-      ELSE;
-         cPeriodMetricString = cPeriodMetricString | '|' | sPeriod | '_' | sMetric;
-      ENDIF;
-
-      sLoopString = TRIM(cPeriodMetricString);
-      sLoopString = sLoopString | IF(SUBST(sLoopString, LONG(sLoopString), 1) @<> '|', '|', '');
-
-      WHILE(nCurPos <= LONG(sLoopString));
-         sCurChar = SUBST(sLoopString, nCurPos, 1);
-         IF(sCurChar @= '|');
-            sPeriodMetricElement = SUBST(sLoopString, nStart, nCurPos - nStart);
-            nSplit = SCAN('_', sPeriodMetricElement);
-            sPeriodElement = SUBST(sPeriodMetricElement, 1, (nSplit - 1));
-            sMetricElement = SUBST(sPeriodMetricElement, (nSplit + 1), LONG(sPeriodMetricElement) - nSplit);
-
-            cRandomIntA = NUMBERTOSTRING(INT(RAND() * 100000));
-            cViewName = '}zTemp.' | GETPROCESSNAME() | '.' | cRandomIntA;
-            cSubsetName = '}zTemp.' | GETPROCESSNAME() | '.' | cRandomIntA;
-            VIEWCREATE(cCube, cViewName, 1);
-            nCtr = 1;
-            nMax = CUBEDIMENSIONCOUNTGET(cCube);
-            WHILE(nCtr <= nMax);
-               sDim = TABDIM(cCube, nCtr);
-               IF(sDim @= 'Version');
-                  sElement = 'Actual';
-                  SUBSETCREATE(sDim, cSubsetName, 1);
-                  SUBSETELEMENTINSERT(sDim, cSubsetName, sElement, 1);
-                  VIEWSUBSETASSIGN(cCube, cViewName, sDim, cSubsetName);
-               ELSEIF(sDim @= 'Period');
-                  sElement = sPeriodElement;
-                  SUBSETCREATE(sDim, cSubsetName, 1);
-                  SUBSETELEMENTINSERT(sDim, cSubsetName, sElement, 1);
-                  VIEWSUBSETASSIGN(cCube, cViewName, sDim, cSubsetName);
-               ELSEIF(sDim @= 'Eats Ops Metric');
-                  sElement = sMetricElement;
-                  SUBSETCREATE(sDim, cSubsetName, 1);
-                  SUBSETELEMENTINSERT(sDim, cSubsetName, sElement, 1);
-                  VIEWSUBSETASSIGN(cCube, cViewName, sDim, cSubsetName);
-               ELSE;
-                  sMDX = '{TM1SORT( {TM1FILTERBYLEVEL({TM1SUBSETALL([ ' | sDim | '] )}, 0)}, ASC)}';
-                  SUBSETCREATEBYMDX(cSubsetName, sMdx, 1);
-                  VIEWSUBSETASSIGN(cCube, cViewName, sDim, cSubsetName);
-               ENDIF;
-               nCtr = nCtr + 1;
-            END;
-            VIEWZEROOUT(cCube, cViewName);
-            nStart = nCurPos + 1;
-         ENDIF;
-         nCurPos = nCurPos + 1;
-      END;
+   IF(SCAN(sMetric, cMetricString) = 0);
+      cMetricString = cMetricString | sMetric | '|';
+      SUBSETDELETEALLELEMENTS('Eats Ops Metric', cSubset);
+      SUBSETELEMENTINSERT('Eats Ops Metric', cSubset, sMetric, 1);
+      VIEWZEROOUT(cCube, cViewName);
    ENDIF;
+
 ENDIF;
 
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
@@ -300,6 +311,9 @@ IF(ELISANC('Eats Ops Metric', 'Net Inflows', vMetric) = 0 & SCAN('_usd', vMetric
 
    IF(pLevel @= 'Month');
       vUSDValue = vValue * CELLGETN('Exchange Rate', cVersion, sPeriod, vCurrency, 'USD', 'Rate');
+   ELSEIF(pLevel @= 'Day');
+      sMonth = SUBST(sPeriod, 1, 7);
+      vUSDValue = vValue * CELLGETN('Exchange Rate', cVersion, ATTRS('Period', sMonth, 'Period-1'), vCurrency, 'USD', 'Month End Rate');
    ELSE;
       sMonth = SUBST(sPeriod, 4, 7);
       vUSDValue = vValue * CELLGETN('Exchange Rate', cVersion, ATTRS('Period', sMonth, 'Period-1'), vCurrency, 'USD', 'Month End Rate');
@@ -344,6 +358,15 @@ ENDIF;
 
 #****Begin: Generated Statements***
 #****End: Generated Statements****
+
+
+sProcess = 'Ops.Eats Ops Staging.From Day Month';
+EXECUTEPROCESS(sProcess
+   , 'pStartDate', pStartDate
+   , 'pEndDate', pEndDate
+   , 'pMetrics', cMetricString
+);
+
 
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #

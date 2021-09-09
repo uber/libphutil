@@ -202,7 +202,11 @@ FEEDERS;
 
 ## Feed Ops
 
-['Amount'] => DB('Ops',!Version,!Period,!Source,!Rate Type,!Location,'2001','Eats',!Eats Ops Metric,'Amount');
+['Amount', 'Total Eats Product Type'] => DB('Ops',!Version,!Period,!Source,!Rate Type,!Location,'2001','Eats',!Eats Ops Metric,'Amount');
+
+['Amount', 'UberGrocery'] => DB('Ops',!Version,!Period,!Source,!Rate Type,!Location,'2004','Eats',!Eats Ops Metric,'Amount');
+
+['Amount', 'Postmates'] => DB('Ops',!Version,!Period,!Source,!Rate Type,!Location,'2006','Eats',!Eats Ops Metric,'Amount');
 
 ['Actual', 'FDS', 'Total Eats Product Type', 'Total Eats Restaurant Type', 'Completed Deliveries', 'Amount'] =>DB('Ops', 'Actual', !Period, 'FDS', !Rate Type, !Location, '2001', 'EATS', 'Completed Trips', 'Amount');
 

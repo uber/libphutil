@@ -1,0 +1,355 @@
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: PROPERTIES                                                           #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+{
+    "DataSource": {
+        "Type": "TM1CubeView",
+        "dataSourceNameForClient": "Eats Ops Staging",
+        "dataSourceNameForServer": "Eats Ops Staging",
+        "view": "Default"
+    },
+    "HasSecurityAccess": false,
+    "Name": "Ops.Eats Ops Staging.From Day Month",
+    "Parameters": [
+        {
+            "Name": "pStartDate",
+            "Prompt": "",
+            "Type": "String",
+            "Value": "2021-07-01"
+        },
+        {
+            "Name": "pEndDate",
+            "Prompt": "",
+            "Type": "String",
+            "Value": "2021-07-31"
+        },
+        {
+            "Name": "pMetrics",
+            "Prompt": "",
+            "Type": "String",
+            "Value": ""
+        }
+    ],
+    "UIData": "CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
+    "Variables": [
+        {
+            "EndByte": 0,
+            "Name": "vVersion",
+            "Position": 1,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vSrc",
+            "Position": 3,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vCurr",
+            "Position": 4,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vLoc",
+            "Position": 6,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vType",
+            "Position": 7,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vRest",
+            "Position": 8,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vMetric",
+            "Position": 9,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vPeriod",
+            "Position": 2,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vMeasure",
+            "Position": 10,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vRateType",
+            "Position": 5,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vValue",
+            "Position": 11,
+            "StartByte": 0,
+            "Type": "Numeric"
+        }
+    ],
+    "VariablesUIData": [
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=33\fColType=827\f"
+    ]
+}
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: PROPERTIES                                                             #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: PROLOG PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+sCube = 'Eats Ops Staging';
+nSiz = CUBEDIMENSIONCOUNTGET(sCube);
+
+cRand = NUMBERTOSTRING(ROUND(RAND() * 100000));
+cRand = FILL('0', 6 - LONG(cRand)) | cRand;
+cRand = NUMBERTOSTRING(NOW()) | '.' | cRand;
+cRandomIntA = cRand;
+
+# -=-=-=-=-=-=-==-=-==-===-==-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=#
+# Create Source View
+# -=-=-=-=-=-=-==-=-==-===-==-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=#
+
+cViewName = '}zTemp.' | GETPROCESSNAME() | '.' | cRandomIntA | ' Source';
+cSubsetName = '}zTemp.' | GETPROCESSNAME() | '.' | cRandomIntA | 'Source';
+
+VIEWCREATE(sCube, cViewName, 1);
+
+
+cnt = 1;
+
+WHILE(cnt <= nSiz);
+
+   sDim = TABDIM(sCube, cnt);
+
+   IF(sDim @= 'Eats Ops Metric');
+      SUBSETCREATE(sDim, cSubsetName, 1);
+      nCurr = 1;
+      nPos = 1;
+      nMax = LONG(pMetrics);
+
+      WHILE(nCurr <= nMax);
+         IF(SUBST(pMetrics, nCurr, 1) @= '|');
+            sMetric = SUBST(pMetrics, nPos, (nCurr - nPos));
+            sElem = TRIM(sMetric);
+            SUBSETELEMENTINSERT(sDim, cSubsetName, sElem, 1);
+            nPos = nCurr + 1;
+         ENDIF;
+         nCurr = nCurr + 1;
+      END;
+
+      VIEWSUBSETASSIGN(sCube, cViewName, sDim, cSubsetName);
+
+
+   ELSEIF(sDim @= 'Period');
+      SUBSETCREATE(sDim, cSubsetName, 1);
+      sStartMon = SUBST(pStartDate, 1, 7);
+      sEndMon = SUBST(pEndDate, 1, 7);
+
+      WHILE(sStartMon @<> sEndMon);
+         SUBSETELEMENTINSERT(sDim, cSubsetName, 'Day ' | sStartMon, 1);
+         sStartMon = ATTRS(sDim, sStartMon, 'Period + 1');
+      END;
+      SUBSETELEMENTINSERT(sDim, cSubsetName, 'Day ' | sEndMon, 1);
+
+      VIEWSUBSETASSIGN(sCube, cViewName, sDim, cSubsetName);
+
+   ELSEIF(sDim @= 'Eats Ops Staging Metric');
+      SUBSETCREATE(sDim, cSubsetName, 1);
+      SUBSETELEMENTINSERT(sDim, cSubsetName, 'Amount', 1);
+      VIEWSUBSETASSIGN(sCube, cViewName, sDim, cSubsetName);
+
+   ELSEIF(sDim @= 'Version');
+      SUBSETCREATE(sDim, cSubsetName, 1);
+      SUBSETELEMENTINSERT(sDim, cSubsetName, 'Actual', 1);
+      VIEWSUBSETASSIGN(sCube, cViewName, sDim, cSubsetName);
+
+   ELSE;
+      sMdx = EXPAND('{TM1FilterByLevel( {TM1SubsetAll([%sDim%].[%sDim%])}, 0) }');
+      SUBSETCREATEBYMDX(cSubsetName, sMdx, 1);
+      SUBSETMDXSET(sDim, cSubsetName, '');
+      VIEWSUBSETASSIGN(sCube, cViewName, sDim, cSubsetName);
+
+   ENDIF;
+
+   cnt = cnt + 1;
+
+END;
+
+
+# -=-=-=-=-=-=-==-=-==-===-==-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=#
+# Create Target View
+# -=-=-=-=-=-=-==-=-==-===-==-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=#
+
+cViewTar = '}zTemp.' | GETPROCESSNAME() | '.' | cRandomIntA | ' Target';
+cSubsetTar = '}zTemp.' | GETPROCESSNAME() | '.' | cRandomIntA | ' Target';
+
+VIEWCREATE(sCube, cViewTar, 1);
+
+cnt = 1;
+
+WHILE(cnt <= nSiz);
+
+   sDim = TABDIM(sCube, cnt);
+
+   IF(sDim @= 'Eats Ops Metric');
+      SUBSETCREATE(sDim, cSubsetTar, 1);
+
+      nCurr = 1;
+      nPos = 1;
+      nMax = LONG(pMetrics);
+
+      WHILE(nCurr <= nMax);
+         IF(SUBST(pMetrics, nCurr, 1) @= '|');
+            sMetric = SUBST(pMetrics, nPos, (nCurr - nPos));
+            sElem = TRIM(sMetric);
+            SUBSETELEMENTINSERT(sDim, cSubsetTar, sElem, 1);
+            nPos = nCurr + 1;
+         ENDIF;
+         nCurr = nCurr + 1;
+      END;
+
+      VIEWSUBSETASSIGN(sCube, cViewTar, sDim, cSubsetTar);
+
+   ELSEIF(sDim @= 'Period');
+      SUBSETCREATE(sDim, cSubsetTar, 1);
+      sStartMon = SUBST(pStartDate, 1, 7);
+      sEndMon = SUBST(pEndDate, 1, 7);
+
+      WHILE(sStartMon @<> sEndMon);
+         SUBSETELEMENTINSERT(sDim, cSubsetTar, sStartMon, 1);
+         sStartMon = ATTRS(sDim, sStartMon, 'Period + 1');
+      END;
+      SUBSETELEMENTINSERT(sDim, cSubsetTar, sEndMon, 1);
+
+      VIEWSUBSETASSIGN(sCube, cViewTar, sDim, cSubsetTar);
+
+   ELSEIF(sDim @= 'Eats Ops Staging Metric');
+      SUBSETCREATE(sDim, cSubsetTar, 1);
+      SUBSETELEMENTINSERT(sDim, cSubsetTar, 'Amount', 1);
+      VIEWSUBSETASSIGN(sCube, cViewTar, sDim, cSubsetTar);
+
+   ELSEIF(sDim @= 'Version');
+      SUBSETCREATE(sDim, cSubsetTar, 1);
+      SUBSETELEMENTINSERT(sDim, cSubsetTar, 'Actual', 1);
+      VIEWSUBSETASSIGN(sCube, cViewTar, sDim, cSubsetTar);
+
+   ELSE;
+      sMdx = EXPAND('{TM1FilterByLevel( {TM1SubsetAll([%sDim%].[%sDim%])}, 0) }');
+      SUBSETCREATEBYMDX(cSubsetTar, sMdx, 1);
+      SUBSETMDXSET(sDim, cSubsetTar, '');
+      VIEWSUBSETASSIGN(sCube, cViewTar, sDim, cSubsetTar);
+
+
+   ENDIF;
+
+   cnt = cnt + 1;
+END;
+
+
+
+
+# -=-=-=-=-=-=-==-=-==-===-==-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=#
+# Clear Target View
+# -=-=-=-=-=-=-==-=-==-===-==-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=#
+
+VIEWZEROOUT(sCube, cViewTar);
+
+# -=-=-=-=-=-=-==-=-==-===-==-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=#
+# Data source
+# -=-=-=-=-=-=-==-=-==-===-==-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=#
+
+
+VIEWEXTRACTSKIPZEROESSET(sCube, cViewName, 1);
+VIEWEXTRACTSKIPRULEVALUESSET(sCube, cViewName, 1);
+VIEWEXTRACTSKIPCALCSSET(sCube, cViewName, 0);
+
+DatasourceNameForServer = sCube;
+DatasourceType = 'VIEW';
+DatasourceCubeView = cViewName;
+
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: PROLOG PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: METADATA PROCEDURE                                                   #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: METADATA PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: DATA PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+CELLPUTN(vValue, sCube, vVersion, SUBST(vPeriod, 5, 7), vSrc, vCurr, vRateType, vLoc, vType, vRest, vMetric, vMeasure);
+
+
+
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: DATA PROCEDURE                                                         #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: EPILOG PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: EPILOG PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
