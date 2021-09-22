@@ -15,7 +15,7 @@
             "Name": "pMetrics",
             "Prompt": "",
             "Type": "String",
-            "Value": ""
+            "Value": "Cash Gross Bookings |Total Other Revenue"
         },
         {
             "Name": "pStartDate",
@@ -180,19 +180,24 @@ WHILE(cnt <= nSiz);
 
 
    ELSEIF(sDim @= 'Period');
-      SUBSETCREATE(sDim, cSubsetName, 1);
+
       sStartMon = SUBST(pStartDate, 1, 7);
       sEndMon = SUBST(pEndDate, 1, 7);
-
-      WHILE(sStartMon @<> sEndMon);
-         SUBSETELEMENTINSERT(sDim, cSubsetName, 'Day ' | sStartMon, 1);
-         sStartMon = ATTRS(sDim, sStartMon, 'Period + 1');
+      sMDX = ' {[Period].[holder]}  ';
+      WHILE(1 = 1);
+         sMDX = sMDX | ' + {[Period]. [Day ' | sStartMon | ']} ';
+         sMDX = sMDX | ' + {TM1FILTERBYPATTERN( {TM1SUBSETALL( [Period] )}, ''WD ' | sStartMon | '-*'')}';
+         IF(sStartMon @= sEndMon);
+            BREAK;
+         ELSE;
+            sStartMon = ATTRS(sDim, sStartMon, 'Period + 1');
+         ENDIF;
       END;
-      SUBSETELEMENTINSERT(sDim, cSubsetName, 'Day ' | sEndMon, 1);
-
+      SUBSETCREATEBYMDX(cSubsetName, sMdx, 1);
+      SUBSETMDXSET(sDim, cSubsetName, '');
       VIEWSUBSETASSIGN(sCube, cViewName, sDim, cSubsetName);
 
-   ELSEIF(sDim @= 'Rides Ops Staging Metric');
+   ELSEIF(sDim @= 'Rides Ops Staging Measure');
       SUBSETCREATE(sDim, cSubsetName, 1);
       SUBSETELEMENTINSERT(sDim, cSubsetName, 'Amount', 1);
       VIEWSUBSETASSIGN(sCube, cViewName, sDim, cSubsetName);
@@ -250,19 +255,23 @@ WHILE(cnt <= nSiz);
       VIEWSUBSETASSIGN(sCube, cViewTar, sDim, cSubsetTar);
 
    ELSEIF(sDim @= 'Period');
-      SUBSETCREATE(sDim, cSubsetTar, 1);
       sStartMon = SUBST(pStartDate, 1, 7);
       sEndMon = SUBST(pEndDate, 1, 7);
-
-      WHILE(sStartMon @<> sEndMon);
-         SUBSETELEMENTINSERT(sDim, cSubsetTar, sStartMon, 1);
-         sStartMon = ATTRS(sDim, sStartMon, 'Period + 1');
+      sMDX = ' {[Period].[holder]}  ';
+      WHILE(1 = 1);
+         sMDX = sMDX | ' + {[Period]. [ ' | sStartMon | ']} ';
+         sMDX = sMDX | ' + {TM1FILTERBYPATTERN( {TM1SUBSETALL( [Period] )}, ''WS ' | sStartMon | '-*'')}';
+         IF(sStartMon @= sEndMon);
+            BREAK;
+         ELSE;
+            sStartMon = ATTRS(sDim, sStartMon, 'Period + 1');
+         ENDIF;
       END;
-      SUBSETELEMENTINSERT(sDim, cSubsetTar, sEndMon, 1);
-
+      SUBSETCREATEBYMDX(cSubsetTar, sMdx, 1);
+      SUBSETMDXSET(sDim, cSubsetTar, '');
       VIEWSUBSETASSIGN(sCube, cViewTar, sDim, cSubsetTar);
 
-   ELSEIF(sDim @= 'Rides Ops Staging Metric');
+   ELSEIF(sDim @= 'Rides Ops Staging Measure');
       SUBSETCREATE(sDim, cSubsetTar, 1);
       SUBSETELEMENTINSERT(sDim, cSubsetTar, 'Amount', 1);
       VIEWSUBSETASSIGN(sCube, cViewTar, sDim, cSubsetTar);
@@ -331,8 +340,17 @@ DatasourceCubeView = cViewName;
 #****Begin: Generated Statements***
 #****End: Generated Statements****
 
+IF(SUBST(vPeriod, 1, 3) @= 'Day');
+   sPeriod = SUBST(vPeriod, 5, 7);
+ELSEIF(SUBST(vPeriod, 1, 2) @= 'WD');
+   sPeriod = 'WS ' | SUBST(vPeriod, 4, 10);
+ENDIF;
 
-CELLPUTN(vValue, sCube, vVersion, SUBST(vPeriod, 5, 7), vSrc, vCurr, vRateType, vLoc, vFlow, vtype, vMetric, vMeasure);
+
+CELLPUTN(vValue, sCube, vVersion, sPeriod, vSrc, vCurr, vRateType, vLoc, vFlow, vtype, vMetric, vMeasure);
+
+
+
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
 # END: DATA PROCEDURE                                                         #
