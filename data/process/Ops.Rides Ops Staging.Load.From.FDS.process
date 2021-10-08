@@ -237,16 +237,23 @@ ELSE;
    sPeriod = 'WS ' | vPeriod;
 ENDIF;
 
-IF(vMetric @= 'Fares');
-   vMetric = '41105';
+IF(SCAN('_usd', vMetric) = 0);
+   sMetric = vMetric;
+ELSE;
+   nSep = SCAN('_usd', vMetric);
+   sMetric = SUBST(vMetric, 1, (nSep - 1));
 ENDIF;
 
-IF(vMetric @= 'Booking Fees');
-   vMetric = '41115';
+IF(sMetric @= 'Fares');
+   sMetric = '41105';
 ENDIF;
 
-IF(vMetric @= 'Refunds');
-   vMetric = '41519';
+IF(sMetric @= 'Booking Fees');
+   sMetric = '41115';
+ENDIF;
+
+IF(sMetric @= 'Refunds');
+   sMetric = '41519';
 ENDIF;
 
 # Location
@@ -295,23 +302,21 @@ ENDIF;
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
 #Scanning the Input to find metrics  to be zeroed out
 
-IF(SCAN('_usd', vMetric) = 0);
-   sMetric = vMetric;
 
-   IF(SCAN(sMetric, cMetricString) = 0);
-      cMetricString = cMetricString | sMetric | '|';
-      SUBSETDELETEALLELEMENTS('Rides Ops Metric', cSubset);
-      SUBSETELEMENTINSERT('Rides Ops Metric', cSubset, sMetric, 1);
-      VIEWZEROOUT(cCube, cViewName);
-   ENDIF;
-
+IF(SCAN(sMetric, cMetricString) = 0);
+   cMetricString = cMetricString | sMetric | '|';
+   SUBSETDELETEALLELEMENTS('Rides Ops Metric', cSubset);
+   SUBSETELEMENTINSERT('Rides Ops Metric', cSubset, sMetric, 1);
+   VIEWZEROOUT(cCube, cViewName);
 ENDIF;
+
+
 
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
 # Load Data
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
 
-IF(ELISANC('Rides Ops Metric', 'Net Inflows', vMetric) = 0 & SCAN('_usd', vMetric) = 0);
+IF(ELISANC('Rides Ops Metric', 'Net Inflows', sMetric) = 0 & SCAN('_usd', vMetric) = 0);
    IF(pLevel @= 'Month');
       vUSDValue = vValue * CELLGETN('Exchange Rate', cVersion, sPeriod, vCurrency, 'USD', 'Rate');
    ELSEIF(pLevel @= 'Day');
@@ -322,29 +327,24 @@ IF(ELISANC('Rides Ops Metric', 'Net Inflows', vMetric) = 0 & SCAN('_usd', vMetri
       vUSDValue = vValue * CELLGETN('Exchange Rate', cVersion, ATTRS('Period', sMonth, 'Period-1'), vCurrency, 'USD', 'Month End Rate');
    ENDIF;
 
-   CELLINCREMENTN(vValue, cCube, cVersion, sPeriod, cSource, vCurrency, cRateType, sLocation, sFlowType, sCarType, vMetric, cMeasure);
-   CELLINCREMENTN(vUSDValue, cCube, cVersion, sPeriod, cSource, vCurrency, 'USD', sLocation, sFlowType, sCarType, vMetric, cMeasure);
-   CELLPUTS(sOutputstring, 'Rides Ops Info', vMetric, sPeriod, 'Last Updated');
+
+   CELLINCREMENTN(vValue, cCube, cVersion, sPeriod, cSource, vCurrency, cRateType, sLocation, sFlowType, sCarType, sMetric, cMeasure);
+
+   CELLINCREMENTN(vUSDValue, cCube, cVersion, sPeriod, cSource, vCurrency, 'USD', sLocation, sFlowType, sCarType, sMetric, cMeasure);
+
+   CELLPUTS(sOutputstring, 'Rides Ops Info', sMetric, sPeriod, 'Last Updated');
 
 ELSEIF(SCAN('_usd', vMetric) = 0);
-   CELLINCREMENTN(vValue, cCube, cVersion, sPeriod, cSource, vCurrency, cRateType, sLocation, sFlowType, sCarType, vMetric, cMeasure);
-   CELLPUTS(sOutputstring, 'Rides Ops Info', vMetric, sPeriod, 'Last Updated');
+
+   CELLINCREMENTN(vValue, cCube, cVersion, sPeriod, cSource, vCurrency, cRateType, sLocation, sFlowType, sCarType, sMetric, cMeasure);
+
+   CELLPUTS(sOutputstring, 'Rides Ops Info', sMetric, sPeriod, 'Last Updated');
 ELSE;
-   nSep = SCAN('_usd', vMetric);
-   sMetric = SUBST(vMetric, 1, (nSep - 1));
-   IF(sMetric @= 'Fares');
-      sMetric = '41105';
-   ENDIF;
 
-   IF(sMetric @= 'Booking Fees');
-      sMetric = '41115';
-   ENDIF;
 
-   IF(sMetric @= 'Refunds');
-      sMetric = '41519';
-   ENDIF;
    CELLINCREMENTN(vValue, cCube, cVersion, sPeriod, cSource, vCurrency, 'USD', sLocation, sFlowType, sCarType, sMetric, cMeasure);
 ENDIF;
+
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
 # END: DATA PROCEDURE                                                         #
