@@ -307,7 +307,7 @@ ENDIF;
 # Load Data
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
 
-IF(ELISANC('Eats Ops Metric', 'Net Inflows', vMetric) = 0 & SCAN('_usd', vMetric) = 0);
+IF(ELISANC('Eats Ops Metric', 'Net Inflows', sMetric) = 0 & SCAN('_usd', vMetric) = 0);
 
    IF(pLevel @= 'Month');
       vUSDValue = vValue * CELLGETN('Exchange Rate', cVersion, sPeriod, vCurrency, 'USD', 'Rate');
