@@ -58,7 +58,7 @@ SKIPCHECK;
 
 ['% of Gross Bookings'] = ['Amount'] \ ['Gross Bookings','Amount'];
 
-['% of Adjusted Net Revenue'] = ['Amount'] \ ['Adjusted Net Revenue'];
+['% of Adjusted Net Revenue'] = ['Amount'] \ ['Adjusted Net Revenue', 'Amount'];
 
 ['PoP Growth'] =
    (

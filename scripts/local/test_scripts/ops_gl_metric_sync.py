@@ -1,6 +1,3 @@
-from datetime import datetime
-
-
 from tm1tests.reconciliation import Reconciliation
 
 source_mdx = (
@@ -14,7 +11,7 @@ source_mdx = (
     "{[Line of Business].[Core Rides], [Line of Business].[Delivery ex M&A]," +
     "[Line of Business].[Freight], [Line of Business].[Total Careem]}"+
 "ON ROWS,"+
-    "{TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER( {[Period].[%s]}, ALL, RECURSIVE )}, 0)} "+
+    "{[Period].[%s]} "+
 "ON COLUMNS "+
 "FROM "+
     "[Ops] "+
@@ -41,7 +38,7 @@ target_mdx = (
     "{[Line of Business].[Core Rides], [Line of Business].[Delivery ex M&A]," +
     "[Line of Business].[Freight], [Line of Business].[Total Careem]}"+
 "ON ROWS,"+
-    "{TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER( {[Month].[%s]}, ALL, RECURSIVE )}, 0)} "+
+    "{[Month].[%s]} "+
 "ON COLUMNS "+
 "FROM "+
     "[GL Reporting] "+
@@ -71,7 +68,8 @@ class Mytest(Reconciliation):
     
     def prepare(self):
         super().prepare()
-        now = datetime.now()
-        curr_yr = str(now.year)
-        self.source[0][2] = source_mdx %(curr_yr)
-        self.target[0][2] = target_mdx %(curr_yr)
+        today = datetime.date.today()
+        first = today.replace(day=1)
+        last_month = (first - datetime.timedelta(days=1)).strftime("%Y-%m")
+        self.source[0][2] = source_mdx %(last_month)
+        self.target[0][2] = target_mdx %(last_month)
