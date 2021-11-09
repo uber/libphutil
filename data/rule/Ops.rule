@@ -240,7 +240,7 @@ SKIPCHECK;
       CONTINUE
    );
 
-['Ops Measure':'Amount',  'Line of Business':{'1004', '2002','2003','8009'}, 'Ops Metric' : 'Active Riders'] = C:
+['Ops Measure':'Amount',  'Line of Business':{'1004', '2002','2003','8009', '2007'}, 'Ops Metric' : 'Active Riders'] = C:
       IF(
          ELLEV('Period', !Period) > 0
       ,
