@@ -6,14 +6,12 @@ source_mdx = (
 "WITH MEMBER [Ops Metric].[Total_Support_Contacts] AS [Ops Metric].[Total Support Contacts]"+
 "SELECT NON EMPTY "+
     "{[Ops Metric].[Completed Trips], [Ops Metric].[Vehicle Miles]," +
-    "[Ops Metric].[P2P Rider Miles]," +
-    "[Ops Metric].[Non-P2P Rider Miles]," + 
+    "[Ops Metric].[Non-P2P Rider Miles]," +
     "[Ops Metric].[Total_Support_Contacts]" +
     "} * "+
-    "{[Line of Business].[Core Rides], [Line of Business].[Delivery ex M&A]," +
-    "[Line of Business].[Freight], [Line of Business].[Total Careem]}"+
+    "{[Line of Business].[Total Line of Business]}" +
 "ON ROWS,"+
-    "{[Period].[%s]} "+
+    "{TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER( {[Period].[%s]}, ALL, RECURSIVE )}, 0)} "+
 "ON COLUMNS "+
 "FROM "+
     "[Ops] "+
@@ -29,18 +27,15 @@ source_mdx = (
 )
 
 target_mdx = (
-"WITH MEMBER [Account].[Rider Miles] AS [Account].[Total Rider Miles]"+
-     "MEMBER [Account].[Total_Support_Contacts] AS [Account].[Total Support Defects]"+
+"WITH MEMBER [Account].[Total_Support_Contacts] AS [Account].[Total Support Defects]"+
 "SELECT NON EMPTY "+
     "{[Account].[Completed Trips], [Account].[Vehicle Miles]," +
-    "[Account].[P2P Rider Miles]," +
-    "[Account].[Non-P2P Rider Miles]," + 
+    "[Account].[Non-P2P Rider Miles]," +
     "[Account].[Total_Support_Contacts]" +
     "} * "+
-    "{[Line of Business].[Core Rides], [Line of Business].[Delivery ex M&A]," +
-    "[Line of Business].[Freight], [Line of Business].[Total Careem]}"+
+    "{[Line of Business].[Total Line of Business]}"+
 "ON ROWS,"+
-    "{[Month].[%s]} "+
+     "{TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER( {[Month].[%s]}, ALL, RECURSIVE )}, 0)} "+
 "ON COLUMNS "+
 "FROM "+
     "[GL Reporting] "+
@@ -59,9 +54,9 @@ target_mdx = (
 class Mytest(Reconciliation):
 
     name = 'Ops GL Metric Sync'
-    email_to = ['pa-eng@uber.com']
+    email_to = []
     email_from = 'pa-eng@uber.com'
-    alert_level = {'email': 'error', 'page': 'critical'}
+    alert_level = {'email': 'error'}
     source = [['ops', 'mdx', source_mdx]]
     target = [['analytics', 'mdx', target_mdx]]
     schedule = '0 9 * * *'
@@ -70,8 +65,7 @@ class Mytest(Reconciliation):
     
     def prepare(self):
         super().prepare()
-        today = datetime.date.today()
-        first = today.replace(day=1)
-        last_month = (first - datetime.timedelta(days=1)).strftime("%Y-%m")
-        self.source[0][2] = source_mdx %(last_month)
-        self.target[0][2] = target_mdx %(last_month)
+        now = datetime.now()
+        curr_yr = str(now.year)
+        self.source[0][2] = source_mdx %(curr_yr)
+        self.target[0][2] = target_mdx %(curr_yr)
