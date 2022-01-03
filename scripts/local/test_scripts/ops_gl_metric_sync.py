@@ -66,6 +66,6 @@ class Mytest(Reconciliation):
     def prepare(self):
         super().prepare()
         now = datetime.now()
-        curr_yr = str(now.year)
+        curr_yr = now.year if now.month > 1 else now.year - 1
         self.source[0][2] = source_mdx %(curr_yr)
         self.target[0][2] = target_mdx %(curr_yr)
