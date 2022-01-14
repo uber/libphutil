@@ -6,7 +6,7 @@
         "Type": "ODBC",
         "dataSourceNameForClient": "TM1TEGRATOR",
         "dataSourceNameForServer": "TM1TEGRATOR",
-        "query": "select * from \"pipe.rides_ops_tm1_monthly_operational.20200324160115.ZPT95K\"",
+        "query": "SELECT * FROM \"pipe.rides_ops_tm1_weekly_operational.20211214020822.ZBWPTP\"",
         "userName": "epm",
         "usesUnicode": true
     },
@@ -17,13 +17,25 @@
             "Name": "pTable",
             "Prompt": "",
             "Type": "String",
-            "Value": "pipe.ops_tm1_monthly_financials.20200219215020.EIX8JN"
+            "Value": "pipe.rides_ops_tm1_weekly_operational.20211214020822.ZBWPTP"
         },
         {
             "Name": "pLevel",
             "Prompt": "",
             "Type": "String",
-            "Value": "Month"
+            "Value": "Week"
+        },
+        {
+            "Name": "pStartDate",
+            "Prompt": "",
+            "Type": "String",
+            "Value": "2021-12-06"
+        },
+        {
+            "Name": "pEndDate",
+            "Prompt": "",
+            "Type": "String",
+            "Value": "2021-12-12"
         }
     ],
     "UIData": "CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
@@ -113,14 +125,13 @@ cMeasure = 'Amount';
 cSource = 'FDS';
 nRecords = 1;
 
-cPeriodMetricString = '';
+cMetricString = '';
 
 nDate = NOW;
 NEWDATEFORMATTER('', 'PST', 'serial', 'full', 'datetime', '');
 sOutputString = FORMATDATE(nDate, 0);
 
-nStart = 1;
-nCurPos = 1;
+
 
 cUser = CELLGETS('System Info', 'SQL User Name GL Transactions', 'String');
 cPassword = CELLGETS('System Info', 'SQL Password GL Transactions', 'String');
@@ -134,6 +145,79 @@ DatasourceUsername = cUser;
 DatasourcePassword = cPassword;
 sQuery = EXPAND('SELECT * FROM "%pTable%"');
 DatasourceQuery = sQuery;
+
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+# Subsets for View Zero Out
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+
+cRandomIntA = NUMBERTOSTRING(INT(RAND() * 100000));
+cSubset = '}zTemp.' | GETPROCESSNAME() | '.' | cRandomIntA | 'test';
+cViewName = '}zTemp.' | GETPROCESSNAME() | '.' | cRandomIntA;
+VIEWCREATE(cCube, cViewName, 1);
+
+nCtr = 1;
+nMax = CUBEDIMENSIONCOUNTGET(cCube);
+
+WHILE(nCtr <= nMax);
+   sDim = TABDIM(cCube, nCtr);
+
+   IF(sDim @= 'Version');
+      sElement = 'Actual';
+      SUBSETCREATE(sDim, cSubset, 1);
+      SUBSETELEMENTINSERT(sDim, cSubset, sElement, 1);
+      VIEWSUBSETASSIGN(cCube, cViewName, sDim, cSubset);
+
+   ELSEIF(sDim @= 'Period');
+      SUBSETCREATE(sDim, cSubset, 1);
+
+      IF(pLevel @= 'Month');
+         sPeriod = SUBST(pStartDate, 1, 7);
+         WHILE(ATTRN(sDim, sPeriod, 'Start of Period') <= ATTRN(sDim, SUBST(pEndDate, 1, 7), 'Start of Period'));
+            SUBSETELEMENTINSERT(sDim, cSubset, sPeriod, 1);
+            sPeriod = ATTRS(sDim, sPeriod, 'Next Period');
+         END;
+      ELSEIF(pLevel @= 'Week');
+         nPeriod = DAYNO(SUBST(pStartDate, 1, 10));
+         nEndPeriod = DAYNO(SUBST(pEndDate, 1, 10));
+
+         WHILE(nPeriod <= nEndPeriod);
+            sDay = DATE(nPeriod, 1);
+            nPar = ELPARN(sDim, sDay);
+            cnt = 1;
+            WHILE(cnt <= nPar);
+               sPar = ELPAR(sDim, sDay, cnt);
+               IF(ELISANC(sDim, 'Total Time - Week Day', sPar) = 1);
+                  sWeek = 'WS ' | SUBST(sPar, 4, 10);
+                  SUBSETELEMENTINSERT(sDim, cSubset, sWeek, 1);
+               ENDIF;
+               cnt = cnt + 1;
+            END;
+            nPeriod = DAYNO(SUBST(ATTRS(sDim, sWeek, 'Next Period'), 4, 10));
+         END;
+
+      ENDIF;
+
+      VIEWSUBSETASSIGN(cCube, cViewName, sDim, cSubset);
+
+   ELSEIF(sDim @= 'Source');
+      sElement = 'FDP';
+      SUBSETCREATE(sDim, cSubset, 1);
+      SUBSETELEMENTINSERT(sDim, cSubset, sElement, 1);
+      VIEWSUBSETASSIGN(cCube, cViewName, sDim, cSubset);
+
+   ELSEIF(sDim @= 'Rides Ops Metric');
+      SUBSETCREATE(sDim, cSubset, 1);
+      VIEWSUBSETASSIGN(cCube, cViewName, sDim, cSubset);
+
+   ELSE;
+      sMDX = '{TM1SORT( {TM1FILTERBYLEVEL({TM1SUBSETALL([ ' | sDim | '] )}, 0)}, ASC)}';
+      SUBSETCREATEBYMDX(cSubset, sMdx, 1);
+      VIEWSUBSETASSIGN(cCube, cViewName, sDim, cSubset);
+   ENDIF;
+
+   nCtr = nCtr + 1;
+END;
+
 
 
 
@@ -149,11 +233,7 @@ DatasourceQuery = sQuery;
 #****Begin: Generated Statements***
 #****End: Generated Statements****
 
-IF(pLevel @= 'Month');
-   IF(vMetric @= 'Completed Trips' % vMetric @= 'Rider Miles');
-      nGLOPS = 1;
-   ENDIF;
-ENDIF;
+
 
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
@@ -172,6 +252,7 @@ ENDIF;
 # Transformation
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
 
+
 # Month and Week
 
 IF(pLevel @= 'Month');
@@ -179,6 +260,12 @@ IF(pLevel @= 'Month');
 ELSE;
    sPeriod = 'WS ' | SUBST(vPeriod, 1, 10);
 ENDIF;
+
+
+IF(SUBSETELEMENTEXISTS('Period', cSubset, sPeriod) = 0);
+   ITEMSKIP;
+ENDIF;
+
 
 # Location
 sDim = 'Location';
@@ -200,6 +287,7 @@ ENDIF;
 IF(DIMIX('Location', sLocation) = 0);
    ITEMSKIP;
 ENDIF;
+
 
 # Flow Type
 sDim = 'Rides Flow Type';
@@ -225,70 +313,21 @@ ENDIF;
 # Clear Target View
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
 #Scanning the Input to find Period and metric combination to be zeroed out
-
 sMetric = vMetric;
 
-IF(SCAN(sPeriod | '_' | sMetric, cPeriodMetricString) = 0);
-
-   IF(LONG(cPeriodMetricString) = 0);
-      cPeriodMetricString = sPeriod | '_' | sMetric;
-   ELSE;
-      cPeriodMetricString = cPeriodMetricString | '|' | sPeriod | '_' | sMetric;
+IF(pLevel @= 'Month');
+   IF(sMetric @= 'Completed Trips' % sMetric @= 'Rider Miles');
+      nGLOPS = 1;
    ENDIF;
-
-   sLoopString = TRIM(cPeriodMetricString);
-   sLoopString = sLoopString | IF(SUBST(sLoopString, LONG(sLoopString), 1) @<> '|', '|', '');
-
-   WHILE(nCurPos <= LONG(sLoopString));
-      sCurChar = SUBST(sLoopString, nCurPos, 1);
-      IF(sCurChar @= '|');
-         sPeriodMetricElement = SUBST(sLoopString, nStart, nCurPos - nStart);
-         nSplit = SCAN('_', sPeriodMetricElement);
-         sPeriodElement = SUBST(sPeriodMetricElement, 1, (nSplit - 1));
-         sMetricElement = SUBST(sPeriodMetricElement, (nSplit + 1), LONG(sPeriodMetricElement) - nSplit);
-
-         cRandomIntA = NUMBERTOSTRING(INT(RAND() * 100000));
-         cViewName = '}zTemp.' | GETPROCESSNAME() | '.' | cRandomIntA;
-         cSubsetName = '}zTemp.' | GETPROCESSNAME() | '.' | cRandomIntA;
-
-         VIEWCREATE(cCube, cViewName, 1);
-         nCtr = 1;
-         nMax = CUBEDIMENSIONCOUNTGET(cCube);
-         WHILE(nCtr <= nMax);
-            sDim = TABDIM(cCube, nCtr);
-            IF(sDim @= 'Version');
-               sElement = 'Actual';
-               SUBSETCREATE(sDim, cSubsetName, 1);
-               SUBSETELEMENTINSERT(sDim, cSubsetName, sElement, 1);
-               VIEWSUBSETASSIGN(cCube, cViewName, sDim, cSubsetName);
-            ELSEIF(sDim @= 'Period');
-               sElement = sPeriodElement;
-               SUBSETCREATE(sDim, cSubsetName, 1);
-               SUBSETELEMENTINSERT(sDim, cSubsetName, sElement, 1);
-               VIEWSUBSETASSIGN(cCube, cViewName, sDim, cSubsetName);
-            ELSEIF(sDim @= 'Source');
-               sElement = 'FDP';
-               SUBSETCREATE(sDim, cSubsetName, 1);
-               SUBSETELEMENTINSERT(sDim, cSubsetName, sElement, 1);
-               VIEWSUBSETASSIGN(cCube, cViewName, sDim, cSubsetName);
-            ELSEIF(sDim @= 'Rides Ops Metric');
-               sElement = sMetricElement;
-               SUBSETCREATE(sDim, cSubsetName, 1);
-               SUBSETELEMENTINSERT(sDim, cSubsetName, sElement, 1);
-               VIEWSUBSETASSIGN(cCube, cViewName, sDim, cSubsetName);
-            ELSE;
-               sMDX = '{TM1SORT( {TM1FILTERBYLEVEL({TM1SUBSETALL([ ' | sDim | '] )}, 0)}, ASC)}';
-               SUBSETCREATEBYMDX(cSubsetName, sMdx, 1);
-               VIEWSUBSETASSIGN(cCube, cViewName, sDim, cSubsetName);
-            ENDIF;
-            nCtr = nCtr + 1;
-         END;
-         VIEWZEROOUT(cCube, cViewName);
-         nStart = nCurPos + 1;
-      ENDIF;
-      nCurPos = nCurPos + 1;
-   END;
 ENDIF;
+
+IF(SCAN(sMetric, cMetricString) = 0);
+   cMetricString = cMetricString | sMetric | '|';
+   SUBSETDELETEALLELEMENTS('Rides Ops Metric', cSubset);
+   SUBSETELEMENTINSERT('Rides Ops Metric', cSubset, sMetric, 1);
+   VIEWZEROOUT(cCube, cViewName);
+ENDIF;
+
 
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
 # Load Data
