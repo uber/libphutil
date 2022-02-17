@@ -224,7 +224,19 @@ WHILE(cnt <= nSiz);
       SUBSETELEMENTINSERT(sDim, cSubsetName, 'Ops P&L', 1);
       VIEWSUBSETASSIGN(sCube, cViewName, sDim, cSubsetName);
 
-   ELSEIF(sDim @= 'Analytics.Total Product Type');
+   ELSEIF(sDim @= 'ANALYTICS.Location');
+      sMdx = '{TM1FILTERBYLEVEL({TM1DRILLDOWNMEMBER( {[ANALYTICS.Location].[Total Location Incl Discontinued]} , ALL, RECURSIVE)},0)}';
+      SUBSETCREATEBYMDX(cSubsetName, sMdx, 1);
+      SUBSETMDXSET(sDim, cSubsetName, '');
+      VIEWSUBSETASSIGN(sCube, cViewName, sDim, cSubsetName);
+
+   ELSEIF(sDim @= 'ANALYTICS.Department');
+      sMdx = '{TM1FILTERBYLEVEL({TM1DRILLDOWNMEMBER( {[ANALYTICS.Department].[Total Department]} , ALL, RECURSIVE)},0)}';
+      SUBSETCREATEBYMDX(cSubsetName, sMdx, 1);
+      SUBSETMDXSET(sDim, cSubsetName, '');
+      VIEWSUBSETASSIGN(sCube, cViewName, sDim, cSubsetName);
+
+   ELSEIF(sDim @= 'Analytics.Product Type');
       SUBSETCREATE(sDim, cSubsetName, 1);
       SUBSETELEMENTINSERT(sDim, cSubsetName, 'Total Product Type', 1);
       VIEWSUBSETASSIGN(sCube, cViewName, sDim, cSubsetName);
