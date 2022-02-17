@@ -1,0 +1,14 @@
+{
+    "Dimensions": [
+        {
+            "Name": "Operational PL FDS Metrics"
+        },
+        {
+            "Name": "Line of Business"
+        },
+        {
+            "Name": "Operational PL Mapping Measure"
+        }
+    ],
+    "Name": "Operational PL Mapping"
+}

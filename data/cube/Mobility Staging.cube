@@ -1,0 +1,41 @@
+{
+    "Dimensions": [
+        {
+            "Name": "Version"
+        },
+        {
+            "Name": "Period"
+        },
+        {
+            "Name": "Source"
+        },
+        {
+            "Name": "Rate Type"
+        },
+        {
+            "Name": "Currency"
+        },
+        {
+            "Name": "Line of Business"
+        },
+        {
+            "Name": "Department"
+        },
+        {
+            "Name": "Location"
+        },
+        {
+            "Name": "Product Type"
+        },
+        {
+            "Name": "Mobility Features"
+        },
+        {
+            "Name": "Mobility Ops Metrics"
+        },
+        {
+            "Name": "Mobility Staging Measure"
+        }
+    ],
+    "Name": "Mobility Staging"
+}

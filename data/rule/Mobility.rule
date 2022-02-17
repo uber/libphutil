@@ -1,0 +1,15 @@
+SKIPCHECK;
+
+
+['Actual', 'FDS', 'Amount'] = N: IF ( ATTRS( 'Mobility Ops Metrics', !Mobility Ops Metrics, 'Fx_Flag') @= 'Y',
+                                                        DB('Mobility Staging',!Version,!Period,!Source,!Rate Type, 'Total Currency' ,!Line of Business,!Department,!Location,!Product Type,!Mobility Features,!Mobility Ops Metrics, 'Amount'),
+                                                        STET);
+
+ # Rider Miles & Completed Trips
+['Actual', 'Product PL', {'Rider Miles', 'Completed Trips'}, 'Amount'] = N: ['FDS'];
+
+
+FEEDERS;
+
+['Actual', 'FDS', {'Rider Miles', 'Completed Trips'}, 'Amount'] => ['Product PL'];
+

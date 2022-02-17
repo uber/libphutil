@@ -1,0 +1,29 @@
+{
+    "Dimensions": [
+        {
+            "Name": "Version"
+        },
+        {
+            "Name": "Period"
+        },
+        {
+            "Name": "Line of Business"
+        },
+        {
+            "Name": "Location"
+        },
+        {
+            "Name": "Department"
+        },
+        {
+            "Name": "Product Type"
+        },
+        {
+            "Name": "ANALYTICS.GL Operational"
+        },
+        {
+            "Name": "Mobility PL Allocation Measure"
+        }
+    ],
+    "Name": "Mobility PL Allocation"
+}

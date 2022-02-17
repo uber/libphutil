@@ -1,0 +1,1607 @@
+{
+    "DefaultMember": {
+        "Attributes": {
+            "Caption": "Non VC Metrics",
+            "FDS Metric": "Non VC Metrics"
+        },
+        "IsPlaceholder": false,
+        "Name": "Non VC Metrics",
+        "Ordinal": 1,
+        "Type": "Regular",
+        "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[Non VC Metrics]",
+        "Weight": 0
+    },
+    "Edges": [
+        {
+            "ComponentName": "gaap_revenue",
+            "ParentName": "Non VC Metrics",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "net_billings",
+            "ParentName": "Non VC Metrics",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "net_bookings",
+            "ParentName": "Non VC Metrics",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "new_driver_incentives",
+            "ParentName": "Non VC Metrics",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "new_rider_incentives",
+            "ParentName": "Non VC Metrics",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "total_rider_promos",
+            "ParentName": "Non VC Metrics",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "variable_contribution_with_nup",
+            "ParentName": "Non VC Metrics",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "new_courier_incentives",
+            "ParentName": "Non VC Metrics",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "new_eater_incentives",
+            "ParentName": "Non VC Metrics",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "courier_referral_reclass",
+            "ParentName": "new_driver_incentives",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "new_driver_incentive_cos",
+            "ParentName": "new_driver_incentives",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "new_driver_incentive_ex_slog",
+            "ParentName": "new_driver_incentives",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "new_driver_incentive_slog",
+            "ParentName": "new_driver_incentives",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "contra_rev_new_client_promotions",
+            "ParentName": "new_rider_incentives",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "g1g1_promos",
+            "ParentName": "new_rider_incentives",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "other_promos",
+            "ParentName": "new_rider_incentives",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "new_courier_incentive_cos",
+            "ParentName": "new_courier_incentives",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "new_courier_incentive_ex_slog",
+            "ParentName": "new_courier_incentives",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "new_courier_incentive_slog",
+            "ParentName": "new_courier_incentives",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "driver_payments_taxes_and_fees",
+            "ParentName": "VC Metrics",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "existing_user_incentives",
+            "ParentName": "VC Metrics",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "gross_bookings",
+            "ParentName": "VC Metrics",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "netr",
+            "ParentName": "VC Metrics",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "total_other_revenue",
+            "ParentName": "VC Metrics",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "variable_contribution",
+            "ParentName": "VC Metrics",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "variable_costs",
+            "ParentName": "VC Metrics",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "partner_payments_taxes_and_fees",
+            "ParentName": "VC Metrics",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "driver_payments_incl_cos",
+            "ParentName": "driver_payments_taxes_and_fees",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "restaurant_payments",
+            "ParentName": "driver_payments_taxes_and_fees",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "taxes_fees_disbursed",
+            "ParentName": "driver_payments_taxes_and_fees",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "tips",
+            "ParentName": "driver_payments_taxes_and_fees",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "wav_fees",
+            "ParentName": "driver_payments_taxes_and_fees",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "driver_payments",
+            "ParentName": "driver_payments_incl_cos",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "driver_payments_cos",
+            "ParentName": "driver_payments_incl_cos",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "restaurant_commission_fee",
+            "ParentName": "restaurant_payments",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "restaurant_dispatch",
+            "ParentName": "restaurant_payments",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "existing_driver_incentives_incl_cos",
+            "ParentName": "existing_user_incentives",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "existing_rider_incentives",
+            "ParentName": "existing_user_incentives",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "net_ufp",
+            "ParentName": "existing_user_incentives",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "promos_contra_rev",
+            "ParentName": "existing_user_incentives",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "existing_courier_incentives_incl_cos",
+            "ParentName": "existing_user_incentives",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "existing_eater_incentives",
+            "ParentName": "existing_user_incentives",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "existing_driver_incentives",
+            "ParentName": "existing_driver_incentives_incl_cos",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "existing_driver_incentives_cos",
+            "ParentName": "existing_driver_incentives_incl_cos",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "marketing_promotions",
+            "ParentName": "existing_rider_incentives",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "rider_loyalty_marketing_expense",
+            "ParentName": "existing_rider_incentives",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "contra_rev_existing_rider_promos",
+            "ParentName": "promos_contra_rev",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "contra_rev_marketing_promotions",
+            "ParentName": "promos_contra_rev",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "contra_revenue_rider_loyalty_marketing_credits",
+            "ParentName": "promos_contra_rev",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "promotions_price_cut",
+            "ParentName": "promos_contra_rev",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "subscription_pass_revenue",
+            "ParentName": "promos_contra_rev",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "existing_courier_incentives",
+            "ParentName": "existing_courier_incentives_incl_cos",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "existing_courier_incentives_cos",
+            "ParentName": "existing_courier_incentives_incl_cos",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "booking_and_other_fees",
+            "ParentName": "gross_bookings",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "fares",
+            "ParentName": "gross_bookings",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "taxes_collected",
+            "ParentName": "gross_bookings",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "basket",
+            "ParentName": "gross_bookings",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "eater_fees",
+            "ParentName": "gross_bookings",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "booking_fees",
+            "ParentName": "booking_and_other_fees",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "other_uber_fees",
+            "ParentName": "booking_and_other_fees",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "airport_fees",
+            "ParentName": "taxes_collected",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "sales_tax_collected",
+            "ParentName": "taxes_collected",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "taxes_collected_other",
+            "ParentName": "taxes_collected",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "tolls_collected",
+            "ParentName": "taxes_collected",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "other_rev",
+            "ParentName": "total_other_revenue",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "partner_revenue_ride_insurance",
+            "ParentName": "total_other_revenue",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "partnerships_revenue",
+            "ParentName": "total_other_revenue",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "vehicle_leasing_revenue",
+            "ParentName": "total_other_revenue",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "ads_revenue",
+            "ParentName": "other_rev",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "other_rev_no_ads",
+            "ParentName": "other_rev",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "money",
+            "ParentName": "variable_costs",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "other_variable",
+            "ParentName": "variable_costs",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "support",
+            "ParentName": "variable_costs",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "tech",
+            "ParentName": "variable_costs",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "trip_insurance",
+            "ParentName": "variable_costs",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "arrears",
+            "ParentName": "money",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "bank_fees",
+            "ParentName": "money",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "chargebacks_dns",
+            "ParentName": "money",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "payment_card_fees",
+            "ParentName": "money",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "merchant_fees",
+            "ParentName": "arrears",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "revenue_reserves",
+            "ParentName": "arrears",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "bad_debt_expense",
+            "ParentName": "chargebacks_dns",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "chargebacks",
+            "ParentName": "chargebacks_dns",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "unauthorized_fares",
+            "ParentName": "chargebacks_dns",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "bags",
+            "ParentName": "other_variable",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "employee_trips",
+            "ParentName": "other_variable",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "misc_partner_payments_total",
+            "ParentName": "other_variable",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "mobile_subscription",
+            "ParentName": "other_variable",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "other_cost_of_sales",
+            "ParentName": "other_variable",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "ppe",
+            "ParentName": "other_variable",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "tax_accrual",
+            "ParentName": "other_variable",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "misc_partner_payments",
+            "ParentName": "misc_partner_payments_total",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "misc_partner_payments_cos",
+            "ParentName": "misc_partner_payments_total",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "appeasements_marketing_credits",
+            "ParentName": "support",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "contra_rev_marketing_credits",
+            "ParentName": "support",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "refunds_two_sided",
+            "ParentName": "support",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "support_services",
+            "ParentName": "support",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "maps_licensing_fees",
+            "ParentName": "tech",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "mobile",
+            "ParentName": "tech",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "network_ex_depr",
+            "ParentName": "tech",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "network_ex-depr",
+            "ParentName": "tech",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "courier_payments_incl_cos",
+            "ParentName": "partner_payments_taxes_and_fees",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "courier_payments",
+            "ParentName": "courier_payments_incl_cos",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "courier_payments_cos",
+            "ParentName": "courier_payments_incl_cos",
+            "Weight": 1
+        }
+    ],
+    "ElementAttributes": [
+        {
+            "Name": "FDS Metric",
+            "Type": "Alias"
+        }
+    ],
+    "Elements": [
+        {
+            "Attributes": {
+                "Caption": "Non VC Metrics",
+                "FDS Metric": "Non VC Metrics"
+            },
+            "Index": 1,
+            "Name": "Non VC Metrics",
+            "Type": "Consolidated",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[Non VC Metrics]"
+        },
+        {
+            "Attributes": {
+                "Caption": "gaap_revenue",
+                "FDS Metric": "gaap_revenue"
+            },
+            "Index": 2,
+            "Name": "gaap_revenue",
+            "Type": "Numeric",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[gaap_revenue]"
+        },
+        {
+            "Attributes": {
+                "Caption": "net_billings",
+                "FDS Metric": "net_billings"
+            },
+            "Index": 3,
+            "Name": "net_billings",
+            "Type": "Numeric",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[net_billings]"
+        },
+        {
+            "Attributes": {
+                "Caption": "net_bookings",
+                "FDS Metric": "net_bookings"
+            },
+            "Index": 4,
+            "Name": "net_bookings",
+            "Type": "Numeric",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[net_bookings]"
+        },
+        {
+            "Attributes": {
+                "Caption": "new_driver_incentives",
+                "FDS Metric": "new_driver_incentives"
+            },
+            "Index": 5,
+            "Name": "new_driver_incentives",
+            "Type": "Consolidated",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[new_driver_incentives]"
+        },
+        {
+            "Attributes": {
+                "Caption": "courier_referral_reclass",
+                "FDS Metric": "courier_referral_reclass"
+            },
+            "Index": 6,
+            "Name": "courier_referral_reclass",
+            "Type": "Numeric",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[courier_referral_reclass]"
+        },
+        {
+            "Attributes": {
+                "Caption": "new_driver_incentive_cos",
+                "FDS Metric": "new_driver_incentive_cos"
+            },
+            "Index": 7,
+            "Name": "new_driver_incentive_cos",
+            "Type": "Numeric",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[new_driver_incentive_cos]"
+        },
+        {
+            "Attributes": {
+                "Caption": "new_driver_incentive_ex_slog",
+                "FDS Metric": "new_driver_incentive_ex_slog"
+            },
+            "Index": 8,
+            "Name": "new_driver_incentive_ex_slog",
+            "Type": "Numeric",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[new_driver_incentive_ex_slog]"
+        },
+        {
+            "Attributes": {
+                "Caption": "new_driver_incentive_slog",
+                "FDS Metric": "new_driver_incentive_slog"
+            },
+            "Index": 9,
+            "Name": "new_driver_incentive_slog",
+            "Type": "Numeric",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[new_driver_incentive_slog]"
+        },
+        {
+            "Attributes": {
+                "Caption": "new_rider_incentives",
+                "FDS Metric": "new_rider_incentives"
+            },
+            "Index": 10,
+            "Name": "new_rider_incentives",
+            "Type": "Consolidated",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[new_rider_incentives]"
+        },
+        {
+            "Attributes": {
+                "Caption": "contra_rev_new_client_promotions",
+                "FDS Metric": "contra_rev_new_client_promotions"
+            },
+            "Index": 11,
+            "Name": "contra_rev_new_client_promotions",
+            "Type": "Numeric",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[contra_rev_new_client_promotions]"
+        },
+        {
+            "Attributes": {
+                "Caption": "g1g1_promos",
+                "FDS Metric": "g1g1_promos"
+            },
+            "Index": 12,
+            "Name": "g1g1_promos",
+            "Type": "Numeric",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[g1g1_promos]"
+        },
+        {
+            "Attributes": {
+                "Caption": "other_promos",
+                "FDS Metric": "other_promos"
+            },
+            "Index": 13,
+            "Name": "other_promos",
+            "Type": "Numeric",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[other_promos]"
+        },
+        {
+            "Attributes": {
+                "Caption": "total_rider_promos",
+                "FDS Metric": "total_rider_promos"
+            },
+            "Index": 14,
+            "Name": "total_rider_promos",
+            "Type": "Numeric",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[total_rider_promos]"
+        },
+        {
+            "Attributes": {
+                "Caption": "variable_contribution_with_nup",
+                "FDS Metric": "variable_contribution_with_nup"
+            },
+            "Index": 15,
+            "Name": "variable_contribution_with_nup",
+            "Type": "Numeric",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[variable_contribution_with_nup]"
+        },
+        {
+            "Attributes": {
+                "Caption": "new_courier_incentives",
+                "FDS Metric": "new_courier_incentives"
+            },
+            "Index": 16,
+            "Name": "new_courier_incentives",
+            "Type": "Consolidated",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[new_courier_incentives]"
+        },
+        {
+            "Attributes": {
+                "Caption": "new_courier_incentive_cos",
+                "FDS Metric": "new_courier_incentive_cos"
+            },
+            "Index": 17,
+            "Name": "new_courier_incentive_cos",
+            "Type": "Numeric",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[new_courier_incentive_cos]"
+        },
+        {
+            "Attributes": {
+                "Caption": "new_courier_incentive_ex_slog",
+                "FDS Metric": "new_courier_incentive_ex_slog"
+            },
+            "Index": 18,
+            "Name": "new_courier_incentive_ex_slog",
+            "Type": "Numeric",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[new_courier_incentive_ex_slog]"
+        },
+        {
+            "Attributes": {
+                "Caption": "new_courier_incentive_slog",
+                "FDS Metric": "new_courier_incentive_slog"
+            },
+            "Index": 19,
+            "Name": "new_courier_incentive_slog",
+            "Type": "Numeric",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[new_courier_incentive_slog]"
+        },
+        {
+            "Attributes": {
+                "Caption": "new_eater_incentives",
+                "FDS Metric": "new_eater_incentives"
+            },
+            "Index": 20,
+            "Name": "new_eater_incentives",
+            "Type": "Numeric",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[new_eater_incentives]"
+        },
+        {
+            "Attributes": {
+                "Caption": "VC Metrics",
+                "FDS Metric": "VC Metrics"
+            },
+            "Index": 21,
+            "Name": "VC Metrics",
+            "Type": "Consolidated",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[VC Metrics]"
+        },
+        {
+            "Attributes": {
+                "Caption": "driver_payments_taxes_and_fees",
+                "FDS Metric": "driver_payments_taxes_and_fees_estimate"
+            },
+            "Index": 22,
+            "Name": "driver_payments_taxes_and_fees",
+            "Type": "Consolidated",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[driver_payments_taxes_and_fees]"
+        },
+        {
+            "Attributes": {
+                "Caption": "driver_payments_incl_cos",
+                "FDS Metric": "driver_payments_incl_cos"
+            },
+            "Index": 23,
+            "Name": "driver_payments_incl_cos",
+            "Type": "Consolidated",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[driver_payments_incl_cos]"
+        },
+        {
+            "Attributes": {
+                "Caption": "driver_payments",
+                "FDS Metric": "driver_payments"
+            },
+            "Index": 24,
+            "Name": "driver_payments",
+            "Type": "Numeric",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[driver_payments]"
+        },
+        {
+            "Attributes": {
+                "Caption": "driver_payments_cos",
+                "FDS Metric": "driver_payments_cos"
+            },
+            "Index": 25,
+            "Name": "driver_payments_cos",
+            "Type": "Numeric",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[driver_payments_cos]"
+        },
+        {
+            "Attributes": {
+                "Caption": "restaurant_payments",
+                "FDS Metric": "restaurant_payments"
+            },
+            "Index": 26,
+            "Name": "restaurant_payments",
+            "Type": "Consolidated",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[restaurant_payments]"
+        },
+        {
+            "Attributes": {
+                "Caption": "restaurant_commission_fee",
+                "FDS Metric": "restaurant_commission_fee"
+            },
+            "Index": 27,
+            "Name": "restaurant_commission_fee",
+            "Type": "Numeric",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[restaurant_commission_fee]"
+        },
+        {
+            "Attributes": {
+                "Caption": "restaurant_dispatch",
+                "FDS Metric": "restaurant_dispatch"
+            },
+            "Index": 28,
+            "Name": "restaurant_dispatch",
+            "Type": "Numeric",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[restaurant_dispatch]"
+        },
+        {
+            "Attributes": {
+                "Caption": "taxes_fees_disbursed",
+                "FDS Metric": "taxes_fees_disbursed"
+            },
+            "Index": 29,
+            "Name": "taxes_fees_disbursed",
+            "Type": "Numeric",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[taxes_fees_disbursed]"
+        },
+        {
+            "Attributes": {
+                "Caption": "tips",
+                "FDS Metric": "tips"
+            },
+            "Index": 30,
+            "Name": "tips",
+            "Type": "Numeric",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[tips]"
+        },
+        {
+            "Attributes": {
+                "Caption": "wav_fees",
+                "FDS Metric": "wav_fees_estimate"
+            },
+            "Index": 31,
+            "Name": "wav_fees",
+            "Type": "Numeric",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[wav_fees]"
+        },
+        {
+            "Attributes": {
+                "Caption": "existing_user_incentives",
+                "FDS Metric": "existing_user_incentives"
+            },
+            "Index": 32,
+            "Name": "existing_user_incentives",
+            "Type": "Consolidated",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[existing_user_incentives]"
+        },
+        {
+            "Attributes": {
+                "Caption": "existing_driver_incentives_incl_cos",
+                "FDS Metric": "existing_driver_incentives_incl_cos"
+            },
+            "Index": 33,
+            "Name": "existing_driver_incentives_incl_cos",
+            "Type": "Consolidated",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[existing_driver_incentives_incl_cos]"
+        },
+        {
+            "Attributes": {
+                "Caption": "existing_driver_incentives",
+                "FDS Metric": "existing_driver_incentives"
+            },
+            "Index": 34,
+            "Name": "existing_driver_incentives",
+            "Type": "Numeric",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[existing_driver_incentives]"
+        },
+        {
+            "Attributes": {
+                "Caption": "existing_driver_incentives_cos",
+                "FDS Metric": "existing_driver_incentives_cos"
+            },
+            "Index": 35,
+            "Name": "existing_driver_incentives_cos",
+            "Type": "Numeric",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[existing_driver_incentives_cos]"
+        },
+        {
+            "Attributes": {
+                "Caption": "existing_rider_incentives",
+                "FDS Metric": "existing_rider_incentives"
+            },
+            "Index": 36,
+            "Name": "existing_rider_incentives",
+            "Type": "Consolidated",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[existing_rider_incentives]"
+        },
+        {
+            "Attributes": {
+                "Caption": "marketing_promotions",
+                "FDS Metric": "marketing_promotions"
+            },
+            "Index": 37,
+            "Name": "marketing_promotions",
+            "Type": "Numeric",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[marketing_promotions]"
+        },
+        {
+            "Attributes": {
+                "Caption": "rider_loyalty_marketing_expense",
+                "FDS Metric": "rider_loyalty_marketing_expense"
+            },
+            "Index": 38,
+            "Name": "rider_loyalty_marketing_expense",
+            "Type": "Numeric",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[rider_loyalty_marketing_expense]"
+        },
+        {
+            "Attributes": {
+                "Caption": "net_ufp",
+                "FDS Metric": "net_ufp"
+            },
+            "Index": 39,
+            "Name": "net_ufp",
+            "Type": "Numeric",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[net_ufp]"
+        },
+        {
+            "Attributes": {
+                "Caption": "promos_contra_rev",
+                "FDS Metric": "promos_contra_rev"
+            },
+            "Index": 40,
+            "Name": "promos_contra_rev",
+            "Type": "Consolidated",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[promos_contra_rev]"
+        },
+        {
+            "Attributes": {
+                "Caption": "contra_rev_existing_rider_promos",
+                "FDS Metric": "contra_rev_existing_rider_promos"
+            },
+            "Index": 41,
+            "Name": "contra_rev_existing_rider_promos",
+            "Type": "Numeric",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[contra_rev_existing_rider_promos]"
+        },
+        {
+            "Attributes": {
+                "Caption": "contra_rev_marketing_promotions",
+                "FDS Metric": "contra_rev_marketing_promotions"
+            },
+            "Index": 42,
+            "Name": "contra_rev_marketing_promotions",
+            "Type": "Numeric",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[contra_rev_marketing_promotions]"
+        },
+        {
+            "Attributes": {
+                "Caption": "contra_revenue_rider_loyalty_marketing_credits",
+                "FDS Metric": "contra_revenue_rider_loyalty_marketing_credits"
+            },
+            "Index": 43,
+            "Name": "contra_revenue_rider_loyalty_marketing_credits",
+            "Type": "Numeric",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[contra_revenue_rider_loyalty_marketing_credits]"
+        },
+        {
+            "Attributes": {
+                "Caption": "promotions_price_cut",
+                "FDS Metric": "promotions_price_cut"
+            },
+            "Index": 44,
+            "Name": "promotions_price_cut",
+            "Type": "Numeric",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[promotions_price_cut]"
+        },
+        {
+            "Attributes": {
+                "Caption": "subscription_pass_revenue",
+                "FDS Metric": "subscription_pass_revenue"
+            },
+            "Index": 45,
+            "Name": "subscription_pass_revenue",
+            "Type": "Numeric",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[subscription_pass_revenue]"
+        },
+        {
+            "Attributes": {
+                "Caption": "existing_courier_incentives_incl_cos",
+                "FDS Metric": "existing_courier_incentives_incl_cos"
+            },
+            "Index": 46,
+            "Name": "existing_courier_incentives_incl_cos",
+            "Type": "Consolidated",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[existing_courier_incentives_incl_cos]"
+        },
+        {
+            "Attributes": {
+                "Caption": "existing_courier_incentives",
+                "FDS Metric": "existing_courier_incentives"
+            },
+            "Index": 47,
+            "Name": "existing_courier_incentives",
+            "Type": "Numeric",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[existing_courier_incentives]"
+        },
+        {
+            "Attributes": {
+                "Caption": "existing_courier_incentives_cos",
+                "FDS Metric": "existing_courier_incentives_cos"
+            },
+            "Index": 48,
+            "Name": "existing_courier_incentives_cos",
+            "Type": "Numeric",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[existing_courier_incentives_cos]"
+        },
+        {
+            "Attributes": {
+                "Caption": "existing_eater_incentives",
+                "FDS Metric": "existing_eater_incentives"
+            },
+            "Index": 49,
+            "Name": "existing_eater_incentives",
+            "Type": "Numeric",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[existing_eater_incentives]"
+        },
+        {
+            "Attributes": {
+                "Caption": "gross_bookings",
+                "FDS Metric": "gross_bookings"
+            },
+            "Index": 50,
+            "Name": "gross_bookings",
+            "Type": "Consolidated",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[gross_bookings]"
+        },
+        {
+            "Attributes": {
+                "Caption": "booking_and_other_fees",
+                "FDS Metric": "booking_and_other_fees"
+            },
+            "Index": 51,
+            "Name": "booking_and_other_fees",
+            "Type": "Consolidated",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[booking_and_other_fees]"
+        },
+        {
+            "Attributes": {
+                "Caption": "booking_fees",
+                "FDS Metric": "booking_fees"
+            },
+            "Index": 52,
+            "Name": "booking_fees",
+            "Type": "Numeric",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[booking_fees]"
+        },
+        {
+            "Attributes": {
+                "Caption": "other_uber_fees",
+                "FDS Metric": "other_uber_fees"
+            },
+            "Index": 53,
+            "Name": "other_uber_fees",
+            "Type": "Numeric",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[other_uber_fees]"
+        },
+        {
+            "Attributes": {
+                "Caption": "fares",
+                "FDS Metric": "fares"
+            },
+            "Index": 54,
+            "Name": "fares",
+            "Type": "Numeric",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[fares]"
+        },
+        {
+            "Attributes": {
+                "Caption": "taxes_collected",
+                "FDS Metric": "taxes_collected"
+            },
+            "Index": 55,
+            "Name": "taxes_collected",
+            "Type": "Consolidated",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[taxes_collected]"
+        },
+        {
+            "Attributes": {
+                "Caption": "airport_fees",
+                "FDS Metric": "airport_fees"
+            },
+            "Index": 56,
+            "Name": "airport_fees",
+            "Type": "Numeric",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[airport_fees]"
+        },
+        {
+            "Attributes": {
+                "Caption": "sales_tax_collected",
+                "FDS Metric": "sales_tax_collected"
+            },
+            "Index": 57,
+            "Name": "sales_tax_collected",
+            "Type": "Numeric",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[sales_tax_collected]"
+        },
+        {
+            "Attributes": {
+                "Caption": "taxes_collected_other",
+                "FDS Metric": "taxes_collected_other"
+            },
+            "Index": 58,
+            "Name": "taxes_collected_other",
+            "Type": "Numeric",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[taxes_collected_other]"
+        },
+        {
+            "Attributes": {
+                "Caption": "tolls_collected",
+                "FDS Metric": "tolls_collected"
+            },
+            "Index": 59,
+            "Name": "tolls_collected",
+            "Type": "Numeric",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[tolls_collected]"
+        },
+        {
+            "Attributes": {
+                "Caption": "basket",
+                "FDS Metric": "basket"
+            },
+            "Index": 60,
+            "Name": "basket",
+            "Type": "Numeric",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[basket]"
+        },
+        {
+            "Attributes": {
+                "Caption": "eater_fees",
+                "FDS Metric": "eater_fees"
+            },
+            "Index": 61,
+            "Name": "eater_fees",
+            "Type": "Numeric",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[eater_fees]"
+        },
+        {
+            "Attributes": {
+                "Caption": "netr",
+                "FDS Metric": "netr_estimate"
+            },
+            "Index": 62,
+            "Name": "netr",
+            "Type": "Numeric",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[netr]"
+        },
+        {
+            "Attributes": {
+                "Caption": "total_other_revenue",
+                "FDS Metric": "total_other_revenue"
+            },
+            "Index": 63,
+            "Name": "total_other_revenue",
+            "Type": "Consolidated",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[total_other_revenue]"
+        },
+        {
+            "Attributes": {
+                "Caption": "other_rev",
+                "FDS Metric": "other_rev"
+            },
+            "Index": 64,
+            "Name": "other_rev",
+            "Type": "Consolidated",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[other_rev]"
+        },
+        {
+            "Attributes": {
+                "Caption": "ads_revenue",
+                "FDS Metric": "ads_revenue"
+            },
+            "Index": 65,
+            "Name": "ads_revenue",
+            "Type": "Numeric",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[ads_revenue]"
+        },
+        {
+            "Attributes": {
+                "Caption": "other_rev_no_ads",
+                "FDS Metric": "other_rev_no_ads"
+            },
+            "Index": 66,
+            "Name": "other_rev_no_ads",
+            "Type": "Numeric",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[other_rev_no_ads]"
+        },
+        {
+            "Attributes": {
+                "Caption": "partner_revenue_ride_insurance",
+                "FDS Metric": "partner_revenue_ride_insurance"
+            },
+            "Index": 67,
+            "Name": "partner_revenue_ride_insurance",
+            "Type": "Numeric",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[partner_revenue_ride_insurance]"
+        },
+        {
+            "Attributes": {
+                "Caption": "partnerships_revenue",
+                "FDS Metric": "partnerships_revenue"
+            },
+            "Index": 68,
+            "Name": "partnerships_revenue",
+            "Type": "Numeric",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[partnerships_revenue]"
+        },
+        {
+            "Attributes": {
+                "Caption": "vehicle_leasing_revenue",
+                "FDS Metric": "vehicle_leasing_revenue"
+            },
+            "Index": 69,
+            "Name": "vehicle_leasing_revenue",
+            "Type": "Numeric",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[vehicle_leasing_revenue]"
+        },
+        {
+            "Attributes": {
+                "Caption": "variable_contribution",
+                "FDS Metric": "variable_contribution_estimate"
+            },
+            "Index": 70,
+            "Name": "variable_contribution",
+            "Type": "Numeric",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[variable_contribution]"
+        },
+        {
+            "Attributes": {
+                "Caption": "variable_costs",
+                "FDS Metric": "variable_costs_estimate"
+            },
+            "Index": 71,
+            "Name": "variable_costs",
+            "Type": "Consolidated",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[variable_costs]"
+        },
+        {
+            "Attributes": {
+                "Caption": "money",
+                "FDS Metric": "money_estimate"
+            },
+            "Index": 72,
+            "Name": "money",
+            "Type": "Consolidated",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[money]"
+        },
+        {
+            "Attributes": {
+                "Caption": "arrears",
+                "FDS Metric": "arrears_estimate"
+            },
+            "Index": 73,
+            "Name": "arrears",
+            "Type": "Consolidated",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[arrears]"
+        },
+        {
+            "Attributes": {
+                "Caption": "merchant_fees",
+                "FDS Metric": "merchant_fees_estimate"
+            },
+            "Index": 74,
+            "Name": "merchant_fees",
+            "Type": "Numeric",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[merchant_fees]"
+        },
+        {
+            "Attributes": {
+                "Caption": "revenue_reserves",
+                "FDS Metric": "revenue_reserves_estimate"
+            },
+            "Index": 75,
+            "Name": "revenue_reserves",
+            "Type": "Numeric",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[revenue_reserves]"
+        },
+        {
+            "Attributes": {
+                "Caption": "bank_fees",
+                "FDS Metric": "bank_fees_estimate"
+            },
+            "Index": 76,
+            "Name": "bank_fees",
+            "Type": "Numeric",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[bank_fees]"
+        },
+        {
+            "Attributes": {
+                "Caption": "chargebacks_dns",
+                "FDS Metric": "chargebacks_dns_estimate"
+            },
+            "Index": 77,
+            "Name": "chargebacks_dns",
+            "Type": "Consolidated",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[chargebacks_dns]"
+        },
+        {
+            "Attributes": {
+                "Caption": "bad_debt_expense",
+                "FDS Metric": "bad_debt_expense_estimate"
+            },
+            "Index": 78,
+            "Name": "bad_debt_expense",
+            "Type": "Numeric",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[bad_debt_expense]"
+        },
+        {
+            "Attributes": {
+                "Caption": "chargebacks",
+                "FDS Metric": "chargebacks_estimate"
+            },
+            "Index": 79,
+            "Name": "chargebacks",
+            "Type": "Numeric",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[chargebacks]"
+        },
+        {
+            "Attributes": {
+                "Caption": "unauthorized_fares",
+                "FDS Metric": "unauthorized_fares_estimate"
+            },
+            "Index": 80,
+            "Name": "unauthorized_fares",
+            "Type": "Numeric",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[unauthorized_fares]"
+        },
+        {
+            "Attributes": {
+                "Caption": "payment_card_fees",
+                "FDS Metric": "payment_card_fees_estimate"
+            },
+            "Index": 81,
+            "Name": "payment_card_fees",
+            "Type": "Numeric",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[payment_card_fees]"
+        },
+        {
+            "Attributes": {
+                "Caption": "other_variable",
+                "FDS Metric": "other_variable_estimate"
+            },
+            "Index": 82,
+            "Name": "other_variable",
+            "Type": "Consolidated",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[other_variable]"
+        },
+        {
+            "Attributes": {
+                "Caption": "bags",
+                "FDS Metric": "bags_estimate"
+            },
+            "Index": 83,
+            "Name": "bags",
+            "Type": "Numeric",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[bags]"
+        },
+        {
+            "Attributes": {
+                "Caption": "employee_trips",
+                "FDS Metric": "employee_trips"
+            },
+            "Index": 84,
+            "Name": "employee_trips",
+            "Type": "Numeric",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[employee_trips]"
+        },
+        {
+            "Attributes": {
+                "Caption": "misc_partner_payments_total",
+                "FDS Metric": "misc_partner_payments_total_estimate"
+            },
+            "Index": 85,
+            "Name": "misc_partner_payments_total",
+            "Type": "Consolidated",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[misc_partner_payments_total]"
+        },
+        {
+            "Attributes": {
+                "Caption": "misc_partner_payments",
+                "FDS Metric": "misc_partner_payments"
+            },
+            "Index": 86,
+            "Name": "misc_partner_payments",
+            "Type": "Numeric",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[misc_partner_payments]"
+        },
+        {
+            "Attributes": {
+                "Caption": "misc_partner_payments_cos",
+                "FDS Metric": "misc_partner_payments_cos"
+            },
+            "Index": 87,
+            "Name": "misc_partner_payments_cos",
+            "Type": "Numeric",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[misc_partner_payments_cos]"
+        },
+        {
+            "Attributes": {
+                "Caption": "mobile_subscription",
+                "FDS Metric": "mobile_subscription"
+            },
+            "Index": 88,
+            "Name": "mobile_subscription",
+            "Type": "Numeric",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[mobile_subscription]"
+        },
+        {
+            "Attributes": {
+                "Caption": "other_cost_of_sales",
+                "FDS Metric": "other_cost_of_sales_estimate"
+            },
+            "Index": 89,
+            "Name": "other_cost_of_sales",
+            "Type": "Numeric",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[other_cost_of_sales]"
+        },
+        {
+            "Attributes": {
+                "Caption": "ppe",
+                "FDS Metric": "ppe"
+            },
+            "Index": 90,
+            "Name": "ppe",
+            "Type": "Numeric",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[ppe]"
+        },
+        {
+            "Attributes": {
+                "Caption": "tax_accrual",
+                "FDS Metric": "tax_accrual_estimate"
+            },
+            "Index": 91,
+            "Name": "tax_accrual",
+            "Type": "Numeric",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[tax_accrual]"
+        },
+        {
+            "Attributes": {
+                "Caption": "support",
+                "FDS Metric": "support_estimate"
+            },
+            "Index": 92,
+            "Name": "support",
+            "Type": "Consolidated",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[support]"
+        },
+        {
+            "Attributes": {
+                "Caption": "appeasements_marketing_credits",
+                "FDS Metric": "appeasements_marketing_credits"
+            },
+            "Index": 93,
+            "Name": "appeasements_marketing_credits",
+            "Type": "Numeric",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[appeasements_marketing_credits]"
+        },
+        {
+            "Attributes": {
+                "Caption": "contra_rev_marketing_credits",
+                "FDS Metric": "contra_rev_marketing_credits"
+            },
+            "Index": 94,
+            "Name": "contra_rev_marketing_credits",
+            "Type": "Numeric",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[contra_rev_marketing_credits]"
+        },
+        {
+            "Attributes": {
+                "Caption": "refunds_two_sided",
+                "FDS Metric": "refunds_two_sided"
+            },
+            "Index": 95,
+            "Name": "refunds_two_sided",
+            "Type": "Numeric",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[refunds_two_sided]"
+        },
+        {
+            "Attributes": {
+                "Caption": "support_services",
+                "FDS Metric": "support_services_estimate"
+            },
+            "Index": 96,
+            "Name": "support_services",
+            "Type": "Numeric",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[support_services]"
+        },
+        {
+            "Attributes": {
+                "Caption": "tech",
+                "FDS Metric": "tech_estimate"
+            },
+            "Index": 97,
+            "Name": "tech",
+            "Type": "Consolidated",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[tech]"
+        },
+        {
+            "Attributes": {
+                "Caption": "maps_licensing_fees",
+                "FDS Metric": "maps_licensing_fees_estimate"
+            },
+            "Index": 98,
+            "Name": "maps_licensing_fees",
+            "Type": "Numeric",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[maps_licensing_fees]"
+        },
+        {
+            "Attributes": {
+                "Caption": "mobile",
+                "FDS Metric": "mobile_estimate"
+            },
+            "Index": 99,
+            "Name": "mobile",
+            "Type": "Numeric",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[mobile]"
+        },
+        {
+            "Attributes": {
+                "Caption": "network_ex_depr",
+                "FDS Metric": "network_ex_depr"
+            },
+            "Index": 100,
+            "Name": "network_ex_depr",
+            "Type": "Numeric",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[network_ex_depr]"
+        },
+        {
+            "Attributes": {
+                "Caption": "network_ex-depr",
+                "FDS Metric": "network_ex-depr_estimate"
+            },
+            "Index": 101,
+            "Name": "network_ex-depr",
+            "Type": "Numeric",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[network_ex-depr]"
+        },
+        {
+            "Attributes": {
+                "Caption": "trip_insurance",
+                "FDS Metric": "trip_insurance_estimate"
+            },
+            "Index": 102,
+            "Name": "trip_insurance",
+            "Type": "Numeric",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[trip_insurance]"
+        },
+        {
+            "Attributes": {
+                "Caption": "partner_payments_taxes_and_fees",
+                "FDS Metric": "partner_payments_taxes_and_fees"
+            },
+            "Index": 103,
+            "Name": "partner_payments_taxes_and_fees",
+            "Type": "Consolidated",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[partner_payments_taxes_and_fees]"
+        },
+        {
+            "Attributes": {
+                "Caption": "courier_payments_incl_cos",
+                "FDS Metric": "courier_payments_incl_cos"
+            },
+            "Index": 104,
+            "Name": "courier_payments_incl_cos",
+            "Type": "Consolidated",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[courier_payments_incl_cos]"
+        },
+        {
+            "Attributes": {
+                "Caption": "courier_payments",
+                "FDS Metric": "courier_payments"
+            },
+            "Index": 105,
+            "Name": "courier_payments",
+            "Type": "Numeric",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[courier_payments]"
+        },
+        {
+            "Attributes": {
+                "Caption": "courier_payments_cos",
+                "FDS Metric": "courier_payments_cos"
+            },
+            "Index": 106,
+            "Name": "courier_payments_cos",
+            "Type": "Numeric",
+            "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics].[courier_payments_cos]"
+        }
+    ],
+    "Name": "Operational PL FDS Metrics",
+    "Subsets": [],
+    "UniqueName": "[Operational PL FDS Metrics].[Operational PL FDS Metrics]"
+}

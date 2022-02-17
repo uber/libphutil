@@ -1,0 +1,29 @@
+{
+    "DefaultMember": {
+        "Attributes": {
+            "Caption": "TM1 Metric"
+        },
+        "IsPlaceholder": false,
+        "Name": "TM1 Metric",
+        "Ordinal": 1,
+        "Type": "Regular",
+        "UniqueName": "[Operational PL Mapping Measure].[Operational PL Mapping Measure].[TM1 Metric]",
+        "Weight": 0
+    },
+    "Edges": [],
+    "ElementAttributes": [],
+    "Elements": [
+        {
+            "Attributes": {
+                "Caption": "TM1 Metric"
+            },
+            "Index": 1,
+            "Name": "TM1 Metric",
+            "Type": "String",
+            "UniqueName": "[Operational PL Mapping Measure].[Operational PL Mapping Measure].[TM1 Metric]"
+        }
+    ],
+    "Name": "Operational PL Mapping Measure",
+    "Subsets": [],
+    "UniqueName": "[Operational PL Mapping Measure].[Operational PL Mapping Measure]"
+}
