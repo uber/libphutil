@@ -28,15 +28,6 @@
             "Name": "Amount",
             "Type": "Numeric",
             "UniqueName": "[Mobility Measure].[Mobility Measure].[Amount]"
-        },
-        {
-            "Attributes": {
-                "Caption": "test"
-            },
-            "Index": 2,
-            "Name": "test",
-            "Type": "Numeric",
-            "UniqueName": "[Mobility Measure].[Mobility Measure].[test]"
         }
     ],
     "Name": "Mobility Measure",
