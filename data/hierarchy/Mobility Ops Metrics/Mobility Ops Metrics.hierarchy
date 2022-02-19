@@ -1353,6 +1353,10 @@
             "Type": "String"
         },
         {
+            "Name": "FDS Metric",
+            "Type": "String"
+        },
+        {
             "Name": "Fx_Flag",
             "Type": "String"
         }
@@ -1388,7 +1392,8 @@
         {
             "Attributes": {
                 "Caption": "GAAP Revenue",
-                "FDS": "gaap_revenue"
+                "FDS": "gaap_revenue",
+                "FDS Metric": "gaap_revenue"
             },
             "Index": 4,
             "Name": "GAAP Revenue",
@@ -1616,6 +1621,7 @@
             "Attributes": {
                 "Caption": "Driver Referral Reclass",
                 "FDS": "courier_referral_reclass",
+                "FDS Metric": "courier_referral_reclass",
                 "Fx_Flag": "Y"
             },
             "Index": 28,
@@ -1627,6 +1633,7 @@
             "Attributes": {
                 "Caption": "New Driver Incentives (ex-SLOG)",
                 "FDS": "new_driver_incentive_ex_slog",
+                "FDS Metric": "new_driver_incentive_ex_slog",
                 "Fx_Flag": "Y"
             },
             "Index": 29,
@@ -1638,6 +1645,7 @@
             "Attributes": {
                 "Caption": "New Driver Incentives (SLOG)",
                 "FDS": "new_driver_incentive_slog",
+                "FDS Metric": "new_driver_incentive_slog",
                 "Fx_Flag": "Y"
             },
             "Index": 30,
@@ -1649,6 +1657,7 @@
             "Attributes": {
                 "Caption": "New Driver Incentives - COS",
                 "FDS": "new_driver_incentive_cos",
+                "FDS Metric": "new_driver_incentive_cos",
                 "Fx_Flag": "Y"
             },
             "Index": 31,
@@ -1670,6 +1679,7 @@
             "Attributes": {
                 "Caption": "G1G1 Promos",
                 "FDS": "g1g1_promos",
+                "FDS Metric": "g1g1_promos",
                 "Fx_Flag": "Y"
             },
             "Index": 33,
@@ -1700,6 +1710,7 @@
             "Attributes": {
                 "Caption": "Other Promos",
                 "FDS": "other_promos",
+                "FDS Metric": "other_promos",
                 "Fx_Flag": "Y"
             },
             "Index": 36,
@@ -2384,7 +2395,8 @@
         {
             "Attributes": {
                 "Caption": "Variable Contribution",
-                "FDS": "variable_contribution"
+                "FDS": "variable_contribution",
+                "FDS Metric": "variable_contribution"
             },
             "Index": 106,
             "Name": "Variable Contribution",
@@ -2394,7 +2406,8 @@
         {
             "Attributes": {
                 "Caption": "Net Effective Take Rate (NETR)",
-                "FDS": "netr"
+                "FDS": "netr",
+                "FDS Metric": "netr"
             },
             "Index": 107,
             "Name": "Net Effective Take Rate (NETR)",
@@ -2426,6 +2439,7 @@
             "Attributes": {
                 "Caption": "Fares / Basket",
                 "FDS": "fares",
+                "FDS Metric": "fares",
                 "Fx_Flag": "Y"
             },
             "Index": 110,
@@ -2466,6 +2480,7 @@
             "Attributes": {
                 "Caption": "41115",
                 "FDS": "booking_fees",
+                "FDS Metric": "booking_fees",
                 "Fx_Flag": "Y"
             },
             "Index": 114,
@@ -2477,6 +2492,7 @@
             "Attributes": {
                 "Caption": "41110",
                 "FDS": "other_uber_fees",
+                "FDS Metric": "other_uber_fees",
                 "Fx_Flag": "Y"
             },
             "Index": 115,
@@ -2488,6 +2504,7 @@
             "Attributes": {
                 "Caption": "41106",
                 "FDS": "sales_tax_collected",
+                "FDS Metric": "sales_tax_collected",
                 "Fx_Flag": "Y"
             },
             "Index": 116,
@@ -2499,6 +2516,7 @@
             "Attributes": {
                 "Caption": "41109",
                 "FDS": "airport_fees",
+                "FDS Metric": "airport_fees",
                 "Fx_Flag": "Y"
             },
             "Index": 117,
@@ -2510,6 +2528,7 @@
             "Attributes": {
                 "Caption": "41108",
                 "FDS": "tolls_collected",
+                "FDS Metric": "tolls_collected",
                 "Fx_Flag": "Y"
             },
             "Index": 118,
@@ -2521,6 +2540,7 @@
             "Attributes": {
                 "Caption": "taxes_collected_other_fds",
                 "FDS": "taxes_collected_other",
+                "FDS Metric": "taxes_collected_other",
                 "Fx_Flag": "Y"
             },
             "Index": 119,
@@ -2571,6 +2591,7 @@
             "Attributes": {
                 "Caption": "Driver Partner Payment - Agent Model",
                 "FDS": "driver_payments",
+                "FDS Metric": "driver_payments",
                 "Fx_Flag": "Y"
             },
             "Index": 124,
@@ -2592,6 +2613,7 @@
             "Attributes": {
                 "Caption": "Driver Payments - COS",
                 "FDS": "driver_payments_cos",
+                "FDS Metric": "driver_payments_cos",
                 "Fx_Flag": "Y"
             },
             "Index": 126,
@@ -2614,6 +2636,7 @@
             "Attributes": {
                 "Caption": "Taxes & Fees Disbursed",
                 "FDS": "taxes_fees_disbursed",
+                "FDS Metric": "taxes_fees_disbursed",
                 "Fx_Flag": "Y"
             },
             "Index": 128,
@@ -2625,6 +2648,7 @@
             "Attributes": {
                 "Caption": "Tips",
                 "FDS": "tips",
+                "FDS Metric": "tips",
                 "Fx_Flag": "Y"
             },
             "Index": 129,
@@ -2636,6 +2660,7 @@
             "Attributes": {
                 "Caption": "WAV Fees",
                 "FDS": "wav_fees",
+                "FDS Metric": "wav_fees",
                 "Fx_Flag": "Y"
             },
             "Index": 130,
@@ -2707,6 +2732,7 @@
             "Attributes": {
                 "Caption": "Existing Driver Incentives_fds",
                 "FDS": "existing_driver_incentives",
+                "FDS Metric": "existing_driver_incentives",
                 "Fx_Flag": "Y"
             },
             "Index": 137,
@@ -2718,6 +2744,7 @@
             "Attributes": {
                 "Caption": "Existing Driver Incentives - COS",
                 "FDS": "existing_driver_incentives_cos",
+                "FDS Metric": "existing_driver_incentives_cos",
                 "Fx_Flag": "Y"
             },
             "Index": 138,
@@ -2759,6 +2786,7 @@
             "Attributes": {
                 "Caption": "72515",
                 "FDS": "marketing_promotions",
+                "FDS Metric": "marketing_promotions",
                 "Fx_Flag": "Y"
             },
             "Index": 142,
@@ -2770,6 +2798,7 @@
             "Attributes": {
                 "Caption": "72518",
                 "FDS": "rider_loyalty_marketing_expense",
+                "FDS Metric": "rider_loyalty_marketing_expense",
                 "Fx_Flag": "Y"
             },
             "Index": 143,
@@ -2811,6 +2840,7 @@
             "Attributes": {
                 "Caption": "Net UFP_fds",
                 "FDS": "net_ufp",
+                "FDS Metric": "net_ufp",
                 "Fx_Flag": "Y"
             },
             "Index": 147,
@@ -2842,6 +2872,7 @@
             "Attributes": {
                 "Caption": "41645",
                 "FDS": "contra_rev_existing_rider_promos",
+                "FDS Metric": "contra_rev_existing_rider_promos",
                 "Fx_Flag": "Y"
             },
             "Index": 150,
@@ -2853,6 +2884,7 @@
             "Attributes": {
                 "Caption": "41649",
                 "FDS": "contra_rev_marketing_promotions",
+                "FDS Metric": "contra_rev_marketing_promotions",
                 "Fx_Flag": "Y"
             },
             "Index": 151,
@@ -2864,6 +2896,7 @@
             "Attributes": {
                 "Caption": "41699",
                 "FDS": "contra_revenue_rider_loyalty_marketing_credits",
+                "FDS Metric": "contra_revenue_rider_loyalty_marketing_credits",
                 "Fx_Flag": "Y"
             },
             "Index": 152,
@@ -2875,6 +2908,7 @@
             "Attributes": {
                 "Caption": "41205",
                 "FDS": "promotions_price_cut",
+                "FDS Metric": "promotions_price_cut",
                 "Fx_Flag": "Y"
             },
             "Index": 153,
@@ -2886,6 +2920,7 @@
             "Attributes": {
                 "Caption": "41620",
                 "FDS": "subscription_pass_revenue",
+                "FDS Metric": "subscription_pass_revenue",
                 "Fx_Flag": "Y"
             },
             "Index": 154,
@@ -2897,6 +2932,7 @@
             "Attributes": {
                 "Caption": "41650",
                 "FDS": "contra_rev_new_client_promotions",
+                "FDS Metric": "contra_rev_new_client_promotions",
                 "Fx_Flag": "Y"
             },
             "Index": 155,
@@ -2929,6 +2965,7 @@
             "Attributes": {
                 "Caption": "Partner Revenue Ride Insurance",
                 "FDS": "partner_revenue_ride_insurance",
+                "FDS Metric": "partner_revenue_ride_insurance",
                 "Fx_Flag": "Y"
             },
             "Index": 158,
@@ -2940,6 +2977,7 @@
             "Attributes": {
                 "Caption": "Partnerships Revenue",
                 "FDS": "partnerships_revenue",
+                "FDS Metric": "partnerships_revenue",
                 "Fx_Flag": "Y"
             },
             "Index": 159,
@@ -2951,6 +2989,7 @@
             "Attributes": {
                 "Caption": "Vehicle Leasing Revenue",
                 "FDS": "vehicle_leasing_revenue",
+                "FDS Metric": "vehicle_leasing_revenue",
                 "Fx_Flag": "Y"
             },
             "Index": 160,
@@ -2989,6 +3028,7 @@
             "Attributes": {
                 "Caption": "Merchant Fees - Cash Collection",
                 "FDS": "merchant_fees",
+                "FDS Metric": "merchant_fees",
                 "Fx_Flag": "Y"
             },
             "Index": 164,
@@ -3000,6 +3040,7 @@
             "Attributes": {
                 "Caption": "Revenue Reserves",
                 "FDS": "revenue_reserves",
+                "FDS Metric": "revenue_reserves",
                 "Fx_Flag": "Y"
             },
             "Index": 165,
@@ -3050,6 +3091,7 @@
             "Attributes": {
                 "Caption": "Bank Fees_fds",
                 "FDS": "bank_fees",
+                "FDS Metric": "bank_fees",
                 "Fx_Flag": "Y"
             },
             "Index": 170,
@@ -3070,6 +3112,7 @@
             "Attributes": {
                 "Caption": "Bad Debt Expense",
                 "FDS": "bad_debt_expense",
+                "FDS Metric": "bad_debt_expense",
                 "Fx_Flag": "Y"
             },
             "Index": 172,
@@ -3081,6 +3124,7 @@
             "Attributes": {
                 "Caption": "Chargebacks",
                 "FDS": "chargebacks",
+                "FDS Metric": "chargebacks",
                 "Fx_Flag": "Y"
             },
             "Index": 173,
@@ -3092,6 +3136,7 @@
             "Attributes": {
                 "Caption": "Unauthorized Fares",
                 "FDS": "unauthorized_fares",
+                "FDS Metric": "unauthorized_fares",
                 "Fx_Flag": "Y"
             },
             "Index": 174,
@@ -3103,6 +3148,7 @@
             "Attributes": {
                 "Caption": "Payment Card Fees",
                 "FDS": "payment_card_fees",
+                "FDS Metric": "payment_card_fees",
                 "Fx_Flag": "Y"
             },
             "Index": 175,
@@ -3123,6 +3169,7 @@
             "Attributes": {
                 "Caption": "Bags",
                 "FDS": "bags",
+                "FDS Metric": "bags",
                 "Fx_Flag": "Y"
             },
             "Index": 177,
@@ -3134,6 +3181,7 @@
             "Attributes": {
                 "Caption": "Employee Trips",
                 "FDS": "employee_trips",
+                "FDS Metric": "employee_trips",
                 "Fx_Flag": "Y"
             },
             "Index": 178,
@@ -3185,6 +3233,7 @@
             "Attributes": {
                 "Caption": "Misc. Partner Payments_fds",
                 "FDS": "misc_partner_payments",
+                "FDS Metric": "misc_partner_payments",
                 "Fx_Flag": "Y"
             },
             "Index": 183,
@@ -3196,6 +3245,7 @@
             "Attributes": {
                 "Caption": "Misc Partner Payments - COS",
                 "FDS": "misc_partner_payments_cos",
+                "FDS Metric": "misc_partner_payments_cos",
                 "Fx_Flag": "Y"
             },
             "Index": 184,
@@ -3207,6 +3257,7 @@
             "Attributes": {
                 "Caption": "Mobile Subscription",
                 "FDS": "mobile_subscription",
+                "FDS Metric": "mobile_subscription",
                 "Fx_Flag": "Y"
             },
             "Index": 185,
@@ -3257,6 +3308,7 @@
             "Attributes": {
                 "Caption": "Other Cost of Sales_fds",
                 "FDS": "other_cost_of_sales",
+                "FDS Metric": "other_cost_of_sales",
                 "Fx_Flag": "Y"
             },
             "Index": 190,
@@ -3268,6 +3320,7 @@
             "Attributes": {
                 "Caption": "PPE",
                 "FDS": "ppe",
+                "FDS Metric": "ppe",
                 "Fx_Flag": "Y"
             },
             "Index": 191,
@@ -3289,6 +3342,7 @@
             "Attributes": {
                 "Caption": "Tax Accrual",
                 "FDS": "tax_accrual",
+                "FDS Metric": "tax_accrual",
                 "Fx_Flag": "Y"
             },
             "Index": 193,
@@ -3318,7 +3372,8 @@
         {
             "Attributes": {
                 "Caption": "Appeasements / Marketing Credits",
-                "FDS": "appeasements_marketing_credits"
+                "FDS": "appeasements_marketing_credits",
+                "FDS Metric": "appeasements_marketing_credits"
             },
             "Index": 196,
             "Name": "Appeasements / Marketing Credits",
@@ -3370,6 +3425,7 @@
             "Attributes": {
                 "Caption": "Contra Rev Marketing Credits",
                 "FDS": "contra_rev_marketing_credits",
+                "FDS Metric": "contra_rev_marketing_credits",
                 "Fx_Flag": "Y"
             },
             "Index": 201,
@@ -3625,6 +3681,7 @@
             "Attributes": {
                 "Caption": "Refunds (Two-Sided)",
                 "FDS": "refunds_two_sided",
+                "FDS Metric": "refunds_two_sided",
                 "Fx_Flag": "Y"
             },
             "Index": 227,
@@ -3636,6 +3693,7 @@
             "Attributes": {
                 "Caption": "Support Services",
                 "FDS": "support_services",
+                "FDS Metric": "support_services",
                 "Fx_Flag": "Y"
             },
             "Index": 228,
@@ -3656,6 +3714,7 @@
             "Attributes": {
                 "Caption": "Maps Licensing Fees",
                 "FDS": "maps_licensing_fees",
+                "FDS Metric": "maps_licensing_fees",
                 "Fx_Flag": "Y"
             },
             "Index": 230,
@@ -3696,6 +3755,7 @@
             "Attributes": {
                 "Caption": "Mobile_fds",
                 "FDS": "mobile",
+                "FDS Metric": "mobile",
                 "Fx_Flag": "Y"
             },
             "Index": 234,
@@ -3707,6 +3767,7 @@
             "Attributes": {
                 "Caption": "Network (ex-Depr.)",
                 "FDS": "network_ex_depr",
+                "FDS Metric": "network_ex_depr",
                 "Fx_Flag": "Y"
             },
             "Index": 235,
@@ -3727,6 +3788,7 @@
             "Attributes": {
                 "Caption": "Ride Insurance",
                 "FDS": "trip_insurance",
+                "FDS Metric": "trip_insurance",
                 "Fx_Flag": "Y"
             },
             "Index": 237,
