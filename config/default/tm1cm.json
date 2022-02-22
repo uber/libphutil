@@ -29,6 +29,7 @@
         "}ElementAttributes_Location",
         "}ElementAttributes_Line of Business",
         "}ElementAttributes_Account",
+        "}ElementAttributes_Department",
         "}ElementAttributes_Period",
         "}ElementAttributes_}Clients",
         "}ElementAttributes_Month",
