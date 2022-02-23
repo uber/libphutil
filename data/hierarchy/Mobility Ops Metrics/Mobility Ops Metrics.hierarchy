@@ -1392,7 +1392,6 @@
         {
             "Attributes": {
                 "Caption": "GAAP Revenue",
-                "FDS": "gaap_revenue",
                 "FDS Metric": "gaap_revenue"
             },
             "Index": 4,
@@ -1610,7 +1609,7 @@
         {
             "Attributes": {
                 "Caption": "New Driver/Courier Incentives",
-                "FDS": "new_driver_incentives"
+                "FDS Metric": "new_driver_incentives"
             },
             "Index": 27,
             "Name": "New Driver/Courier Incentives",
@@ -1668,7 +1667,7 @@
         {
             "Attributes": {
                 "Caption": "New Rider/Eater Incentives",
-                "FDS": "new_rider_incentives"
+                "FDS Metric": "new_rider_incentives"
             },
             "Index": 32,
             "Name": "New Rider/Eater Incentives",
@@ -2395,7 +2394,6 @@
         {
             "Attributes": {
                 "Caption": "Variable Contribution",
-                "FDS": "variable_contribution",
                 "FDS Metric": "variable_contribution"
             },
             "Index": 106,
@@ -2406,7 +2404,6 @@
         {
             "Attributes": {
                 "Caption": "Net Effective Take Rate (NETR)",
-                "FDS": "netr",
                 "FDS Metric": "netr"
             },
             "Index": 107,
@@ -2417,7 +2414,7 @@
         {
             "Attributes": {
                 "Caption": "Gross Bookings",
-                "FDS": "gross_bookings"
+                "FDS Metric": "gross_bookings"
             },
             "Index": 108,
             "Name": "Gross Bookings",
@@ -2428,6 +2425,7 @@
             "Attributes": {
                 "Caption": "Booking / Eater Fees",
                 "FDS": "booking_and_other_fees",
+                "FDS Metric": "booking_and_other_fees",
                 "Fx_Flag": "Y"
             },
             "Index": 109,
@@ -2451,6 +2449,7 @@
             "Attributes": {
                 "Caption": "Taxes Collected",
                 "FDS": "taxes_collected",
+                "FDS Metric": "taxes_collected",
                 "Fx_Flag": "Y"
             },
             "Index": 111,
@@ -2560,7 +2559,7 @@
         {
             "Attributes": {
                 "Caption": "Driver/Courier/Resto Payments & Taxes and Fees",
-                "FDS": "driver_payments_taxes_and_fees"
+                "FDS Metric": "driver_payments_taxes_and_fees"
             },
             "Index": 121,
             "Name": "Driver/Courier/Resto Payments & Taxes and Fees",
@@ -2570,7 +2569,7 @@
         {
             "Attributes": {
                 "Caption": "Driver/Courier Payments (incl. CoS)",
-                "FDS": "driver_payments_incl_cos"
+                "FDS Metric": "driver_payments_incl_cos"
             },
             "Index": 122,
             "Name": "Driver/Courier Payments (incl. CoS)",
@@ -2579,8 +2578,7 @@
         },
         {
             "Attributes": {
-                "Caption": "Driver/Courier Payments",
-                "FDS": "driver_payments"
+                "Caption": "Driver/Courier Payments"
             },
             "Index": 123,
             "Name": "Driver/Courier Payments",
@@ -2625,6 +2623,7 @@
             "Attributes": {
                 "Caption": "Restaurant Payments",
                 "FDS": "restaurant_payments",
+                "FDS Metric": "restaurant_payments",
                 "Fx_Flag": "Y"
             },
             "Index": 127,
@@ -2671,7 +2670,7 @@
         {
             "Attributes": {
                 "Caption": "Existing User Incentives",
-                "FDS": "existing_user_incentives"
+                "FDS Metric": "existing_user_incentives"
             },
             "Index": 131,
             "Name": "Existing User Incentives",
@@ -2681,7 +2680,7 @@
         {
             "Attributes": {
                 "Caption": "Existing Driver Incentives (incl. CoS)",
-                "FDS": "existing_driver_incentives_incl_cos"
+                "FDS Metric": "existing_driver_incentives_incl_cos"
             },
             "Index": 132,
             "Name": "Existing Driver Incentives (incl. CoS)",
@@ -2690,8 +2689,7 @@
         },
         {
             "Attributes": {
-                "Caption": "Existing Driver Incentives",
-                "FDS": "existing_driver_incentives"
+                "Caption": "Existing Driver Incentives"
             },
             "Index": 133,
             "Name": "Existing Driver Incentives",
@@ -2754,8 +2752,7 @@
         },
         {
             "Attributes": {
-                "Caption": "Existing Rider/Eater Incentives",
-                "FDS": "existing_rider_incentives"
+                "Caption": "Existing Rider/Eater Incentives"
             },
             "Index": 139,
             "Name": "Existing Rider/Eater Incentives",
@@ -2766,6 +2763,7 @@
             "Attributes": {
                 "Caption": "Existing Promos",
                 "FDS": "existing_rider_incentives",
+                "FDS Metric": "existing_rider_incentives",
                 "Fx_Flag": "Y"
             },
             "Index": 140,
@@ -2808,8 +2806,7 @@
         },
         {
             "Attributes": {
-                "Caption": "Net UFP",
-                "FDS": "net_ufp"
+                "Caption": "Net UFP"
             },
             "Index": 144,
             "Name": "Net UFP",
@@ -2852,6 +2849,7 @@
             "Attributes": {
                 "Caption": "Promos - Contra Rev",
                 "FDS": "promos_contra_rev",
+                "FDS Metric": "promos_contra_rev",
                 "Fx_Flag": "Y"
             },
             "Index": 148,
@@ -2943,7 +2941,7 @@
         {
             "Attributes": {
                 "Caption": "Other Revenue",
-                "FDS": "total_other_revenue"
+                "FDS Metric": "total_other_revenue"
             },
             "Index": 156,
             "Name": "Other Revenue",
@@ -2953,7 +2951,6 @@
         {
             "Attributes": {
                 "Caption": "Other Rev",
-                "FDS": "other_rev",
                 "Fx_Flag": "Y"
             },
             "Index": 157,
@@ -2999,7 +2996,8 @@
         },
         {
             "Attributes": {
-                "Caption": "Variable Costs"
+                "Caption": "Variable Costs",
+                "FDS Metric": "variable_costs"
             },
             "Index": 161,
             "Name": "Variable Costs",
@@ -3008,7 +3006,8 @@
         },
         {
             "Attributes": {
-                "Caption": "Money"
+                "Caption": "Money",
+                "FDS Metric": "money"
             },
             "Index": 162,
             "Name": "Money",
@@ -3017,7 +3016,8 @@
         },
         {
             "Attributes": {
-                "Caption": "Arrears"
+                "Caption": "Arrears",
+                "FDS Metric": "arrears"
             },
             "Index": 163,
             "Name": "Arrears",
@@ -3101,7 +3101,8 @@
         },
         {
             "Attributes": {
-                "Caption": "Chargebacks & DNS"
+                "Caption": "Chargebacks & DNS",
+                "FDS Metric": "chargebacks_dns"
             },
             "Index": 171,
             "Name": "Chargebacks & DNS",
@@ -3158,7 +3159,8 @@
         },
         {
             "Attributes": {
-                "Caption": "Other Variable"
+                "Caption": "Other Variable",
+                "FDS Metric": "other_variable"
             },
             "Index": 176,
             "Name": "Other Variable",
@@ -3192,7 +3194,7 @@
         {
             "Attributes": {
                 "Caption": "Misc. Partner Payments (incl. CoS)",
-                "FDS": "misc_partner_payments_total"
+                "FDS Metric": "misc_partner_payments_total"
             },
             "Index": 179,
             "Name": "Misc. Partner Payments (incl. CoS)",
@@ -3201,8 +3203,7 @@
         },
         {
             "Attributes": {
-                "Caption": "Misc. Partner Payments",
-                "FDS": "misc_partner_payments"
+                "Caption": "Misc. Partner Payments"
             },
             "Index": 180,
             "Name": "Misc. Partner Payments",
@@ -3352,7 +3353,8 @@
         },
         {
             "Attributes": {
-                "Caption": "Support"
+                "Caption": "Support",
+                "FDS Metric": "support"
             },
             "Index": 194,
             "Name": "Support",
@@ -3372,7 +3374,6 @@
         {
             "Attributes": {
                 "Caption": "Appeasements / Marketing Credits",
-                "FDS": "appeasements_marketing_credits",
                 "FDS Metric": "appeasements_marketing_credits"
             },
             "Index": 196,
@@ -3413,7 +3414,8 @@
         {
             "Attributes": {
                 "Caption": "Appeasements / Marketing Credits_fds",
-                "FDS": "Appeasements / Marketing Credits_fds",
+                "FDS": "appeasements_marketing_credits",
+                "FDS Metric": "appeasements_marketing_credits",
                 "Fx_Flag": "Y"
             },
             "Index": 200,
@@ -3703,7 +3705,8 @@
         },
         {
             "Attributes": {
-                "Caption": "Tech"
+                "Caption": "Tech",
+                "FDS Metric": "tech"
             },
             "Index": 229,
             "Name": "Tech",

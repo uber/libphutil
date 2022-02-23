@@ -155,12 +155,13 @@ WHILE(nCtr <= nMax);
       SUBSETELEMENTINSERT(vDim, cSubset2, 'Delivery', 1);
       VIEWSUBSETASSIGN(cCube2, cViewName2, vDim, cSubset2);
    ELSE;
-      sMDX = '{TM1SORT( {TM1FILTERBYLEVEL({TM1SUBSETALL([ ' | vDim | '] )}, 0)}, ASC)}';
+      sMDX = '{TM1SORT( {TM1SUBSETALL([ ' | vDim | '] )}, ASC)}';
       SUBSETCREATEBYMDX(cSubset2, sMdx, 1);
       VIEWSUBSETASSIGN(cCube2, cViewName2, vDim, cSubset2);
    ENDIF;
    nCtr = nCtr + 1;
 END;
+
 
 
 DatasourceNameForServer = cCube2;
