@@ -70,14 +70,14 @@
         },
         {
             "EndByte": 0,
-            "Name": "vU4BH",
+            "Name": "vU4B",
             "Position": 5,
             "StartByte": 0,
             "Type": "String"
         },
         {
             "EndByte": 0,
-            "Name": "vU4B",
+            "Name": "vU4BH",
             "Position": 6,
             "StartByte": 0,
             "Type": "String"

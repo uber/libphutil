@@ -288,7 +288,7 @@ IF(SUBSETELEMENTEXISTS('Period', cSubset, sPeriod) = 0);
    ITEMSKIP;
 ENDIF;
 
-vFeatutre = '';
+vFeature = '';
 
 IF(SCAN('_usd', vMetric) = 0);
    sMetric_fds = vMetric;
