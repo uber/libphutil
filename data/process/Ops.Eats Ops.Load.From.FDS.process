@@ -113,6 +113,9 @@
 # BEGIN: PROLOG PROCEDURE                                                     #
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
 
+# ================= TAPTOOLS: START GENERATED CODE =================== #
+
+# ================= TAPTOOLS: END GENERATED CODE ===================== #
 
 #****Begin: Generated Statements***
 #****End: Generated Statements****
@@ -161,20 +164,20 @@ cSubset = '}zTemp.' | GETPROCESSNAME() | '.' | cRandomIntA;
 cViewName = '}zTemp.' | GETPROCESSNAME() | '.' | cRandomIntA;
 VIEWCREATE(cCube, cViewName, 1);
 
-nCtr = 1;
-nMax = CUBEDIMENSIONCOUNTGET(cCube);
+ nCtr = 1;
+ nMax = CUBEDIMENSIONCOUNTGET(cCube);
 
 WHILE(nCtr <= nMax);
-   sDim = TABDIM(cCube, nCtr);
+    sDim = TABDIM(cCube, nCtr);
 
-   IF(sDim @= 'Version');
-      sElement = 'Actual';
-      SUBSETCREATE(sDim, cSubset, 1);
-      SUBSETELEMENTINSERT(sDim, cSubset, sElement, 1);
-      VIEWSUBSETASSIGN(cCube, cViewName, sDim, cSubset);
+    IF(sDim @= 'Version');
+       sElement = 'Actual';
+       SUBSETCREATE(sDim, cSubset, 1);
+       SUBSETELEMENTINSERT(sDim, cSubset, sElement, 1);  
+       VIEWSUBSETASSIGN(cCube, cViewName, sDim, cSubset);
 
-   ELSEIF(sDim @= 'Period');
-      SUBSETCREATE(sDim, cSubset, 1);
+    ELSEIF(sDim @= 'Period');
+        SUBSETCREATE(sDim, cSubset, 1);
 
       IF(pLevel @= 'Month');
          sPeriod = SUBST(pStartDate, 1, 7);
@@ -201,30 +204,32 @@ WHILE(nCtr <= nMax);
             nPeriod = DAYNO(SUBST(ATTRS(sDim, sWeek, 'Next Period'), 4, 10));
          END;
 
-      ENDIF;
+           ENDIF;
+         
+          VIEWSUBSETASSIGN(cCube, cViewName, sDim, cSubset);
 
-      VIEWSUBSETASSIGN(cCube, cViewName, sDim, cSubset);
+      ELSEIF(sDim @= 'Source');
+       sElement = 'FDP';
+       SUBSETCREATE(sDim, cSubset, 1);
+       SUBSETELEMENTINSERT(sDim, cSubset, sElement, 1);  
+       VIEWSUBSETASSIGN(cCube, cViewName, sDim, cSubset);
 
-   ELSEIF(sDim @= 'Source');
-      sElement = 'FDP';
-      SUBSETCREATE(sDim, cSubset, 1);
-      SUBSETELEMENTINSERT(sDim, cSubset, sElement, 1);
-      VIEWSUBSETASSIGN(cCube, cViewName, sDim, cSubset);
+     ELSEIF(sDim @= 'Eats Ops Metric');
+         SUBSETCREATE(sDim, cSubset, 1); 
+         VIEWSUBSETASSIGN(cCube, cViewName, sDim, cSubset);
 
-   ELSEIF(sDim @= 'Eats Ops Metric');
-      SUBSETCREATE(sDim, cSubset, 1);
-      VIEWSUBSETASSIGN(cCube, cViewName, sDim, cSubset);
+     ELSE;
+          sMDX = '{TM1SORT( {TM1FILTERBYLEVEL({TM1SUBSETALL([ ' | sDim | '] )}, 0)}, ASC)}';
+          SUBSETCREATEBYMDX(cSubset, sMdx, 1);
+          VIEWSUBSETASSIGN(cCube, cViewName, sDim, cSubset);
+     ENDIF;
 
-   ELSE;
-      sMDX = '{TM1SORT( {TM1FILTERBYLEVEL({TM1SUBSETALL([ ' | sDim | '] )}, 0)}, ASC)}';
-      SUBSETCREATEBYMDX(cSubset, sMdx, 1);
-      VIEWSUBSETASSIGN(cCube, cViewName, sDim, cSubset);
-   ENDIF;
-
-   nCtr = nCtr + 1;
-END;
+    nCtr = nCtr + 1;
+ END;
 
 
+# ================= TAPTOOLS: START GENERATED CODE =================== #
+# ================= TAPTOOLS: END GENERATED CODE ===================== #
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
 # END: PROLOG PROCEDURE                                                       #
@@ -319,21 +324,22 @@ IF(pLevel @= 'Month');
    ENDIF;
 ENDIF;
 
-IF(SCAN(sMetric, cMetricString) = 0);
-   cMetricString = cMetricString | sMetric | '|';
-   SUBSETDELETEALLELEMENTS('Eats Ops Metric', cSubset);
-   SUBSETELEMENTINSERT('Eats Ops Metric', cSubset, sMetric, 1);
-   VIEWZEROOUT(cCube, cViewName);
-ENDIF;
+   IF(SCAN(sMetric, cMetricString) = 0);
+      cMetricString = cMetricString | sMetric | '|';
+      SUBSETDELETEALLELEMENTS('Eats Ops Metric', cSubset);
+      SUBSETELEMENTINSERT('Eats Ops Metric', cSubset, sMetric, 1);
+      VIEWZEROOUT(cCube, cViewName);
+   ENDIF;
 
 
 
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
 # Load Data
+# Adding Active Restaurants L28 to be skipped while loading for Month
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
 
 IF(pLevel @= 'Month');
-   IF(sMetric @= 'Active Eaters L28' % sMetric @= 'Weekly Active Eaters' % sMetric @= 'Active Couriers L28' % sMetric @= 'Weekly Active Couriers');
+   IF(sMetric @= 'Active Eaters L28' % sMetric @= 'Weekly Active Eaters' % sMetric @= 'Active Couriers L28' % sMetric @= 'Weekly Active Couriers' % sMetric @='Active Restaurants L28');
       ITEMSKIP;
    ENDIF;
 ELSE;
