@@ -457,43 +457,54 @@ ENDIF;
 ## Retrive Alloc Base Account 
 sAllocAcc = CELLGETS(cAllocCube, vVersion, vPeriod, vLOB, 'Total Location Incl Discontinued', '0000', 'Unspecified Product Type', vGLOperational, 'Mapping for Alloc TI');
 
-nAllocTotal = CELLGETN(cTargetCube, vVersion, vPeriod, 'FDS', vRateType, vLOB, '0000', vLocation, cProductConsol, cMobilityConsol, sAllocAcc, 'Amount');
-## Conduct Allocations by Product / Feature 
+IF(sAllocAcc @= 'No Allocate');
 
-IF(nAllocTotal <> 0);
-   Dim1Count = 1;
-   Dim1Size = DIMSIZ(cDimProductType);
-   WHILE(Dim1Count <= Dim1Size);
-      sProductType = DIMNM(cDimProductType, Dim1Count);
-      IF(ELLEV(cDimProductType, sProductType) = 0 & ELISANC(cDimProductType, cProductConsol, sProductType) = 1);
-         nAllocP = CELLGETN(cTargetCube, vVersion, vPeriod, 'FDS', vRateType, vLOB, '0000', vLocation, sProductType, cMobilityConsol, sAllocAcc, 'Amount');
-         IF(nAllocP <> 0);
-            Dim2Count = 1;
-            Dim2Size = DIMSIZ(cDimMobilityFeature);
-            WHILE(Dim2Count <= Dim2Size);
-               sMobilityFeature = DIMNM(cDimMobilityFeature, Dim2Count);
-               IF(ELLEV(cDimMobilityFeature, sMobilityFeature) = 0 & ELISANC(cDimMobilityFeature, cMobilityConsol, sMobilityFeature) = 1);
-                  nAllocPM = CELLGETN(cTargetCube, vVersion, vPeriod, 'FDS', vRateType, vLOB, '0000', vLocation, sProductType, sMobilityFeature, sAllocAcc, 'Amount');
-                  IF(nAllocPM <> 0);
-                     nAllocPerc = nAllocPM \ nAllocTotal;
-                     nAllocVal = vValue * nAllocPerc;
-                     # ================= TAPTOOLS: START GENERATED CODE =================== #
-                     nDataProcedureDataOperations = nDataProcedureDataOperations + 1;
-                     # ================= TAPTOOLS: END GENERATED CODE ===================== #
-                     CELLINCREMENTN(nAllocVal, cTargetCube, vVersion, vPeriod, cTargetSource, vRateType, vLOB, '0000', vLocation, sProductType, sMobilityFeature, vGLOperational, 'Amount');
-                  ENDIF;
-               ENDIF;
-               Dim2Count = Dim2Count + 1;
-            END;
-         ENDIF;
-      ENDIF;
-      Dim1Count = Dim1Count + 1;
-   END;
-ELSE;
    # ================= TAPTOOLS: START GENERATED CODE =================== #
    nDataProcedureDataOperations = nDataProcedureDataOperations + 1;
    # ================= TAPTOOLS: END GENERATED CODE ===================== #
-   CELLINCREMENTN(vValue, cTargetCube, vVersion, vPeriod, cTargetSource, vRateType, vLOB, '0000', vLocation, 'Unspecified Product Type', 'Unspecified Mobility Features', vGLOperational, 'Amount');
+   CELLINCREMENTN(vValue, cTargetCube, vVersion, vPeriod, cTargetSource, vRateType, vLOB, vDepartment, vLocation, 'Unspecified Product Type', 'Unspecified Mobility Features', vGLOperational, 'Amount');
+
+ELSE;
+
+   nAllocTotal = CELLGETN(cTargetCube, vVersion, vPeriod, 'FDS', vRateType, vLOB, '0000', vLocation, cProductConsol, cMobilityConsol, sAllocAcc, 'Amount');
+   ## Conduct Allocations by Product / Feature 
+
+   IF(nAllocTotal <> 0);
+      Dim1Count = 1;
+      Dim1Size = DIMSIZ(cDimProductType);
+      WHILE(Dim1Count <= Dim1Size);
+         sProductType = DIMNM(cDimProductType, Dim1Count);
+         IF(ELLEV(cDimProductType, sProductType) = 0 & ELISANC(cDimProductType, cProductConsol, sProductType) = 1);
+            nAllocP = CELLGETN(cTargetCube, vVersion, vPeriod, 'FDS', vRateType, vLOB, '0000', vLocation, sProductType, cMobilityConsol, sAllocAcc, 'Amount');
+            IF(nAllocP <> 0);
+               Dim2Count = 1;
+               Dim2Size = DIMSIZ(cDimMobilityFeature);
+               WHILE(Dim2Count <= Dim2Size);
+                  sMobilityFeature = DIMNM(cDimMobilityFeature, Dim2Count);
+                  IF(ELLEV(cDimMobilityFeature, sMobilityFeature) = 0 & ELISANC(cDimMobilityFeature, cMobilityConsol, sMobilityFeature) = 1);
+                     nAllocPM = CELLGETN(cTargetCube, vVersion, vPeriod, 'FDS', vRateType, vLOB, '0000', vLocation, sProductType, sMobilityFeature, sAllocAcc, 'Amount');
+                     IF(nAllocPM <> 0);
+                        nAllocPerc = nAllocPM \ nAllocTotal;
+                        nAllocVal = vValue * nAllocPerc;
+                        # ================= TAPTOOLS: START GENERATED CODE =================== #
+                        nDataProcedureDataOperations = nDataProcedureDataOperations + 1;
+                        # ================= TAPTOOLS: END GENERATED CODE ===================== #
+                        CELLINCREMENTN(nAllocVal, cTargetCube, vVersion, vPeriod, cTargetSource, vRateType, vLOB, '0000', vLocation, sProductType, sMobilityFeature, vGLOperational, 'Amount');
+                     ENDIF;
+                  ENDIF;
+                  Dim2Count = Dim2Count + 1;
+               END;
+            ENDIF;
+         ENDIF;
+         Dim1Count = Dim1Count + 1;
+      END;
+   ELSE;
+      # ================= TAPTOOLS: START GENERATED CODE =================== #
+      nDataProcedureDataOperations = nDataProcedureDataOperations + 1;
+      # ================= TAPTOOLS: END GENERATED CODE ===================== #
+      CELLINCREMENTN(vValue, cTargetCube, vVersion, vPeriod, cTargetSource, vRateType, vLOB, vDepartment, vLocation, 'Unspecified Product Type', 'Unspecified Mobility Features', vGLOperational, 'Amount');
+   ENDIF;
+
 ENDIF;
 
 
