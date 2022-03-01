@@ -1,0 +1,65 @@
+##====================================================##
+# V1 Delivery P&L Allocation
+##====================================================##
+
+FEEDSTRINGS;
+SKIPCHECK;
+
+## Check if there is override allocation
+
+['Allocation Method'] =S:
+  IF( DB('Delivery PL Allocation',!Version,!Period,!Line of Business,!Location,!Department,!Delivery Fulfillment Type,!Delivery Merchant Type,!Delivery Order Category,!Delivery Merchant Segment,!ANALYTICS.GL Operational,'Allocation Method Override') @<> '',
+    DB('Delivery PL Allocation',!Version,!Period,!Line of Business,!Location,!Department,!Delivery Fulfillment Type,!Delivery Merchant Type,!Delivery Order Category,!Delivery Merchant Segment,!ANALYTICS.GL Operational,'Allocation Method Override'), Continue);
+
+## Check if FDS data.
+
+[{'Location':'Total Location Incl Discontinued'},'Allocation Method' ] = S:
+ IF ( ELLEV ('ANALYTICS.GL Operational', !ANALYTICS.GL Operational) = 0,
+ IF ( DB('Delivery',!Version,!Period,'FDS','USD',!Line of Business,!Department,'Total Location Incl Discontinued','Total Fulfillment Type','Total Merchant Type','Total Order Category','Total Merchant Segment','All Delivery Features',!ANALYTICS.GL Operational,'Amount')<> 0
+         % DB('Delivery',!Version,!Period,'FDS','USD',!Line of Business,!Department,'Total Location Incl Discontinued','Total Fulfillment Type','Total Merchant Type','Total Order Category','Total Merchant Segment','All Delivery Features',!ANALYTICS.GL Operational | '_fds','Amount') <> 0,
+     IF( ATTRS('Delivery Ops Metrics', !ANALYTICS.GL Operational, 'FDS') @<> '', ATTRS('Delivery Ops Metrics', !ANALYTICS.GL Operational, 'FDS'), 'Calculated'),
+  Continue),
+'');
+
+[{'Location':'Total Location Incl Discontinued'},'Allocation Method Override' ] = S:
+IF (  ELLEV ('Line of Business', !Line of Business) = 0 & ELLEV ('ANALYTICS.GL Operational', !ANALYTICS.GL Operational) = 0 ,
+ IF ( DB('Delivery',!Version,!Period,'FDS','USD',!Line of Business,!Department,'Total Location Incl Discontinued','Total Fulfillment Type','Total Merchant Type','Total Order Category','Total Merchant Segment','All Delivery Features', ATTRS( 'ANALYTICS.GL Operational', !ANALYTICS.GL Operational, 'GL Operational L1') | '_fds','Amount') <> 0,
+     IF( ATTRS('Delivery Ops Metrics', ATTRS ('ANALYTICS.GL Operational', !ANALYTICS.GL Operational, 'GL Operational L1') | '_fds' , 'FDS') @<> '', ATTRS('Delivery Ops Metrics',ATTRS ('ANALYTICS.GL Operational', !ANALYTICS.GL Operational, 'GL Operational L1') | '_fds' , 'FDS'), 'Calculated' ),
+  Continue),
+Continue);
+
+[{'Location':'Total Location Incl Discontinued'},'Allocation Method Override' ] = S:
+IF ( ELLEV ('Line of Business', !Line of Business) = 0  & ELLEV ('ANALYTICS.GL Operational', !ANALYTICS.GL Operational) = 0,
+ IF ( DB('Delivery',!Version,!Period,'FDS','USD',!Line of Business,!Department,'Total Location Incl Discontinued','Total Fulfillment Type','Total Merchant Type','Total Order Category','Total Merchant Segment','All Delivery Features',!ANALYTICS.GL Operational,'Amount') <> 0
+          %  DB('Delivery',!Version,!Period,'FDS','USD',!Line of Business,!Department,'Total Location Incl Discontinued','Total Fulfillment Type','Total Merchant Type','Total Order Category','Total Merchant Segment','All Delivery Features',!ANALYTICS.GL Operational | '_fds','Amount') <> 0,
+     IF( ATTRS('Delivery Ops Metrics', !ANALYTICS.GL Operational, 'FDS') @<> '', ATTRS('Delivery Ops Metrics', !ANALYTICS.GL Operational, 'FDS'), 'Calculated' ),
+STET),
+Continue);
+
+[{'Location':'Total Location Incl Discontinued'},'Allocation Method Override' ] = S:
+IF ( ELLEV ('Line of Business', !Line of Business) = 0  ,
+ IF ( DB('Delivery',!Version,!Period,'FDS','USD',!Line of Business,!Department,'Total Location Incl Discontinued','Total Fulfillment Type','Total Merchant Type','Total Order Category','Total Merchant Segment','All Delivery Features',!ANALYTICS.GL Operational,'Amount') <> 0
+          %  DB('Delivery',!Version,!Period,'FDS','USD',!Line of Business,!Department,'Total Location Incl Discontinued','Total Fulfillment Type','Total Merchant Type','Total Order Category','Total Merchant Segment','All Delivery Features',!ANALYTICS.GL Operational | '_fds','Amount') <> 0,
+     IF( ATTRS('Delivery Ops Metrics', !ANALYTICS.GL Operational, 'FDS') @<> '', ATTRS('Delivery Ops Metrics', !ANALYTICS.GL Operational, 'FDS'), 'Calculated' ),
+''),
+Continue);
+
+## Default. Need to change to attribute of GL Ops.
+
+[{'Location':'Total Location Incl Discontinued'},'Allocation Method'] = S:
+  IF ( ELLEV ('Line of Business', !Line of Business) = 0,
+  IF(  DB('Delivery PL Allocation',!Version,!Period,!Line of Business,!Location,!Department,!Delivery Fulfillment Type,!Delivery Merchant Type,!Delivery Order Category,!Delivery Merchant Segment,!ANALYTICS.GL Operational,'Allocation Method Override') @= '',
+    IF (  DB('Delivery PL Allocation',!Version,!Period,'Delivery',!Location,!Department,!Delivery Fulfillment Type,!Delivery Merchant Type,!Delivery Order Category,!Delivery Merchant Segment,!ANALYTICS.GL Operational,'Allocation Method Override') @<> '',
+       DB('Delivery PL Allocation',!Version,!Period,'Delivery',!Location,!Department,!Delivery Fulfillment Type,!Delivery Merchant Type,!Delivery Order Category,!Delivery Merchant Segment,!ANALYTICS.GL Operational,'Allocation Method Override'),
+           DB('Delivery PL Allocation',!Version,!Period,'Delivery',!Location,!Department,!Delivery Fulfillment Type,!Delivery Merchant Type,!Delivery Order Category,!Delivery Merchant Segment,'GAAP Contribution','Allocation Method Override')),
+     Continue),
+'');
+
+[{'Location':'Total Location Incl Discontinued'},'Mapping for Alloc TI' ] = S:
+IF ( ELLEV ('ANALYTICS.GL Operational', !ANALYTICS.GL Operational) = 0,
+ IF ( DB('Delivery',!Version,!Period,'FDS','USD',!Line of Business,!Department,'Total Location Incl Discontinued','Total Fulfillment Type','Total Merchant Type','Total Order Category','Total Merchant Segment','All Delivery Features',!ANALYTICS.GL Operational,'Amount') <> 0, !ANALYTICS.GL Operational,
+      IF (  DB('Delivery',!Version,!Period,'FDS','USD',!Line of Business,!Department,'Total Location Incl Discontinued','Total Fulfillment Type','Total Merchant Type','Total Order Category','Total Merchant Segment','All Delivery Features',!ANALYTICS.GL Operational | '_fds','Amount') <> 0, !ANALYTICS.GL Operational | '_fds',
+          IF ( DB('Delivery',!Version,!Period,'FDS','USD',!Line of Business,!Department,'Total Location Incl Discontinued','Total Fulfillment Type','Total Merchant Type','Total Order Category','Total Merchant Segment','All Delivery Features', ATTRS ('ANALYTICS.GL Operational', !ANALYTICS.GL Operational, 'GL Operational L1') | '_fds','Amount')<> 0,
+                ATTRS ('ANALYTICS.GL Operational', !ANALYTICS.GL Operational, 'GL Operational L1') | '_fds',
+    DB('Delivery PL Allocation',!Version,!Period,!Line of Business,!Location,!Department,!Delivery Fulfillment Type,!Delivery Merchant Type,!Delivery Order Category,!Delivery Merchant Segment,!ANALYTICS.GL Operational,'Allocation Method')))),
+'');

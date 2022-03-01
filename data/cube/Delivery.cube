@@ -1,0 +1,47 @@
+{
+    "Dimensions": [
+        {
+            "Name": "Version"
+        },
+        {
+            "Name": "Period"
+        },
+        {
+            "Name": "Source"
+        },
+        {
+            "Name": "Rate Type"
+        },
+        {
+            "Name": "Line of Business"
+        },
+        {
+            "Name": "Department"
+        },
+        {
+            "Name": "Location"
+        },
+        {
+            "Name": "Delivery Fulfillment Type"
+        },
+        {
+            "Name": "Delivery Merchant Type"
+        },
+        {
+            "Name": "Delivery Order Category"
+        },
+        {
+            "Name": "Delivery Merchant Segment"
+        },
+        {
+            "Name": "Delivery Features"
+        },
+        {
+            "Name": "Delivery Ops Metrics"
+        },
+        {
+            "Name": "Delivery Measure"
+        }
+    ],
+    "Name": "Delivery"
+}

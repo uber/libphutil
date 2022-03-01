@@ -1,0 +1,53 @@
+{
+    "DefaultMember": {
+        "Attributes": {
+            "Caption": "Allocation Method"
+        },
+        "IsPlaceholder": false,
+        "Name": "Allocation Method",
+        "Ordinal": 1,
+        "Type": "Regular",
+        "UniqueName": "[Delivery PL Allocation Measure].[Delivery PL Allocation Measure].[Allocation Method]",
+        "Weight": 0
+    },
+    "Edges": [],
+    "ElementAttributes": [
+        {
+            "Name": "picklist",
+            "Type": "String"
+        }
+    ],
+    "Elements": [
+        {
+            "Attributes": {
+                "Caption": "Allocation Method"
+            },
+            "Index": 1,
+            "Name": "Allocation Method",
+            "Type": "String",
+            "UniqueName": "[Delivery PL Allocation Measure].[Delivery PL Allocation Measure].[Allocation Method]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Allocation Method Override",
+                "picklist": "static:Completed Trips:P2P Miles:Gross Bookings"
+            },
+            "Index": 2,
+            "Name": "Allocation Method Override",
+            "Type": "String",
+            "UniqueName": "[Delivery PL Allocation Measure].[Delivery PL Allocation Measure].[Allocation Method Override]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Mapping for Alloc TI"
+            },
+            "Index": 3,
+            "Name": "Mapping for Alloc TI",
+            "Type": "String",
+            "UniqueName": "[Delivery PL Allocation Measure].[Delivery PL Allocation Measure].[Mapping for Alloc TI]"
+        }
+    ],
+    "Name": "Delivery PL Allocation Measure",
+    "Subsets": [],
+    "UniqueName": "[Delivery PL Allocation Measure].[Delivery PL Allocation Measure]"
+}

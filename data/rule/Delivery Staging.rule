@@ -1,0 +1,69 @@
+SKIPCHECK;
+
+[ {'No Rate type', 'USD'} , 'Amount' ] =N:  STET;
+
+
+## Local Currency
+
+['Local', 'Amount'] = N:
+   IF(
+      ATTRS('Location', !Location, 'Currency') @= !Currency
+   ,
+      IF(
+         ELISANC('Period', 'Total Time - Month', !Period)=1
+      ,
+         ['Rate Type':'USD','Currency':'Total Currency','Amount'] /
+         IF (DB('Exchange Rate', 'Actual', !Period, ATTRS('Location', !Location, 'Currency'),'USD', 'Rate')<>0,
+             DB('Exchange Rate', 'Actual', !Period, ATTRS('Location', !Location, 'Currency'),'USD', 'Rate'),
+             DB('Exchange Rate', 'Actual', ATTRS('Period', !Period, 'Period-1'), ATTRS('Location', !Location, 'Currency'),'USD', 'Rate')
+            )
+      ,
+         IF(
+                ELISANC('Period', 'Total Time - Day', !Period)=1
+             ,
+               ['Rate Type':'USD','Currency':'Total Currency','Amount'] /
+               IF (DB('Exchange Rate', 'Actual', Subst(!Period, 1, 7), ATTRS('Location', !Location, 'Currency'),'USD', 'Rate') <> 0,
+               		DB('Exchange Rate', 'Actual', Subst(!Period, 1, 7), ATTRS('Location', !Location, 'Currency'),'USD', 'Rate'),
+               		DB('Exchange Rate', 'Actual', ATTRS('Period',Subst(!Period, 1, 7), 'Period-1'), ATTRS('Location', !Location, 'Currency'),'USD', 'Rate')
+               	   )
+             ,
+               ['Rate Type':'USD','Currency':'Total Currency','Amount'] /
+               IF (DB('Exchange Rate', 'Actual', Subst(!Period, 4, 7), ATTRS('Location', !Location, 'Currency'),'USD', 'Rate') <> 0,
+               		DB('Exchange Rate', 'Actual', Subst(!Period, 4, 7), ATTRS('Location', !Location, 'Currency'),'USD', 'Rate'),
+               		DB('Exchange Rate', 'Actual', ATTRS('Period', Subst(!Period, 4, 7), 'Period-1'), ATTRS('Location', !Location, 'Currency'),'USD', 'Rate')
+               	  )
+            )
+      )
+   ,
+      STET
+   );
+
+
+## Rate Type Calculation
+
+['Amount'] = N:
+   ['No Rate Type','Amount'] *
+   IF(
+      ELISANC('Period', 'Total Time - Month', !Period)=1
+   ,
+      DB('Exchange Rate by Rate Type', !Version, !Period, !Currency, !Rate Type, 'Amount')
+   ,
+      IF(
+             ELISANC('Period', 'Total Time - Day', !Period)=1
+           ,
+             DB('Exchange Rate by Rate Type',!Version, Subst(!Period, 1, 7), !Currency, !Rate Type, 'Amount')
+           ,
+             DB('Exchange Rate by Rate Type',!Version, Subst(!Period, 4, 7), !Currency, !Rate Type, 'Amount')
+          )
+   );
+
+
+
+
+FEEDERS;
+
+['Amount'] => DB('Delivery',!Version,!Period,!Source,!Rate Type,!Line of Business,!Department,!Location,!Delivery Fulfillment Type,!Delivery Merchant Type,!Delivery Order Category,!Delivery Merchant Segment,!Delivery Features,!Delivery Ops Metrics,'Amount');
+
+['No Rate Type'] => ['FX Rates'];
+
+['Rate Type':'USD'] => ['Local'];

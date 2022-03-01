@@ -1,0 +1,320 @@
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: PROPERTIES                                                           #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+{
+    "DataSource": {
+        "Type": "None"
+    },
+    "HasSecurityAccess": false,
+    "Name": "Ops.Delivery.Product PL.Wrapper",
+    "Parameters": [
+        {
+            "Name": "pVersion",
+            "Prompt": "Version: N-Level",
+            "Type": "String",
+            "Value": "Actual"
+        },
+        {
+            "Name": "pMonth",
+            "Prompt": "Month: N-Level or C-Level, or BLANK;",
+            "Type": "String",
+            "Value": "2022-01"
+        },
+        {
+            "Name": "pRateType",
+            "Prompt": "Rate Type: N-Level, C-Level, or BLANK",
+            "Type": "String",
+            "Value": "USD"
+        }
+    ],
+    "UIData": "CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
+    "Variables": [],
+    "VariablesUIData": []
+}
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: PROPERTIES                                                             #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: PROLOG PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+# ================= TAPTOOLS: START GENERATED CODE =================== #
+sProcessName = GETPROCESSNAME();
+IF(sProcessName @<> 'TAP.Call.Queue.Add Job To Queue' & sProcessName @<> 'TAP.CubeSaveData' & sProcessName @<> 'TAP.Call.Save' & sProcessName @<> 'TAP.Call.Save.Wrapper' & sProcessName @<> 'TAP.Call.CubeSaveData.Wrapper' & sProcessName @<> 'TAP.Call.Tests' & sProcessName @<> 'TAP.Call.Init' & sProcessName @<> 'TAP.Call.Export Application Stats' & sProcessName @<> 'TAP.Cube.Export Data to File' & SCAN('}drill', LOWER(sProcessName)) = 0);
+   sSDA.Status = CELLGETS('TAP System Info', 'Block Process Execution', 'Value');
+   IF(sSDA.Status @= 'Yes');
+      PROCESSBREAK;
+   ENDIF;
+ENDIF;
+LOGOUTPUT('DEBUG', 'PARAMETER: pVersion: "' | pVersion | '"');
+LOGOUTPUT('DEBUG', 'PARAMETER: pMonth: "' | pMonth | '"');
+LOGOUTPUT('DEBUG', 'PARAMETER: pRateType: "' | pRateType | '"');
+LOGOUTPUT('DEBUG', 'PROGRESS: START PROLOG PROCEDURE');
+nMetadataProcedureRecordsStarted = 0;
+nMetadataProcedureRecordsSkipped = 0;
+nMetadataProcedureRecordsRejected = 0;
+nMetadataProcedureRecordsCompleted = 0;
+nDataProcedureRecordsStarted = 0;
+nDataProcedureRecordsSkipped = 0;
+nDataProcedureRecordsRejected = 0;
+nDataProcedureRecordsCompleted = 0;
+nPrologProcedureDataOperations = 0;
+nDataProcedureDataOperations = 0;
+nTotalDataOperations = 0;
+nPrologProcedureMetadataOperations = 0;
+nMetadataProcedureMetadataOperations = 0;
+nDataProcedureMetadataOperations = 0;
+nEpilogProcedureMetadataOperations = 0;
+nTotalProcedureMetadataOperations = 0;
+nPrologProcedureStartTime = NOW();
+nPrologProcedureEndTime = 0;
+nMetadataProcedureStartTime = 0;
+nMetadataProcedureEndTime = 0;
+nDataProcedureStartTime = 0;
+nDataProcedureEndTime = 0;
+# ================= TAPTOOLS: END GENERATED CODE ===================== #
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+# Delivery / Product PL Wrapper
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+# Summary: Wrapper process to run allocation procedure in parallel. 
+
+# ==================================================================== #
+# Globals
+# ==================================================================== #
+
+cVersion = TRIM(pVersion);
+cMonth = TRIM(pMonth);
+cRateType = TRIM(pRateType);
+cAccount = 'Ops PL';
+
+cRand = NUMBERTOSTRING(ROUND(RAND() * 100000));
+cRand = FILL('0', 6 - LONG(cRand)) | cRand;
+cRand = NUMBERTOSTRING(NOW()) | '.' | cRand;
+
+cSub = '}zTemp.' | cRand;
+
+cPythonExe = CELLGETS('TAP System Info', 'Python Executable', 'Value');
+
+cScriptRun = CELLGETS('TAP System Info', 'Scripts Shared Path', 'Value');
+cScriptRun = cScriptRun | '/tap/tap-runti-in-parallel.py';
+
+cBatchUser = CELLGETS('TAP System Info', 'Batch Username', 'Value');
+cBatchPassword = CELLGETS('TAP System Info', 'Batch Password', 'Value');
+cBatchNamespace = CELLGETS('TAP System Info', 'Batch Namespace', 'Value');
+cServer = CELLGETS('TAP Application Info', CELLGETS('TAP System Info', 'Service Name', 'Value'), 'Endpoint');
+cPort = '443';
+cThreads = '10';
+
+cTemplateScriptRun = '%cPythonExe% %cScriptRun% --server ''%cServer%'' --port %cPort% --user ''%cBatchUser%'' --password ''%cBatchPassword%'' --namespace ''%cBatchNamespace%'' --threads ''%cThreads%'' %sProcess%';
+cTemplateProcess = '--process ''Ops.Delivery.Product PL'' pVersion ''%cVersion%'' pMonth ''%sMonth%'' pRateType ''%sRateType%'' pAccount ''%cAccount%'' ';
+
+# ==================================================================== #
+# Create Source Subsets
+# ==================================================================== #
+
+# Month
+sDim = 'Month';
+sSub = cSub;
+sEleAnc = IF(cMonth @= '', 'Total Month', cMonth);
+
+IF(SUBSETEXISTS(sDim, sSub) = 0);
+   SUBSETCREATE(sDim, sSub);
+ENDIF;
+SUBSETDELETEALLELEMENTS(sDim, sSub);
+
+IF(DTYPE(sDim, sEleAnc) @= 'N');
+   sEle = sEleAnc;
+   SUBSETELEMENTINSERT(sDim, sSub, sEle, SUBSETGETSIZE(sDim, sSub) + 1);
+ELSE;
+   i = 1;
+   WHILE(i <= DIMSIZ(sDim));
+      sEle = DIMNM(sDim, i);
+      IF(DTYPE(sDim, sEle) @= 'N' & ELISANC(sDim, sEleAnc, sEle) = 1);
+         SUBSETELEMENTINSERT(sDim, sSub, sEle, SUBSETGETSIZE(sDim, sSub) + 1);
+      ENDIF;
+      i = i + 1;
+   END;
+ENDIF;
+
+# Rate Type
+sDim = 'Rate Type';
+sSub = cSub;
+sEleAnc = IF(cRateType @= '', 'FX Rates', cRateType);
+
+IF(SUBSETEXISTS(sDim, sSub) = 0);
+   SUBSETCREATE(sDim, sSub);
+ENDIF;
+SUBSETDELETEALLELEMENTS(sDim, sSub);
+
+IF(DTYPE(sDim, sEleAnc) @= 'N');
+   sEle = sEleAnc;
+   SUBSETELEMENTINSERT(sDim, sSub, sEle, SUBSETGETSIZE(sDim, sSub) + 1);
+ELSE;
+   i = 1;
+   WHILE(i <= DIMSIZ(sDim));
+      sEle = DIMNM(sDim, i);
+      IF(DTYPE(sDim, sEle) @= 'N' & ELISANC(sDim, sEleAnc, sEle) = 1);
+         SUBSETELEMENTINSERT(sDim, sSub, sEle, SUBSETGETSIZE(sDim, sSub) + 1);
+      ENDIF;
+      i = i + 1;
+   END;
+ENDIF;
+
+
+# ==================================================================== #
+# Iterate Subset, Setup parallel execution
+# ==================================================================== #
+
+sSub = cSub;
+sProcess = '';
+nCount = 0;
+i = 1;
+WHILE(i <= SUBSETGETSIZE('Rate Type', sSub));
+   sRateType = SUBSETGETELEMENTNAME('Rate Type', sSub, i);
+
+   p = 1;
+   WHILE(p <= SUBSETGETSIZE('Month', sSub));
+      nCount = nCount + 1;
+
+      sMonth = SUBSETGETELEMENTNAME('Month', sSub, p);
+      sProcess = sProcess | EXPAND(cTemplateProcess);
+
+      IF(MOD(nCount, 100) = 0);
+         sCommand = EXPAND(cTemplateScriptRun);
+
+         # Logging + Strip Passwords + Execute Python
+         LOGOUTPUT('INFO', 'PYTHON SCRIPT EXECUTION -- START -- SYNCHRONOUS');
+         sLogCommand = IF(LONG(sCommand) > 600, SUBST(sCommand, 1, 600) | '. . . (600 char max)', sCommand);
+         nPassStartInd = SCAN('--password', sLogCommand);
+         nPassEndInd = SCAN('--namespace', sLogCommand);
+         sLogCommand = SUBST(sLogCommand, 1, nPassStartInd - 1) | SUBST(sLogCommand, nPassEndInd, LONG(sLogCommand));
+         LOGOUTPUT('INFO', EXPAND('PYTHON SCRIPT COMMAND: %sLogCommand%'));
+         EXECUTECOMMAND(sCommand, 1);
+         LOGOUTPUT('INFO', 'PYTHON SCRIPT EXECUTION -- COMPLETE');
+         sProcess = '';
+      ENDIF;
+
+      p = p + 1;
+   END;
+
+   i = i + 1;
+END;
+
+sCommand = EXPAND(cTemplateScriptRun);
+
+# Logging + Strip Password
+LOGOUTPUT('INFO', 'PYTHON SCRIPT EXECUTION -- START -- ASYNCHRONOUS');
+sLogCommand = IF(LONG(sCommand) > 600, SUBST(sCommand, 1, 600) | '. . . (600 char max)', sCommand);
+nPassStartInd = SCAN('--password', sLogCommand);
+nPassEndInd = SCAN('--namespace', sLogCommand);
+sLogCommand = SUBST(sLogCommand, 1, nPassStartInd - 1) | SUBST(sLogCommand, nPassEndInd, LONG(sLogCommand));
+LOGOUTPUT('INFO', EXPAND('PYTHON SCRIPT COMMAND: %sLogCommand%'));
+
+EXECUTECOMMAND(sCommand, 0);
+# ================= TAPTOOLS: START GENERATED CODE =================== #
+nPrologProcedureEndTime = NOW();
+LOGOUTPUT('DEBUG', 'DATASOURCE: DatasourceType: "' | DatasourceType | '"');
+LOGOUTPUT('DEBUG', 'DATASOURCE: DatasourceNameForServer: "' | DatasourceNameForServer | '"');
+LOGOUTPUT('DEBUG', 'DATASOURCE: DatasourceCubeView: "' | DatasourceCubeView | '"');
+LOGOUTPUT('DEBUG', 'DATASOURCE: DatasourceDimensionSubset: "' | DatasourceDimensionSubset | '"');
+LOGOUTPUT('DEBUG', 'PROGRESS: END PROLOG PROCEDURE');
+# ================= TAPTOOLS: END GENERATED CODE ===================== #
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: PROLOG PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: METADATA PROCEDURE                                                   #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: METADATA PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: DATA PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: DATA PROCEDURE                                                         #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: EPILOG PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+# ================= TAPTOOLS: START GENERATED CODE =================== #
+sProcessName = GETPROCESSNAME();
+IF(sProcessName @<> 'TAP.Call.Queue.Add Job To Queue' & sProcessName @<> 'TAP.CubeSaveData' & sProcessName @<> 'TAP.Call.Save' & sProcessName @<> 'TAP.Call.Save.Wrapper' & sProcessName @<> 'TAP.Call.CubeSaveData.Wrapper' & sProcessName @<> 'TAP.Call.Tests' & sProcessName @<> 'TAP.Call.Init' & sProcessName @<> 'TAP.Call.Export Application Stats' & sProcessName @<> 'TAP.Cube.Export Data to File' & SCAN('}drill', LOWER(sProcessName)) = 0);
+   sSDA.Status = CELLGETS('TAP System Info', 'Block Process Execution', 'Value');
+   IF(sSDA.Status @= 'Yes');
+      LOGOUTPUT('INFO', 'Block Process Execution Flag is Yes in TAP System Info Cube. Skipping this process...');
+      PROCESSBREAK;
+   ENDIF;
+ENDIF;
+IF(nPrologProcedureEndTime = 0);
+   LOGOUTPUT('DEBUG', 'DATASOURCE: DatasourceType: "NULL"');
+   LOGOUTPUT('DEBUG', 'PROGRESS: END PROLOG PROCEDURE');
+   nPrologProcedureEndTime = NOW();
+ENDIF;
+IF(nMetadataProcedureStartTime > 0 & nMetadataProcedureEndTime = 0);
+   LOGOUTPUT('DEBUG', 'PROGRESS: END METADATA PROCEDURE');
+   nMetadataProcedureEndTime = NOW();
+ENDIF;
+IF(nDataProcedureStartTime > 0 & nDataProcedureEndTime = 0);
+   LOGOUTPUT('DEBUG', 'PROGRESS: END DATA PROCEDURE');
+   nDataProcedureEndTime = NOW();
+ENDIF;
+LOGOUTPUT('DEBUG', 'PROGRESS: START EPILOG PROCEDURE');
+nEpilogProcedureStartTime = NOW();
+# ================= TAPTOOLS: END GENERATED CODE ===================== #
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+# ================= TAPTOOLS: START GENERATED CODE =================== #
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: PrologProcedureRuntime: "' | NUMBERTOSTRING(ROUNDP((nPrologProcedureEndTime - nPrologProcedureStartTime) * 86400, 2)) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: PrologProcedureMetadataOperations: "' | NUMBERTOSTRING(nPrologProcedureMetadataOperations) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: PrologProcedureDataOperations: "' | NUMBERTOSTRING(nPrologProcedureDataOperations) | '"');
+
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: MetadataProcedureRuntime: "' | NUMBERTOSTRING(ROUNDP((nMetadataProcedureEndTime - nMetadataProcedureStartTime) * 86400, 2)) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: MetadataProcedureMetadataOperations: "' | NUMBERTOSTRING(nMetadataProcedureMetadataOperations) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: MetadataProcedureRecordsStarted: "' | NUMBERTOSTRING(nMetadataProcedureRecordsStarted) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: MetadataProcedureRecordsSkipped: "' | NUMBERTOSTRING(nMetadataProcedureRecordsSkipped) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: MetadataProcedureRecordsRejected: "' | NUMBERTOSTRING(nMetadataProcedureRecordsRejected) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: MetadataProcedureRecordsCompleted: "' | NUMBERTOSTRING(nMetadataProcedureRecordsCompleted) | '"');
+
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: DataProcedureRuntime: "' | NUMBERTOSTRING(ROUNDP((nDataProcedureEndTime - nDataProcedureStartTime) * 86400, 2)) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: DataProcedureMetadataOperations: "' | NUMBERTOSTRING(nDataProcedureMetadataOperations) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: DataProcedureDataOperations: "' | NUMBERTOSTRING(nDataProcedureDataOperations) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: DataProcedureRecordsStarted: "' | NUMBERTOSTRING(nDataProcedureRecordsStarted) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: DataProcedureRecordsSkipped: "' | NUMBERTOSTRING(nDataProcedureRecordsSkipped) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: DataProcedureRecordsRejected: "' | NUMBERTOSTRING(nDataProcedureRecordsRejected) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: DataProcedureRecordsCompleted: "' | NUMBERTOSTRING(nDataProcedureRecordsCompleted) | '"');
+
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: EpilogProcedureRuntime: "' | NUMBERTOSTRING(ROUNDP((NOW() - nEpilogProcedureStartTime) * 86400, 2)) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: EpilogProcedureMetadataOperations: "' | NUMBERTOSTRING(nEpilogProcedureMetadataOperations) | '"');
+
+nTotalDataOperations = nPrologProcedureDataOperations + nDataProcedureDataOperations;
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: TotalDataOperations: "' | NUMBERTOSTRING(nTotalDataOperations) | '"');
+nTotalMetadataOperations = nPrologProcedureMetadataOperations + nMetadataProcedureMetadataOperations + nDataProcedureMetadataOperations + nEpilogProcedureMetadataOperations;
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: TotalMetadataOperations: "' | NUMBERTOSTRING(nTotalMetadataOperations) | '"');
+LOGOUTPUT('DEBUG', 'PROGRESS: END EPILOG PROCEDURE');
+# ================= TAPTOOLS: END GENERATED CODE ===================== #
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: EPILOG PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #

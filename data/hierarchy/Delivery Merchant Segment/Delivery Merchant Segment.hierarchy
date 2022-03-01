@@ -1,0 +1,167 @@
+{
+    "DefaultMember": {
+        "Attributes": {
+            "Caption": "Total Merchant Segment",
+            "FDS": "Total Merchant Segment"
+        },
+        "IsPlaceholder": false,
+        "Name": "Total Merchant Segment",
+        "Ordinal": 1,
+        "Type": "Regular",
+        "UniqueName": "[Delivery Merchant Segment].[Delivery Merchant Segment].[Total Merchant Segment]",
+        "Weight": 0
+    },
+    "Edges": [
+        {
+            "ComponentName": "Enterprise",
+            "ParentName": "Total Merchant Segment",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Strategic",
+            "ParentName": "Total Merchant Segment",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "SMB Total",
+            "ParentName": "Total Merchant Segment",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Unspecified Merchant Segment",
+            "ParentName": "Total Merchant Segment",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Non-McD Strategic",
+            "ParentName": "Strategic",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "McD",
+            "ParentName": "Strategic",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "SMB - Outbound",
+            "ParentName": "SMB Total",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "SMB - Self-Service",
+            "ParentName": "SMB Total",
+            "Weight": 1
+        }
+    ],
+    "ElementAttributes": [
+        {
+            "Name": "FDS",
+            "Type": "Alias"
+        },
+        {
+            "Name": "fds_value",
+            "Type": "String"
+        }
+    ],
+    "Elements": [
+        {
+            "Attributes": {
+                "Caption": "Total Merchant Segment",
+                "FDS": "Total Merchant Segment"
+            },
+            "Index": 1,
+            "Name": "Total Merchant Segment",
+            "Type": "Consolidated",
+            "UniqueName": "[Delivery Merchant Segment].[Delivery Merchant Segment].[Total Merchant Segment]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Enterprise",
+                "FDS": "Enterprise",
+                "fds_value": "Enterprise"
+            },
+            "Index": 2,
+            "Name": "Enterprise",
+            "Type": "Numeric",
+            "UniqueName": "[Delivery Merchant Segment].[Delivery Merchant Segment].[Enterprise]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Strategic",
+                "FDS": "Strategic"
+            },
+            "Index": 3,
+            "Name": "Strategic",
+            "Type": "Consolidated",
+            "UniqueName": "[Delivery Merchant Segment].[Delivery Merchant Segment].[Strategic]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Non-McD Strategic",
+                "FDS": "Non-McD Strategic",
+                "fds_value": "Non-McD Strategic"
+            },
+            "Index": 4,
+            "Name": "Non-McD Strategic",
+            "Type": "Numeric",
+            "UniqueName": "[Delivery Merchant Segment].[Delivery Merchant Segment].[Non-McD Strategic]"
+        },
+        {
+            "Attributes": {
+                "Caption": "McD",
+                "FDS": "McD",
+                "fds_value": "McD"
+            },
+            "Index": 5,
+            "Name": "McD",
+            "Type": "Numeric",
+            "UniqueName": "[Delivery Merchant Segment].[Delivery Merchant Segment].[McD]"
+        },
+        {
+            "Attributes": {
+                "Caption": "SMB Total",
+                "FDS": "SMB Total",
+                "fds_value": "SMB Total"
+            },
+            "Index": 6,
+            "Name": "SMB Total",
+            "Type": "Consolidated",
+            "UniqueName": "[Delivery Merchant Segment].[Delivery Merchant Segment].[SMB Total]"
+        },
+        {
+            "Attributes": {
+                "Caption": "SMB - Outbound",
+                "FDS": "SMB - Outbound",
+                "fds_value": "SMB - Outbound"
+            },
+            "Index": 7,
+            "Name": "SMB - Outbound",
+            "Type": "Numeric",
+            "UniqueName": "[Delivery Merchant Segment].[Delivery Merchant Segment].[SMB - Outbound]"
+        },
+        {
+            "Attributes": {
+                "Caption": "SMB - Self-Service",
+                "FDS": "SMB - Self-Service",
+                "fds_value": "SMB - Self-Service"
+            },
+            "Index": 8,
+            "Name": "SMB - Self-Service",
+            "Type": "Numeric",
+            "UniqueName": "[Delivery Merchant Segment].[Delivery Merchant Segment].[SMB - Self-Service]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Unspecified Merchant Segment",
+                "FDS": "Unspecified Merchant Size"
+            },
+            "Index": 9,
+            "Name": "Unspecified Merchant Segment",
+            "Type": "Numeric",
+            "UniqueName": "[Delivery Merchant Segment].[Delivery Merchant Segment].[Unspecified Merchant Segment]"
+        }
+    ],
+    "Name": "Delivery Merchant Segment",
+    "Subsets": [],
+    "UniqueName": "[Delivery Merchant Segment].[Delivery Merchant Segment]"
+}

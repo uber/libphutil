@@ -1,0 +1,526 @@
+{
+    "DefaultMember": {
+        "Attributes": {
+            "Caption": "Feature Groupings"
+        },
+        "IsPlaceholder": false,
+        "Name": "Feature Groupings",
+        "Ordinal": 1,
+        "Type": "Regular",
+        "UniqueName": "[Delivery Features].[Delivery Features].[Feature Groupings]",
+        "Weight": 0
+    },
+    "Edges": [
+        {
+            "ComponentName": "1 feature",
+            "ParentName": "Feature Groupings",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "2 feature",
+            "ParentName": "Feature Groupings",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Dir(T) Mem(T) U4B(T)",
+            "ParentName": "All Delivery Features",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Dir(T) Mem(F) U4B(T)",
+            "ParentName": "All Delivery Features",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Dir(T) Mem(T) U4B(F)",
+            "ParentName": "All Delivery Features",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Dir(T) Mem(F) U4B(F)",
+            "ParentName": "All Delivery Features",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Dir(F) Mem(T) U4B(T)",
+            "ParentName": "All Delivery Features",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Dir(F) Mem(T) U4B(F)",
+            "ParentName": "All Delivery Features",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Dir(F) Mem(F) U4B(T)",
+            "ParentName": "All Delivery Features",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Dir(F) Mem(F) U4B(F)",
+            "ParentName": "All Delivery Features",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Unspecified Delivery Features",
+            "ParentName": "All Delivery Features",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "U4B",
+            "ParentName": "1 feature",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Direct",
+            "ParentName": "1 feature",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "No Direct",
+            "ParentName": "1 feature",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "No U4B",
+            "ParentName": "1 feature",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Membership Discount Applied",
+            "ParentName": "1 feature",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "No Membership Discount Applied",
+            "ParentName": "1 feature",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Dir(T) Mem(T) U4B(T)",
+            "ParentName": "U4B",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Dir(T) Mem(F) U4B(T)",
+            "ParentName": "U4B",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Dir(F) Mem(T) U4B(T)",
+            "ParentName": "U4B",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Dir(F) Mem(F) U4B(T)",
+            "ParentName": "U4B",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Dir(T) Mem(T) U4B(T)",
+            "ParentName": "Direct",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Dir(T) Mem(F) U4B(T)",
+            "ParentName": "Direct",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Dir(T) Mem(T) U4B(F)",
+            "ParentName": "Direct",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Dir(T) Mem(F) U4B(F)",
+            "ParentName": "Direct",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Dir(F) Mem(T) U4B(T)",
+            "ParentName": "No Direct",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Dir(F) Mem(T) U4B(F)",
+            "ParentName": "No Direct",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Dir(F) Mem(F) U4B(T)",
+            "ParentName": "No Direct",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Dir(F) Mem(F) U4B(F)",
+            "ParentName": "No Direct",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Dir(T) Mem(T) U4B(F)",
+            "ParentName": "No U4B",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Dir(T) Mem(F) U4B(F)",
+            "ParentName": "No U4B",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Dir(F) Mem(T) U4B(F)",
+            "ParentName": "No U4B",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Dir(F) Mem(F) U4B(F)",
+            "ParentName": "No U4B",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Dir(T) Mem(F) U4B(T)",
+            "ParentName": "No Membership Discount Applied",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Dir(T) Mem(F) U4B(F)",
+            "ParentName": "No Membership Discount Applied",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Dir(F) Mem(F) U4B(T)",
+            "ParentName": "No Membership Discount Applied",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Dir(F) Mem(F) U4B(F)",
+            "ParentName": "No Membership Discount Applied",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Dir(T) Mem(T) U4B(T)",
+            "ParentName": "Membership Discount Applied",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Dir(T) Mem(T) U4B(F)",
+            "ParentName": "Membership Discount Applied",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Dir(F) Mem(T) U4B(T)",
+            "ParentName": "Membership Discount Applied",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Dir(F) Mem(T) U4B(F)",
+            "ParentName": "Membership Discount Applied",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Membership Discount Applied U4B",
+            "ParentName": "2 feature",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Membership Discount Applied No U4B",
+            "ParentName": "2 feature",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "U4B No Membership Discount Applied",
+            "ParentName": "2 feature",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Dir(T) Mem(T) U4B(T)",
+            "ParentName": "Membership Discount Applied U4B",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Dir(F) Mem(T) U4B(T)",
+            "ParentName": "Membership Discount Applied U4B",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Dir(T) Mem(T) U4B(F)",
+            "ParentName": "Membership Discount Applied No U4B",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Dir(F) Mem(T) U4B(F)",
+            "ParentName": "Membership Discount Applied No U4B",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Dir(T) Mem(F) U4B(T)",
+            "ParentName": "U4B No Membership Discount Applied",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Dir(F) Mem(F) U4B(T)",
+            "ParentName": "U4B No Membership Discount Applied",
+            "Weight": 1
+        }
+    ],
+    "ElementAttributes": [
+        {
+            "Name": "Direct",
+            "Type": "String"
+        },
+        {
+            "Name": "Membership",
+            "Type": "String"
+        },
+        {
+            "Name": "Membership Discount Applied",
+            "Type": "String"
+        },
+        {
+            "Name": "U4B",
+            "Type": "String"
+        },
+        {
+            "Name": "}SYS_TEMP_ATTRIBUTE",
+            "Type": "String"
+        }
+    ],
+    "Elements": [
+        {
+            "Attributes": {
+                "Caption": "Feature Groupings"
+            },
+            "Index": 1,
+            "Name": "Feature Groupings",
+            "Type": "Consolidated",
+            "UniqueName": "[Delivery Features].[Delivery Features].[Feature Groupings]"
+        },
+        {
+            "Attributes": {
+                "Caption": "All Delivery Features"
+            },
+            "Index": 2,
+            "Name": "All Delivery Features",
+            "Type": "Consolidated",
+            "UniqueName": "[Delivery Features].[Delivery Features].[All Delivery Features]"
+        },
+        {
+            "Attributes": {
+                "Caption": "1 feature"
+            },
+            "Index": 3,
+            "Name": "1 feature",
+            "Type": "Consolidated",
+            "UniqueName": "[Delivery Features].[Delivery Features].[1 feature]"
+        },
+        {
+            "Attributes": {
+                "Caption": "U4B"
+            },
+            "Index": 4,
+            "Name": "U4B",
+            "Type": "Consolidated",
+            "UniqueName": "[Delivery Features].[Delivery Features].[U4B]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Direct"
+            },
+            "Index": 5,
+            "Name": "Direct",
+            "Type": "Consolidated",
+            "UniqueName": "[Delivery Features].[Delivery Features].[Direct]"
+        },
+        {
+            "Attributes": {
+                "Caption": "No Direct"
+            },
+            "Index": 6,
+            "Name": "No Direct",
+            "Type": "Consolidated",
+            "UniqueName": "[Delivery Features].[Delivery Features].[No Direct]"
+        },
+        {
+            "Attributes": {
+                "Caption": "No U4B"
+            },
+            "Index": 7,
+            "Name": "No U4B",
+            "Type": "Consolidated",
+            "UniqueName": "[Delivery Features].[Delivery Features].[No U4B]"
+        },
+        {
+            "Attributes": {
+                "Caption": "No Membership Discount Applied"
+            },
+            "Index": 8,
+            "Name": "No Membership Discount Applied",
+            "Type": "Consolidated",
+            "UniqueName": "[Delivery Features].[Delivery Features].[No Membership Discount Applied]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Membership Discount Applied"
+            },
+            "Index": 9,
+            "Name": "Membership Discount Applied",
+            "Type": "Consolidated",
+            "UniqueName": "[Delivery Features].[Delivery Features].[Membership Discount Applied]"
+        },
+        {
+            "Attributes": {
+                "Caption": "2 feature"
+            },
+            "Index": 10,
+            "Name": "2 feature",
+            "Type": "Consolidated",
+            "UniqueName": "[Delivery Features].[Delivery Features].[2 feature]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Membership Discount Applied U4B"
+            },
+            "Index": 11,
+            "Name": "Membership Discount Applied U4B",
+            "Type": "Consolidated",
+            "UniqueName": "[Delivery Features].[Delivery Features].[Membership Discount Applied U4B]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Membership Discount Applied No U4B"
+            },
+            "Index": 12,
+            "Name": "Membership Discount Applied No U4B",
+            "Type": "Consolidated",
+            "UniqueName": "[Delivery Features].[Delivery Features].[Membership Discount Applied No U4B]"
+        },
+        {
+            "Attributes": {
+                "Caption": "U4B No Membership Discount Applied"
+            },
+            "Index": 13,
+            "Name": "U4B No Membership Discount Applied",
+            "Type": "Consolidated",
+            "UniqueName": "[Delivery Features].[Delivery Features].[U4B No Membership Discount Applied]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Dir(T) Mem(T) U4B(T)",
+                "Direct": "T",
+                "Membership": "T",
+                "Membership Discount Applied": "T",
+                "U4B": "T"
+            },
+            "Index": 14,
+            "Name": "Dir(T) Mem(T) U4B(T)",
+            "Type": "Numeric",
+            "UniqueName": "[Delivery Features].[Delivery Features].[Dir(T) Mem(T) U4B(T)]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Dir(T) Mem(F) U4B(T)",
+                "Direct": "T",
+                "Membership": "F",
+                "Membership Discount Applied": "F",
+                "U4B": "T"
+            },
+            "Index": 15,
+            "Name": "Dir(T) Mem(F) U4B(T)",
+            "Type": "Numeric",
+            "UniqueName": "[Delivery Features].[Delivery Features].[Dir(T) Mem(F) U4B(T)]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Dir(T) Mem(T) U4B(F)",
+                "Direct": "T",
+                "Membership": "T",
+                "Membership Discount Applied": "T",
+                "U4B": "F"
+            },
+            "Index": 16,
+            "Name": "Dir(T) Mem(T) U4B(F)",
+            "Type": "Numeric",
+            "UniqueName": "[Delivery Features].[Delivery Features].[Dir(T) Mem(T) U4B(F)]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Dir(T) Mem(F) U4B(F)",
+                "Direct": "T",
+                "Membership": "F",
+                "Membership Discount Applied": "F",
+                "U4B": "F"
+            },
+            "Index": 17,
+            "Name": "Dir(T) Mem(F) U4B(F)",
+            "Type": "Numeric",
+            "UniqueName": "[Delivery Features].[Delivery Features].[Dir(T) Mem(F) U4B(F)]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Dir(F) Mem(T) U4B(T)",
+                "Direct": "F",
+                "Membership": "T",
+                "Membership Discount Applied": "T",
+                "U4B": "T"
+            },
+            "Index": 18,
+            "Name": "Dir(F) Mem(T) U4B(T)",
+            "Type": "Numeric",
+            "UniqueName": "[Delivery Features].[Delivery Features].[Dir(F) Mem(T) U4B(T)]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Dir(F) Mem(T) U4B(F)",
+                "Direct": "F",
+                "Membership": "T",
+                "Membership Discount Applied": "T",
+                "U4B": "F"
+            },
+            "Index": 19,
+            "Name": "Dir(F) Mem(T) U4B(F)",
+            "Type": "Numeric",
+            "UniqueName": "[Delivery Features].[Delivery Features].[Dir(F) Mem(T) U4B(F)]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Dir(F) Mem(F) U4B(T)",
+                "Direct": "F",
+                "Membership": "F",
+                "Membership Discount Applied": "F",
+                "U4B": "T"
+            },
+            "Index": 20,
+            "Name": "Dir(F) Mem(F) U4B(T)",
+            "Type": "Numeric",
+            "UniqueName": "[Delivery Features].[Delivery Features].[Dir(F) Mem(F) U4B(T)]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Dir(F) Mem(F) U4B(F)",
+                "Direct": "F",
+                "Membership": "F",
+                "Membership Discount Applied": "F",
+                "U4B": "F"
+            },
+            "Index": 21,
+            "Name": "Dir(F) Mem(F) U4B(F)",
+            "Type": "Numeric",
+            "UniqueName": "[Delivery Features].[Delivery Features].[Dir(F) Mem(F) U4B(F)]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Unspecified Delivery Features",
+                "Direct": "Unspecified",
+                "Membership": "Unspecified",
+                "Membership Discount Applied": "Unspecified",
+                "U4B": "Unspecified"
+            },
+            "Index": 22,
+            "Name": "Unspecified Delivery Features",
+            "Type": "Numeric",
+            "UniqueName": "[Delivery Features].[Delivery Features].[Unspecified Delivery Features]"
+        }
+    ],
+    "Name": "Delivery Features",
+    "Subsets": [],
+    "UniqueName": "[Delivery Features].[Delivery Features]"
+}

@@ -1,0 +1,18 @@
+SKIPCHECK;
+
+
+['Actual', 'FDS', 'Amount'] = N: IF ( ATTRS( 'Delivery Ops Metrics', !Delivery Ops Metrics, 'Fx_Flag') @= 'Y',
+                                                        DB('Delivery Staging',!Version,!Period,!Source,!Rate Type, 'Total Currency',!Line of Business,!Department,!Location,!Delivery Fulfillment Type,!Delivery Merchant Type,!Delivery Order Category,!Delivery Merchant Segment,!Delivery Features,!Delivery Ops Metrics,'Amount'),
+                                                        STET);
+
+
+
+
+ # Rider Miles & Completed Trips
+['Actual', 'Product PL', {'P2P Miles', 'Completed Trips'}, 'Amount'] = N: ['FDS'];
+
+
+FEEDERS;
+
+['Actual', 'FDS', {'P2P Miles', 'Completed Trips'}, 'Amount'] => ['Product PL'];
+

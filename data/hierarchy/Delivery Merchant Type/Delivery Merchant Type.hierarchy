@@ -1,0 +1,216 @@
+{
+    "DefaultMember": {
+        "Attributes": {
+            "Caption": "Total Merchant Type",
+            "FDS": "Total Merchant Type"
+        },
+        "IsPlaceholder": false,
+        "Name": "Total Merchant Type",
+        "Ordinal": 1,
+        "Type": "Regular",
+        "UniqueName": "[Delivery Merchant Type].[Delivery Merchant Type].[Total Merchant Type]",
+        "Weight": 0
+    },
+    "Edges": [
+        {
+            "ComponentName": "Restaurant",
+            "ParentName": "Total Merchant Type",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Grocery",
+            "ParentName": "Total Merchant Type",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Liquor",
+            "ParentName": "Total Merchant Type",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Specialty Food",
+            "ParentName": "Total Merchant Type",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Essentials",
+            "ParentName": "Total Merchant Type",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Pharmacy",
+            "ParentName": "Total Merchant Type",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Flower",
+            "ParentName": "Total Merchant Type",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Retail",
+            "ParentName": "Total Merchant Type",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Pet Supply",
+            "ParentName": "Total Merchant Type",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Unspecified Merchant Type",
+            "ParentName": "Total Merchant Type",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Unknown",
+            "ParentName": "Total Merchant Type",
+            "Weight": 1
+        }
+    ],
+    "ElementAttributes": [
+        {
+            "Name": "FDS",
+            "Type": "Alias"
+        },
+        {
+            "Name": "fds_value",
+            "Type": "String"
+        }
+    ],
+    "Elements": [
+        {
+            "Attributes": {
+                "Caption": "Total Merchant Type",
+                "FDS": "Total Merchant Type"
+            },
+            "Index": 1,
+            "Name": "Total Merchant Type",
+            "Type": "Consolidated",
+            "UniqueName": "[Delivery Merchant Type].[Delivery Merchant Type].[Total Merchant Type]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Restaurant",
+                "FDS": "Merchant_Type_Restaurant",
+                "fds_value": "Merchant_Type_Restaurant"
+            },
+            "Index": 2,
+            "Name": "Restaurant",
+            "Type": "Numeric",
+            "UniqueName": "[Delivery Merchant Type].[Delivery Merchant Type].[Restaurant]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Grocery",
+                "FDS": "Merchant_Type_Grocery",
+                "fds_value": "Merchant_Type_Grocery"
+            },
+            "Index": 3,
+            "Name": "Grocery",
+            "Type": "Numeric",
+            "UniqueName": "[Delivery Merchant Type].[Delivery Merchant Type].[Grocery]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Liquor",
+                "FDS": "Merchant_Type_Liquor",
+                "fds_value": "Merchant_Type_Liquor"
+            },
+            "Index": 4,
+            "Name": "Liquor",
+            "Type": "Numeric",
+            "UniqueName": "[Delivery Merchant Type].[Delivery Merchant Type].[Liquor]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Specialty Food",
+                "FDS": "Merchant_Type_Specialty_Food",
+                "fds_value": "Merchant_Type_Specialty_Food"
+            },
+            "Index": 5,
+            "Name": "Specialty Food",
+            "Type": "Numeric",
+            "UniqueName": "[Delivery Merchant Type].[Delivery Merchant Type].[Specialty Food]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Essentials",
+                "FDS": "Merchant_Type_Essentials",
+                "fds_value": "Merchant_Type_Essentials"
+            },
+            "Index": 6,
+            "Name": "Essentials",
+            "Type": "Numeric",
+            "UniqueName": "[Delivery Merchant Type].[Delivery Merchant Type].[Essentials]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Pharmacy",
+                "FDS": "Merchant_Type_Pharmacy",
+                "fds_value": "Merchant_Type_Pharmacy"
+            },
+            "Index": 7,
+            "Name": "Pharmacy",
+            "Type": "Numeric",
+            "UniqueName": "[Delivery Merchant Type].[Delivery Merchant Type].[Pharmacy]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Flower",
+                "FDS": "Merchant_Type_Flower",
+                "fds_value": "Merchant_Type_Flower"
+            },
+            "Index": 8,
+            "Name": "Flower",
+            "Type": "Numeric",
+            "UniqueName": "[Delivery Merchant Type].[Delivery Merchant Type].[Flower]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Retail",
+                "FDS": "Merchant_Type_Retail",
+                "fds_value": "Merchant_Type_Retail"
+            },
+            "Index": 9,
+            "Name": "Retail",
+            "Type": "Numeric",
+            "UniqueName": "[Delivery Merchant Type].[Delivery Merchant Type].[Retail]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Pet Supply",
+                "FDS": "Merchant_Type_Pet_Supply",
+                "fds_value": "Merchant_Type_Pet_Supply"
+            },
+            "Index": 10,
+            "Name": "Pet Supply",
+            "Type": "Numeric",
+            "UniqueName": "[Delivery Merchant Type].[Delivery Merchant Type].[Pet Supply]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Unspecified Merchant Type",
+                "FDS": "Unspecified Merchant Type"
+            },
+            "Index": 11,
+            "Name": "Unspecified Merchant Type",
+            "Type": "Numeric",
+            "UniqueName": "[Delivery Merchant Type].[Delivery Merchant Type].[Unspecified Merchant Type]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Unknown",
+                "FDS": "MERCHANT_TYPE_UNKNOWN",
+                "fds_value": "MERCHANT_TYPE_UNKNOWN"
+            },
+            "Index": 12,
+            "Name": "Unknown",
+            "Type": "Numeric",
+            "UniqueName": "[Delivery Merchant Type].[Delivery Merchant Type].[Unknown]"
+        }
+    ],
+    "Name": "Delivery Merchant Type",
+    "Subsets": [],
+    "UniqueName": "[Delivery Merchant Type].[Delivery Merchant Type]"
+}

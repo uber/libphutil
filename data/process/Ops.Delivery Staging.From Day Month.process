@@ -1,0 +1,532 @@
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: PROPERTIES                                                           #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+{
+    "DataSource": {
+        "Type": "TM1CubeView",
+        "dataSourceNameForClient": "Delivery Staging",
+        "dataSourceNameForServer": "Delivery Staging",
+        "view": "Default"
+    },
+    "HasSecurityAccess": false,
+    "Name": "Ops.Delivery Staging.From Day Month",
+    "Parameters": [
+        {
+            "Name": "pStartDate",
+            "Prompt": "",
+            "Type": "String",
+            "Value": "2021-12-01"
+        },
+        {
+            "Name": "pEndDate",
+            "Prompt": "",
+            "Type": "String",
+            "Value": "2021-12-31"
+        },
+        {
+            "Name": "pRateType",
+            "Prompt": "",
+            "Type": "String",
+            "Value": "No rate Type"
+        },
+        {
+            "Name": "pTable",
+            "Prompt": "",
+            "Type": "String",
+            "Value": ""
+        }
+    ],
+    "UIData": "CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
+    "Variables": [
+        {
+            "EndByte": 0,
+            "Name": "vVersion",
+            "Position": 1,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vSource",
+            "Position": 3,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vRateType",
+            "Position": 4,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vCurrency",
+            "Position": 5,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vLob",
+            "Position": 6,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vDept",
+            "Position": 7,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vLocation",
+            "Position": 8,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vFul",
+            "Position": 9,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vMerType",
+            "Position": 10,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vOrder",
+            "Position": 11,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vSeg",
+            "Position": 12,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vFeature",
+            "Position": 13,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vPeriod",
+            "Position": 2,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vMetric",
+            "Position": 14,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vMeasure",
+            "Position": 15,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vValue",
+            "Position": 16,
+            "StartByte": 0,
+            "Type": "Numeric"
+        }
+    ],
+    "VariablesUIData": [
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=33\fColType=827\f"
+    ]
+}
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: PROPERTIES                                                             #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: PROLOG PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+# ================= TAPTOOLS: START GENERATED CODE =================== #
+sProcessName = GETPROCESSNAME();
+IF(sProcessName @<> 'TAP.Call.Queue.Add Job To Queue' & sProcessName @<> 'TAP.CubeSaveData' & sProcessName @<> 'TAP.Call.Save' & sProcessName @<> 'TAP.Call.Save.Wrapper' & sProcessName @<> 'TAP.Call.CubeSaveData.Wrapper' & sProcessName @<> 'TAP.Call.Tests' & sProcessName @<> 'TAP.Call.Init' & sProcessName @<> 'TAP.Call.Export Application Stats' & sProcessName @<> 'TAP.Cube.Export Data to File' & SCAN('}drill', LOWER(sProcessName)) = 0);
+   sSDA.Status = CELLGETS('TAP System Info', 'Block Process Execution', 'Value');
+   IF(sSDA.Status @= 'Yes');
+      PROCESSBREAK;
+   ENDIF;
+ENDIF;
+LOGOUTPUT('DEBUG', 'PARAMETER: pStartDate: "' | pStartDate | '"');
+LOGOUTPUT('DEBUG', 'PARAMETER: pEndDate: "' | pEndDate | '"');
+LOGOUTPUT('DEBUG', 'PARAMETER: pRateType: "' | pRateType | '"');
+LOGOUTPUT('DEBUG', 'PARAMETER: pTable: "' | pTable | '"');
+LOGOUTPUT('DEBUG', 'PROGRESS: START PROLOG PROCEDURE');
+nMetadataProcedureRecordsStarted = 0;
+nMetadataProcedureRecordsSkipped = 0;
+nMetadataProcedureRecordsRejected = 0;
+nMetadataProcedureRecordsCompleted = 0;
+nDataProcedureRecordsStarted = 0;
+nDataProcedureRecordsSkipped = 0;
+nDataProcedureRecordsRejected = 0;
+nDataProcedureRecordsCompleted = 0;
+nPrologProcedureDataOperations = 0;
+nDataProcedureDataOperations = 0;
+nTotalDataOperations = 0;
+nPrologProcedureMetadataOperations = 0;
+nMetadataProcedureMetadataOperations = 0;
+nDataProcedureMetadataOperations = 0;
+nEpilogProcedureMetadataOperations = 0;
+nTotalProcedureMetadataOperations = 0;
+nPrologProcedureStartTime = NOW();
+nPrologProcedureEndTime = 0;
+nMetadataProcedureStartTime = 0;
+nMetadataProcedureEndTime = 0;
+nDataProcedureStartTime = 0;
+nDataProcedureEndTime = 0;
+# ================= TAPTOOLS: END GENERATED CODE ===================== #
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+sCube = 'Delivery Staging';
+nSiz = CUBEDIMENSIONCOUNTGET(sCube);
+
+cRand = NUMBERTOSTRING(ROUND(RAND() * 100000));
+cRand = FILL('0', 6 - LONG(cRand)) | cRand;
+cRand = NUMBERTOSTRING(NOW()) | '.' | cRand;
+cRandomIntA = cRand;
+
+# -=-=-=-=-=-=-==-=-==-===-==-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=#
+# Create Source View
+# -=-=-=-=-=-=-==-=-==-===-==-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=#
+
+cViewName = '}zTemp.' | GETPROCESSNAME() | '.' | cRandomIntA | ' Source';
+cSubsetName = '}zTemp.' | GETPROCESSNAME() | '.' | cRandomIntA | 'Source';
+
+VIEWCREATE(sCube, cViewName, 1);
+
+
+cnt = 1;
+
+WHILE(cnt <= nSiz);
+
+   sDim = TABDIM(sCube, cnt);
+
+   IF(sDim @= 'Delivery Ops Metrics');
+      sMDX = '{TM1FILTERBYLEVEL({TM1DRILLDOWNMEMBER( {[Delivery Ops Metrics].[GAAP Contribution], [Delivery Ops Metrics].[Total Incentives]}, ALL, RECURSIVE )}, 0)}';
+      SUBSETCREATEBYMDX(cSubsetname, sMDX, 1);
+      VIEWSUBSETASSIGN(sCube, cViewName, sDim, cSubsetName);
+
+   ELSEIF(sDim @= 'Period');
+
+      sStartMon = SUBST(pStartDate, 1, 7);
+      sEndMon = SUBST(pEndDate, 1, 7);
+      sMDX = ' {[Period].[holder]}  ';
+      nLoopCounter = 1;
+      WHILE(ATTRN(sDim, sStartMon, 'Start of Period') <= ATTRN(sDim, sEndMon, 'Start of Period'));
+         sMDX = sMDX | ' + {[Period]. [Day ' | sStartMon | ']} ';
+         sMDX = sMDX | ' + {TM1FILTERBYPATTERN( {TM1SUBSETALL( [Period] )}, ''WD ' | sStartMon | '-*'')}';
+         sStartMon = ATTRS(sDim, sStartMon, 'Period + 1');
+         nLoopCounter = nLoopCounter + 1;
+         # Loop counter is being used to prevent the while loop not to run for infinite number of times if wrong attribute values are given
+         # Setting the max Loop counter as 12 so that it won't run for more than an year in a single run
+         IF(sStartMon @= '' % nLoopCounter > 12);
+            LOGOUTPUT('ERROR', 'Period + 1 attribute value is setup incorrectly in Period dimension. Please check');
+            ProcessQuit;
+         ENDIF;
+      END;
+      SUBSETCREATEBYMDX(cSubsetName, sMdx, 1);
+      SUBSETMDXSET(sDim, cSubsetName, '');
+      VIEWSUBSETASSIGN(sCube, cViewName, sDim, cSubsetName);
+
+   ELSEIF(sDim @= 'Delivery Staging Measure');
+      SUBSETCREATE(sDim, cSubsetName, 1);
+      SUBSETELEMENTINSERT(sDim, cSubsetName, 'Amount', 1);
+      VIEWSUBSETASSIGN(sCube, cViewName, sDim, cSubsetName);
+
+   ELSEIF(sDim @= 'Version');
+      SUBSETCREATE(sDim, cSubsetName, 1);
+      SUBSETELEMENTINSERT(sDim, cSubsetName, 'Actual', 1);
+      VIEWSUBSETASSIGN(sCube, cViewName, sDim, cSubsetName);
+
+   ELSEIF(sDim @= 'Source');
+      SUBSETCREATE(sDim, cSubsetName, 1);
+      SUBSETELEMENTINSERT(sDim, cSubsetName, 'FDS', 1);
+      VIEWSUBSETASSIGN(sCube, cViewName, sDim, cSubsetName);
+
+   ELSEIF(sDim @= 'Rate Type');
+      sElement = pRateType;
+      SUBSETCREATE(sDim, cSubsetName, 1);
+      SUBSETELEMENTINSERT(sDim, cSubsetName, sElement, 1);
+      VIEWSUBSETASSIGN(sCube, cViewName, sDim, cSubsetName);
+
+   ELSE;
+      sMdx = EXPAND('{TM1FilterByLevel( {TM1SubsetAll([%sDim%].[%sDim%])}, 0) }');
+      SUBSETCREATEBYMDX(cSubsetName, sMdx, 1);
+      SUBSETMDXSET(sDim, cSubsetName, '');
+      VIEWSUBSETASSIGN(sCube, cViewName, sDim, cSubsetName);
+
+   ENDIF;
+
+   cnt = cnt + 1;
+
+END;
+
+
+# -=-=-=-=-=-=-==-=-==-===-==-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=#
+# Create Target View
+# -=-=-=-=-=-=-==-=-==-===-==-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=#
+
+cViewTar = '}zTemp.' | GETPROCESSNAME() | '.' | cRandomIntA | ' Target';
+cSubsetTar = '}zTemp.' | GETPROCESSNAME() | '.' | cRandomIntA | ' Target';
+
+VIEWCREATE(sCube, cViewTar, 1);
+
+cnt = 1;
+
+WHILE(cnt <= nSiz);
+
+   sDim = TABDIM(sCube, cnt);
+
+   IF(sDim @= 'Delivery Ops Metrics');
+      sMDX = '{TM1FILTERBYLEVEL({TM1DRILLDOWNMEMBER( {[Delivery Ops Metrics].[GAAP Contribution], [Delivery Ops Metrics].[Total Incentives]}, ALL, RECURSIVE )}, 0)}';
+      SUBSETCREATEBYMDX(cSubsetTar, sMDX, 1);
+      VIEWSUBSETASSIGN(sCube, cViewTar, sDim, cSubsetTar);
+
+   ELSEIF(sDim @= 'Period');
+      sStartMon = SUBST(pStartDate, 1, 7);
+      sEndMon = SUBST(pEndDate, 1, 7);
+      sMDX = ' {[Period].[holder]}  ';
+      nLoopCounter = 1;
+      WHILE(ATTRN(sDim, sStartMon, 'Start of Period') <= ATTRN(sDim, sEndMon, 'Start of Period'));
+         sMDX = sMDX | ' + {[Period]. [ ' | sStartMon | ']} ';
+         sMDX = sMDX | ' + {TM1FILTERBYPATTERN( {TM1SUBSETALL( [Period] )}, ''WS ' | sStartMon | '-*'')}';
+         sStartMon = ATTRS(sDim, sStartMon, 'Period + 1');
+         nLoopCounter = nLoopCounter + 1;
+         # Loop counter is being used to prevent the while loop not to run for infinite number of times if wrong attribute values are given
+         # Setting the max Loop counter as 12 so that it won't run for more than an year in a single run
+         IF(sStartMon @= '' % nLoopCounter > 12);
+            LOGOUTPUT('ERROR', 'Period + 1 attribute value is setup incorrectly in Period dimension. Please check');
+            ProcessQuit;
+         ENDIF;
+      END;
+      SUBSETCREATEBYMDX(cSubsetTar, sMdx, 1);
+      SUBSETMDXSET(sDim, cSubsetTar, '');
+      VIEWSUBSETASSIGN(sCube, cViewTar, sDim, cSubsetTar);
+
+   ELSEIF(sDim @= 'Delivery Staging Measure');
+      SUBSETCREATE(sDim, cSubsetTar, 1);
+      SUBSETELEMENTINSERT(sDim, cSubsetTar, 'Amount', 1);
+      VIEWSUBSETASSIGN(sCube, cViewTar, sDim, cSubsetTar);
+
+   ELSEIF(sDim @= 'Version');
+      SUBSETCREATE(sDim, cSubsetTar, 1);
+      SUBSETELEMENTINSERT(sDim, cSubsetTar, 'Actual', 1);
+      VIEWSUBSETASSIGN(sCube, cViewTar, sDim, cSubsetTar);
+
+
+   ELSEIF(sDim @= 'Source');
+      SUBSETCREATE(sDim, cSubsetTar, 1);
+      SUBSETELEMENTINSERT(sDim, cSubsetTar, 'FDS', 1);
+      VIEWSUBSETASSIGN(sCube, cViewTar, sDim, cSubsetTar);
+
+   ELSEIF(sDim @= 'Rate Type');
+      sElement = pRateType;
+      SUBSETCREATE(sDim, cSubsetTar, 1);
+      SUBSETELEMENTINSERT(sDim, cSubsetTar, sElement, 1);
+      VIEWSUBSETASSIGN(sCube, cViewTar, sDim, cSubsetTar);
+
+   ELSE;
+      sMdx = EXPAND('{TM1FilterByLevel( {TM1SubsetAll([%sDim%].[%sDim%])}, 0) }');
+      SUBSETCREATEBYMDX(cSubsetTar, sMdx, 1);
+      SUBSETMDXSET(sDim, cSubsetTar, '');
+      VIEWSUBSETASSIGN(sCube, cViewTar, sDim, cSubsetTar);
+
+
+   ENDIF;
+
+   cnt = cnt + 1;
+END;
+
+
+
+
+# -=-=-=-=-=-=-==-=-==-===-==-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=#
+# Clear Target View
+# -=-=-=-=-=-=-==-=-==-===-==-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=#
+
+VIEWZEROOUT(sCube, cViewTar);
+
+# -=-=-=-=-=-=-==-=-==-===-==-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=#
+# Data source
+# -=-=-=-=-=-=-==-=-==-===-==-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=#
+
+
+VIEWEXTRACTSKIPZEROESSET(sCube, cViewName, 1);
+VIEWEXTRACTSKIPRULEVALUESSET(sCube, cViewName, 1);
+VIEWEXTRACTSKIPCALCSSET(sCube, cViewName, 0);
+
+DatasourceNameForServer = sCube;
+DatasourceType = 'VIEW';
+DatasourceCubeView = cViewName;
+
+
+
+# ================= TAPTOOLS: START GENERATED CODE =================== #
+nPrologProcedureEndTime = NOW();
+LOGOUTPUT('DEBUG', 'DATASOURCE: DatasourceType: "' | DatasourceType | '"');
+LOGOUTPUT('DEBUG', 'DATASOURCE: DatasourceNameForServer: "' | DatasourceNameForServer | '"');
+LOGOUTPUT('DEBUG', 'DATASOURCE: DatasourceCubeView: "' | DatasourceCubeView | '"');
+LOGOUTPUT('DEBUG', 'DATASOURCE: DatasourceDimensionSubset: "' | DatasourceDimensionSubset | '"');
+LOGOUTPUT('DEBUG', 'PROGRESS: END PROLOG PROCEDURE');
+# ================= TAPTOOLS: END GENERATED CODE ===================== #
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: PROLOG PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: METADATA PROCEDURE                                                   #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: METADATA PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: DATA PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+# ================= TAPTOOLS: START GENERATED CODE =================== #
+nDataProcedureRecordsStarted = nDataProcedureRecordsStarted + 1;
+IF(nMetadataProcedureEndTime = 0);
+   LOGOUTPUT('DEBUG', 'PROGRESS: END METADATA PROCEDURE');
+   nMetadataProcedureEndTime = NOW();
+ENDIF;
+IF(nDataProcedureStartTime = 0);
+   LOGOUTPUT('DEBUG', 'PROGRESS: START DATA PROCEDURE');
+   nDataProcedureStartTime = NOW();
+ENDIF;
+# ================= TAPTOOLS: END GENERATED CODE ===================== #
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+IF(SUBST(vPeriod, 1, 3) @= 'Day');
+   sPeriod = SUBST(vPeriod, 5, 7);
+ELSEIF(SUBST(vPeriod, 1, 2) @= 'WD');
+   sPeriod = 'WS ' | SUBST(vPeriod, 4, 10);
+ENDIF;
+
+# ================= TAPTOOLS: START GENERATED CODE =================== #
+nDataProcedureDataOperations = nDataProcedureDataOperations + 1;
+# ================= TAPTOOLS: END GENERATED CODE ===================== #
+CELLPUTN(vValue, sCube, vVersion, sPeriod, vSource, vRateType, vCurrency, vLob, vDept, vLocation, vFul, vMerType, vOrder, vSeg, vFeature, vMetric, 'Amount');
+
+
+
+# ================= TAPTOOLS: START GENERATED CODE =================== #
+nDataProcedureRecordsCompleted = nDataProcedureRecordsCompleted + 1;
+# ================= TAPTOOLS: END GENERATED CODE ===================== #
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: DATA PROCEDURE                                                         #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: EPILOG PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+# ================= TAPTOOLS: START GENERATED CODE =================== #
+sProcessName = GETPROCESSNAME();
+IF(sProcessName @<> 'TAP.Call.Queue.Add Job To Queue' & sProcessName @<> 'TAP.CubeSaveData' & sProcessName @<> 'TAP.Call.Save' & sProcessName @<> 'TAP.Call.Save.Wrapper' & sProcessName @<> 'TAP.Call.CubeSaveData.Wrapper' & sProcessName @<> 'TAP.Call.Tests' & sProcessName @<> 'TAP.Call.Init' & sProcessName @<> 'TAP.Call.Export Application Stats' & sProcessName @<> 'TAP.Cube.Export Data to File' & SCAN('}drill', LOWER(sProcessName)) = 0);
+   sSDA.Status = CELLGETS('TAP System Info', 'Block Process Execution', 'Value');
+   IF(sSDA.Status @= 'Yes');
+      LOGOUTPUT('INFO', 'Block Process Execution Flag is Yes in TAP System Info Cube. Skipping this process...');
+      PROCESSBREAK;
+   ENDIF;
+ENDIF;
+IF(nPrologProcedureEndTime = 0);
+   LOGOUTPUT('DEBUG', 'DATASOURCE: DatasourceType: "NULL"');
+   LOGOUTPUT('DEBUG', 'PROGRESS: END PROLOG PROCEDURE');
+   nPrologProcedureEndTime = NOW();
+ENDIF;
+IF(nMetadataProcedureStartTime > 0 & nMetadataProcedureEndTime = 0);
+   LOGOUTPUT('DEBUG', 'PROGRESS: END METADATA PROCEDURE');
+   nMetadataProcedureEndTime = NOW();
+ENDIF;
+IF(nDataProcedureStartTime > 0 & nDataProcedureEndTime = 0);
+   LOGOUTPUT('DEBUG', 'PROGRESS: END DATA PROCEDURE');
+   nDataProcedureEndTime = NOW();
+ENDIF;
+LOGOUTPUT('DEBUG', 'PROGRESS: START EPILOG PROCEDURE');
+nEpilogProcedureStartTime = NOW();
+# ================= TAPTOOLS: END GENERATED CODE ===================== #
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+# ================= TAPTOOLS: START GENERATED CODE =================== #
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: PrologProcedureRuntime: "' | NUMBERTOSTRING(ROUNDP((nPrologProcedureEndTime - nPrologProcedureStartTime) * 86400, 2)) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: PrologProcedureMetadataOperations: "' | NUMBERTOSTRING(nPrologProcedureMetadataOperations) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: PrologProcedureDataOperations: "' | NUMBERTOSTRING(nPrologProcedureDataOperations) | '"');
+
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: MetadataProcedureRuntime: "' | NUMBERTOSTRING(ROUNDP((nMetadataProcedureEndTime - nMetadataProcedureStartTime) * 86400, 2)) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: MetadataProcedureMetadataOperations: "' | NUMBERTOSTRING(nMetadataProcedureMetadataOperations) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: MetadataProcedureRecordsStarted: "' | NUMBERTOSTRING(nMetadataProcedureRecordsStarted) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: MetadataProcedureRecordsSkipped: "' | NUMBERTOSTRING(nMetadataProcedureRecordsSkipped) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: MetadataProcedureRecordsRejected: "' | NUMBERTOSTRING(nMetadataProcedureRecordsRejected) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: MetadataProcedureRecordsCompleted: "' | NUMBERTOSTRING(nMetadataProcedureRecordsCompleted) | '"');
+
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: DataProcedureRuntime: "' | NUMBERTOSTRING(ROUNDP((nDataProcedureEndTime - nDataProcedureStartTime) * 86400, 2)) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: DataProcedureMetadataOperations: "' | NUMBERTOSTRING(nDataProcedureMetadataOperations) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: DataProcedureDataOperations: "' | NUMBERTOSTRING(nDataProcedureDataOperations) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: DataProcedureRecordsStarted: "' | NUMBERTOSTRING(nDataProcedureRecordsStarted) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: DataProcedureRecordsSkipped: "' | NUMBERTOSTRING(nDataProcedureRecordsSkipped) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: DataProcedureRecordsRejected: "' | NUMBERTOSTRING(nDataProcedureRecordsRejected) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: DataProcedureRecordsCompleted: "' | NUMBERTOSTRING(nDataProcedureRecordsCompleted) | '"');
+
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: EpilogProcedureRuntime: "' | NUMBERTOSTRING(ROUNDP((NOW() - nEpilogProcedureStartTime) * 86400, 2)) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: EpilogProcedureMetadataOperations: "' | NUMBERTOSTRING(nEpilogProcedureMetadataOperations) | '"');
+
+nTotalDataOperations = nPrologProcedureDataOperations + nDataProcedureDataOperations;
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: TotalDataOperations: "' | NUMBERTOSTRING(nTotalDataOperations) | '"');
+nTotalMetadataOperations = nPrologProcedureMetadataOperations + nMetadataProcedureMetadataOperations + nDataProcedureMetadataOperations + nEpilogProcedureMetadataOperations;
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: TotalMetadataOperations: "' | NUMBERTOSTRING(nTotalMetadataOperations) | '"');
+LOGOUTPUT('DEBUG', 'PROGRESS: END EPILOG PROCEDURE');
+# ================= TAPTOOLS: END GENERATED CODE ===================== #
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: EPILOG PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #

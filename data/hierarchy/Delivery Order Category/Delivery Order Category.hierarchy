@@ -1,0 +1,232 @@
+{
+    "DefaultMember": {
+        "Attributes": {
+            "Caption": "Total Order Category",
+            "FDS": "Total Order Category"
+        },
+        "IsPlaceholder": false,
+        "Name": "Total Order Category",
+        "Ordinal": 1,
+        "Type": "Regular",
+        "UniqueName": "[Delivery Order Category].[Delivery Order Category].[Total Order Category]",
+        "Weight": 0
+    },
+    "Edges": [
+        {
+            "ComponentName": "GMA",
+            "ParentName": "Total Order Category",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Default",
+            "ParentName": "Total Order Category",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Postmates_overflow",
+            "ParentName": "Total Order Category",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Grocery",
+            "ParentName": "Total Order Category",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Delivery API",
+            "ParentName": "Total Order Category",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "White Label Online Ordering",
+            "ParentName": "Total Order Category",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "RDI",
+            "ParentName": "Total Order Category",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "GMA V2",
+            "ParentName": "Total Order Category",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "External Ordering",
+            "ParentName": "Total Order Category",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Unknown",
+            "ParentName": "Total Order Category",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Google Ordering",
+            "ParentName": "Total Order Category",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Unspecified Order Category",
+            "ParentName": "Total Order Category",
+            "Weight": 1
+        }
+    ],
+    "ElementAttributes": [
+        {
+            "Name": "FDS",
+            "Type": "Alias"
+        },
+        {
+            "Name": "fds_value",
+            "Type": "String"
+        }
+    ],
+    "Elements": [
+        {
+            "Attributes": {
+                "Caption": "Total Order Category",
+                "FDS": "Total Order Category"
+            },
+            "Index": 1,
+            "Name": "Total Order Category",
+            "Type": "Consolidated",
+            "UniqueName": "[Delivery Order Category].[Delivery Order Category].[Total Order Category]"
+        },
+        {
+            "Attributes": {
+                "Caption": "GMA",
+                "FDS": "GMA",
+                "fds_value": "GMA"
+            },
+            "Index": 2,
+            "Name": "GMA",
+            "Type": "Numeric",
+            "UniqueName": "[Delivery Order Category].[Delivery Order Category].[GMA]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Default",
+                "FDS": "DEFAULT",
+                "fds_value": "DEFAULT"
+            },
+            "Index": 3,
+            "Name": "Default",
+            "Type": "Numeric",
+            "UniqueName": "[Delivery Order Category].[Delivery Order Category].[Default]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Postmates_overflow",
+                "FDS": "Postmates_overflow",
+                "fds_value": "Postmates_overflow"
+            },
+            "Index": 4,
+            "Name": "Postmates_overflow",
+            "Type": "Numeric",
+            "UniqueName": "[Delivery Order Category].[Delivery Order Category].[Postmates_overflow]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Grocery",
+                "FDS": "GROCERY",
+                "fds_value": "GROCERY"
+            },
+            "Index": 5,
+            "Name": "Grocery",
+            "Type": "Numeric",
+            "UniqueName": "[Delivery Order Category].[Delivery Order Category].[Grocery]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Delivery API",
+                "FDS": "DELIVERY_API",
+                "fds_value": "DELIVERY_API"
+            },
+            "Index": 6,
+            "Name": "Delivery API",
+            "Type": "Numeric",
+            "UniqueName": "[Delivery Order Category].[Delivery Order Category].[Delivery API]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Unknown",
+                "FDS": "Unknown",
+                "fds_value": "Unknown"
+            },
+            "Index": 7,
+            "Name": "Unknown",
+            "Type": "Numeric",
+            "UniqueName": "[Delivery Order Category].[Delivery Order Category].[Unknown]"
+        },
+        {
+            "Attributes": {
+                "Caption": "White Label Online Ordering",
+                "FDS": "WHITELABEL_ONLINE_ORDERING",
+                "fds_value": "WHITELABEL_ONLINE_ORDERING"
+            },
+            "Index": 8,
+            "Name": "White Label Online Ordering",
+            "Type": "Numeric",
+            "UniqueName": "[Delivery Order Category].[Delivery Order Category].[White Label Online Ordering]"
+        },
+        {
+            "Attributes": {
+                "Caption": "RDI",
+                "FDS": "RDI",
+                "fds_value": "RDI"
+            },
+            "Index": 9,
+            "Name": "RDI",
+            "Type": "Numeric",
+            "UniqueName": "[Delivery Order Category].[Delivery Order Category].[RDI]"
+        },
+        {
+            "Attributes": {
+                "Caption": "GMA V2",
+                "FDS": "GMA_V2",
+                "fds_value": "GMA_V2"
+            },
+            "Index": 10,
+            "Name": "GMA V2",
+            "Type": "Numeric",
+            "UniqueName": "[Delivery Order Category].[Delivery Order Category].[GMA V2]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Unspecified Order Category",
+                "FDS": "Unspecified Order Category"
+            },
+            "Index": 11,
+            "Name": "Unspecified Order Category",
+            "Type": "Numeric",
+            "UniqueName": "[Delivery Order Category].[Delivery Order Category].[Unspecified Order Category]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Google Ordering",
+                "FDS": "GOOGLE_ORDERING",
+                "fds_value": "GOOGLE_ORDERING"
+            },
+            "Index": 12,
+            "Name": "Google Ordering",
+            "Type": "Numeric",
+            "UniqueName": "[Delivery Order Category].[Delivery Order Category].[Google Ordering]"
+        },
+        {
+            "Attributes": {
+                "Caption": "External Ordering",
+                "FDS": "EATS_EXTERNAL_ORDERING",
+                "fds_value": "EATS_EXTERNAL_ORDERING"
+            },
+            "Index": 13,
+            "Name": "External Ordering",
+            "Type": "Numeric",
+            "UniqueName": "[Delivery Order Category].[Delivery Order Category].[External Ordering]"
+        }
+    ],
+    "Name": "Delivery Order Category",
+    "Subsets": [],
+    "UniqueName": "[Delivery Order Category].[Delivery Order Category]"
+}

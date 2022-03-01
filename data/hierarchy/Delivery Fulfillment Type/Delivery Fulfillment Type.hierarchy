@@ -1,0 +1,136 @@
+{
+    "DefaultMember": {
+        "Attributes": {
+            "Caption": "Total Fulfillment Type",
+            "FDS": "Total Fulfillment Type"
+        },
+        "IsPlaceholder": false,
+        "Name": "Total Fulfillment Type",
+        "Ordinal": 1,
+        "Type": "Regular",
+        "UniqueName": "[Delivery Fulfillment Type].[Delivery Fulfillment Type].[Total Fulfillment Type]",
+        "Weight": 0
+    },
+    "Edges": [
+        {
+            "ComponentName": "Delivery",
+            "ParentName": "Total Fulfillment Type",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Delivery Third Party",
+            "ParentName": "Total Fulfillment Type",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Pickup",
+            "ParentName": "Total Fulfillment Type",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Delivery Over The Top",
+            "ParentName": "Total Fulfillment Type",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Dine In",
+            "ParentName": "Total Fulfillment Type",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Unspecified Fulfillment type",
+            "ParentName": "Total Fulfillment Type",
+            "Weight": 1
+        }
+    ],
+    "ElementAttributes": [
+        {
+            "Name": "FDS",
+            "Type": "Alias"
+        },
+        {
+            "Name": "fds_value",
+            "Type": "String"
+        }
+    ],
+    "Elements": [
+        {
+            "Attributes": {
+                "Caption": "Total Fulfillment Type",
+                "FDS": "Total Fulfillment Type"
+            },
+            "Index": 1,
+            "Name": "Total Fulfillment Type",
+            "Type": "Consolidated",
+            "UniqueName": "[Delivery Fulfillment Type].[Delivery Fulfillment Type].[Total Fulfillment Type]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Delivery",
+                "FDS": "Delivery",
+                "fds_value": "Delivery"
+            },
+            "Index": 2,
+            "Name": "Delivery",
+            "Type": "Numeric",
+            "UniqueName": "[Delivery Fulfillment Type].[Delivery Fulfillment Type].[Delivery]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Delivery Third Party",
+                "FDS": "Delivery_Third_Party",
+                "fds_value": "Delivery_Third_Party"
+            },
+            "Index": 3,
+            "Name": "Delivery Third Party",
+            "Type": "Numeric",
+            "UniqueName": "[Delivery Fulfillment Type].[Delivery Fulfillment Type].[Delivery Third Party]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Pickup",
+                "FDS": "Pickup",
+                "fds_value": "Pickup"
+            },
+            "Index": 4,
+            "Name": "Pickup",
+            "Type": "Numeric",
+            "UniqueName": "[Delivery Fulfillment Type].[Delivery Fulfillment Type].[Pickup]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Delivery Over The Top",
+                "FDS": "Delivery_Over_The_Top",
+                "fds_value": "Delivery_Over_The_Top"
+            },
+            "Index": 5,
+            "Name": "Delivery Over The Top",
+            "Type": "Numeric",
+            "UniqueName": "[Delivery Fulfillment Type].[Delivery Fulfillment Type].[Delivery Over The Top]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Dine In",
+                "FDS": "Dine_In",
+                "fds_value": "Dine_In"
+            },
+            "Index": 6,
+            "Name": "Dine In",
+            "Type": "Numeric",
+            "UniqueName": "[Delivery Fulfillment Type].[Delivery Fulfillment Type].[Dine In]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Unspecified Fulfillment type",
+                "FDS": "Unspecified Fulfillment type"
+            },
+            "Index": 7,
+            "Name": "Unspecified Fulfillment type",
+            "Type": "Numeric",
+            "UniqueName": "[Delivery Fulfillment Type].[Delivery Fulfillment Type].[Unspecified Fulfillment type]"
+        }
+    ],
+    "Name": "Delivery Fulfillment Type",
+    "Subsets": [],
+    "UniqueName": "[Delivery Fulfillment Type].[Delivery Fulfillment Type]"
+}
