@@ -30,7 +30,7 @@
         {
             "Attributes": {
                 "Caption": "Allocation Method Override",
-                "picklist": "static:Completed Trips:P2P Miles:Gross Bookings"
+                "picklist": "static:Completed Trips:P2P Miles:Gross Bookings:No Allocate"
             },
             "Index": 2,
             "Name": "Allocation Method Override",
