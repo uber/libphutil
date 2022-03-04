@@ -7,7 +7,9 @@ source_mdx = (
 "SELECT NON EMPTY "+
     "{[Ops Metric].[Completed Trips], [Ops Metric].[Vehicle Miles]," +
     "[Ops Metric].[Non-P2P Rider Miles]," +
-    "[Ops Metric].[Total_Support_Contacts]" +
+    "[Ops Metric].[Total_Support_Contacts]," +
+    "[Ops Metric].[Cash Gross Bookings]," +
+    "[Ops Metric].[Cash Trips]"+
     "} * "+
     "{[Line of Business].[Total Line of Business]}" +
 "ON ROWS,"+
@@ -31,7 +33,9 @@ target_mdx = (
 "SELECT NON EMPTY "+
     "{[Account].[Completed Trips], [Account].[Vehicle Miles]," +
     "[Account].[Non-P2P Rider Miles]," +
-    "[Account].[Total_Support_Contacts]" +
+    "[Account].[Total_Support_Contacts]," +
+    "[Account].[Cash Gross Bookings]," +
+    "[Account].[Cash Trips]" +
     "} * "+
     "{[Line of Business].[Total Line of Business]}"+
 "ON ROWS,"+
