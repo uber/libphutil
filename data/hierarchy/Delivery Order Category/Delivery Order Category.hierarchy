@@ -71,6 +71,11 @@
             "ComponentName": "Unspecified Order Category",
             "ParentName": "Total Order Category",
             "Weight": 1
+        },
+        {
+            "ComponentName": "OTT BYOC Cash",
+            "ParentName": "Total Order Category",
+            "Weight": 1
         }
     ],
     "ElementAttributes": [
@@ -224,6 +229,17 @@
             "Name": "External Ordering",
             "Type": "Numeric",
             "UniqueName": "[Delivery Order Category].[Delivery Order Category].[External Ordering]"
+        },
+        {
+            "Attributes": {
+                "Caption": "OTT BYOC Cash",
+                "FDS": "OTT_BYOC_CASH",
+                "fds_value": "OTT_BYOC_CASH"
+            },
+            "Index": 14,
+            "Name": "OTT BYOC Cash",
+            "Type": "Numeric",
+            "UniqueName": "[Delivery Order Category].[Delivery Order Category].[OTT BYOC Cash]"
         }
     ],
     "Name": "Delivery Order Category",
