@@ -180,8 +180,9 @@
 # ================= TAPTOOLS: START GENERATED CODE =================== #
 sProcessName = GETPROCESSNAME();
 IF(sProcessName @<> 'TAP.Call.Queue.Add Job To Queue' & sProcessName @<> 'TAP.CubeSaveData' & sProcessName @<> 'TAP.Call.Save' & sProcessName @<> 'TAP.Call.Save.Wrapper' & sProcessName @<> 'TAP.Call.CubeSaveData.Wrapper' & sProcessName @<> 'TAP.Call.Tests' & sProcessName @<> 'TAP.Call.Init' & sProcessName @<> 'TAP.Call.Export Application Stats' & sProcessName @<> 'TAP.Cube.Export Data to File' & SCAN('}drill', LOWER(sProcessName)) = 0);
-   sSDA.Status = CELLGETS('TAP System Info', 'Block Process Execution', 'Value');
-   IF(sSDA.Status @= 'Yes');
+   sBlock.Execution.Status = CELLGETS('TAP System Info', 'Block Process Execution', 'Value');
+   IF(UPPER(sBlock.Execution.Status) @= 'YES');
+      sBlock.Epilog.Execution = 'Yes';
       PROCESSBREAK;
    ENDIF;
 ENDIF;
@@ -257,11 +258,9 @@ WHILE(cnt <= nSiz);
          sMDX = sMDX | ' + {TM1FILTERBYPATTERN( {TM1SUBSETALL( [Period] )}, ''WD ' | sStartMon | '-*'')}';
          sStartMon = ATTRS(sDim, sStartMon, 'Period + 1');
          nLoopCounter = nLoopCounter + 1;
-         # Loop counter is being used to prevent the while loop not to run for infinite number of times if wrong attribute values are given
-         # Setting the max Loop counter as 12 so that it won't run for more than an year in a single run
-         IF(sStartMon @= '' % nLoopCounter > 12);
+         IF(sStartMon @= '' % nLoopCounter > 120);
             LOGOUTPUT('ERROR', 'Period + 1 attribute value is setup incorrectly in Period dimension. Please check');
-            ProcessQuit;
+            PROCESSQUIT;
          ENDIF;
       END;
       SUBSETCREATEBYMDX(cSubsetName, sMdx, 1);
@@ -332,11 +331,9 @@ WHILE(cnt <= nSiz);
          sMDX = sMDX | ' + {TM1FILTERBYPATTERN( {TM1SUBSETALL( [Period] )}, ''WS ' | sStartMon | '-*'')}';
          sStartMon = ATTRS(sDim, sStartMon, 'Period + 1');
          nLoopCounter = nLoopCounter + 1;
-         # Loop counter is being used to prevent the while loop not to run for infinite number of times if wrong attribute values are given
-         # Setting the max Loop counter as 12 so that it won't run for more than an year in a single run
-         IF(sStartMon @= '' % nLoopCounter > 12);
+         IF(sStartMon @= '' % nLoopCounter > 120);
             LOGOUTPUT('ERROR', 'Period + 1 attribute value is setup incorrectly in Period dimension. Please check');
-            ProcessQuit;
+            PROCESSQUIT;
          ENDIF;
       END;
       SUBSETCREATEBYMDX(cSubsetTar, sMdx, 1);
@@ -444,6 +441,7 @@ ENDIF;
 #****Begin: Generated Statements***
 #****End: Generated Statements****
 
+
 IF(SUBST(vPeriod, 1, 3) @= 'Day');
    sPeriod = SUBST(vPeriod, 5, 7);
 ELSEIF(SUBST(vPeriod, 1, 2) @= 'WD');
@@ -454,7 +452,6 @@ ENDIF;
 nDataProcedureDataOperations = nDataProcedureDataOperations + 1;
 # ================= TAPTOOLS: END GENERATED CODE ===================== #
 CELLPUTN(vValue, sCube, vVersion, sPeriod, vSource, vRateType, vCurrency, vLob, vDept, vLocation, vFul, vMerType, vOrder, vSeg, vFeature, vMetric, 'Amount');
-
 
 
 # ================= TAPTOOLS: START GENERATED CODE =================== #
@@ -469,13 +466,9 @@ nDataProcedureRecordsCompleted = nDataProcedureRecordsCompleted + 1;
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
 
 # ================= TAPTOOLS: START GENERATED CODE =================== #
-sProcessName = GETPROCESSNAME();
-IF(sProcessName @<> 'TAP.Call.Queue.Add Job To Queue' & sProcessName @<> 'TAP.CubeSaveData' & sProcessName @<> 'TAP.Call.Save' & sProcessName @<> 'TAP.Call.Save.Wrapper' & sProcessName @<> 'TAP.Call.CubeSaveData.Wrapper' & sProcessName @<> 'TAP.Call.Tests' & sProcessName @<> 'TAP.Call.Init' & sProcessName @<> 'TAP.Call.Export Application Stats' & sProcessName @<> 'TAP.Cube.Export Data to File' & SCAN('}drill', LOWER(sProcessName)) = 0);
-   sSDA.Status = CELLGETS('TAP System Info', 'Block Process Execution', 'Value');
-   IF(sSDA.Status @= 'Yes');
-      LOGOUTPUT('INFO', 'Block Process Execution Flag is Yes in TAP System Info Cube. Skipping this process...');
-      PROCESSBREAK;
-   ENDIF;
+IF(sBlock.Epilog.Execution @= 'Yes');
+   LOGOUTPUT('INFO', 'Block Process Execution Flag is Yes in TAP System Info Cube. Skipping this process...');
+   PROCESSBREAK;
 ENDIF;
 IF(nPrologProcedureEndTime = 0);
    LOGOUTPUT('DEBUG', 'DATASOURCE: DatasourceType: "NULL"');
