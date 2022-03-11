@@ -118,7 +118,7 @@ cBatchPassword = CELLGETS('TAP System Info', 'Batch Password', 'Value');
 cBatchNamespace = CELLGETS('TAP System Info', 'Batch Namespace', 'Value');
 cServer = CELLGETS('TAP Application Info', CELLGETS('TAP System Info', 'Service Name', 'Value'), 'Endpoint');
 cPort = '443';
-cThreads = '200';
+cThreads = '100';
 cSpace = ' ';
 
 # ==================================================================== #
