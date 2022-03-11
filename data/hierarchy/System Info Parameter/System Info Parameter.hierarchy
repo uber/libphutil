@@ -66,6 +66,15 @@
             "Name": "Oracle Password",
             "Type": "Numeric",
             "UniqueName": "[System Info Parameter].[System Info Parameter].[Oracle Password]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Encrypted Password"
+            },
+            "Index": 7,
+            "Name": "Encrypted Password",
+            "Type": "Numeric",
+            "UniqueName": "[System Info Parameter].[System Info Parameter].[Encrypted Password]"
         }
     ],
     "Name": "System Info Parameter",

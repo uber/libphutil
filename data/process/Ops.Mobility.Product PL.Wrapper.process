@@ -16,15 +16,21 @@
         },
         {
             "Name": "pMonth",
-            "Prompt": "Month: N-Level or C-Level, or BLANK;",
+            "Prompt": "Month: N-Level",
             "Type": "String",
             "Value": "2021-12"
         },
         {
             "Name": "pRateType",
-            "Prompt": "Rate Type: N-Level, C-Level, or BLANK",
+            "Prompt": "Rate Type: N-Level",
             "Type": "String",
             "Value": "USD"
+        },
+        {
+            "Name": "pAccount",
+            "Prompt": "Account: N-Level, C-Level, or BLANK",
+            "Type": "String",
+            "Value": "Ops PL"
         }
     ],
     "UIData": "CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
@@ -41,14 +47,16 @@
 # ================= TAPTOOLS: START GENERATED CODE =================== #
 sProcessName = GETPROCESSNAME();
 IF(sProcessName @<> 'TAP.Call.Queue.Add Job To Queue' & sProcessName @<> 'TAP.CubeSaveData' & sProcessName @<> 'TAP.Call.Save' & sProcessName @<> 'TAP.Call.Save.Wrapper' & sProcessName @<> 'TAP.Call.CubeSaveData.Wrapper' & sProcessName @<> 'TAP.Call.Tests' & sProcessName @<> 'TAP.Call.Init' & sProcessName @<> 'TAP.Call.Export Application Stats' & sProcessName @<> 'TAP.Cube.Export Data to File' & SCAN('}drill', LOWER(sProcessName)) = 0);
-   sSDA.Status = CELLGETS('TAP System Info', 'Block Process Execution', 'Value');
-   IF(sSDA.Status @= 'Yes');
+   sBlock.Execution.Status = CELLGETS('TAP System Info', 'Block Process Execution', 'Value');
+   IF(UPPER(sBlock.Execution.Status) @= 'YES');
+      sBlock.Epilog.Execution = 'Yes';
       PROCESSBREAK;
    ENDIF;
 ENDIF;
 LOGOUTPUT('DEBUG', 'PARAMETER: pVersion: "' | pVersion | '"');
 LOGOUTPUT('DEBUG', 'PARAMETER: pMonth: "' | pMonth | '"');
 LOGOUTPUT('DEBUG', 'PARAMETER: pRateType: "' | pRateType | '"');
+LOGOUTPUT('DEBUG', 'PARAMETER: pAccount: "' | pAccount | '"');
 LOGOUTPUT('DEBUG', 'PROGRESS: START PROLOG PROCEDURE');
 nMetadataProcedureRecordsStarted = 0;
 nMetadataProcedureRecordsSkipped = 0;
@@ -78,7 +86,7 @@ nDataProcedureEndTime = 0;
 #****End: Generated Statements****
 
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-# Mobility / Product PL Wrapper
+# Mobility PL Wrapper
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 # Summary: Wrapper process to run allocation procedure in parallel. 
@@ -87,40 +95,64 @@ nDataProcedureEndTime = 0;
 # Globals
 # ==================================================================== #
 
+DatasourceASCIIQuoteCharacter = '';
+
 cVersion = TRIM(pVersion);
 cMonth = TRIM(pMonth);
 cRateType = TRIM(pRateType);
-cAccount = 'Ops PL';
+cAccount = TRIM(pAccount);
 
 cRand = NUMBERTOSTRING(ROUND(RAND() * 100000));
 cRand = FILL('0', 6 - LONG(cRand)) | cRand;
 cRand = NUMBERTOSTRING(NOW()) | '.' | cRand;
-
 cSub = '}zTemp.' | cRand;
 
 cPythonExe = CELLGETS('TAP System Info', 'Python Executable', 'Value');
+cScriptRunPath = CELLGETS('TAP System Info', 'Scripts Shared Path', 'Value');
+cScriptRun = cScriptRunPath | '/tap/rushti/rushti.py';
+cScriptConfig = cScriptRunPath | '/tap/rushti/config.ini';
 
-cScriptRun = CELLGETS('TAP System Info', 'Scripts Shared Path', 'Value');
-cScriptRun = cScriptRun | '/tap/tap-runti-in-parallel.py';
-
+cInstance = CELLGETS('TAP System Info', 'Instance Name', 'Value');
 cBatchUser = CELLGETS('TAP System Info', 'Batch Username', 'Value');
 cBatchPassword = CELLGETS('TAP System Info', 'Batch Password', 'Value');
 cBatchNamespace = CELLGETS('TAP System Info', 'Batch Namespace', 'Value');
 cServer = CELLGETS('TAP Application Info', CELLGETS('TAP System Info', 'Service Name', 'Value'), 'Endpoint');
 cPort = '443';
-cThreads = '10';
+cThreads = '200';
+cSpace = ' ';
 
-cTemplateScriptRun = '%cPythonExe% %cScriptRun% --server ''%cServer%'' --port %cPort% --user ''%cBatchUser%'' --password ''%cBatchPassword%'' --namespace ''%cBatchNamespace%'' --threads ''%cThreads%'' %sProcess%';
-cTemplateProcess = '--process ''Ops.Mobility.Product PL'' pVersion ''%cVersion%'' pMonth ''%sMonth%'' pRateType ''%sRateType%'' pAccount ''%cAccount%'' ';
+# Need to put encrpyted pass in TAP
+cEncryptedPass = CELLGETS('System Info', 'Encrypted Password', 'String');
 
 # ==================================================================== #
-# Create Source Subsets
+# Variables 
 # ==================================================================== #
 
-# Month
-sDim = 'Month';
+cTIprocess = 'Ops.Mobility.Product PL';
+cScriptBatch = cScriptRunPath | '/tap/rushti/opsmobilitypl.txt';
+cDimAccount = 'ANALYTICS.GL Operational';
+
+# ==================================================================== #
+# Create config 
+# ==================================================================== #
+
+sConfigInstance = '[' | cInstance | ']  ' | cSpace;
+sConfigAddress = 'address=' | cServer;
+sConfigPort = 'port=' | cPort;
+sConfigUser = 'user=' | cBatchUser | ' ' | cSpace;
+sConfigPass = 'password=' | cEncryptedPass | ' ' | cSpace;
+sConfigNameSpace = 'namespace=uberAD ' | cSpace;
+sConfigSSL = 'ssl=True';
+ASCIIOUTPUT(cScriptConfig, sConfigInstance);ASCIIOUTPUT(cScriptConfig, sConfigAddress);ASCIIOUTPUT(cScriptConfig, sConfigPort);ASCIIOUTPUT(cScriptConfig, sConfigUser);ASCIIOUTPUT(cScriptConfig, sConfigPass);ASCIIOUTPUT(cScriptConfig, sConfigNameSpace);ASCIIOUTPUT(cScriptConfig, sConfigSSL);
+
+# ==================================================================== #
+# Create Source Subset
+# ==================================================================== #
+
+# ANALYTICS.GL Operational
+sDim = cDimAccount;
 sSub = cSub;
-sEleAnc = IF(cMonth @= '', 'Total Month', cMonth);
+sEleAnc = IF(cAccount @= '', 'Ops PL', cAccount);
 
 IF(SUBSETEXISTS(sDim, sSub) = 0);
    SUBSETCREATE(sDim, sSub);
@@ -141,81 +173,32 @@ ELSE;
    END;
 ENDIF;
 
-# Rate Type
-sDim = 'Rate Type';
-sSub = cSub;
-sEleAnc = IF(cRateType @= '', 'FX Rates', cRateType);
-
-IF(SUBSETEXISTS(sDim, sSub) = 0);
-   SUBSETCREATE(sDim, sSub);
-ENDIF;
-SUBSETDELETEALLELEMENTS(sDim, sSub);
-
-IF(DTYPE(sDim, sEleAnc) @= 'N');
-   sEle = sEleAnc;
-   SUBSETELEMENTINSERT(sDim, sSub, sEle, SUBSETGETSIZE(sDim, sSub) + 1);
-ELSE;
-   i = 1;
-   WHILE(i <= DIMSIZ(sDim));
-      sEle = DIMNM(sDim, i);
-      IF(DTYPE(sDim, sEle) @= 'N' & ELISANC(sDim, sEleAnc, sEle) = 1);
-         SUBSETELEMENTINSERT(sDim, sSub, sEle, SUBSETGETSIZE(sDim, sSub) + 1);
-      ENDIF;
-      i = i + 1;
-   END;
-ENDIF;
-
-
 # ==================================================================== #
-# Iterate Subset, Setup parallel execution
+# Create batch file 
 # ==================================================================== #
 
+sDim = cDimAccount;
 sSub = cSub;
-sProcess = '';
-nCount = 0;
 i = 1;
-WHILE(i <= SUBSETGETSIZE('Rate Type', sSub));
-   sRateType = SUBSETGETELEMENTNAME('Rate Type', sSub, i);
-
-   p = 1;
-   WHILE(p <= SUBSETGETSIZE('Month', sSub));
-      nCount = nCount + 1;
-
-      sMonth = SUBSETGETELEMENTNAME('Month', sSub, p);
-      sProcess = sProcess | EXPAND(cTemplateProcess);
-
-      IF(MOD(nCount, 100) = 0);
-         sCommand = EXPAND(cTemplateScriptRun);
-
-         # Logging + Strip Passwords + Execute Python
-         LOGOUTPUT('INFO', 'PYTHON SCRIPT EXECUTION -- START -- SYNCHRONOUS');
-         sLogCommand = IF(LONG(sCommand) > 600, SUBST(sCommand, 1, 600) | '. . . (600 char max)', sCommand);
-         nPassStartInd = SCAN('--password', sLogCommand);
-         nPassEndInd = SCAN('--namespace', sLogCommand);
-         sLogCommand = SUBST(sLogCommand, 1, nPassStartInd - 1) | SUBST(sLogCommand, nPassEndInd, LONG(sLogCommand));
-         LOGOUTPUT('INFO', EXPAND('PYTHON SCRIPT COMMAND: %sLogCommand%'));
-         EXECUTECOMMAND(sCommand, 1);
-         LOGOUTPUT('INFO', 'PYTHON SCRIPT EXECUTION -- COMPLETE');
-         sProcess = '';
-      ENDIF;
-
-      p = p + 1;
-   END;
-
+WHILE(i <= SUBSETGETSIZE(sDim, sSub));
+   sAccount = SUBSETGETELEMENTNAME(sDim, sSub, i);
+   sOutput = 'instance="' | cInstance | '" process="' | cTIprocess | '" pVersion="' | cVersion | '" pMonth="' | cMonth | '" pAccount="' | sAccount | '" pRateType="' | cRateType | '"';
+   ASCIIOUTPUT(cScriptBatch, sOutput);
    i = i + 1;
 END;
 
-sCommand = EXPAND(cTemplateScriptRun);
 
-# Logging + Strip Password
-LOGOUTPUT('INFO', 'PYTHON SCRIPT EXECUTION -- START -- ASYNCHRONOUS');
-sLogCommand = IF(LONG(sCommand) > 600, SUBST(sCommand, 1, 600) | '. . . (600 char max)', sCommand);
-nPassStartInd = SCAN('--password', sLogCommand);
-nPassEndInd = SCAN('--namespace', sLogCommand);
-sLogCommand = SUBST(sLogCommand, 1, nPassStartInd - 1) | SUBST(sLogCommand, nPassEndInd, LONG(sLogCommand));
-LOGOUTPUT('INFO', EXPAND('PYTHON SCRIPT COMMAND: %sLogCommand%'));
 
-EXECUTECOMMAND(sCommand, 0);
+
+
+
+
+
+
+
+
+
+
 # ================= TAPTOOLS: START GENERATED CODE =================== #
 nPrologProcedureEndTime = NOW();
 LOGOUTPUT('DEBUG', 'DATASOURCE: DatasourceType: "' | DatasourceType | '"');
@@ -257,13 +240,9 @@ LOGOUTPUT('DEBUG', 'PROGRESS: END PROLOG PROCEDURE');
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
 
 # ================= TAPTOOLS: START GENERATED CODE =================== #
-sProcessName = GETPROCESSNAME();
-IF(sProcessName @<> 'TAP.Call.Queue.Add Job To Queue' & sProcessName @<> 'TAP.CubeSaveData' & sProcessName @<> 'TAP.Call.Save' & sProcessName @<> 'TAP.Call.Save.Wrapper' & sProcessName @<> 'TAP.Call.CubeSaveData.Wrapper' & sProcessName @<> 'TAP.Call.Tests' & sProcessName @<> 'TAP.Call.Init' & sProcessName @<> 'TAP.Call.Export Application Stats' & sProcessName @<> 'TAP.Cube.Export Data to File' & SCAN('}drill', LOWER(sProcessName)) = 0);
-   sSDA.Status = CELLGETS('TAP System Info', 'Block Process Execution', 'Value');
-   IF(sSDA.Status @= 'Yes');
-      LOGOUTPUT('INFO', 'Block Process Execution Flag is Yes in TAP System Info Cube. Skipping this process...');
-      PROCESSBREAK;
-   ENDIF;
+IF(sBlock.Epilog.Execution @= 'Yes');
+   LOGOUTPUT('INFO', 'Block Process Execution Flag is Yes in TAP System Info Cube. Skipping this process...');
+   PROCESSBREAK;
 ENDIF;
 IF(nPrologProcedureEndTime = 0);
    LOGOUTPUT('DEBUG', 'DATASOURCE: DatasourceType: "NULL"');
@@ -284,6 +263,15 @@ nEpilogProcedureStartTime = NOW();
 
 #****Begin: Generated Statements***
 #****End: Generated Statements****
+
+
+# ==================================================================== #
+# Run Ti 
+# ==================================================================== #
+
+cTemplateScriptRun = '%cPythonExe% %cScriptRun% %cScriptBatch% %cThreads%';
+sCommand = EXPAND(cTemplateScriptRun);
+EXECUTECOMMAND(sCommand, 1);
 
 # ================= TAPTOOLS: START GENERATED CODE =================== #
 LOGOUTPUT('DEBUG', 'PROCESS_METRIC: PrologProcedureRuntime: "' | NUMBERTOSTRING(ROUNDP((nPrologProcedureEndTime - nPrologProcedureStartTime) * 86400, 2)) | '"');
