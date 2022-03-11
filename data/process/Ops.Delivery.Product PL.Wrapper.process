@@ -121,9 +121,6 @@ cPort = '443';
 cThreads = '200';
 cSpace = ' ';
 
-# Need to put encrpyted pass in TAP
-cEncryptedPass = CELLGETS('System Info', 'Encrypted Password', 'String');
-
 # ==================================================================== #
 # Variables 
 # ==================================================================== #
@@ -131,19 +128,6 @@ cEncryptedPass = CELLGETS('System Info', 'Encrypted Password', 'String');
 cTIprocess = 'Ops.Delivery.Product PL';
 cScriptBatch = cScriptRunPath | '/tap/rushti/opsdeliverypl.txt';
 cDimAccount = 'ANALYTICS.GL Operational';
-
-# ==================================================================== #
-# Create config 
-# ==================================================================== #
-
-sConfigInstance = '[' | cInstance | ']  ' | cSpace;
-sConfigAddress = 'address=' | cServer;
-sConfigPort = 'port=' | cPort;
-sConfigUser = 'user=' | cBatchUser | ' ' | cSpace;
-sConfigPass = 'password=' | cEncryptedPass | ' ' | cSpace;
-sConfigNameSpace = 'namespace=uberAD ' | cSpace;
-sConfigSSL = 'ssl=True';
-ASCIIOUTPUT(cScriptConfig, sConfigInstance);ASCIIOUTPUT(cScriptConfig, sConfigAddress);ASCIIOUTPUT(cScriptConfig, sConfigPort);ASCIIOUTPUT(cScriptConfig, sConfigUser);ASCIIOUTPUT(cScriptConfig, sConfigPass);ASCIIOUTPUT(cScriptConfig, sConfigNameSpace);ASCIIOUTPUT(cScriptConfig, sConfigSSL);
 
 # ==================================================================== #
 # Create Source Subset
