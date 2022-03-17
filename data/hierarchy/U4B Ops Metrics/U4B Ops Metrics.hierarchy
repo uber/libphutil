@@ -1,0 +1,4319 @@
+{
+    "DefaultMember": {
+        "Attributes": {
+            "Caption": "Rider Miles"
+        },
+        "IsPlaceholder": false,
+        "Name": "Rider Miles",
+        "Ordinal": 1,
+        "Type": "Regular",
+        "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Rider Miles]",
+        "Weight": 0
+    },
+    "Edges": [
+        {
+            "ComponentName": "Adj EBITDA % of GAAP Revenue",
+            "ParentName": "Ops PL",
+            "Weight": 0
+        },
+        {
+            "ComponentName": "FTE Headcount",
+            "ParentName": "Ops PL",
+            "Weight": 0
+        },
+        {
+            "ComponentName": "GAAP Contribution",
+            "ParentName": "Ops PL",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Total Incentives",
+            "ParentName": "Ops PL",
+            "Weight": 0
+        },
+        {
+            "ComponentName": "Completed Trips",
+            "ParentName": "Ops PL",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "GAAP Revenue",
+            "ParentName": "Adj EBITDA % of GAAP Revenue",
+            "Weight": 0
+        },
+        {
+            "ComponentName": "Eliminations",
+            "ParentName": "GAAP Contribution",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Net Income / (Loss)",
+            "ParentName": "GAAP Contribution",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Net Income / (Loss) from Discontinued Operations",
+            "ParentName": "GAAP Contribution",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Not Used",
+            "ParentName": "GAAP Contribution",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Existing User Incentives (Total Rollup)",
+            "ParentName": "Total Incentives",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "New Driver/Courier Incentives (Total Rollup)",
+            "ParentName": "Total Incentives",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "New Rider/Eater Incentives (Total Rollup)",
+            "ParentName": "Total Incentives",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Adjusted Net Revenue",
+            "ParentName": "GAAP Revenue",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Driver Referral Reclass - ANR",
+            "ParentName": "GAAP Revenue",
+            "Weight": -1
+        },
+        {
+            "ComponentName": "EBIT",
+            "ParentName": "Net Income / (Loss)",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Income Tax Expenses",
+            "ParentName": "Net Income / (Loss)",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Net Interest Income / (Expenses)",
+            "ParentName": "Net Income / (Loss)",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Other Income / (Expenses)",
+            "ParentName": "Net Income / (Loss)",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Contribution incl. Stock Comp",
+            "ParentName": "EBIT",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Corporate Allocation",
+            "ParentName": "EBIT",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Contribution",
+            "ParentName": "Contribution incl. Stock Comp",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Stock Compensation",
+            "ParentName": "Contribution incl. Stock Comp",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Adj EBITDA",
+            "ParentName": "Contribution",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Depreciation and Amortization",
+            "ParentName": "Contribution",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Operating Expenses",
+            "ParentName": "Adj EBITDA",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Ops PL - Unmapped",
+            "ParentName": "Adj EBITDA",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Variable Contribution",
+            "ParentName": "Adj EBITDA",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Freight OpEx (-)",
+            "ParentName": "Operating Expenses",
+            "Weight": -1
+        },
+        {
+            "ComponentName": "Marketing",
+            "ParentName": "Operating Expenses",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Total Other Operating Expenses",
+            "ParentName": "Operating Expenses",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Total People Costs & Contractors",
+            "ParentName": "Operating Expenses",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Freight OpEx - CommOps Shared Resources (-)",
+            "ParentName": "Freight OpEx (-)",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Freight OpEx- GSS Ops  (-)",
+            "ParentName": "Freight OpEx (-)",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Brand + Non-Media Marketing",
+            "ParentName": "Marketing",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Driver/Courier Perf Marketing",
+            "ParentName": "Marketing",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "New Driver/Courier Incentives",
+            "ParentName": "Marketing",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "New Rider/Eater Incentives",
+            "ParentName": "Marketing",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Ops Events & Acquisitions",
+            "ParentName": "Marketing",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Restaurant Perf Marketing",
+            "ParentName": "Marketing",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Rider/Eater Perf Marketing",
+            "ParentName": "Marketing",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Brand Marketing",
+            "ParentName": "Brand + Non-Media Marketing",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Non-Media Marketing",
+            "ParentName": "Brand + Non-Media Marketing",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Driver/Courier Acquisition Rollup",
+            "ParentName": "Driver/Courier Perf Marketing",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Driver/Courier Re-Engagement Rollup",
+            "ParentName": "Driver/Courier Perf Marketing",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Driver Referral Reclass",
+            "ParentName": "New Driver/Courier Incentives",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "New Driver Incentives (ex-SLOG)",
+            "ParentName": "New Driver/Courier Incentives",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "New Driver Incentives (SLOG)",
+            "ParentName": "New Driver/Courier Incentives",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "New Driver Incentives - COS",
+            "ParentName": "New Driver/Courier Incentives",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "New Driver/Courier Incentives_fds",
+            "ParentName": "New Driver/Courier Incentives",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "G1G1 Promos",
+            "ParentName": "New Rider/Eater Incentives",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Ops Other Promos",
+            "ParentName": "New Rider/Eater Incentives",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "New Rider/Eater Incentives_fds",
+            "ParentName": "New Rider/Eater Incentives",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "=41650",
+            "ParentName": "Ops Other Promos",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Other Promos",
+            "ParentName": "Ops Other Promos",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "41650",
+            "ParentName": "Ops Other Promos",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Rider/Eater Acquisition Rollup",
+            "ParentName": "Rider/Eater Perf Marketing",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Rider/Eater Re-Engagement Rollup",
+            "ParentName": "Rider/Eater Perf Marketing",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Driver/Courier Background Check",
+            "ParentName": "Total Other Operating Expenses",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "General Insurance",
+            "ParentName": "Total Other Operating Expenses",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Legal Services",
+            "ParentName": "Total Other Operating Expenses",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Other Operating Expenses",
+            "ParentName": "Total Other Operating Expenses",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Total Outside Services",
+            "ParentName": "Total Other Operating Expenses",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Legal - Settlements",
+            "ParentName": "Legal Services",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Legal Services (ex. Settlements)",
+            "ParentName": "Legal Services",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Allocated Costs",
+            "ParentName": "Other Operating Expenses",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Allocated Regional Costs",
+            "ParentName": "Other Operating Expenses",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Other Opex",
+            "ParentName": "Other Operating Expenses",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "R&D Expenses",
+            "ParentName": "Other Operating Expenses",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Allocated G&A Costs",
+            "ParentName": "Allocated Costs",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Allocated HQ Ops Costs",
+            "ParentName": "Allocated Costs",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Allocated R&D Costs",
+            "ParentName": "Allocated Costs",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Allocated S&M Costs",
+            "ParentName": "Allocated Costs",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Freight - Outside Services (-)",
+            "ParentName": "Total Outside Services",
+            "Weight": -1
+        },
+        {
+            "ComponentName": "Lobby & Corp. Comm",
+            "ParentName": "Total Outside Services",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Outside Services",
+            "ParentName": "Total Outside Services",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Outside Services - Account Management Total (-)",
+            "ParentName": "Freight - Outside Services (-)",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Outside Services - Carrier ops (-)",
+            "ParentName": "Freight - Outside Services (-)",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Outside Services - Finance Operations (-)",
+            "ParentName": "Freight - Outside Services (-)",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Outside Services - Freight Tracking (-)",
+            "ParentName": "Freight - Outside Services (-)",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Outside Services - GSS - Program Mgmt. (-)",
+            "ParentName": "Freight - Outside Services (-)",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Contractors",
+            "ParentName": "Total People Costs & Contractors",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "People Costs",
+            "ParentName": "Total People Costs & Contractors",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Contractors (Total)",
+            "ParentName": "Contractors",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Freight - Contractors (-)",
+            "ParentName": "Contractors",
+            "Weight": -1
+        },
+        {
+            "ComponentName": "Contractors - Account Management Total (-)",
+            "ParentName": "Freight - Contractors (-)",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Contractors - Carrier ops (-)",
+            "ParentName": "Freight - Contractors (-)",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Contractors - Finance Operations (-)",
+            "ParentName": "Freight - Contractors (-)",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Contractors - Freight Tracking (-)",
+            "ParentName": "Freight - Contractors (-)",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Contractors - GSS - Program Mgmt. (-)",
+            "ParentName": "Freight - Contractors (-)",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Facilities & Technology Expenses",
+            "ParentName": "People Costs",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Freight -Facilities & Technology Expenses (-)",
+            "ParentName": "People Costs",
+            "Weight": -1
+        },
+        {
+            "ComponentName": "Freight -Fully Loaded Headcount (-)",
+            "ParentName": "People Costs",
+            "Weight": -1
+        },
+        {
+            "ComponentName": "Fully Loaded Headcount",
+            "ParentName": "People Costs",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Travel & Entertainment",
+            "ParentName": "People Costs",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Allocated Facilities",
+            "ParentName": "Facilities & Technology Expenses",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Facilities Opex",
+            "ParentName": "Facilities & Technology Expenses",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Facilities Securities",
+            "ParentName": "Facilities & Technology Expenses",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Other Rental Spaces",
+            "ParentName": "Facilities & Technology Expenses",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "P-Card Unprocessed Total",
+            "ParentName": "Facilities & Technology Expenses",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Rent",
+            "ParentName": "Facilities & Technology Expenses",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Technology Expenses",
+            "ParentName": "Facilities & Technology Expenses",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Facilities & Technology Expenses- Finance Operations (-)",
+            "ParentName": "Freight -Facilities & Technology Expenses (-)",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Facilities & Technology Expenses - GSS - Program Mgmt. (-)",
+            "ParentName": "Freight -Facilities & Technology Expenses (-)",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Fully Loaded Headcount (excl Meals) - Account Management Total (-)",
+            "ParentName": "Freight -Fully Loaded Headcount (-)",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Fully Loaded Headcount (excl Meals) - Carrier ops (-)",
+            "ParentName": "Freight -Fully Loaded Headcount (-)",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Fully Loaded Headcount (excl Meals) - Finance Operations (-)",
+            "ParentName": "Freight -Fully Loaded Headcount (-)",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Fully Loaded Headcount (excl Meals) - Freight Tracking (-)",
+            "ParentName": "Freight -Fully Loaded Headcount (-)",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Fully Loaded Headcount (excl Meals) - GSS - Program Mgmt. (-)",
+            "ParentName": "Freight -Fully Loaded Headcount (-)",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Base Pay",
+            "ParentName": "Fully Loaded Headcount",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Benefits",
+            "ParentName": "Fully Loaded Headcount",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Benefits - Employee Credits & Promos",
+            "ParentName": "Fully Loaded Headcount",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Benefits - Meals",
+            "ParentName": "Fully Loaded Headcount",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Payroll Taxes",
+            "ParentName": "Fully Loaded Headcount",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Total Bonus",
+            "ParentName": "Fully Loaded Headcount",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Conferences, Training & Other",
+            "ParentName": "Travel & Entertainment",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Morale",
+            "ParentName": "Travel & Entertainment",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "T&E Unprocessed Total",
+            "ParentName": "Travel & Entertainment",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Travel",
+            "ParentName": "Travel & Entertainment",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Net Effective Take Rate (NETR)",
+            "ParentName": "Variable Contribution",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Variable Costs",
+            "ParentName": "Variable Contribution",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Gross Bookings",
+            "ParentName": "Net Effective Take Rate (NETR)",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Pricing, Incentives, and Other Revenue",
+            "ParentName": "Net Effective Take Rate (NETR)",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Booking / Eater Fees",
+            "ParentName": "Gross Bookings",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Fares / Basket",
+            "ParentName": "Gross Bookings",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Taxes Collected",
+            "ParentName": "Gross Bookings",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Taxes Collected_fds",
+            "ParentName": "Gross Bookings",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Booking / Eater Fees_fds",
+            "ParentName": "Gross Bookings",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "41106",
+            "ParentName": "Taxes Collected_fds",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "41109",
+            "ParentName": "Taxes Collected_fds",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "41108",
+            "ParentName": "Taxes Collected_fds",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "taxes_collected_other_fds",
+            "ParentName": "Taxes Collected_fds",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "41115",
+            "ParentName": "Booking / Eater Fees_fds",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "41110",
+            "ParentName": "Booking / Eater Fees_fds",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Driver/Courier/Resto Payments & Taxes and Fees",
+            "ParentName": "Pricing, Incentives, and Other Revenue",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Existing User Incentives",
+            "ParentName": "Pricing, Incentives, and Other Revenue",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Other Revenue",
+            "ParentName": "Pricing, Incentives, and Other Revenue",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Driver/Courier Payments (incl. CoS)",
+            "ParentName": "Driver/Courier/Resto Payments & Taxes and Fees",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Restaurant Payments",
+            "ParentName": "Driver/Courier/Resto Payments & Taxes and Fees",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Taxes & Fees Disbursed",
+            "ParentName": "Driver/Courier/Resto Payments & Taxes and Fees",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Tips",
+            "ParentName": "Driver/Courier/Resto Payments & Taxes and Fees",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "WAV Fees",
+            "ParentName": "Driver/Courier/Resto Payments & Taxes and Fees",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Restaurant Payments_fds",
+            "ParentName": "Driver/Courier/Resto Payments & Taxes and Fees",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Driver/Courier/Resto Payments & Taxes and Fees_fds",
+            "ParentName": "Driver/Courier/Resto Payments & Taxes and Fees",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Driver/Courier Payments",
+            "ParentName": "Driver/Courier Payments (incl. CoS)",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Driver Payments - COS",
+            "ParentName": "Driver/Courier Payments (incl. CoS)",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Driver/Courier Payments (incl. CoS)_fds",
+            "ParentName": "Driver/Courier Payments (incl. CoS)",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Driver Partner Payment - Agent Model",
+            "ParentName": "Driver/Courier Payments",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Driver Partner Payment - Principal Model",
+            "ParentName": "Driver/Courier Payments",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Driver/Courier Payments_fds",
+            "ParentName": "Driver/Courier Payments",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "41359",
+            "ParentName": "Restaurant Payments_fds",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "41328",
+            "ParentName": "Restaurant Payments_fds",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Existing Driver Incentives (incl. CoS)",
+            "ParentName": "Existing User Incentives",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Existing Rider/Eater Incentives",
+            "ParentName": "Existing User Incentives",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Net UFP",
+            "ParentName": "Existing User Incentives",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Promos - Contra Rev",
+            "ParentName": "Existing User Incentives",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Promos - Contra Rev_fds",
+            "ParentName": "Existing User Incentives",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Existing Driver Incentives",
+            "ParentName": "Existing Driver Incentives (incl. CoS)",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Existing Driver Incentives - COS",
+            "ParentName": "Existing Driver Incentives (incl. CoS)",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Existing Driver Incentives (incl. CoS)_fds",
+            "ParentName": "Existing Driver Incentives (incl. CoS)",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Existing Driver Incentives (ex-SLOG)",
+            "ParentName": "Existing Driver Incentives",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Existing Driver Incentives (SLOG)",
+            "ParentName": "Existing Driver Incentives",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Partner Incentive Reclass",
+            "ParentName": "Existing Driver Incentives",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Existing Driver Incentives_fds",
+            "ParentName": "Existing Driver Incentives",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Existing Promos",
+            "ParentName": "Existing Rider/Eater Incentives",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Existing Promos_fds",
+            "ParentName": "Existing Rider/Eater Incentives",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Existing Rider/Eater Incentives_fds",
+            "ParentName": "Existing Rider/Eater Incentives",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "72515",
+            "ParentName": "Existing Promos_fds",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "72518",
+            "ParentName": "Existing Promos_fds",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Upfront Price Adj. Down",
+            "ParentName": "Net UFP",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Upfront Price Adj. Up",
+            "ParentName": "Net UFP",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Net UFP_fds",
+            "ParentName": "Net UFP",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "41645",
+            "ParentName": "Promos - Contra Rev_fds",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "41649",
+            "ParentName": "Promos - Contra Rev_fds",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "41699",
+            "ParentName": "Promos - Contra Rev_fds",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "41205",
+            "ParentName": "Promos - Contra Rev_fds",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "41620",
+            "ParentName": "Promos - Contra Rev_fds",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Partner Revenue Ride Insurance",
+            "ParentName": "Other Revenue",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Partnerships Revenue",
+            "ParentName": "Other Revenue",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Vehicle Leasing Revenue",
+            "ParentName": "Other Revenue",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "other_rev - ads_revenue",
+            "ParentName": "Other Revenue",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "45196",
+            "ParentName": "Other Revenue",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Other Rev",
+            "ParentName": "other_rev - ads_revenue",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "45196",
+            "ParentName": "other_rev - ads_revenue",
+            "Weight": -1
+        },
+        {
+            "ComponentName": "Money",
+            "ParentName": "Variable Costs",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Other Variable",
+            "ParentName": "Variable Costs",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Support",
+            "ParentName": "Variable Costs",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Tech",
+            "ParentName": "Variable Costs",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Trip Insurance",
+            "ParentName": "Variable Costs",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Arrears",
+            "ParentName": "Money",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Bank Fees",
+            "ParentName": "Money",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Chargebacks & DNS",
+            "ParentName": "Money",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Payment Card Fees",
+            "ParentName": "Money",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Merchant Fees - Cash Collection",
+            "ParentName": "Arrears",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Revenue Reserves",
+            "ParentName": "Arrears",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "51012",
+            "ParentName": "Bank Fees",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "78115",
+            "ParentName": "Bank Fees",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "78116",
+            "ParentName": "Bank Fees",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Bank Fees_fds",
+            "ParentName": "Bank Fees",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Bad Debt Expense",
+            "ParentName": "Chargebacks & DNS",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Chargebacks",
+            "ParentName": "Chargebacks & DNS",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Unauthorized Fares",
+            "ParentName": "Chargebacks & DNS",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Bags",
+            "ParentName": "Other Variable",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Employee Trips",
+            "ParentName": "Other Variable",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Misc. Partner Payments (incl. CoS)",
+            "ParentName": "Other Variable",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Mobile Subscription",
+            "ParentName": "Other Variable",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Other Cost of Sales",
+            "ParentName": "Other Variable",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "PPE",
+            "ParentName": "Other Variable",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "PPE - Covid",
+            "ParentName": "Other Variable",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Tax Accrual",
+            "ParentName": "Other Variable",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Misc. Partner Payments",
+            "ParentName": "Misc. Partner Payments (incl. CoS)",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Misc Partner Payments - COS",
+            "ParentName": "Misc. Partner Payments (incl. CoS)",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Misc. AP",
+            "ParentName": "Misc. Partner Payments",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Misc. Partner Stmt",
+            "ParentName": "Misc. Partner Payments",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Misc. Partner Payments_fds",
+            "ParentName": "Misc. Partner Payments",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Fuel Program",
+            "ParentName": "Other Cost of Sales",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "NeMo Cost of Sales",
+            "ParentName": "Other Cost of Sales",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Other COS",
+            "ParentName": "Other Cost of Sales",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Other Cost of Sales_fds",
+            "ParentName": "Other Cost of Sales",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Allocated Support Costs",
+            "ParentName": "Support",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Appeasements / Marketing Credits",
+            "ParentName": "Support",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Contra Rev Marketing Credits",
+            "ParentName": "Support",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Freight - Variable OpEx (+)",
+            "ParentName": "Support",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Refunds (Two-Sided)",
+            "ParentName": "Support",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Support Services",
+            "ParentName": "Support",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Contra Rev Credits",
+            "ParentName": "Appeasements / Marketing Credits",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Other Marketing Credits",
+            "ParentName": "Appeasements / Marketing Credits",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Rider Satisfaction Refund",
+            "ParentName": "Appeasements / Marketing Credits",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Appeasements / Marketing Credits_fds",
+            "ParentName": "Appeasements / Marketing Credits",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Freight - Contractors (+)",
+            "ParentName": "Freight - Variable OpEx (+)",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Freight - Facilities & Technology Expenses (+)",
+            "ParentName": "Freight - Variable OpEx (+)",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Freight - Fully Loaded Headcount (+)",
+            "ParentName": "Freight - Variable OpEx (+)",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Freight - OpEx (+)",
+            "ParentName": "Freight - Variable OpEx (+)",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Freight - Outside Services (+)",
+            "ParentName": "Freight - Variable OpEx (+)",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Contractors - Account Management Total (+)",
+            "ParentName": "Freight - Contractors (+)",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Contractors - Carrier ops (+)",
+            "ParentName": "Freight - Contractors (+)",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Contractors - Finance Operations (+)",
+            "ParentName": "Freight - Contractors (+)",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Contractors - Freight Tracking (+)",
+            "ParentName": "Freight - Contractors (+)",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Contractors - GSS - Program Mgmt. (+)",
+            "ParentName": "Freight - Contractors (+)",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Facilities & Technology Expenses- Finance Operations (+)",
+            "ParentName": "Freight - Facilities & Technology Expenses (+)",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Facilities & Technology Expenses - GSS - Program Mgmt. (+)",
+            "ParentName": "Freight - Facilities & Technology Expenses (+)",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Fully Loaded Headcount (excl Meals) - Account Management Total (+)",
+            "ParentName": "Freight - Fully Loaded Headcount (+)",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Fully Loaded Headcount (excl Meals) - Carrier ops (+)",
+            "ParentName": "Freight - Fully Loaded Headcount (+)",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Fully Loaded Headcount (excl Meals) - Finance Operations (+)",
+            "ParentName": "Freight - Fully Loaded Headcount (+)",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Fully Loaded Headcount (excl Meals) - Freight Tracking (+)",
+            "ParentName": "Freight - Fully Loaded Headcount (+)",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Fully Loaded Headcount (excl Meals) - GSS - Program Mgmt. (+)",
+            "ParentName": "Freight - Fully Loaded Headcount (+)",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Freight OpEx - CommOps Shared Resources (+)",
+            "ParentName": "Freight - OpEx (+)",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Freight OpEx- GSS Ops  (+)",
+            "ParentName": "Freight - OpEx (+)",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Outside Services - Account Management Total (+)",
+            "ParentName": "Freight - Outside Services (+)",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Outside Services - Carrier ops (+)",
+            "ParentName": "Freight - Outside Services (+)",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Outside Services - Finance Operations (+)",
+            "ParentName": "Freight - Outside Services (+)",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Outside Services - Freight Tracking (+)",
+            "ParentName": "Freight - Outside Services (+)",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Outside Services - GSS - Program Mgmt. (+)",
+            "ParentName": "Freight - Outside Services (+)",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Maps Licensing Fees",
+            "ParentName": "Tech",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Mobile",
+            "ParentName": "Tech",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Network (ex-Depr.)",
+            "ParentName": "Tech",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Mobile Services",
+            "ParentName": "Mobile",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Total Mobile Devices",
+            "ParentName": "Mobile",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Mobile_fds",
+            "ParentName": "Mobile",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Ride Insurance",
+            "ParentName": "Trip Insurance",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Existing Driver Incentives (incl. CoS) - Stat",
+            "ParentName": "Existing User Incentives (Total Rollup)",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Existing Rider/Eater Incentives - Stat",
+            "ParentName": "Existing User Incentives (Total Rollup)",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Net UFP - Stat",
+            "ParentName": "Existing User Incentives (Total Rollup)",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Promos - Contra Rev - Stat",
+            "ParentName": "Existing User Incentives (Total Rollup)",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Existing Driver Incentives - COS - Stat",
+            "ParentName": "Existing Driver Incentives (incl. CoS) - Stat",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Existing Driver Incentives - Stat",
+            "ParentName": "Existing Driver Incentives (incl. CoS) - Stat",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Existing Driver Incentives (ex-SLOG) - Stat",
+            "ParentName": "Existing Driver Incentives - Stat",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Existing Driver Incentives (SLOG) - Stat",
+            "ParentName": "Existing Driver Incentives - Stat",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Partner Incentive Reclass - Stat",
+            "ParentName": "Existing Driver Incentives - Stat",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Existing Promos - Stat",
+            "ParentName": "Existing Rider/Eater Incentives - Stat",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Upfront Price Adj. Down  - Stat",
+            "ParentName": "Net UFP - Stat",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Upfront Price Adj. Up - Stat",
+            "ParentName": "Net UFP - Stat",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Driver Referral Reclass - Stat",
+            "ParentName": "New Driver/Courier Incentives (Total Rollup)",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "New Driver Incentives (ex-SLOG) - Stat",
+            "ParentName": "New Driver/Courier Incentives (Total Rollup)",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "New Driver Incentives (SLOG)- Stat",
+            "ParentName": "New Driver/Courier Incentives (Total Rollup)",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "New Driver Incentives - COS - Stat",
+            "ParentName": "New Driver/Courier Incentives (Total Rollup)",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "G1G1 Promos - Stat",
+            "ParentName": "New Rider/Eater Incentives (Total Rollup)",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Ops Other Promos - Stat",
+            "ParentName": "New Rider/Eater Incentives (Total Rollup)",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "=41650 - Stat",
+            "ParentName": "Ops Other Promos - Stat",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Other Promos - Stat",
+            "ParentName": "Ops Other Promos - Stat",
+            "Weight": 1
+        }
+    ],
+    "ElementAttributes": [
+        {
+            "Name": "FDS",
+            "Type": "String"
+        },
+        {
+            "Name": "FDS Metric",
+            "Type": "String"
+        },
+        {
+            "Name": "Fx_Flag",
+            "Type": "String"
+        }
+    ],
+    "Elements": [
+        {
+            "Attributes": {
+                "Caption": "Rider Miles"
+            },
+            "Index": 1,
+            "Name": "Rider Miles",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Rider Miles]"
+        },
+        {
+            "Attributes": {
+                "Caption": "P2P Miles"
+            },
+            "Index": 2,
+            "Name": "P2P Miles",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[P2P Miles]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Ops PL"
+            },
+            "Index": 3,
+            "Name": "Ops PL",
+            "Type": "Consolidated",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Ops PL]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Completed Trips"
+            },
+            "Index": 4,
+            "Name": "Completed Trips",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Completed Trips]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Adj EBITDA % of GAAP Revenue"
+            },
+            "Index": 5,
+            "Name": "Adj EBITDA % of GAAP Revenue",
+            "Type": "Consolidated",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Adj EBITDA % of GAAP Revenue]"
+        },
+        {
+            "Attributes": {
+                "Caption": "FTE Headcount"
+            },
+            "Index": 6,
+            "Name": "FTE Headcount",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[FTE Headcount]"
+        },
+        {
+            "Attributes": {
+                "Caption": "GAAP Contribution"
+            },
+            "Index": 7,
+            "Name": "GAAP Contribution",
+            "Type": "Consolidated",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[GAAP Contribution]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Total Incentives"
+            },
+            "Index": 8,
+            "Name": "Total Incentives",
+            "Type": "Consolidated",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Total Incentives]"
+        },
+        {
+            "Attributes": {
+                "Caption": "GAAP Revenue",
+                "FDS Metric": "gaap_revenue"
+            },
+            "Index": 9,
+            "Name": "GAAP Revenue",
+            "Type": "Consolidated",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[GAAP Revenue]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Adjusted Net Revenue",
+                "Fx_Flag": "Y"
+            },
+            "Index": 10,
+            "Name": "Adjusted Net Revenue",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Adjusted Net Revenue]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Driver Referral Reclass - ANR",
+                "Fx_Flag": "Y"
+            },
+            "Index": 11,
+            "Name": "Driver Referral Reclass - ANR",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Driver Referral Reclass - ANR]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Eliminations",
+                "Fx_Flag": "Y"
+            },
+            "Index": 12,
+            "Name": "Eliminations",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Eliminations]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Net Income / (Loss)"
+            },
+            "Index": 13,
+            "Name": "Net Income / (Loss)",
+            "Type": "Consolidated",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Net Income / (Loss)]"
+        },
+        {
+            "Attributes": {
+                "Caption": "EBIT"
+            },
+            "Index": 14,
+            "Name": "EBIT",
+            "Type": "Consolidated",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[EBIT]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Contribution incl. Stock Comp"
+            },
+            "Index": 15,
+            "Name": "Contribution incl. Stock Comp",
+            "Type": "Consolidated",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Contribution incl. Stock Comp]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Contribution"
+            },
+            "Index": 16,
+            "Name": "Contribution",
+            "Type": "Consolidated",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Contribution]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Adj EBITDA"
+            },
+            "Index": 17,
+            "Name": "Adj EBITDA",
+            "Type": "Consolidated",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Adj EBITDA]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Operating Expenses"
+            },
+            "Index": 18,
+            "Name": "Operating Expenses",
+            "Type": "Consolidated",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Operating Expenses]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Freight OpEx (-)"
+            },
+            "Index": 19,
+            "Name": "Freight OpEx (-)",
+            "Type": "Consolidated",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Freight OpEx (-)]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Freight OpEx - CommOps Shared Resources (-)",
+                "Fx_Flag": "Y"
+            },
+            "Index": 20,
+            "Name": "Freight OpEx - CommOps Shared Resources (-)",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Freight OpEx - CommOps Shared Resources (-)]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Freight OpEx- GSS Ops  (-)",
+                "Fx_Flag": "Y"
+            },
+            "Index": 21,
+            "Name": "Freight OpEx- GSS Ops  (-)",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Freight OpEx- GSS Ops  (-)]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Marketing"
+            },
+            "Index": 22,
+            "Name": "Marketing",
+            "Type": "Consolidated",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Marketing]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Brand + Non-Media Marketing"
+            },
+            "Index": 23,
+            "Name": "Brand + Non-Media Marketing",
+            "Type": "Consolidated",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Brand + Non-Media Marketing]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Brand Marketing",
+                "Fx_Flag": "Y"
+            },
+            "Index": 24,
+            "Name": "Brand Marketing",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Brand Marketing]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Non-Media Marketing",
+                "Fx_Flag": "Y"
+            },
+            "Index": 25,
+            "Name": "Non-Media Marketing",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Non-Media Marketing]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Driver/Courier Perf Marketing"
+            },
+            "Index": 26,
+            "Name": "Driver/Courier Perf Marketing",
+            "Type": "Consolidated",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Driver/Courier Perf Marketing]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Driver/Courier Acquisition Rollup",
+                "Fx_Flag": "Y"
+            },
+            "Index": 27,
+            "Name": "Driver/Courier Acquisition Rollup",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Driver/Courier Acquisition Rollup]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Driver/Courier Re-Engagement Rollup",
+                "Fx_Flag": "Y"
+            },
+            "Index": 28,
+            "Name": "Driver/Courier Re-Engagement Rollup",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Driver/Courier Re-Engagement Rollup]"
+        },
+        {
+            "Attributes": {
+                "Caption": "New Driver/Courier Incentives"
+            },
+            "Index": 29,
+            "Name": "New Driver/Courier Incentives",
+            "Type": "Consolidated",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[New Driver/Courier Incentives]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Driver Referral Reclass",
+                "FDS": "courier_referral_reclass",
+                "FDS Metric": "courier_referral_reclass",
+                "Fx_Flag": "Y"
+            },
+            "Index": 30,
+            "Name": "Driver Referral Reclass",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Driver Referral Reclass]"
+        },
+        {
+            "Attributes": {
+                "Caption": "New Driver Incentives (ex-SLOG)",
+                "FDS": "new_courier_incentive_ex_slog",
+                "FDS Metric": "new_courier_incentive_ex_slog",
+                "Fx_Flag": "Y"
+            },
+            "Index": 31,
+            "Name": "New Driver Incentives (ex-SLOG)",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[New Driver Incentives (ex-SLOG)]"
+        },
+        {
+            "Attributes": {
+                "Caption": "New Driver Incentives (SLOG)",
+                "FDS": "new_courier_incentive_slog",
+                "FDS Metric": "new_courier_incentive_slog",
+                "Fx_Flag": "Y"
+            },
+            "Index": 32,
+            "Name": "New Driver Incentives (SLOG)",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[New Driver Incentives (SLOG)]"
+        },
+        {
+            "Attributes": {
+                "Caption": "New Driver Incentives - COS",
+                "FDS": "new_courier_incentive_cos",
+                "FDS Metric": "new_courier_incentive_cos",
+                "Fx_Flag": "Y"
+            },
+            "Index": 33,
+            "Name": "New Driver Incentives - COS",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[New Driver Incentives - COS]"
+        },
+        {
+            "Attributes": {
+                "Caption": "New Driver/Courier Incentives_fds",
+                "FDS": "new_courier_incentives",
+                "FDS Metric": "new_courier_incentives",
+                "Fx_Flag": "Y"
+            },
+            "Index": 34,
+            "Name": "New Driver/Courier Incentives_fds",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[New Driver/Courier Incentives_fds]"
+        },
+        {
+            "Attributes": {
+                "Caption": "New Rider/Eater Incentives"
+            },
+            "Index": 35,
+            "Name": "New Rider/Eater Incentives",
+            "Type": "Consolidated",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[New Rider/Eater Incentives]"
+        },
+        {
+            "Attributes": {
+                "Caption": "G1G1 Promos",
+                "FDS": "g1g1_promos",
+                "FDS Metric": "g1g1_promos",
+                "Fx_Flag": "Y"
+            },
+            "Index": 36,
+            "Name": "G1G1 Promos",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[G1G1 Promos]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Ops Other Promos"
+            },
+            "Index": 37,
+            "Name": "Ops Other Promos",
+            "Type": "Consolidated",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Ops Other Promos]"
+        },
+        {
+            "Attributes": {
+                "Caption": "New Rider/Eater Incentives_fds",
+                "FDS": "new_eater_incentives",
+                "FDS Metric": "new_eater_incentives",
+                "Fx_Flag": "Y"
+            },
+            "Index": 38,
+            "Name": "New Rider/Eater Incentives_fds",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[New Rider/Eater Incentives_fds]"
+        },
+        {
+            "Attributes": {
+                "Caption": "=41650",
+                "Fx_Flag": "Y"
+            },
+            "Index": 39,
+            "Name": "=41650",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[=41650]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Other Promos",
+                "FDS": "other_promos",
+                "FDS Metric": "other_promos",
+                "Fx_Flag": "Y"
+            },
+            "Index": 40,
+            "Name": "Other Promos",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Other Promos]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Ops Events & Acquisitions",
+                "Fx_Flag": "Y"
+            },
+            "Index": 41,
+            "Name": "Ops Events & Acquisitions",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Ops Events & Acquisitions]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Restaurant Perf Marketing",
+                "Fx_Flag": "Y"
+            },
+            "Index": 42,
+            "Name": "Restaurant Perf Marketing",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Restaurant Perf Marketing]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Rider/Eater Perf Marketing"
+            },
+            "Index": 43,
+            "Name": "Rider/Eater Perf Marketing",
+            "Type": "Consolidated",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Rider/Eater Perf Marketing]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Rider/Eater Acquisition Rollup",
+                "Fx_Flag": "Y"
+            },
+            "Index": 44,
+            "Name": "Rider/Eater Acquisition Rollup",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Rider/Eater Acquisition Rollup]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Rider/Eater Re-Engagement Rollup",
+                "Fx_Flag": "Y"
+            },
+            "Index": 45,
+            "Name": "Rider/Eater Re-Engagement Rollup",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Rider/Eater Re-Engagement Rollup]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Total Other Operating Expenses"
+            },
+            "Index": 46,
+            "Name": "Total Other Operating Expenses",
+            "Type": "Consolidated",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Total Other Operating Expenses]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Driver/Courier Background Check",
+                "Fx_Flag": "Y"
+            },
+            "Index": 47,
+            "Name": "Driver/Courier Background Check",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Driver/Courier Background Check]"
+        },
+        {
+            "Attributes": {
+                "Caption": "General Insurance",
+                "Fx_Flag": "Y"
+            },
+            "Index": 48,
+            "Name": "General Insurance",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[General Insurance]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Legal Services"
+            },
+            "Index": 49,
+            "Name": "Legal Services",
+            "Type": "Consolidated",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Legal Services]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Legal - Settlements",
+                "Fx_Flag": "Y"
+            },
+            "Index": 50,
+            "Name": "Legal - Settlements",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Legal - Settlements]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Legal Services (ex. Settlements)",
+                "Fx_Flag": "Y"
+            },
+            "Index": 51,
+            "Name": "Legal Services (ex. Settlements)",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Legal Services (ex. Settlements)]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Other Operating Expenses"
+            },
+            "Index": 52,
+            "Name": "Other Operating Expenses",
+            "Type": "Consolidated",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Other Operating Expenses]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Allocated Costs"
+            },
+            "Index": 53,
+            "Name": "Allocated Costs",
+            "Type": "Consolidated",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Allocated Costs]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Allocated G&A Costs",
+                "Fx_Flag": "Y"
+            },
+            "Index": 54,
+            "Name": "Allocated G&A Costs",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Allocated G&A Costs]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Allocated HQ Ops Costs",
+                "Fx_Flag": "Y"
+            },
+            "Index": 55,
+            "Name": "Allocated HQ Ops Costs",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Allocated HQ Ops Costs]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Allocated R&D Costs",
+                "Fx_Flag": "Y"
+            },
+            "Index": 56,
+            "Name": "Allocated R&D Costs",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Allocated R&D Costs]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Allocated S&M Costs",
+                "Fx_Flag": "Y"
+            },
+            "Index": 57,
+            "Name": "Allocated S&M Costs",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Allocated S&M Costs]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Allocated Regional Costs",
+                "Fx_Flag": "Y"
+            },
+            "Index": 58,
+            "Name": "Allocated Regional Costs",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Allocated Regional Costs]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Other Opex",
+                "Fx_Flag": "Y"
+            },
+            "Index": 59,
+            "Name": "Other Opex",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Other Opex]"
+        },
+        {
+            "Attributes": {
+                "Caption": "R&D Expenses",
+                "Fx_Flag": "Y"
+            },
+            "Index": 60,
+            "Name": "R&D Expenses",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[R&D Expenses]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Total Outside Services"
+            },
+            "Index": 61,
+            "Name": "Total Outside Services",
+            "Type": "Consolidated",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Total Outside Services]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Freight - Outside Services (-)"
+            },
+            "Index": 62,
+            "Name": "Freight - Outside Services (-)",
+            "Type": "Consolidated",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Freight - Outside Services (-)]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Outside Services - Account Management Total (-)",
+                "Fx_Flag": "Y"
+            },
+            "Index": 63,
+            "Name": "Outside Services - Account Management Total (-)",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Outside Services - Account Management Total (-)]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Outside Services - Carrier ops (-)",
+                "Fx_Flag": "Y"
+            },
+            "Index": 64,
+            "Name": "Outside Services - Carrier ops (-)",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Outside Services - Carrier ops (-)]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Outside Services - Finance Operations (-)",
+                "Fx_Flag": "Y"
+            },
+            "Index": 65,
+            "Name": "Outside Services - Finance Operations (-)",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Outside Services - Finance Operations (-)]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Outside Services - Freight Tracking (-)",
+                "Fx_Flag": "Y"
+            },
+            "Index": 66,
+            "Name": "Outside Services - Freight Tracking (-)",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Outside Services - Freight Tracking (-)]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Outside Services - GSS - Program Mgmt. (-)",
+                "Fx_Flag": "Y"
+            },
+            "Index": 67,
+            "Name": "Outside Services - GSS - Program Mgmt. (-)",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Outside Services - GSS - Program Mgmt. (-)]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Lobby & Corp. Comm",
+                "Fx_Flag": "Y"
+            },
+            "Index": 68,
+            "Name": "Lobby & Corp. Comm",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Lobby & Corp. Comm]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Outside Services",
+                "Fx_Flag": "Y"
+            },
+            "Index": 69,
+            "Name": "Outside Services",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Outside Services]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Total People Costs & Contractors"
+            },
+            "Index": 70,
+            "Name": "Total People Costs & Contractors",
+            "Type": "Consolidated",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Total People Costs & Contractors]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Contractors"
+            },
+            "Index": 71,
+            "Name": "Contractors",
+            "Type": "Consolidated",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Contractors]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Contractors (Total)",
+                "Fx_Flag": "Y"
+            },
+            "Index": 72,
+            "Name": "Contractors (Total)",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Contractors (Total)]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Freight - Contractors (-)"
+            },
+            "Index": 73,
+            "Name": "Freight - Contractors (-)",
+            "Type": "Consolidated",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Freight - Contractors (-)]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Contractors - Account Management Total (-)",
+                "Fx_Flag": "Y"
+            },
+            "Index": 74,
+            "Name": "Contractors - Account Management Total (-)",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Contractors - Account Management Total (-)]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Contractors - Carrier ops (-)",
+                "Fx_Flag": "Y"
+            },
+            "Index": 75,
+            "Name": "Contractors - Carrier ops (-)",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Contractors - Carrier ops (-)]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Contractors - Finance Operations (-)",
+                "Fx_Flag": "Y"
+            },
+            "Index": 76,
+            "Name": "Contractors - Finance Operations (-)",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Contractors - Finance Operations (-)]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Contractors - Freight Tracking (-)",
+                "Fx_Flag": "Y"
+            },
+            "Index": 77,
+            "Name": "Contractors - Freight Tracking (-)",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Contractors - Freight Tracking (-)]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Contractors - GSS - Program Mgmt. (-)",
+                "Fx_Flag": "Y"
+            },
+            "Index": 78,
+            "Name": "Contractors - GSS - Program Mgmt. (-)",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Contractors - GSS - Program Mgmt. (-)]"
+        },
+        {
+            "Attributes": {
+                "Caption": "People Costs"
+            },
+            "Index": 79,
+            "Name": "People Costs",
+            "Type": "Consolidated",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[People Costs]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Facilities & Technology Expenses"
+            },
+            "Index": 80,
+            "Name": "Facilities & Technology Expenses",
+            "Type": "Consolidated",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Facilities & Technology Expenses]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Allocated Facilities",
+                "Fx_Flag": "Y"
+            },
+            "Index": 81,
+            "Name": "Allocated Facilities",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Allocated Facilities]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Facilities Opex",
+                "Fx_Flag": "Y"
+            },
+            "Index": 82,
+            "Name": "Facilities Opex",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Facilities Opex]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Facilities Securities",
+                "Fx_Flag": "Y"
+            },
+            "Index": 83,
+            "Name": "Facilities Securities",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Facilities Securities]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Other Rental Spaces",
+                "Fx_Flag": "Y"
+            },
+            "Index": 84,
+            "Name": "Other Rental Spaces",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Other Rental Spaces]"
+        },
+        {
+            "Attributes": {
+                "Caption": "P-Card Unprocessed Total",
+                "Fx_Flag": "Y"
+            },
+            "Index": 85,
+            "Name": "P-Card Unprocessed Total",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[P-Card Unprocessed Total]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Rent",
+                "Fx_Flag": "Y"
+            },
+            "Index": 86,
+            "Name": "Rent",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Rent]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Technology Expenses",
+                "Fx_Flag": "Y"
+            },
+            "Index": 87,
+            "Name": "Technology Expenses",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Technology Expenses]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Freight -Facilities & Technology Expenses (-)"
+            },
+            "Index": 88,
+            "Name": "Freight -Facilities & Technology Expenses (-)",
+            "Type": "Consolidated",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Freight -Facilities & Technology Expenses (-)]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Facilities & Technology Expenses- Finance Operations (-)",
+                "Fx_Flag": "Y"
+            },
+            "Index": 89,
+            "Name": "Facilities & Technology Expenses- Finance Operations (-)",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Facilities & Technology Expenses- Finance Operations (-)]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Facilities & Technology Expenses - GSS - Program Mgmt. (-)",
+                "Fx_Flag": "Y"
+            },
+            "Index": 90,
+            "Name": "Facilities & Technology Expenses - GSS - Program Mgmt. (-)",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Facilities & Technology Expenses - GSS - Program Mgmt. (-)]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Freight -Fully Loaded Headcount (-)"
+            },
+            "Index": 91,
+            "Name": "Freight -Fully Loaded Headcount (-)",
+            "Type": "Consolidated",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Freight -Fully Loaded Headcount (-)]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Fully Loaded Headcount (excl Meals) - Account Management Total (-)",
+                "Fx_Flag": "Y"
+            },
+            "Index": 92,
+            "Name": "Fully Loaded Headcount (excl Meals) - Account Management Total (-)",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Fully Loaded Headcount (excl Meals) - Account Management Total (-)]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Fully Loaded Headcount (excl Meals) - Carrier ops (-)",
+                "Fx_Flag": "Y"
+            },
+            "Index": 93,
+            "Name": "Fully Loaded Headcount (excl Meals) - Carrier ops (-)",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Fully Loaded Headcount (excl Meals) - Carrier ops (-)]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Fully Loaded Headcount (excl Meals) - Finance Operations (-)",
+                "Fx_Flag": "Y"
+            },
+            "Index": 94,
+            "Name": "Fully Loaded Headcount (excl Meals) - Finance Operations (-)",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Fully Loaded Headcount (excl Meals) - Finance Operations (-)]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Fully Loaded Headcount (excl Meals) - Freight Tracking (-)",
+                "Fx_Flag": "Y"
+            },
+            "Index": 95,
+            "Name": "Fully Loaded Headcount (excl Meals) - Freight Tracking (-)",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Fully Loaded Headcount (excl Meals) - Freight Tracking (-)]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Fully Loaded Headcount (excl Meals) - GSS - Program Mgmt. (-)",
+                "Fx_Flag": "Y"
+            },
+            "Index": 96,
+            "Name": "Fully Loaded Headcount (excl Meals) - GSS - Program Mgmt. (-)",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Fully Loaded Headcount (excl Meals) - GSS - Program Mgmt. (-)]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Fully Loaded Headcount"
+            },
+            "Index": 97,
+            "Name": "Fully Loaded Headcount",
+            "Type": "Consolidated",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Fully Loaded Headcount]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Base Pay",
+                "Fx_Flag": "Y"
+            },
+            "Index": 98,
+            "Name": "Base Pay",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Base Pay]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Benefits",
+                "Fx_Flag": "Y"
+            },
+            "Index": 99,
+            "Name": "Benefits",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Benefits]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Benefits - Employee Credits & Promos",
+                "Fx_Flag": "Y"
+            },
+            "Index": 100,
+            "Name": "Benefits - Employee Credits & Promos",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Benefits - Employee Credits & Promos]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Benefits - Meals",
+                "Fx_Flag": "Y"
+            },
+            "Index": 101,
+            "Name": "Benefits - Meals",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Benefits - Meals]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Payroll Taxes",
+                "Fx_Flag": "Y"
+            },
+            "Index": 102,
+            "Name": "Payroll Taxes",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Payroll Taxes]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Total Bonus",
+                "Fx_Flag": "Y"
+            },
+            "Index": 103,
+            "Name": "Total Bonus",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Total Bonus]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Travel & Entertainment"
+            },
+            "Index": 104,
+            "Name": "Travel & Entertainment",
+            "Type": "Consolidated",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Travel & Entertainment]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Conferences, Training & Other",
+                "Fx_Flag": "Y"
+            },
+            "Index": 105,
+            "Name": "Conferences, Training & Other",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Conferences, Training & Other]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Morale",
+                "Fx_Flag": "Y"
+            },
+            "Index": 106,
+            "Name": "Morale",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Morale]"
+        },
+        {
+            "Attributes": {
+                "Caption": "T&E Unprocessed Total",
+                "Fx_Flag": "Y"
+            },
+            "Index": 107,
+            "Name": "T&E Unprocessed Total",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[T&E Unprocessed Total]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Travel",
+                "Fx_Flag": "Y"
+            },
+            "Index": 108,
+            "Name": "Travel",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Travel]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Ops PL - Unmapped",
+                "Fx_Flag": "Y"
+            },
+            "Index": 109,
+            "Name": "Ops PL - Unmapped",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Ops PL - Unmapped]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Variable Contribution",
+                "FDS Metric": "variable_contribution"
+            },
+            "Index": 110,
+            "Name": "Variable Contribution",
+            "Type": "Consolidated",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Variable Contribution]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Net Effective Take Rate (NETR)",
+                "FDS Metric": "netr"
+            },
+            "Index": 111,
+            "Name": "Net Effective Take Rate (NETR)",
+            "Type": "Consolidated",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Net Effective Take Rate (NETR)]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Gross Bookings",
+                "FDS Metric": "gross_bookings"
+            },
+            "Index": 112,
+            "Name": "Gross Bookings",
+            "Type": "Consolidated",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Gross Bookings]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Booking / Eater Fees",
+                "FDS": "eater_fees",
+                "FDS Metric": "eater_fees",
+                "Fx_Flag": "Y"
+            },
+            "Index": 113,
+            "Name": "Booking / Eater Fees",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Booking / Eater Fees]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Fares / Basket",
+                "FDS": "basket",
+                "FDS Metric": "basket",
+                "Fx_Flag": "Y"
+            },
+            "Index": 114,
+            "Name": "Fares / Basket",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Fares / Basket]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Taxes Collected",
+                "FDS": "taxes_collected",
+                "FDS Metric": "taxes_collected",
+                "Fx_Flag": "Y"
+            },
+            "Index": 115,
+            "Name": "Taxes Collected",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Taxes Collected]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Taxes Collected_fds"
+            },
+            "Index": 116,
+            "Name": "Taxes Collected_fds",
+            "Type": "Consolidated",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Taxes Collected_fds]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Booking / Eater Fees_fds"
+            },
+            "Index": 117,
+            "Name": "Booking / Eater Fees_fds",
+            "Type": "Consolidated",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Booking / Eater Fees_fds]"
+        },
+        {
+            "Attributes": {
+                "Caption": "41115",
+                "FDS": "booking_fees",
+                "FDS Metric": "booking_fees",
+                "Fx_Flag": "Y"
+            },
+            "Index": 118,
+            "Name": "41115",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[41115]"
+        },
+        {
+            "Attributes": {
+                "Caption": "41110",
+                "FDS": "other_uber_fees",
+                "FDS Metric": "other_uber_fees",
+                "Fx_Flag": "Y"
+            },
+            "Index": 119,
+            "Name": "41110",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[41110]"
+        },
+        {
+            "Attributes": {
+                "Caption": "41106",
+                "FDS": "sales_tax_collected",
+                "FDS Metric": "sales_tax_collected",
+                "Fx_Flag": "Y"
+            },
+            "Index": 120,
+            "Name": "41106",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[41106]"
+        },
+        {
+            "Attributes": {
+                "Caption": "41109",
+                "FDS": "airport_fees",
+                "FDS Metric": "airport_fees",
+                "Fx_Flag": "Y"
+            },
+            "Index": 121,
+            "Name": "41109",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[41109]"
+        },
+        {
+            "Attributes": {
+                "Caption": "41108",
+                "FDS": "tolls_collected",
+                "FDS Metric": "tolls_collected",
+                "Fx_Flag": "Y"
+            },
+            "Index": 122,
+            "Name": "41108",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[41108]"
+        },
+        {
+            "Attributes": {
+                "Caption": "taxes_collected_other_fds",
+                "FDS": "taxes_collected_other",
+                "FDS Metric": "taxes_collected_other",
+                "Fx_Flag": "Y"
+            },
+            "Index": 123,
+            "Name": "taxes_collected_other_fds",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[taxes_collected_other_fds]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Pricing, Incentives, and Other Revenue"
+            },
+            "Index": 124,
+            "Name": "Pricing, Incentives, and Other Revenue",
+            "Type": "Consolidated",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Pricing, Incentives, and Other Revenue]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Driver/Courier/Resto Payments & Taxes and Fees"
+            },
+            "Index": 125,
+            "Name": "Driver/Courier/Resto Payments & Taxes and Fees",
+            "Type": "Consolidated",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Driver/Courier/Resto Payments & Taxes and Fees]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Driver/Courier/Resto Payments & Taxes and Fees_fds",
+                "FDS": "partner_payments_taxes_and_fees",
+                "FDS Metric": "partner_payments_taxes_and_fees",
+                "Fx_Flag": "Y"
+            },
+            "Index": 126,
+            "Name": "Driver/Courier/Resto Payments & Taxes and Fees_fds",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Driver/Courier/Resto Payments & Taxes and Fees_fds]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Driver/Courier Payments (incl. CoS)"
+            },
+            "Index": 127,
+            "Name": "Driver/Courier Payments (incl. CoS)",
+            "Type": "Consolidated",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Driver/Courier Payments (incl. CoS)]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Driver/Courier Payments (incl. CoS)_fds",
+                "FDS": "courier_payments_incl_cos",
+                "FDS Metric": "courier_payments_incl_cos",
+                "Fx_Flag": "Y"
+            },
+            "Index": 128,
+            "Name": "Driver/Courier Payments (incl. CoS)_fds",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Driver/Courier Payments (incl. CoS)_fds]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Driver/Courier Payments"
+            },
+            "Index": 129,
+            "Name": "Driver/Courier Payments",
+            "Type": "Consolidated",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Driver/Courier Payments]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Driver Partner Payment - Agent Model",
+                "Fx_Flag": "Y"
+            },
+            "Index": 130,
+            "Name": "Driver Partner Payment - Agent Model",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Driver Partner Payment - Agent Model]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Driver Partner Payment - Principal Model",
+                "Fx_Flag": "Y"
+            },
+            "Index": 131,
+            "Name": "Driver Partner Payment - Principal Model",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Driver Partner Payment - Principal Model]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Driver/Courier Payments_fds",
+                "FDS": "courier_payments",
+                "FDS Metric": "courier_payments",
+                "Fx_Flag": "Y"
+            },
+            "Index": 132,
+            "Name": "Driver/Courier Payments_fds",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Driver/Courier Payments_fds]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Driver Payments - COS",
+                "FDS": "courier_payments_cos",
+                "FDS Metric": "courier_payments_cos",
+                "Fx_Flag": "Y"
+            },
+            "Index": 133,
+            "Name": "Driver Payments - COS",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Driver Payments - COS]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Restaurant Payments",
+                "FDS": "restaurant_payments",
+                "FDS Metric": "restaurant_payments",
+                "Fx_Flag": "Y"
+            },
+            "Index": 134,
+            "Name": "Restaurant Payments",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Restaurant Payments]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Taxes & Fees Disbursed",
+                "FDS": "taxes_fees_disbursed",
+                "FDS Metric": "taxes_fees_disbursed",
+                "Fx_Flag": "Y"
+            },
+            "Index": 135,
+            "Name": "Taxes & Fees Disbursed",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Taxes & Fees Disbursed]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Tips",
+                "FDS": "tips",
+                "FDS Metric": "tips",
+                "Fx_Flag": "Y"
+            },
+            "Index": 136,
+            "Name": "Tips",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Tips]"
+        },
+        {
+            "Attributes": {
+                "Caption": "WAV Fees",
+                "FDS": "wav_fees",
+                "FDS Metric": "wav_fees",
+                "Fx_Flag": "Y"
+            },
+            "Index": 137,
+            "Name": "WAV Fees",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[WAV Fees]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Restaurant Payments_fds"
+            },
+            "Index": 138,
+            "Name": "Restaurant Payments_fds",
+            "Type": "Consolidated",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Restaurant Payments_fds]"
+        },
+        {
+            "Attributes": {
+                "Caption": "41359",
+                "FDS": "restaurant_commission_fee",
+                "FDS Metric": "restaurant_commission_fee",
+                "Fx_Flag": "Y"
+            },
+            "Index": 139,
+            "Name": "41359",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[41359]"
+        },
+        {
+            "Attributes": {
+                "Caption": "41328",
+                "FDS": "restaurant_dispatch",
+                "FDS Metric": "restaurant_dispatch",
+                "Fx_Flag": "Y"
+            },
+            "Index": 140,
+            "Name": "41328",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[41328]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Existing User Incentives",
+                "FDS Metric": "existing_user_incentives"
+            },
+            "Index": 141,
+            "Name": "Existing User Incentives",
+            "Type": "Consolidated",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Existing User Incentives]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Existing Driver Incentives (incl. CoS)"
+            },
+            "Index": 142,
+            "Name": "Existing Driver Incentives (incl. CoS)",
+            "Type": "Consolidated",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Existing Driver Incentives (incl. CoS)]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Existing Driver Incentives"
+            },
+            "Index": 143,
+            "Name": "Existing Driver Incentives",
+            "Type": "Consolidated",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Existing Driver Incentives]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Existing Driver Incentives (ex-SLOG)",
+                "Fx_Flag": "Y"
+            },
+            "Index": 144,
+            "Name": "Existing Driver Incentives (ex-SLOG)",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Existing Driver Incentives (ex-SLOG)]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Existing Driver Incentives (SLOG)",
+                "Fx_Flag": "Y"
+            },
+            "Index": 145,
+            "Name": "Existing Driver Incentives (SLOG)",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Existing Driver Incentives (SLOG)]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Partner Incentive Reclass",
+                "Fx_Flag": "Y"
+            },
+            "Index": 146,
+            "Name": "Partner Incentive Reclass",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Partner Incentive Reclass]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Existing Driver Incentives_fds",
+                "FDS": "existing_courier_incentives",
+                "FDS Metric": "existing_courier_incentives",
+                "Fx_Flag": "Y"
+            },
+            "Index": 147,
+            "Name": "Existing Driver Incentives_fds",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Existing Driver Incentives_fds]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Existing Driver Incentives - COS",
+                "FDS": "existing_courier_incentives_cos",
+                "FDS Metric": "existing_courier_incentives_cos",
+                "Fx_Flag": "Y"
+            },
+            "Index": 148,
+            "Name": "Existing Driver Incentives - COS",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Existing Driver Incentives - COS]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Existing Driver Incentives (incl. CoS)_fds",
+                "FDS": "existing_courier_incentives_incl_cos",
+                "FDS Metric": "existing_courier_incentives_incl_cos",
+                "Fx_Flag": "Y"
+            },
+            "Index": 149,
+            "Name": "Existing Driver Incentives (incl. CoS)_fds",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Existing Driver Incentives (incl. CoS)_fds]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Existing Rider/Eater Incentives"
+            },
+            "Index": 150,
+            "Name": "Existing Rider/Eater Incentives",
+            "Type": "Consolidated",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Existing Rider/Eater Incentives]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Existing Promos",
+                "Fx_Flag": "Y"
+            },
+            "Index": 151,
+            "Name": "Existing Promos",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Existing Promos]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Existing Promos_fds"
+            },
+            "Index": 152,
+            "Name": "Existing Promos_fds",
+            "Type": "Consolidated",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Existing Promos_fds]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Existing Rider/Eater Incentives_fds",
+                "Fx_Flag": "Y"
+            },
+            "Index": 153,
+            "Name": "Existing Rider/Eater Incentives_fds",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Existing Rider/Eater Incentives_fds]"
+        },
+        {
+            "Attributes": {
+                "Caption": "72515",
+                "FDS": "marketing_promotions",
+                "FDS Metric": "marketing_promotions",
+                "Fx_Flag": "Y"
+            },
+            "Index": 154,
+            "Name": "72515",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[72515]"
+        },
+        {
+            "Attributes": {
+                "Caption": "72518",
+                "FDS": "rider_loyalty_marketing_expense",
+                "FDS Metric": "rider_loyalty_marketing_expense",
+                "Fx_Flag": "Y"
+            },
+            "Index": 155,
+            "Name": "72518",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[72518]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Net UFP"
+            },
+            "Index": 156,
+            "Name": "Net UFP",
+            "Type": "Consolidated",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Net UFP]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Upfront Price Adj. Down",
+                "Fx_Flag": "Y"
+            },
+            "Index": 157,
+            "Name": "Upfront Price Adj. Down",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Upfront Price Adj. Down]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Upfront Price Adj. Up",
+                "Fx_Flag": "Y"
+            },
+            "Index": 158,
+            "Name": "Upfront Price Adj. Up",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Upfront Price Adj. Up]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Net UFP_fds",
+                "FDS": "net_ufp",
+                "FDS Metric": "net_ufp",
+                "Fx_Flag": "Y"
+            },
+            "Index": 159,
+            "Name": "Net UFP_fds",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Net UFP_fds]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Promos - Contra Rev",
+                "FDS": "promos_contra_rev",
+                "FDS Metric": "promos_contra_rev",
+                "Fx_Flag": "Y"
+            },
+            "Index": 160,
+            "Name": "Promos - Contra Rev",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Promos - Contra Rev]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Promos - Contra Rev_fds"
+            },
+            "Index": 161,
+            "Name": "Promos - Contra Rev_fds",
+            "Type": "Consolidated",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Promos - Contra Rev_fds]"
+        },
+        {
+            "Attributes": {
+                "Caption": "41645",
+                "FDS": "contra_rev_existing_rider_promos",
+                "FDS Metric": "contra_rev_existing_rider_promos",
+                "Fx_Flag": "Y"
+            },
+            "Index": 162,
+            "Name": "41645",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[41645]"
+        },
+        {
+            "Attributes": {
+                "Caption": "41649",
+                "FDS": "contra_rev_marketing_promotions",
+                "FDS Metric": "contra_rev_marketing_promotions",
+                "Fx_Flag": "Y"
+            },
+            "Index": 163,
+            "Name": "41649",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[41649]"
+        },
+        {
+            "Attributes": {
+                "Caption": "41699",
+                "FDS": "contra_revenue_rider_loyalty_marketing_credits",
+                "FDS Metric": "contra_revenue_rider_loyalty_marketing_credits",
+                "Fx_Flag": "Y"
+            },
+            "Index": 164,
+            "Name": "41699",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[41699]"
+        },
+        {
+            "Attributes": {
+                "Caption": "41205",
+                "FDS": "promotions_price_cut",
+                "FDS Metric": "promotions_price_cut",
+                "Fx_Flag": "Y"
+            },
+            "Index": 165,
+            "Name": "41205",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[41205]"
+        },
+        {
+            "Attributes": {
+                "Caption": "41620",
+                "FDS": "subscription_pass_revenue",
+                "FDS Metric": "subscription_pass_revenue",
+                "Fx_Flag": "Y"
+            },
+            "Index": 166,
+            "Name": "41620",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[41620]"
+        },
+        {
+            "Attributes": {
+                "Caption": "41650",
+                "FDS": "contra_rev_new_client_promotions",
+                "FDS Metric": "contra_rev_new_client_promotions",
+                "Fx_Flag": "Y"
+            },
+            "Index": 167,
+            "Name": "41650",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[41650]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Other Revenue",
+                "FDS Metric": "total_other_revenue"
+            },
+            "Index": 168,
+            "Name": "Other Revenue",
+            "Type": "Consolidated",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Other Revenue]"
+        },
+        {
+            "Attributes": {
+                "Caption": "45196",
+                "FDS": "ads_revenue",
+                "FDS Metric": "ads_revenue",
+                "Fx_Flag": "Y"
+            },
+            "Index": 169,
+            "Name": "45196",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[45196]"
+        },
+        {
+            "Attributes": {
+                "Caption": "other_rev - ads_revenue"
+            },
+            "Index": 170,
+            "Name": "other_rev - ads_revenue",
+            "Type": "Consolidated",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[other_rev - ads_revenue]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Other Rev",
+                "FDS": "other_rev",
+                "FDS Metric": "other_rev",
+                "Fx_Flag": "Y"
+            },
+            "Index": 171,
+            "Name": "Other Rev",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Other Rev]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Partner Revenue Ride Insurance",
+                "FDS": "partner_revenue_ride_insurance",
+                "FDS Metric": "partner_revenue_ride_insurance",
+                "Fx_Flag": "Y"
+            },
+            "Index": 172,
+            "Name": "Partner Revenue Ride Insurance",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Partner Revenue Ride Insurance]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Partnerships Revenue",
+                "FDS": "partnerships_revenue",
+                "FDS Metric": "partnerships_revenue",
+                "Fx_Flag": "Y"
+            },
+            "Index": 173,
+            "Name": "Partnerships Revenue",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Partnerships Revenue]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Vehicle Leasing Revenue",
+                "FDS": "vehicle_leasing_revenue",
+                "FDS Metric": "vehicle_leasing_revenue",
+                "Fx_Flag": "Y"
+            },
+            "Index": 174,
+            "Name": "Vehicle Leasing Revenue",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Vehicle Leasing Revenue]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Variable Costs",
+                "FDS Metric": "variable_costs"
+            },
+            "Index": 175,
+            "Name": "Variable Costs",
+            "Type": "Consolidated",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Variable Costs]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Money",
+                "FDS Metric": "money"
+            },
+            "Index": 176,
+            "Name": "Money",
+            "Type": "Consolidated",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Money]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Arrears",
+                "FDS Metric": "arrears"
+            },
+            "Index": 177,
+            "Name": "Arrears",
+            "Type": "Consolidated",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Arrears]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Merchant Fees - Cash Collection",
+                "FDS": "merchant_fees",
+                "FDS Metric": "merchant_fees",
+                "Fx_Flag": "Y"
+            },
+            "Index": 178,
+            "Name": "Merchant Fees - Cash Collection",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Merchant Fees - Cash Collection]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Revenue Reserves",
+                "FDS": "revenue_reserves",
+                "FDS Metric": "revenue_reserves",
+                "Fx_Flag": "Y"
+            },
+            "Index": 179,
+            "Name": "Revenue Reserves",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Revenue Reserves]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Bank Fees"
+            },
+            "Index": 180,
+            "Name": "Bank Fees",
+            "Type": "Consolidated",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Bank Fees]"
+        },
+        {
+            "Attributes": {
+                "Caption": "51012",
+                "Fx_Flag": "Y"
+            },
+            "Index": 181,
+            "Name": "51012",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[51012]"
+        },
+        {
+            "Attributes": {
+                "Caption": "78115",
+                "Fx_Flag": "Y"
+            },
+            "Index": 182,
+            "Name": "78115",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[78115]"
+        },
+        {
+            "Attributes": {
+                "Caption": "78116",
+                "Fx_Flag": "Y"
+            },
+            "Index": 183,
+            "Name": "78116",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[78116]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Bank Fees_fds",
+                "FDS": "bank_fees",
+                "FDS Metric": "bank_fees",
+                "Fx_Flag": "Y"
+            },
+            "Index": 184,
+            "Name": "Bank Fees_fds",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Bank Fees_fds]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Chargebacks & DNS",
+                "FDS Metric": "chargebacks_dns"
+            },
+            "Index": 185,
+            "Name": "Chargebacks & DNS",
+            "Type": "Consolidated",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Chargebacks & DNS]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Bad Debt Expense",
+                "FDS": "bad_debt_expense",
+                "FDS Metric": "bad_debt_expense",
+                "Fx_Flag": "Y"
+            },
+            "Index": 186,
+            "Name": "Bad Debt Expense",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Bad Debt Expense]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Chargebacks",
+                "FDS": "chargebacks",
+                "FDS Metric": "chargebacks",
+                "Fx_Flag": "Y"
+            },
+            "Index": 187,
+            "Name": "Chargebacks",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Chargebacks]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Unauthorized Fares",
+                "FDS": "unauthorized_fares",
+                "FDS Metric": "unauthorized_fares",
+                "Fx_Flag": "Y"
+            },
+            "Index": 188,
+            "Name": "Unauthorized Fares",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Unauthorized Fares]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Payment Card Fees",
+                "FDS": "payment_card_fees",
+                "FDS Metric": "payment_card_fees",
+                "Fx_Flag": "Y"
+            },
+            "Index": 189,
+            "Name": "Payment Card Fees",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Payment Card Fees]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Other Variable",
+                "FDS Metric": "other_variable"
+            },
+            "Index": 190,
+            "Name": "Other Variable",
+            "Type": "Consolidated",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Other Variable]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Bags",
+                "FDS": "bags",
+                "FDS Metric": "bags",
+                "Fx_Flag": "Y"
+            },
+            "Index": 191,
+            "Name": "Bags",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Bags]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Employee Trips",
+                "FDS": "employee_trips",
+                "FDS Metric": "employee_trips",
+                "Fx_Flag": "Y"
+            },
+            "Index": 192,
+            "Name": "Employee Trips",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Employee Trips]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Misc. Partner Payments (incl. CoS)",
+                "FDS Metric": "misc_partner_payments_total"
+            },
+            "Index": 193,
+            "Name": "Misc. Partner Payments (incl. CoS)",
+            "Type": "Consolidated",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Misc. Partner Payments (incl. CoS)]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Misc. Partner Payments"
+            },
+            "Index": 194,
+            "Name": "Misc. Partner Payments",
+            "Type": "Consolidated",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Misc. Partner Payments]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Misc. AP",
+                "Fx_Flag": "Y"
+            },
+            "Index": 195,
+            "Name": "Misc. AP",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Misc. AP]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Misc. Partner Stmt",
+                "Fx_Flag": "Y"
+            },
+            "Index": 196,
+            "Name": "Misc. Partner Stmt",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Misc. Partner Stmt]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Misc. Partner Payments_fds",
+                "FDS": "misc_partner_payments",
+                "FDS Metric": "misc_partner_payments",
+                "Fx_Flag": "Y"
+            },
+            "Index": 197,
+            "Name": "Misc. Partner Payments_fds",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Misc. Partner Payments_fds]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Misc Partner Payments - COS",
+                "FDS": "misc_partner_payments_cos",
+                "FDS Metric": "misc_partner_payments_cos",
+                "Fx_Flag": "Y"
+            },
+            "Index": 198,
+            "Name": "Misc Partner Payments - COS",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Misc Partner Payments - COS]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Mobile Subscription",
+                "FDS": "mobile_subscription",
+                "FDS Metric": "mobile_subscription",
+                "Fx_Flag": "Y"
+            },
+            "Index": 199,
+            "Name": "Mobile Subscription",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Mobile Subscription]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Other Cost of Sales"
+            },
+            "Index": 200,
+            "Name": "Other Cost of Sales",
+            "Type": "Consolidated",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Other Cost of Sales]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Fuel Program",
+                "Fx_Flag": "Y"
+            },
+            "Index": 201,
+            "Name": "Fuel Program",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Fuel Program]"
+        },
+        {
+            "Attributes": {
+                "Caption": "NeMo Cost of Sales",
+                "Fx_Flag": "Y"
+            },
+            "Index": 202,
+            "Name": "NeMo Cost of Sales",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[NeMo Cost of Sales]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Other COS",
+                "Fx_Flag": "Y"
+            },
+            "Index": 203,
+            "Name": "Other COS",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Other COS]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Other Cost of Sales_fds",
+                "FDS": "other_cost_of_sales",
+                "FDS Metric": "other_cost_of_sales",
+                "Fx_Flag": "Y"
+            },
+            "Index": 204,
+            "Name": "Other Cost of Sales_fds",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Other Cost of Sales_fds]"
+        },
+        {
+            "Attributes": {
+                "Caption": "PPE",
+                "FDS": "ppe",
+                "FDS Metric": "ppe",
+                "Fx_Flag": "Y"
+            },
+            "Index": 205,
+            "Name": "PPE",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[PPE]"
+        },
+        {
+            "Attributes": {
+                "Caption": "PPE - Covid",
+                "Fx_Flag": "Y"
+            },
+            "Index": 206,
+            "Name": "PPE - Covid",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[PPE - Covid]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Tax Accrual",
+                "FDS": "tax_accrual",
+                "FDS Metric": "tax_accrual",
+                "Fx_Flag": "Y"
+            },
+            "Index": 207,
+            "Name": "Tax Accrual",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Tax Accrual]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Support",
+                "FDS Metric": "support"
+            },
+            "Index": 208,
+            "Name": "Support",
+            "Type": "Consolidated",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Support]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Allocated Support Costs",
+                "Fx_Flag": "Y"
+            },
+            "Index": 209,
+            "Name": "Allocated Support Costs",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Allocated Support Costs]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Appeasements / Marketing Credits"
+            },
+            "Index": 210,
+            "Name": "Appeasements / Marketing Credits",
+            "Type": "Consolidated",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Appeasements / Marketing Credits]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Contra Rev Credits",
+                "Fx_Flag": "Y"
+            },
+            "Index": 211,
+            "Name": "Contra Rev Credits",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Contra Rev Credits]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Other Marketing Credits",
+                "Fx_Flag": "Y"
+            },
+            "Index": 212,
+            "Name": "Other Marketing Credits",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Other Marketing Credits]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Rider Satisfaction Refund",
+                "Fx_Flag": "Y"
+            },
+            "Index": 213,
+            "Name": "Rider Satisfaction Refund",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Rider Satisfaction Refund]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Appeasements / Marketing Credits_fds",
+                "FDS": "appeasements_marketing_credits",
+                "FDS Metric": "appeasements_marketing_credits",
+                "Fx_Flag": "Y"
+            },
+            "Index": 214,
+            "Name": "Appeasements / Marketing Credits_fds",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Appeasements / Marketing Credits_fds]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Contra Rev Marketing Credits",
+                "FDS": "contra_rev_marketing_credits",
+                "FDS Metric": "contra_rev_marketing_credits",
+                "Fx_Flag": "Y"
+            },
+            "Index": 215,
+            "Name": "Contra Rev Marketing Credits",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Contra Rev Marketing Credits]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Freight - Variable OpEx (+)"
+            },
+            "Index": 216,
+            "Name": "Freight - Variable OpEx (+)",
+            "Type": "Consolidated",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Freight - Variable OpEx (+)]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Freight - Contractors (+)"
+            },
+            "Index": 217,
+            "Name": "Freight - Contractors (+)",
+            "Type": "Consolidated",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Freight - Contractors (+)]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Contractors - Account Management Total (+)",
+                "Fx_Flag": "Y"
+            },
+            "Index": 218,
+            "Name": "Contractors - Account Management Total (+)",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Contractors - Account Management Total (+)]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Contractors - Carrier ops (+)",
+                "Fx_Flag": "Y"
+            },
+            "Index": 219,
+            "Name": "Contractors - Carrier ops (+)",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Contractors - Carrier ops (+)]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Contractors - Finance Operations (+)",
+                "Fx_Flag": "Y"
+            },
+            "Index": 220,
+            "Name": "Contractors - Finance Operations (+)",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Contractors - Finance Operations (+)]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Contractors - Freight Tracking (+)",
+                "Fx_Flag": "Y"
+            },
+            "Index": 221,
+            "Name": "Contractors - Freight Tracking (+)",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Contractors - Freight Tracking (+)]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Contractors - GSS - Program Mgmt. (+)",
+                "Fx_Flag": "Y"
+            },
+            "Index": 222,
+            "Name": "Contractors - GSS - Program Mgmt. (+)",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Contractors - GSS - Program Mgmt. (+)]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Freight - Facilities & Technology Expenses (+)"
+            },
+            "Index": 223,
+            "Name": "Freight - Facilities & Technology Expenses (+)",
+            "Type": "Consolidated",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Freight - Facilities & Technology Expenses (+)]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Facilities & Technology Expenses- Finance Operations (+)",
+                "Fx_Flag": "Y"
+            },
+            "Index": 224,
+            "Name": "Facilities & Technology Expenses- Finance Operations (+)",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Facilities & Technology Expenses- Finance Operations (+)]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Facilities & Technology Expenses - GSS - Program Mgmt. (+)",
+                "Fx_Flag": "Y"
+            },
+            "Index": 225,
+            "Name": "Facilities & Technology Expenses - GSS - Program Mgmt. (+)",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Facilities & Technology Expenses - GSS - Program Mgmt. (+)]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Freight - Fully Loaded Headcount (+)"
+            },
+            "Index": 226,
+            "Name": "Freight - Fully Loaded Headcount (+)",
+            "Type": "Consolidated",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Freight - Fully Loaded Headcount (+)]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Fully Loaded Headcount (excl Meals) - Account Management Total (+)",
+                "Fx_Flag": "Y"
+            },
+            "Index": 227,
+            "Name": "Fully Loaded Headcount (excl Meals) - Account Management Total (+)",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Fully Loaded Headcount (excl Meals) - Account Management Total (+)]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Fully Loaded Headcount (excl Meals) - Carrier ops (+)",
+                "Fx_Flag": "Y"
+            },
+            "Index": 228,
+            "Name": "Fully Loaded Headcount (excl Meals) - Carrier ops (+)",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Fully Loaded Headcount (excl Meals) - Carrier ops (+)]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Fully Loaded Headcount (excl Meals) - Finance Operations (+)",
+                "Fx_Flag": "Y"
+            },
+            "Index": 229,
+            "Name": "Fully Loaded Headcount (excl Meals) - Finance Operations (+)",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Fully Loaded Headcount (excl Meals) - Finance Operations (+)]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Fully Loaded Headcount (excl Meals) - Freight Tracking (+)",
+                "Fx_Flag": "Y"
+            },
+            "Index": 230,
+            "Name": "Fully Loaded Headcount (excl Meals) - Freight Tracking (+)",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Fully Loaded Headcount (excl Meals) - Freight Tracking (+)]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Fully Loaded Headcount (excl Meals) - GSS - Program Mgmt. (+)",
+                "Fx_Flag": "Y"
+            },
+            "Index": 231,
+            "Name": "Fully Loaded Headcount (excl Meals) - GSS - Program Mgmt. (+)",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Fully Loaded Headcount (excl Meals) - GSS - Program Mgmt. (+)]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Freight - OpEx (+)"
+            },
+            "Index": 232,
+            "Name": "Freight - OpEx (+)",
+            "Type": "Consolidated",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Freight - OpEx (+)]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Freight OpEx - CommOps Shared Resources (+)",
+                "Fx_Flag": "Y"
+            },
+            "Index": 233,
+            "Name": "Freight OpEx - CommOps Shared Resources (+)",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Freight OpEx - CommOps Shared Resources (+)]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Freight OpEx- GSS Ops  (+)",
+                "Fx_Flag": "Y"
+            },
+            "Index": 234,
+            "Name": "Freight OpEx- GSS Ops  (+)",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Freight OpEx- GSS Ops  (+)]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Freight - Outside Services (+)"
+            },
+            "Index": 235,
+            "Name": "Freight - Outside Services (+)",
+            "Type": "Consolidated",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Freight - Outside Services (+)]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Outside Services - Account Management Total (+)",
+                "Fx_Flag": "Y"
+            },
+            "Index": 236,
+            "Name": "Outside Services - Account Management Total (+)",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Outside Services - Account Management Total (+)]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Outside Services - Carrier ops (+)",
+                "Fx_Flag": "Y"
+            },
+            "Index": 237,
+            "Name": "Outside Services - Carrier ops (+)",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Outside Services - Carrier ops (+)]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Outside Services - Finance Operations (+)",
+                "Fx_Flag": "Y"
+            },
+            "Index": 238,
+            "Name": "Outside Services - Finance Operations (+)",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Outside Services - Finance Operations (+)]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Outside Services - Freight Tracking (+)",
+                "Fx_Flag": "Y"
+            },
+            "Index": 239,
+            "Name": "Outside Services - Freight Tracking (+)",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Outside Services - Freight Tracking (+)]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Outside Services - GSS - Program Mgmt. (+)",
+                "Fx_Flag": "Y"
+            },
+            "Index": 240,
+            "Name": "Outside Services - GSS - Program Mgmt. (+)",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Outside Services - GSS - Program Mgmt. (+)]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Refunds (Two-Sided)",
+                "FDS": "refunds_two_sided",
+                "FDS Metric": "refunds_two_sided",
+                "Fx_Flag": "Y"
+            },
+            "Index": 241,
+            "Name": "Refunds (Two-Sided)",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Refunds (Two-Sided)]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Support Services",
+                "FDS": "support_services",
+                "FDS Metric": "support_services",
+                "Fx_Flag": "Y"
+            },
+            "Index": 242,
+            "Name": "Support Services",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Support Services]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Tech",
+                "FDS Metric": "tech"
+            },
+            "Index": 243,
+            "Name": "Tech",
+            "Type": "Consolidated",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Tech]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Maps Licensing Fees",
+                "FDS": "maps_licensing_fees",
+                "FDS Metric": "maps_licensing_fees",
+                "Fx_Flag": "Y"
+            },
+            "Index": 244,
+            "Name": "Maps Licensing Fees",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Maps Licensing Fees]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Mobile"
+            },
+            "Index": 245,
+            "Name": "Mobile",
+            "Type": "Consolidated",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Mobile]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Mobile Services",
+                "Fx_Flag": "Y"
+            },
+            "Index": 246,
+            "Name": "Mobile Services",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Mobile Services]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Total Mobile Devices",
+                "Fx_Flag": "Y"
+            },
+            "Index": 247,
+            "Name": "Total Mobile Devices",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Total Mobile Devices]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Mobile_fds",
+                "FDS": "mobile",
+                "FDS Metric": "mobile",
+                "Fx_Flag": "Y"
+            },
+            "Index": 248,
+            "Name": "Mobile_fds",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Mobile_fds]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Network (ex-Depr.)",
+                "FDS": "network_ex-depr",
+                "FDS Metric": "network_ex-depr",
+                "Fx_Flag": "Y"
+            },
+            "Index": 249,
+            "Name": "Network (ex-Depr.)",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Network (ex-Depr.)]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Trip Insurance"
+            },
+            "Index": 250,
+            "Name": "Trip Insurance",
+            "Type": "Consolidated",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Trip Insurance]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Ride Insurance",
+                "FDS": "trip_insurance",
+                "FDS Metric": "trip_insurance",
+                "Fx_Flag": "Y"
+            },
+            "Index": 251,
+            "Name": "Ride Insurance",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Ride Insurance]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Depreciation and Amortization",
+                "Fx_Flag": "Y"
+            },
+            "Index": 252,
+            "Name": "Depreciation and Amortization",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Depreciation and Amortization]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Stock Compensation",
+                "Fx_Flag": "Y"
+            },
+            "Index": 253,
+            "Name": "Stock Compensation",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Stock Compensation]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Corporate Allocation",
+                "Fx_Flag": "Y"
+            },
+            "Index": 254,
+            "Name": "Corporate Allocation",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Corporate Allocation]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Income Tax Expenses",
+                "Fx_Flag": "Y"
+            },
+            "Index": 255,
+            "Name": "Income Tax Expenses",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Income Tax Expenses]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Net Interest Income / (Expenses)",
+                "Fx_Flag": "Y"
+            },
+            "Index": 256,
+            "Name": "Net Interest Income / (Expenses)",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Net Interest Income / (Expenses)]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Other Income / (Expenses)",
+                "Fx_Flag": "Y"
+            },
+            "Index": 257,
+            "Name": "Other Income / (Expenses)",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Other Income / (Expenses)]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Net Income / (Loss) from Discontinued Operations",
+                "Fx_Flag": "Y"
+            },
+            "Index": 258,
+            "Name": "Net Income / (Loss) from Discontinued Operations",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Net Income / (Loss) from Discontinued Operations]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Not Used",
+                "Fx_Flag": "Y"
+            },
+            "Index": 259,
+            "Name": "Not Used",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Not Used]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Existing User Incentives (Total Rollup)"
+            },
+            "Index": 260,
+            "Name": "Existing User Incentives (Total Rollup)",
+            "Type": "Consolidated",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Existing User Incentives (Total Rollup)]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Existing Driver Incentives (incl. CoS) - Stat"
+            },
+            "Index": 261,
+            "Name": "Existing Driver Incentives (incl. CoS) - Stat",
+            "Type": "Consolidated",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Existing Driver Incentives (incl. CoS) - Stat]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Existing Driver Incentives - COS - Stat",
+                "Fx_Flag": "Y"
+            },
+            "Index": 262,
+            "Name": "Existing Driver Incentives - COS - Stat",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Existing Driver Incentives - COS - Stat]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Existing Driver Incentives - Stat"
+            },
+            "Index": 263,
+            "Name": "Existing Driver Incentives - Stat",
+            "Type": "Consolidated",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Existing Driver Incentives - Stat]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Existing Driver Incentives (ex-SLOG) - Stat",
+                "Fx_Flag": "Y"
+            },
+            "Index": 264,
+            "Name": "Existing Driver Incentives (ex-SLOG) - Stat",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Existing Driver Incentives (ex-SLOG) - Stat]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Existing Driver Incentives (SLOG) - Stat",
+                "Fx_Flag": "Y"
+            },
+            "Index": 265,
+            "Name": "Existing Driver Incentives (SLOG) - Stat",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Existing Driver Incentives (SLOG) - Stat]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Partner Incentive Reclass - Stat",
+                "Fx_Flag": "Y"
+            },
+            "Index": 266,
+            "Name": "Partner Incentive Reclass - Stat",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Partner Incentive Reclass - Stat]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Existing Rider/Eater Incentives - Stat"
+            },
+            "Index": 267,
+            "Name": "Existing Rider/Eater Incentives - Stat",
+            "Type": "Consolidated",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Existing Rider/Eater Incentives - Stat]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Existing Promos - Stat",
+                "Fx_Flag": "Y"
+            },
+            "Index": 268,
+            "Name": "Existing Promos - Stat",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Existing Promos - Stat]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Net UFP - Stat"
+            },
+            "Index": 269,
+            "Name": "Net UFP - Stat",
+            "Type": "Consolidated",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Net UFP - Stat]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Upfront Price Adj. Down  - Stat",
+                "Fx_Flag": "Y"
+            },
+            "Index": 270,
+            "Name": "Upfront Price Adj. Down  - Stat",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Upfront Price Adj. Down  - Stat]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Upfront Price Adj. Up - Stat",
+                "Fx_Flag": "Y"
+            },
+            "Index": 271,
+            "Name": "Upfront Price Adj. Up - Stat",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Upfront Price Adj. Up - Stat]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Promos - Contra Rev - Stat",
+                "Fx_Flag": "Y"
+            },
+            "Index": 272,
+            "Name": "Promos - Contra Rev - Stat",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Promos - Contra Rev - Stat]"
+        },
+        {
+            "Attributes": {
+                "Caption": "New Driver/Courier Incentives (Total Rollup)"
+            },
+            "Index": 273,
+            "Name": "New Driver/Courier Incentives (Total Rollup)",
+            "Type": "Consolidated",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[New Driver/Courier Incentives (Total Rollup)]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Driver Referral Reclass - Stat",
+                "Fx_Flag": "Y"
+            },
+            "Index": 274,
+            "Name": "Driver Referral Reclass - Stat",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Driver Referral Reclass - Stat]"
+        },
+        {
+            "Attributes": {
+                "Caption": "New Driver Incentives (ex-SLOG) - Stat",
+                "Fx_Flag": "Y"
+            },
+            "Index": 275,
+            "Name": "New Driver Incentives (ex-SLOG) - Stat",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[New Driver Incentives (ex-SLOG) - Stat]"
+        },
+        {
+            "Attributes": {
+                "Caption": "New Driver Incentives (SLOG)- Stat",
+                "Fx_Flag": "Y"
+            },
+            "Index": 276,
+            "Name": "New Driver Incentives (SLOG)- Stat",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[New Driver Incentives (SLOG)- Stat]"
+        },
+        {
+            "Attributes": {
+                "Caption": "New Driver Incentives - COS - Stat",
+                "Fx_Flag": "Y"
+            },
+            "Index": 277,
+            "Name": "New Driver Incentives - COS - Stat",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[New Driver Incentives - COS - Stat]"
+        },
+        {
+            "Attributes": {
+                "Caption": "New Rider/Eater Incentives (Total Rollup)"
+            },
+            "Index": 278,
+            "Name": "New Rider/Eater Incentives (Total Rollup)",
+            "Type": "Consolidated",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[New Rider/Eater Incentives (Total Rollup)]"
+        },
+        {
+            "Attributes": {
+                "Caption": "G1G1 Promos - Stat",
+                "Fx_Flag": "Y"
+            },
+            "Index": 279,
+            "Name": "G1G1 Promos - Stat",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[G1G1 Promos - Stat]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Ops Other Promos - Stat"
+            },
+            "Index": 280,
+            "Name": "Ops Other Promos - Stat",
+            "Type": "Consolidated",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Ops Other Promos - Stat]"
+        },
+        {
+            "Attributes": {
+                "Caption": "=41650 - Stat",
+                "Fx_Flag": "Y"
+            },
+            "Index": 281,
+            "Name": "=41650 - Stat",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[=41650 - Stat]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Other Promos - Stat",
+                "Fx_Flag": "Y"
+            },
+            "Index": 282,
+            "Name": "Other Promos - Stat",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics].[Other Promos - Stat]"
+        }
+    ],
+    "Name": "U4B Ops Metrics",
+    "Subsets": [],
+    "UniqueName": "[U4B Ops Metrics].[U4B Ops Metrics]"
+}

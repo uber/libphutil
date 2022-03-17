@@ -1,0 +1,64 @@
+{
+    "DefaultMember": {
+        "Attributes": {
+            "Caption": "Source",
+            "picklist": "static: Oracle U4B Mob/Del: Oracle U4B 5001"
+        },
+        "IsPlaceholder": false,
+        "Name": "Source",
+        "Ordinal": 1,
+        "Type": "Regular",
+        "UniqueName": "[U4B PL Allocation Measure].[U4B PL Allocation Measure].[Source]",
+        "Weight": 0
+    },
+    "Edges": [],
+    "ElementAttributes": [
+        {
+            "Name": "picklist",
+            "Type": "String"
+        }
+    ],
+    "Elements": [
+        {
+            "Attributes": {
+                "Caption": "Source",
+                "picklist": "static: Oracle U4B Mob/Del: Oracle U4B 5001"
+            },
+            "Index": 1,
+            "Name": "Source",
+            "Type": "String",
+            "UniqueName": "[U4B PL Allocation Measure].[U4B PL Allocation Measure].[Source]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Allocation Method"
+            },
+            "Index": 2,
+            "Name": "Allocation Method",
+            "Type": "String",
+            "UniqueName": "[U4B PL Allocation Measure].[U4B PL Allocation Measure].[Allocation Method]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Allocation Method Override",
+                "picklist": "static:Completed Trips:Rider Miles:Gross Bookings:No Allocate"
+            },
+            "Index": 3,
+            "Name": "Allocation Method Override",
+            "Type": "String",
+            "UniqueName": "[U4B PL Allocation Measure].[U4B PL Allocation Measure].[Allocation Method Override]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Mapping for Alloc TI"
+            },
+            "Index": 4,
+            "Name": "Mapping for Alloc TI",
+            "Type": "String",
+            "UniqueName": "[U4B PL Allocation Measure].[U4B PL Allocation Measure].[Mapping for Alloc TI]"
+        }
+    ],
+    "Name": "U4B PL Allocation Measure",
+    "Subsets": [],
+    "UniqueName": "[U4B PL Allocation Measure].[U4B PL Allocation Measure]"
+}

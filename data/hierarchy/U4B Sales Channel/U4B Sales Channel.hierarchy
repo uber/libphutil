@@ -1,0 +1,97 @@
+{
+    "DefaultMember": {
+        "Attributes": {
+            "Caption": "Total U4B Sales Channel",
+            "FDS_Value": "Total U4B Sales Channel"
+        },
+        "IsPlaceholder": false,
+        "Name": "Total U4B Sales Channel",
+        "Ordinal": 1,
+        "Type": "Regular",
+        "UniqueName": "[U4B Sales Channel].[U4B Sales Channel].[Total U4B Sales Channel]",
+        "Weight": 0
+    },
+    "Edges": [
+        {
+            "ComponentName": "Sales",
+            "ParentName": "Total U4B Sales Channel",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Self-serve",
+            "ParentName": "Total U4B Sales Channel",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Scaled Sales",
+            "ParentName": "Total U4B Sales Channel",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Unspecified U4B Sales Channel",
+            "ParentName": "Total U4B Sales Channel",
+            "Weight": 1
+        }
+    ],
+    "ElementAttributes": [
+        {
+            "Name": "FDS_Value",
+            "Type": "Alias"
+        }
+    ],
+    "Elements": [
+        {
+            "Attributes": {
+                "Caption": "Total U4B Sales Channel",
+                "FDS_Value": "Total U4B Sales Channel"
+            },
+            "Index": 1,
+            "Name": "Total U4B Sales Channel",
+            "Type": "Consolidated",
+            "UniqueName": "[U4B Sales Channel].[U4B Sales Channel].[Total U4B Sales Channel]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Sales",
+                "FDS_Value": "Sales"
+            },
+            "Index": 2,
+            "Name": "Sales",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Sales Channel].[U4B Sales Channel].[Sales]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Self-serve",
+                "FDS_Value": "self_serve"
+            },
+            "Index": 3,
+            "Name": "Self-serve",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Sales Channel].[U4B Sales Channel].[Self-serve]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Scaled Sales",
+                "FDS_Value": "scaled_sales"
+            },
+            "Index": 4,
+            "Name": "Scaled Sales",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Sales Channel].[U4B Sales Channel].[Scaled Sales]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Unspecified U4B Sales Channel",
+                "FDS_Value": "Unspecified U4B Sales Channel"
+            },
+            "Index": 5,
+            "Name": "Unspecified U4B Sales Channel",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Sales Channel].[U4B Sales Channel].[Unspecified U4B Sales Channel]"
+        }
+    ],
+    "Name": "U4B Sales Channel",
+    "Subsets": [],
+    "UniqueName": "[U4B Sales Channel].[U4B Sales Channel]"
+}

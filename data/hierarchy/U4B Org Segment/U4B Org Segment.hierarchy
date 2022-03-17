@@ -1,0 +1,262 @@
+{
+    "DefaultMember": {
+        "Attributes": {
+            "Caption": "Total U4B Org Segment",
+            "FDS_Value": "Total U4B Org Segment"
+        },
+        "IsPlaceholder": false,
+        "Name": "Total U4B Org Segment",
+        "Ordinal": 1,
+        "Type": "Regular",
+        "UniqueName": "[U4B Org Segment].[U4B Org Segment].[Total U4B Org Segment]",
+        "Weight": 0
+    },
+    "Edges": [
+        {
+            "ComponentName": "ENT",
+            "ParentName": "Total U4B Org Segment",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Inside + Scaled Sales",
+            "ParentName": "Total U4B Org Segment",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "MM (Middle Market)",
+            "ParentName": "Total U4B Org Segment",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Misc.",
+            "ParentName": "Total U4B Org Segment",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "STRAT",
+            "ParentName": "Total U4B Org Segment",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Self Service",
+            "ParentName": "Total U4B Org Segment",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Unspecified U4B Org Segment",
+            "ParentName": "Total U4B Org Segment",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Inside Sales",
+            "ParentName": "Inside + Scaled Sales",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Scaled Sales (SMB)",
+            "ParentName": "Inside + Scaled Sales",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "ENT&MM",
+            "ParentName": "MM (Middle Market)",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "MM",
+            "ParentName": "MM (Middle Market)",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "E4B",
+            "ParentName": "Misc.",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Guest Products",
+            "ParentName": "Misc.",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Health",
+            "ParentName": "Misc.",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Support",
+            "ParentName": "Misc.",
+            "Weight": 1
+        }
+    ],
+    "ElementAttributes": [
+        {
+            "Name": "FDS_Value",
+            "Type": "Alias"
+        }
+    ],
+    "Elements": [
+        {
+            "Attributes": {
+                "Caption": "Total U4B Org Segment",
+                "FDS_Value": "Total U4B Org Segment"
+            },
+            "Index": 1,
+            "Name": "Total U4B Org Segment",
+            "Type": "Consolidated",
+            "UniqueName": "[U4B Org Segment].[U4B Org Segment].[Total U4B Org Segment]"
+        },
+        {
+            "Attributes": {
+                "Caption": "ENT",
+                "FDS_Value": "ENT"
+            },
+            "Index": 2,
+            "Name": "ENT",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Org Segment].[U4B Org Segment].[ENT]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Inside + Scaled Sales",
+                "FDS_Value": "Inside + Scaled Sales"
+            },
+            "Index": 3,
+            "Name": "Inside + Scaled Sales",
+            "Type": "Consolidated",
+            "UniqueName": "[U4B Org Segment].[U4B Org Segment].[Inside + Scaled Sales]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Inside Sales",
+                "FDS_Value": "Inside Sales"
+            },
+            "Index": 4,
+            "Name": "Inside Sales",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Org Segment].[U4B Org Segment].[Inside Sales]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Scaled Sales (SMB)",
+                "FDS_Value": "Scaled Sales (SMB)"
+            },
+            "Index": 5,
+            "Name": "Scaled Sales (SMB)",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Org Segment].[U4B Org Segment].[Scaled Sales (SMB)]"
+        },
+        {
+            "Attributes": {
+                "Caption": "MM (Middle Market)",
+                "FDS_Value": "MM (Middle Market)"
+            },
+            "Index": 6,
+            "Name": "MM (Middle Market)",
+            "Type": "Consolidated",
+            "UniqueName": "[U4B Org Segment].[U4B Org Segment].[MM (Middle Market)]"
+        },
+        {
+            "Attributes": {
+                "Caption": "ENT&MM",
+                "FDS_Value": "ENT&MM"
+            },
+            "Index": 7,
+            "Name": "ENT&MM",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Org Segment].[U4B Org Segment].[ENT&MM]"
+        },
+        {
+            "Attributes": {
+                "Caption": "MM",
+                "FDS_Value": "MM"
+            },
+            "Index": 8,
+            "Name": "MM",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Org Segment].[U4B Org Segment].[MM]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Misc.",
+                "FDS_Value": "Misc."
+            },
+            "Index": 9,
+            "Name": "Misc.",
+            "Type": "Consolidated",
+            "UniqueName": "[U4B Org Segment].[U4B Org Segment].[Misc.]"
+        },
+        {
+            "Attributes": {
+                "Caption": "E4B",
+                "FDS_Value": "E4B"
+            },
+            "Index": 10,
+            "Name": "E4B",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Org Segment].[U4B Org Segment].[E4B]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Guest Products",
+                "FDS_Value": "Guest Products"
+            },
+            "Index": 11,
+            "Name": "Guest Products",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Org Segment].[U4B Org Segment].[Guest Products]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Health",
+                "FDS_Value": "Health"
+            },
+            "Index": 12,
+            "Name": "Health",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Org Segment].[U4B Org Segment].[Health]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Support",
+                "FDS_Value": "Support"
+            },
+            "Index": 13,
+            "Name": "Support",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Org Segment].[U4B Org Segment].[Support]"
+        },
+        {
+            "Attributes": {
+                "Caption": "STRAT",
+                "FDS_Value": "STRAT"
+            },
+            "Index": 14,
+            "Name": "STRAT",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Org Segment].[U4B Org Segment].[STRAT]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Self Service",
+                "FDS_Value": "Self Service"
+            },
+            "Index": 15,
+            "Name": "Self Service",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Org Segment].[U4B Org Segment].[Self Service]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Unspecified U4B Org Segment",
+                "FDS_Value": "Unspecified U4B Org Segment"
+            },
+            "Index": 16,
+            "Name": "Unspecified U4B Org Segment",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Org Segment].[U4B Org Segment].[Unspecified U4B Org Segment]"
+        }
+    ],
+    "Name": "U4B Org Segment",
+    "Subsets": [],
+    "UniqueName": "[U4B Org Segment].[U4B Org Segment]"
+}

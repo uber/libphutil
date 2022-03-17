@@ -1,0 +1,187 @@
+{
+    "DefaultMember": {
+        "Attributes": {
+            "Caption": "Total U4B Product",
+            "FDS_Value": "Total U4B Product"
+        },
+        "IsPlaceholder": false,
+        "Name": "Total U4B Product",
+        "Ordinal": 1,
+        "Type": "Regular",
+        "UniqueName": "[U4B Product].[U4B Product].[Total U4B Product]",
+        "Weight": 0
+    },
+    "Edges": [
+        {
+            "ComponentName": "Eats",
+            "ParentName": "Total U4B Product",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Rides",
+            "ParentName": "Total U4B Product",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Unspecified U4B Product",
+            "ParentName": "Total U4B Product",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Gift Cards",
+            "ParentName": "Total U4B Product",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Eats Vouchers",
+            "ParentName": "Eats",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Meal Programs",
+            "ParentName": "Eats",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Central",
+            "ParentName": "Rides",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Rides Vouchers",
+            "ParentName": "Rides",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Travel",
+            "ParentName": "Rides",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Health",
+            "ParentName": "Rides",
+            "Weight": 1
+        }
+    ],
+    "ElementAttributes": [
+        {
+            "Name": "FDS_Value",
+            "Type": "Alias"
+        }
+    ],
+    "Elements": [
+        {
+            "Attributes": {
+                "Caption": "Total U4B Product",
+                "FDS_Value": "Total U4B Product"
+            },
+            "Index": 1,
+            "Name": "Total U4B Product",
+            "Type": "Consolidated",
+            "UniqueName": "[U4B Product].[U4B Product].[Total U4B Product]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Eats",
+                "FDS_Value": "Eats"
+            },
+            "Index": 2,
+            "Name": "Eats",
+            "Type": "Consolidated",
+            "UniqueName": "[U4B Product].[U4B Product].[Eats]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Eats Vouchers",
+                "FDS_Value": "Eats Vouchers"
+            },
+            "Index": 3,
+            "Name": "Eats Vouchers",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Product].[U4B Product].[Eats Vouchers]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Meal Programs",
+                "FDS_Value": "Meal Programs"
+            },
+            "Index": 4,
+            "Name": "Meal Programs",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Product].[U4B Product].[Meal Programs]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Rides",
+                "FDS_Value": "Rides"
+            },
+            "Index": 5,
+            "Name": "Rides",
+            "Type": "Consolidated",
+            "UniqueName": "[U4B Product].[U4B Product].[Rides]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Central",
+                "FDS_Value": "Central"
+            },
+            "Index": 6,
+            "Name": "Central",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Product].[U4B Product].[Central]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Rides Vouchers",
+                "FDS_Value": "Rides Vouchers"
+            },
+            "Index": 7,
+            "Name": "Rides Vouchers",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Product].[U4B Product].[Rides Vouchers]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Travel",
+                "FDS_Value": "Travel"
+            },
+            "Index": 8,
+            "Name": "Travel",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Product].[U4B Product].[Travel]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Health",
+                "FDS_Value": "Health"
+            },
+            "Index": 9,
+            "Name": "Health",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Product].[U4B Product].[Health]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Unspecified U4B Product",
+                "FDS_Value": "Unspecified U4B Product"
+            },
+            "Index": 10,
+            "Name": "Unspecified U4B Product",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Product].[U4B Product].[Unspecified U4B Product]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Gift Cards",
+                "FDS_Value": "Gift Cards"
+            },
+            "Index": 11,
+            "Name": "Gift Cards",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Product].[U4B Product].[Gift Cards]"
+        }
+    ],
+    "Name": "U4B Product",
+    "Subsets": [],
+    "UniqueName": "[U4B Product].[U4B Product]"
+}

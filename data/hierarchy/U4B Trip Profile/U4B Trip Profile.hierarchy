@@ -1,0 +1,86 @@
+{
+    "DefaultMember": {
+        "Attributes": {
+            "Caption": "Total U4B Trip Profile"
+        },
+        "IsPlaceholder": false,
+        "Name": "Total U4B Trip Profile",
+        "Ordinal": 1,
+        "Type": "Regular",
+        "UniqueName": "[U4B Trip Profile].[U4B Trip Profile].[Total U4B Trip Profile]",
+        "Weight": 0
+    },
+    "Edges": [
+        {
+            "ComponentName": "Managed",
+            "ParentName": "Total U4B Trip Profile",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Unmanaged",
+            "ParentName": "Total U4B Trip Profile",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Personal",
+            "ParentName": "Total U4B Trip Profile",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Unspecified U4B Trip Profile",
+            "ParentName": "Total U4B Trip Profile",
+            "Weight": 1
+        }
+    ],
+    "ElementAttributes": [],
+    "Elements": [
+        {
+            "Attributes": {
+                "Caption": "Total U4B Trip Profile"
+            },
+            "Index": 1,
+            "Name": "Total U4B Trip Profile",
+            "Type": "Consolidated",
+            "UniqueName": "[U4B Trip Profile].[U4B Trip Profile].[Total U4B Trip Profile]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Managed"
+            },
+            "Index": 2,
+            "Name": "Managed",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Trip Profile].[U4B Trip Profile].[Managed]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Unmanaged"
+            },
+            "Index": 3,
+            "Name": "Unmanaged",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Trip Profile].[U4B Trip Profile].[Unmanaged]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Personal"
+            },
+            "Index": 4,
+            "Name": "Personal",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Trip Profile].[U4B Trip Profile].[Personal]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Unspecified U4B Trip Profile"
+            },
+            "Index": 5,
+            "Name": "Unspecified U4B Trip Profile",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Trip Profile].[U4B Trip Profile].[Unspecified U4B Trip Profile]"
+        }
+    ],
+    "Name": "U4B Trip Profile",
+    "Subsets": [],
+    "UniqueName": "[U4B Trip Profile].[U4B Trip Profile]"
+}

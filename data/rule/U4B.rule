@@ -1,0 +1,18 @@
+SKIPCHECK;
+
+
+['Actual', 'FDS', 'Amount'] = N: IF ( ATTRS( 'Delivery Ops Metrics', !U4B Ops Metrics, 'Fx_Flag') @= 'Y ' % ATTRS( 'Mobility Ops Metrics', !U4B Ops Metrics, 'Fx_Flag') @= 'Y ' ,
+                                                        DB('U4B Staging',!Version,!Period,!Source,!Rate Type, 'Total Currency',!Line of Business,!Department,!Location,!U4B Org Segment,!U4B Product,!U4B Sales Channel,!U4B Trip Profile,!U4B Ops Metrics,'Amount'),
+                                                        STET);
+
+
+
+
+['Actual', 'Product PL', {'P2P Miles','Rider Miles', 'Completed Trips'}, 'Amount'] = N: ['FDS'];
+
+
+FEEDERS;
+
+['Actual', 'FDS', {'P2P Miles','Rider Miles', 'Completed Trips'}, 'Amount'] => ['Product PL'];
+
+

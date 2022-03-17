@@ -1,0 +1,47 @@
+{
+    "Dimensions": [
+        {
+            "Name": "Version"
+        },
+        {
+            "Name": "Period"
+        },
+        {
+            "Name": "Source"
+        },
+        {
+            "Name": "Rate Type"
+        },
+        {
+            "Name": "Currency"
+        },
+        {
+            "Name": "Line of Business"
+        },
+        {
+            "Name": "Department"
+        },
+        {
+            "Name": "Location"
+        },
+        {
+            "Name": "U4B Org Segment"
+        },
+        {
+            "Name": "U4B Product"
+        },
+        {
+            "Name": "U4B Sales Channel"
+        },
+        {
+            "Name": "U4B Trip Profile"
+        },
+        {
+            "Name": "U4B Ops Metrics"
+        },
+        {
+            "Name": "U4B Staging Measure"
+        }
+    ],
+    "Name": "U4B Staging"
+}

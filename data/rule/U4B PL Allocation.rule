@@ -1,0 +1,82 @@
+##====================================================##
+# V1 U4B P&L Allocation
+##====================================================##
+
+FEEDSTRINGS;
+SKIPCHECK;
+
+
+['Source'] =S:
+   IF ( ELLEV ('Line of Business', !Line of Business) = 0 & ELLEV ('ANALYTICS.GL Operational', !ANALYTICS.GL Operational) <> 0 , '', STET);
+
+['GAAP Contribution', 'Allocation Method Override'] =S: STET;
+
+## Check if there is override allocation
+
+['Allocation Method'] =S:
+  IF( DB('U4B PL Allocation',!Version,!Period,!Line of Business,!Location,!Department,!U4B Trip Profile,!U4B Sales Channel,!U4B Org Segment,!U4B Product,!ANALYTICS.GL Operational,'Allocation Method Override') @<> '',
+    DB('U4B PL Allocation',!Version,!Period,!Line of Business,!Location,!Department,!U4B Trip Profile,!U4B Sales Channel,!U4B Org Segment,!U4B Product,!ANALYTICS.GL Operational,'Allocation Method Override'), Continue);
+
+## Check if FDS data.
+
+[{'Location':'Total Location Incl Discontinued'},'Allocation Method' ] = S:
+ IF ( ELLEV ('ANALYTICS.GL Operational', !ANALYTICS.GL Operational) = 0,
+ IF ( DB('U4B',!Version,!Period,'FDS','USD','Total Line of Business',!Department,'Total Location Incl Discontinued','Total U4B Org Segment','Total U4B Product','Total U4B Sales Channel','Total U4B Trip Profile',!ANALYTICS.GL Operational,'Amount')<> 0
+         % DB('U4B',!Version,!Period,'FDS','USD','Total Line of Business',!Department,'Total Location Incl Discontinued','Total U4B Org Segment','Total U4B Product','Total U4B Sales Channel','Total U4B Trip Profile',!ANALYTICS.GL Operational | '_fds','Amount') <> 0,
+     IF( ATTRS('U4B Ops Metrics', !ANALYTICS.GL Operational, 'FDS') @<> '', ATTRS('U4B Ops Metrics', !ANALYTICS.GL Operational, 'FDS'), 'Calculated'),
+  Continue),
+'');
+
+[{'Location':'Total Location Incl Discontinued'},'Allocation Method Override' ] = S:
+IF (  ELLEV ('Line of Business', !Line of Business) = 0 & ELLEV ('ANALYTICS.GL Operational', !ANALYTICS.GL Operational) = 0 ,
+ IF ( DB('U4B',!Version,!Period,'FDS','USD','Total Line of Business',!Department,'Total Location Incl Discontinued','Total U4B Org Segment','Total U4B Product','Total U4B Sales Channel','Total U4B Trip Profile',ATTRS ('ANALYTICS.GL Operational', !ANALYTICS.GL Operational, 'GL Operational L1')  | '_fds','Amount') <> 0,
+     IF( ATTRS('U4B Ops Metrics', ATTRS ('ANALYTICS.GL Operational', !ANALYTICS.GL Operational, 'GL Operational L1') | '_fds' , 'FDS') @<> '', ATTRS('U4B Ops Metrics',ATTRS ('ANALYTICS.GL Operational', !ANALYTICS.GL Operational, 'GL Operational L1') | '_fds' , 'FDS'), 'Calculated' ),
+  Continue),
+Continue);
+
+[{'Location':'Total Location Incl Discontinued'},'Allocation Method Override' ] = S:
+IF ( ELLEV ('Line of Business', !Line of Business) = 0  & ELLEV ('ANALYTICS.GL Operational', !ANALYTICS.GL Operational) = 0,
+ IF (DB('U4B',!Version,!Period,'FDS','USD','Total Line of Business',!Department,'Total Location Incl Discontinued','Total U4B Org Segment','Total U4B Product','Total U4B Sales Channel','Total U4B Trip Profile',!ANALYTICS.GL Operational,'Amount') <> 0
+          % DB('U4B',!Version,!Period,'FDS','USD','Total Line of Business',!Department,'Total Location Incl Discontinued','Total U4B Org Segment','Total U4B Product','Total U4B Sales Channel','Total U4B Trip Profile',!ANALYTICS.GL Operational | '_fds','Amount') <> 0,
+     IF( ATTRS('U4B Ops Metrics', !ANALYTICS.GL Operational, 'FDS') @<> '', ATTRS('U4B Ops Metrics', !ANALYTICS.GL Operational, 'FDS'), 'Calculated' ),
+STET),
+Continue);
+
+[{'Location':'Total Location Incl Discontinued'},'Allocation Method Override' ] = S:
+IF ( ELLEV ('Line of Business', !Line of Business) = 0  ,
+ IF ( DB('U4B',!Version,!Period,'FDS','USD','Total Line of Business',!Department,'Total Location Incl Discontinued','Total U4B Org Segment','Total U4B Product','Total U4B Sales Channel','Total U4B Trip Profile',!ANALYTICS.GL Operational,'Amount') <> 0
+          %  DB('U4B',!Version,!Period,'FDS','USD','Total Line of Business',!Department,'Total Location Incl Discontinued','Total U4B Org Segment','Total U4B Product','Total U4B Sales Channel','Total U4B Trip Profile',!ANALYTICS.GL Operational | '_fds','Amount') <> 0,
+     IF( ATTRS('U4B Ops Metrics', !ANALYTICS.GL Operational, 'FDS') @<> '', ATTRS('U4B Ops Metrics', !ANALYTICS.GL Operational, 'FDS'), 'Calculated' ),
+''),
+Continue);
+
+## Default. Need to change to attribute of GL Ops.
+
+[{'Location':'Total Location Incl Discontinued'},'Allocation Method'] = S:
+  IF ( ELLEV ('Line of Business', !Line of Business) = 0,
+  IF(   DB('U4B PL Allocation',!Version,!Period,!Line of Business,!Location,!Department,!U4B Trip Profile,!U4B Sales Channel,!U4B Org Segment,!U4B Product,!ANALYTICS.GL Operational,'Allocation Method Override') @= '',
+    IF ( DB('U4B PL Allocation',!Version,!Period,!Line of Business,!Location,!Department,!U4B Trip Profile,!U4B Sales Channel,!U4B Org Segment,!U4B Product,!ANALYTICS.GL Operational,'Allocation Method Override') @<> '',
+       DB('U4B PL Allocation',!Version,!Period,!Line of Business,!Location,!Department,!U4B Trip Profile,!U4B Sales Channel,!U4B Org Segment,!U4B Product,!ANALYTICS.GL Operational,'Allocation Method Override'),
+           DB('U4B PL Allocation',!Version,!Period,!Line of Business,!Location,!Department,!U4B Trip Profile,!U4B Sales Channel,!U4B Org Segment,!U4B Product,'GAAP Contribution','Allocation Method Override')),
+     Continue),
+'');
+
+#Hardr coded the mapping for Restuarant Payments until we fix upstream FDS data for mobility
+
+[{'Location':'Total Location Incl Discontinued'},'Restaurant Payments','Mapping for Alloc TI' ] = S:
+IF ( ELLEV ('ANALYTICS.GL Operational', !ANALYTICS.GL Operational) = 0,
+      IF (  DB('U4B',!Version,!Period,'FDS','USD','Total Line of Business',!Department,'Total Location Incl Discontinued','Total U4B Org Segment','Total U4B Product','Total U4B Sales Channel','Total U4B Trip Profile',!ANALYTICS.GL Operational | '_fds','Amount') <> 0, !ANALYTICS.GL Operational | '_fds',
+          IF ( DB('U4B',!Version,!Period,'FDS','USD','Total Line of Business',!Department,'Total Location Incl Discontinued','Total U4B Org Segment','Total U4B Product','Total U4B Sales Channel','Total U4B Trip Profile', ATTRS ('ANALYTICS.GL Operational', !ANALYTICS.GL Operational, 'GL Operational L1') | '_fds','Amount')<> 0,
+                ATTRS ('ANALYTICS.GL Operational', !ANALYTICS.GL Operational, 'GL Operational L1') | '_fds',
+    DB('U4B PL Allocation',!Version,!Period,!Line of Business,!Location,!Department,!U4B Trip Profile,!U4B Sales Channel,!U4B Org Segment,!U4B Product,!ANALYTICS.GL Operational,'Allocation Method'))),
+'');
+
+[{'Location':'Total Location Incl Discontinued'},'Mapping for Alloc TI' ] = S:
+IF ( ELLEV ('ANALYTICS.GL Operational', !ANALYTICS.GL Operational) = 0,
+ IF ( DB('U4B',!Version,!Period,'FDS','USD','Total Line of Business',!Department,'Total Location Incl Discontinued','Total U4B Org Segment','Total U4B Product','Total U4B Sales Channel','Total U4B Trip Profile',!ANALYTICS.GL Operational,'Amount') <> 0, !ANALYTICS.GL Operational,
+      IF (  DB('U4B',!Version,!Period,'FDS','USD','Total Line of Business',!Department,'Total Location Incl Discontinued','Total U4B Org Segment','Total U4B Product','Total U4B Sales Channel','Total U4B Trip Profile',!ANALYTICS.GL Operational | '_fds','Amount') <> 0, !ANALYTICS.GL Operational | '_fds',
+          IF ( DB('U4B',!Version,!Period,'FDS','USD','Total Line of Business',!Department,'Total Location Incl Discontinued','Total U4B Org Segment','Total U4B Product','Total U4B Sales Channel','Total U4B Trip Profile', ATTRS ('ANALYTICS.GL Operational', !ANALYTICS.GL Operational, 'GL Operational L1') | '_fds','Amount')<> 0,
+                ATTRS ('ANALYTICS.GL Operational', !ANALYTICS.GL Operational, 'GL Operational L1') | '_fds',
+    DB('U4B PL Allocation',!Version,!Period,!Line of Business,!Location,!Department,!U4B Trip Profile,!U4B Sales Channel,!U4B Org Segment,!U4B Product,!ANALYTICS.GL Operational,'Allocation Method')))),
+'');
+

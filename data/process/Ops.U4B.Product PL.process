@@ -1,0 +1,639 @@
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: PROPERTIES                                                           #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+{
+    "DataSource": {
+        "Type": "TM1CubeView",
+        "dataSourceNameForClient": "U4B",
+        "dataSourceNameForServer": "U4B",
+        "view": "View1"
+    },
+    "HasSecurityAccess": false,
+    "Name": "Ops.U4B.Product PL",
+    "Parameters": [
+        {
+            "Name": "pVersion",
+            "Prompt": "",
+            "Type": "String",
+            "Value": "Actual"
+        },
+        {
+            "Name": "pMonth",
+            "Prompt": "",
+            "Type": "String",
+            "Value": "2021-12"
+        },
+        {
+            "Name": "pAccount",
+            "Prompt": "",
+            "Type": "String",
+            "Value": "Ops PL"
+        },
+        {
+            "Name": "pRateType",
+            "Prompt": "",
+            "Type": "String",
+            "Value": "USD"
+        }
+    ],
+    "UIData": "CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
+    "Variables": [
+        {
+            "EndByte": 0,
+            "Name": "vVersion",
+            "Position": 1,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vPeriod",
+            "Position": 2,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vSource",
+            "Position": 3,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vRateType",
+            "Position": 4,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vLOB",
+            "Position": 5,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vDepartment",
+            "Position": 6,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vLocation",
+            "Position": 7,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vOrgSegment",
+            "Position": 8,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vProductType",
+            "Position": 9,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vSalesChannel",
+            "Position": 10,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vTripProfile",
+            "Position": 11,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vMetric",
+            "Position": 12,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vMeasure",
+            "Position": 13,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vValue",
+            "Position": 14,
+            "StartByte": 0,
+            "Type": "Numeric"
+        }
+    ],
+    "VariablesUIData": [
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=33\fColType=827\f"
+    ]
+}
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: PROPERTIES                                                             #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: PROLOG PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+# ================= TAPTOOLS: START GENERATED CODE =================== #
+sProcessName = GETPROCESSNAME();
+IF(sProcessName @<> 'TAP.Call.Queue.Add Job To Queue' & sProcessName @<> 'TAP.CubeSaveData' & sProcessName @<> 'TAP.Call.Save' & sProcessName @<> 'TAP.Call.Save.Wrapper' & sProcessName @<> 'TAP.Call.CubeSaveData.Wrapper' & sProcessName @<> 'TAP.Call.Tests' & sProcessName @<> 'TAP.Call.Init' & sProcessName @<> 'TAP.Call.Export Application Stats' & sProcessName @<> 'TAP.Cube.Export Data to File' & SCAN('}drill', LOWER(sProcessName)) = 0);
+   sBlock.Execution.Status = CELLGETS('TAP System Info', 'Block Process Execution', 'Value');
+   IF(UPPER(sBlock.Execution.Status) @= 'YES');
+      sBlock.Epilog.Execution = 'Yes';
+      PROCESSBREAK;
+   ENDIF;
+ENDIF;
+LOGOUTPUT('DEBUG', 'PARAMETER: pVersion: "' | pVersion | '"');
+LOGOUTPUT('DEBUG', 'PARAMETER: pMonth: "' | pMonth | '"');
+LOGOUTPUT('DEBUG', 'PARAMETER: pAccount: "' | pAccount | '"');
+LOGOUTPUT('DEBUG', 'PARAMETER: pRateType: "' | pRateType | '"');
+LOGOUTPUT('DEBUG', 'PROGRESS: START PROLOG PROCEDURE');
+nMetadataProcedureRecordsStarted = 0;
+nMetadataProcedureRecordsSkipped = 0;
+nMetadataProcedureRecordsRejected = 0;
+nMetadataProcedureRecordsCompleted = 0;
+nDataProcedureRecordsStarted = 0;
+nDataProcedureRecordsSkipped = 0;
+nDataProcedureRecordsRejected = 0;
+nDataProcedureRecordsCompleted = 0;
+nPrologProcedureDataOperations = 0;
+nDataProcedureDataOperations = 0;
+nTotalDataOperations = 0;
+nPrologProcedureMetadataOperations = 0;
+nMetadataProcedureMetadataOperations = 0;
+nDataProcedureMetadataOperations = 0;
+nEpilogProcedureMetadataOperations = 0;
+nTotalProcedureMetadataOperations = 0;
+nPrologProcedureStartTime = NOW();
+nPrologProcedureEndTime = 0;
+nMetadataProcedureStartTime = 0;
+nMetadataProcedureEndTime = 0;
+nDataProcedureStartTime = 0;
+nDataProcedureEndTime = 0;
+# ================= TAPTOOLS: END GENERATED CODE ===================== #
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+# Allocate GL Operational based on U4B FDS
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+# Summary: This process allocates Oracle data by Del Dimensions / Features that is recieved from FDS. 
+# Non-FDS data points will be allocated based on User specified login in the Mobility PL Allocation cube. 
+
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+## Initialise Constants               ##
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+
+cSourceCube = 'U4B';
+cTargetCube = 'U4B';
+cAllocCube = 'U4B PL Allocation';
+
+cRand = NUMBERTOSTRING(ROUND(RAND() * 100000));
+cRand = FILL('0', 6 - LONG(cRand)) | cRand;
+cRand = NUMBERTOSTRING(NOW()) | '.' | cRand;
+cRandomIntA = cRand;
+cViewName = 'zTemp.' | GETPROCESSNAME() | '.' | cRandomIntA;
+cSubsetName = 'zTemp.' | GETPROCESSNAME() | '.' | cRandomIntA;
+
+cDimOpsAcc = 'GL Operational';
+cDimFDSAcc = 'Operational PL FDS Metrics';
+cDimU4BAcc = 'U4B Ops Metrics';
+
+cU4BOrgDim = 'U4B Org Segment';
+cU4BProductDim = 'U4B Product';
+cU4BSalesDim = 'U4B Sales Channel';
+cU4BTripDim = 'U4B Trip Profile';
+
+cVersion = pVersion;
+cMeasure = 'Amount';
+cTargetSource = 'Product PL';
+cU4BOrgConsol = 'Total U4B Org Segment';
+cU4BProductConsol = 'Total U4B Product';
+cU4BSalesConsol = 'Total U4B Sales Channel';
+cU4BTripConsol = 'Total U4B Trip Profile';
+cSourceConsol = 'Oracle';
+cLocationConsol = 'Total Location Incl Discontinued';
+cDeptConsol = 'Total Org';
+cLOBConsol = 'Total Line of Business';
+cGLAccountConsol = 'Ops P&L';
+cProductConsol = 'Total Product Type';
+
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+## Clear Target             ##
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+
+cRandomIntA = NUMBERTOSTRING(INT(RAND() * 100000 * RAND()));
+cViewName = 'zTemp.' | GETPROCESSNAME() | '.' | cRandomIntA;
+cSubsetName = 'zTemp.' | GETPROCESSNAME() | '.' | cRandomIntA;
+
+cCube = cTargetCube;
+VIEWCREATE(cCube, cViewName, 1);
+nCtr = 1;
+nMax = CUBEDIMENSIONCOUNTGET(cCube);
+WHILE(nCtr <= nMax);
+   sDim = TABDIM(cCube, nCtr);
+   IF(sDim @= 'Version');
+      sElement = pVersion;
+      SUBSETCREATE(sDim, cSubsetName, 1);
+      SUBSETELEMENTINSERT(sDim, cSubsetName, sElement, 1);
+      VIEWSUBSETASSIGN(cCube, cViewName, sDim, cSubsetName);
+   ELSEIF(sDim @= 'Period');
+      IF(DTYPE(sDim, pMonth) @= 'N');
+         sElement = pMonth;
+         SUBSETCREATE(sDim, cSubsetName, 1);
+         SUBSETELEMENTINSERT(sDim, cSubsetName, sElement, 1);
+         VIEWSUBSETASSIGN(cCube, cViewName, sDim, cSubsetName);
+      ELSE;
+         sMDX = '{TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER( {[ ' | sDim | '].[ ' | pMonth | ']}, ALL, RECURSIVE )}, 0)}';
+         SUBSETCREATEBYMDX(cSubsetName, sMdx, 1);
+         VIEWSUBSETASSIGN(cCube, cViewName, sDim, cSubsetName);
+      ENDIF;
+   ELSEIF(sDim @= 'Source');
+      sElement1 = cTargetSource;
+      SUBSETCREATE(sDim, cSubsetName, 1);
+      SUBSETELEMENTINSERT(sDim, cSubsetName, sElement1, 1);
+      VIEWSUBSETASSIGN(cCube, cViewName, sDim, cSubsetName);
+   ELSEIF(sDim @= 'U4B Ops Metrics');
+      IF(DTYPE(sDim, pAccount) @= 'N');
+         sElement = pAccount;
+         SUBSETCREATE(sDim, cSubsetName, 1);
+         SUBSETELEMENTINSERT(sDim, cSubsetName, sElement, 1);
+         VIEWSUBSETASSIGN(cCube, cViewName, sDim, cSubsetName);
+      ELSE;
+         sMDX = '{TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER( {[ ' | sDim | '].[ ' | pAccount | ']}, ALL, RECURSIVE )}, 0)}';
+         SUBSETCREATEBYMDX(cSubsetName, sMdx, 1);
+         VIEWSUBSETASSIGN(cCube, cViewName, sDim, cSubsetName);
+      ENDIF;
+   ELSEIF(sDim @= 'Rate Type');
+      IF(pRateType @= '');
+         sMDX = '{TM1SORT( {TM1FILTERBYLEVEL({TM1SUBSETALL([ ' | sDim | '] )}, 0)}, ASC)}';
+         SUBSETCREATEBYMDX(cSubsetName, sMdx, 1);
+      ELSE;
+         sElement = pRateType;
+         SUBSETCREATE(sDim, cSubsetName, 1);
+         SUBSETELEMENTINSERT(sDim, cSubsetName, sElement, 1);
+      ENDIF;
+      VIEWSUBSETASSIGN(cCube, cViewName, sDim, cSubsetName);
+   ELSEIF(sDim @= 'U4B Measure');
+      sElement = 'Amount';
+      SUBSETCREATE(sDim, cSubsetName, 1);
+      SUBSETELEMENTINSERT(sDim, cSubsetName, sElement, 1);
+      VIEWSUBSETASSIGN(cCube, cViewName, sDim, cSubsetName);
+   ELSE;
+      sMDX = '{TM1SORT( {TM1FILTERBYLEVEL({TM1SUBSETALL([ ' | sDim | '] )}, 0)}, ASC)}';
+      SUBSETCREATEBYMDX(cSubsetName, sMdx, 1);
+      VIEWSUBSETASSIGN(cCube, cViewName, sDim, cSubsetName);
+   ENDIF;
+   nCtr = nCtr + 1;
+END;
+
+VIEWEXTRACTSKIPRULEVALUESSET(cCube, cViewName, 1);
+VIEWEXTRACTSKIPCALCSSET(cCube, cViewName, 1);
+VIEWEXTRACTSKIPZEROESSET(cCube, cViewName, 1);
+
+VIEWZEROOUT(cCube, cViewName);
+
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+## Create Source View                 ##
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+
+cRand = NUMBERTOSTRING(ROUND(RAND() * 100000));
+cRand = FILL('0', 6 - LONG(cRand)) | cRand;
+cRand = NUMBERTOSTRING(NOW()) | '.' | cRand;
+cRandomIntA1 = cRand;
+cViewName1 = GETPROCESSNAME() | '.' | cRandomIntA;
+cSubsetName1 = GETPROCESSNAME() | '.' | cRandomIntA;
+
+cCube = cSourceCube;
+VIEWCREATE(cCube, cViewName1, 1);
+nCtr = 1;
+nMax = CUBEDIMENSIONCOUNTGET(cCube);
+WHILE(nCtr <= nMax);
+   sDim = TABDIM(cCube, nCtr);
+   IF(sDim @= 'Version');
+      sElement = pVersion;
+      SUBSETCREATE(sDim, cSubsetName1, 1);
+      SUBSETELEMENTINSERT(sDim, cSubsetName1, sElement, 1);
+      VIEWSUBSETASSIGN(cCube, cViewName1, sDim, cSubsetName1);
+   ELSEIF(sDim @= 'Period');
+      IF(DTYPE(sDim, pMonth) @= 'N');
+         sElement = pMonth;
+         SUBSETCREATE(sDim, cSubsetName1, 1);
+         SUBSETELEMENTINSERT(sDim, cSubsetName1, sElement, 1);
+         VIEWSUBSETASSIGN(cCube, cViewName1, sDim, cSubsetName1);
+      ELSE;
+         sMDX = '{TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER( { ( [ ' | sDim | '  ].[ ' | pMonth | ' ] )}, ALL, RECURSIVE)}, 0)}';
+         SUBSETCREATEBYMDX(cSubsetName1, sMdx, 1);
+         VIEWSUBSETASSIGN(cCube, cViewName, sDim, cSubsetName1);
+      ENDIF;
+   ELSEIF(sDim @= 'U4B Ops Metrics');
+      IF(DTYPE(sDim, pAccount) @= 'N');
+         sElement = pAccount;
+         SUBSETCREATE(sDim, cSubsetName1, 1);
+         SUBSETELEMENTINSERT(sDim, cSubsetName1, sElement, 1);
+         VIEWSUBSETASSIGN(cCube, cViewName1, sDim, cSubsetName1);
+      ELSE;
+         sMDX = '{TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER( { ( [ ' | sDim | '  ].[ ' | pAccount | ' ] )}, ALL, RECURSIVE)}, 0)}';
+         SUBSETCREATEBYMDX(cSubsetName1, sMdx, 1);
+         VIEWSUBSETASSIGN(cCube, cViewName1, sDim, cSubsetName1);
+      ENDIF;
+   ELSEIF(sDim @= 'Source');
+      sElement = cSourceConsol;
+      SUBSETCREATE(sDim, cSubsetName1, 1);
+      SUBSETELEMENTINSERT(sDim, cSubsetName1, sElement, 1);
+      VIEWSUBSETASSIGN(cCube, cViewName1, sDim, cSubsetName1);
+   ELSEIF(sDim @= 'Location');
+      sMDX = '{TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER( { ( [ ' | sDim | '  ].[ ' | cLocationConsol | ' ] )}, ALL, RECURSIVE)}, 0)}';
+      SUBSETCREATEBYMDX(cSubsetName1, sMdx, 1);
+      VIEWSUBSETASSIGN(cCube, cViewName1, sDim, cSubsetName1);
+   ELSEIF(sDim @= 'Department');
+      sMDX = '{TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER( { ( [ ' | sDim | '  ].[ ' | cDeptConsol | ' ] )}, ALL, RECURSIVE)}, 0)}';
+      SUBSETCREATEBYMDX(cSubsetName1, sMdx, 1);
+      VIEWSUBSETASSIGN(cCube, cViewName1, sDim, cSubsetName1);
+   ELSEIF(sDim @= 'Line of Business');
+      sMDX = '{TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER( { ( [ ' | sDim | '  ].[ ' | cLOBConsol | ' ] )}, ALL, RECURSIVE)}, 0)}';
+      SUBSETCREATEBYMDX(cSubsetName1, sMdx, 1);
+      VIEWSUBSETASSIGN(cCube, cViewName1, sDim, cSubsetName1);
+   ELSEIF(sDim @= 'Rate Type');
+      IF(pRateType @= '');
+         sMDX = '{TM1SORT( {TM1FILTERBYLEVEL({TM1SUBSETALL([ ' | sDim | '] )}, 0)}, ASC)}';
+         SUBSETCREATEBYMDX(cSubsetName1, sMdx, 1);
+      ELSE;
+         sMDX = '{TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER( { ( [ ' | sDim | '  ].[ ' | pRateType | ' ] )}, ALL, RECURSIVE)}, 0)}';
+         SUBSETCREATEBYMDX(cSubsetName1, sMdx, 1);
+      ENDIF;
+      VIEWSUBSETASSIGN(cCube, cViewName1, sDim, cSubsetName1);
+   ELSEIF(sDim @= 'U4B Measure');
+      sElement = 'Amount';
+      SUBSETCREATE(sDim, cSubsetName1, 1);
+      SUBSETELEMENTINSERT(sDim, cSubsetName1, sElement, 1);
+      VIEWSUBSETASSIGN(cCube, cViewName1, sDim, cSubsetName1);
+   ELSE;
+      sMDX = '{TM1SORT( {TM1FILTERBYLEVEL({TM1SUBSETALL([ ' | sDim | '] )}, 0)}, ASC)}';
+      SUBSETCREATEBYMDX(cSubsetName1, sMdx, 1);
+      VIEWSUBSETASSIGN(cCube, cViewName1, sDim, cSubsetName1);
+   ENDIF;
+
+   nCtr = nCtr + 1;
+END;
+
+VIEWEXTRACTSKIPRULEVALUESSET(cCube, cViewName1, 1);
+VIEWEXTRACTSKIPCALCSSET(cCube, cViewName1, 0);
+VIEWEXTRACTSKIPZEROESSET(cCube, cViewName1, 1);
+
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+## Set View as DataSource             ##
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+
+DatasourceNameForServer = cSourceCube;
+DatasourceType = 'VIEW';
+DatasourceCubeView = cViewName1;
+# ================= TAPTOOLS: START GENERATED CODE =================== #
+nPrologProcedureEndTime = NOW();
+LOGOUTPUT('DEBUG', 'DATASOURCE: DatasourceType: "' | DatasourceType | '"');
+LOGOUTPUT('DEBUG', 'DATASOURCE: DatasourceNameForServer: "' | DatasourceNameForServer | '"');
+LOGOUTPUT('DEBUG', 'DATASOURCE: DatasourceCubeView: "' | DatasourceCubeView | '"');
+LOGOUTPUT('DEBUG', 'DATASOURCE: DatasourceDimensionSubset: "' | DatasourceDimensionSubset | '"');
+LOGOUTPUT('DEBUG', 'PROGRESS: END PROLOG PROCEDURE');
+# ================= TAPTOOLS: END GENERATED CODE ===================== #
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: PROLOG PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: METADATA PROCEDURE                                                   #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: METADATA PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: DATA PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+# ================= TAPTOOLS: START GENERATED CODE =================== #
+nDataProcedureRecordsStarted = nDataProcedureRecordsStarted + 1;
+IF(nMetadataProcedureEndTime = 0);
+   LOGOUTPUT('DEBUG', 'PROGRESS: END METADATA PROCEDURE');
+   nMetadataProcedureEndTime = NOW();
+ENDIF;
+IF(nDataProcedureStartTime = 0);
+   LOGOUTPUT('DEBUG', 'PROGRESS: START DATA PROCEDURE');
+   nDataProcedureStartTime = NOW();
+ENDIF;
+# ================= TAPTOOLS: END GENERATED CODE ===================== #
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+###################################################
+# Allocation by U4B Dim/ Features
+###################################################
+
+
+## Skip variables based on user inputted source  
+sSource = CELLGETS(cAllocCube, vVersion, vPeriod, '5001', 'Total Location Incl Discontinued', '0000', 'Unspecified U4B Trip Profile', 'Unspecified U4B Sales Channel', 'Unspecified U4B Org Segment', 'Unspecified U4B Product', vMetric, 'Source');
+IF(sSource @= 'Oracle U4B Mob/Del' & vLOB @= '5001');
+   ITEMSKIP;
+ELSEIF(sSource @= 'Oracle U4B 5001' & vLOB @<> '5001');
+   ITEMSKIP;
+ENDIF;
+
+# Variables for 5001
+IF(vLOB @= '5001');
+   sLOB = cLOBConsol;
+   sLocation = cLocationConsol;
+ELSE;
+   sLOB = vLOB;
+   sLocation = vLocation;
+ENDIF;
+
+
+## Retrive Alloc Base Account 
+sAllocAcc = CELLGETS(cAllocCube, vVersion, vPeriod, '5001', cLocationConsol, '0000', 'Unspecified U4B Trip Profile', 'Unspecified U4B Sales Channel', 'Unspecified U4B Org Segment', 'Unspecified U4B Product', vMetric, 'Mapping for Alloc TI');
+
+IF(sAllocAcc @= 'No Allocate');
+
+   # ================= TAPTOOLS: START GENERATED CODE =================== #
+   nDataProcedureDataOperations = nDataProcedureDataOperations + 1;
+   # ================= TAPTOOLS: END GENERATED CODE ===================== #
+   CELLINCREMENTN(vValue, cTargetCube, vVersion, vPeriod, cTargetSource, vRateType, vLOB, '0000', vLocation, 'Unspecified U4B Org Segment', 'Unspecified U4B Product', 'Unspecified U4B Sales Channel', 'Unspecified U4B Trip Profile', vMetric, 'Amount');
+
+ELSE;
+
+   nAllocTotal = CELLGETN(cTargetCube, vVersion, vPeriod, 'FDS', vRateType, sLOB, '0000', sLocation, cU4BOrgConsol, cU4BProductConsol, cU4BSalesConsol, cU4BTripConsol, sAllocAcc, 'Amount');
+   ## Conduct Allocations by Product / Feature 
+
+   IF(nAllocTotal <> 0);
+      Dim1Count = 1;
+      Dim1Size = DIMSIZ(cU4BOrgDim);
+      WHILE(Dim1Count <= Dim1Size);
+         sU4BOrg = DIMNM(cU4BOrgDim, Dim1Count);
+         IF(ELLEV(cU4BOrgDim, sU4BOrg) = 0 & ELISANC(cU4BOrgDim, cU4BOrgConsol, sU4BOrg) = 1);
+            nAllocO = CELLGETN(cTargetCube, vVersion, vPeriod, 'FDS', vRateType, sLOB, '0000', sLocation, sU4BOrg, cU4BProductConsol, cU4BSalesConsol, cU4BTripConsol, sAllocAcc, 'Amount');
+            IF(nAllocO <> 0);
+               Dim2Count = 1;
+               Dim2Size = DIMSIZ(cU4BProductDim);
+               WHILE(Dim2Count <= Dim2Size);
+                  sU4BProduct = DIMNM(cU4BProductDim, Dim2Count);
+                  IF(ELLEV(cU4BProductDim, sU4BProduct) = 0 & ELISANC(cU4BProductDim, cU4BProductConsol, sU4BProduct) = 1);
+                     nAllocP = CELLGETN(cTargetCube, vVersion, vPeriod, 'FDS', vRateType, sLOB, '0000', sLocation, sU4BOrg, sU4BProduct, cU4BSalesConsol, cU4BTripConsol, sAllocAcc, 'Amount');
+                     IF(nAllocP <> 0);
+                        Dim3Count = 1;
+                        Dim3Size = DIMSIZ(cU4BSalesDim);
+                        WHILE(Dim3Count <= Dim3Size);
+                           sU4BSales = DIMNM(cU4BSalesDim, Dim3Count);
+                           IF(ELLEV(cU4BSalesDim, sU4BSales) = 0 & ELISANC(cU4BSalesDim, cU4BSalesConsol, sU4BSales) = 1);
+                              nAllocS = CELLGETN(cTargetCube, vVersion, vPeriod, 'FDS', vRateType, sLOB, '0000', sLocation, sU4BOrg, sU4BProduct, sU4BSales, cU4BTripConsol, sAllocAcc, 'Amount');
+                              IF(nAllocS <> 0);
+                                 Dim4Count = 1;
+                                 Dim4Size = DIMSIZ(cU4BTripDim);
+                                 WHILE(Dim4Count <= Dim4Size);
+                                    sU4BTrip = DIMNM(cU4BTripDim, Dim4Count);
+                                    IF(ELLEV(cU4BTripDim, sU4BTrip) = 0 & ELISANC(cU4BTripDim, cU4BTripConsol, sU4BTrip) = 1);
+                                       nAllocT = CELLGETN(cTargetCube, vVersion, vPeriod, 'FDS', vRateType, sLOB, '0000', sLocation, sU4BOrg, sU4BProduct, sU4BSales, sU4BTrip, sAllocAcc, 'Amount');
+                                       IF(nAllocT <> 0);
+                                          nAllocPerc = nAllocT \ nAllocTotal;
+                                          nAllocVal = vValue * nAllocPerc;
+                                          # ================= TAPTOOLS: START GENERATED CODE =================== #
+                                          nDataProcedureDataOperations = nDataProcedureDataOperations + 1;
+                                          # ================= TAPTOOLS: END GENERATED CODE ===================== #
+                                          CELLINCREMENTN(nAllocVal, cTargetCube, vVersion, vPeriod, cTargetSource, vRateType, vLOB, '0000', vLocation, sU4BOrg, sU4BProduct, sU4BSales, sU4BTrip, vMetric, 'Amount');
+                                       ENDIF;
+                                    ENDIF;
+                                    Dim4Count = Dim4Count + 1;
+                                 END;
+                              ENDIF;
+                           ENDIF;
+                           Dim3Count = Dim3Count + 1;
+                        END;
+                     ENDIF;
+                  ENDIF;
+                  Dim2Count = Dim2Count + 1;
+               END;
+            ENDIF;
+         ENDIF;
+         Dim1Count = Dim1Count + 1;
+      END;
+   ELSE;
+      # ================= TAPTOOLS: START GENERATED CODE =================== #
+      nDataProcedureDataOperations = nDataProcedureDataOperations + 1;
+      # ================= TAPTOOLS: END GENERATED CODE ===================== #
+      CELLINCREMENTN(vValue, cTargetCube, vVersion, vPeriod, cTargetSource, vRateType, vLOB, '0000', vLocation, 'Unspecified U4B Org Segment', 'Unspecified U4B Product', 'Unspecified U4B Sales Channel', 'Unspecified U4B Trip Profile', vMetric, 'Amount');
+   ENDIF;
+
+ENDIF;
+
+
+
+
+
+
+
+
+
+
+# ================= TAPTOOLS: START GENERATED CODE =================== #
+nDataProcedureRecordsCompleted = nDataProcedureRecordsCompleted + 1;
+# ================= TAPTOOLS: END GENERATED CODE ===================== #
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: DATA PROCEDURE                                                         #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: EPILOG PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+# ================= TAPTOOLS: START GENERATED CODE =================== #
+IF(sBlock.Epilog.Execution @= 'Yes');
+   LOGOUTPUT('INFO', 'Block Process Execution Flag is Yes in TAP System Info Cube. Skipping this process...');
+   PROCESSBREAK;
+ENDIF;
+IF(nPrologProcedureEndTime = 0);
+   LOGOUTPUT('DEBUG', 'DATASOURCE: DatasourceType: "NULL"');
+   LOGOUTPUT('DEBUG', 'PROGRESS: END PROLOG PROCEDURE');
+   nPrologProcedureEndTime = NOW();
+ENDIF;
+IF(nMetadataProcedureStartTime > 0 & nMetadataProcedureEndTime = 0);
+   LOGOUTPUT('DEBUG', 'PROGRESS: END METADATA PROCEDURE');
+   nMetadataProcedureEndTime = NOW();
+ENDIF;
+IF(nDataProcedureStartTime > 0 & nDataProcedureEndTime = 0);
+   LOGOUTPUT('DEBUG', 'PROGRESS: END DATA PROCEDURE');
+   nDataProcedureEndTime = NOW();
+ENDIF;
+LOGOUTPUT('DEBUG', 'PROGRESS: START EPILOG PROCEDURE');
+nEpilogProcedureStartTime = NOW();
+# ================= TAPTOOLS: END GENERATED CODE ===================== #
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+# ================= TAPTOOLS: START GENERATED CODE =================== #
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: PrologProcedureRuntime: "' | NUMBERTOSTRING(ROUNDP((nPrologProcedureEndTime - nPrologProcedureStartTime) * 86400, 2)) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: PrologProcedureMetadataOperations: "' | NUMBERTOSTRING(nPrologProcedureMetadataOperations) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: PrologProcedureDataOperations: "' | NUMBERTOSTRING(nPrologProcedureDataOperations) | '"');
+
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: MetadataProcedureRuntime: "' | NUMBERTOSTRING(ROUNDP((nMetadataProcedureEndTime - nMetadataProcedureStartTime) * 86400, 2)) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: MetadataProcedureMetadataOperations: "' | NUMBERTOSTRING(nMetadataProcedureMetadataOperations) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: MetadataProcedureRecordsStarted: "' | NUMBERTOSTRING(nMetadataProcedureRecordsStarted) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: MetadataProcedureRecordsSkipped: "' | NUMBERTOSTRING(nMetadataProcedureRecordsSkipped) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: MetadataProcedureRecordsRejected: "' | NUMBERTOSTRING(nMetadataProcedureRecordsRejected) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: MetadataProcedureRecordsCompleted: "' | NUMBERTOSTRING(nMetadataProcedureRecordsCompleted) | '"');
+
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: DataProcedureRuntime: "' | NUMBERTOSTRING(ROUNDP((nDataProcedureEndTime - nDataProcedureStartTime) * 86400, 2)) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: DataProcedureMetadataOperations: "' | NUMBERTOSTRING(nDataProcedureMetadataOperations) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: DataProcedureDataOperations: "' | NUMBERTOSTRING(nDataProcedureDataOperations) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: DataProcedureRecordsStarted: "' | NUMBERTOSTRING(nDataProcedureRecordsStarted) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: DataProcedureRecordsSkipped: "' | NUMBERTOSTRING(nDataProcedureRecordsSkipped) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: DataProcedureRecordsRejected: "' | NUMBERTOSTRING(nDataProcedureRecordsRejected) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: DataProcedureRecordsCompleted: "' | NUMBERTOSTRING(nDataProcedureRecordsCompleted) | '"');
+
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: EpilogProcedureRuntime: "' | NUMBERTOSTRING(ROUNDP((NOW() - nEpilogProcedureStartTime) * 86400, 2)) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: EpilogProcedureMetadataOperations: "' | NUMBERTOSTRING(nEpilogProcedureMetadataOperations) | '"');
+
+nTotalDataOperations = nPrologProcedureDataOperations + nDataProcedureDataOperations;
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: TotalDataOperations: "' | NUMBERTOSTRING(nTotalDataOperations) | '"');
+nTotalMetadataOperations = nPrologProcedureMetadataOperations + nMetadataProcedureMetadataOperations + nDataProcedureMetadataOperations + nEpilogProcedureMetadataOperations;
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: TotalMetadataOperations: "' | NUMBERTOSTRING(nTotalMetadataOperations) | '"');
+LOGOUTPUT('DEBUG', 'PROGRESS: END EPILOG PROCEDURE');
+# ================= TAPTOOLS: END GENERATED CODE ===================== #
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: EPILOG PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #

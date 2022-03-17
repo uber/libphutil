@@ -1,0 +1,36 @@
+{
+    "DefaultMember": {
+        "Attributes": {
+            "Caption": "Amount",
+            "Format": "#,##0;(#,##0)"
+        },
+        "IsPlaceholder": false,
+        "Name": "Amount",
+        "Ordinal": 1,
+        "Type": "Regular",
+        "UniqueName": "[U4B Staging Measure].[U4B Staging Measure].[Amount]",
+        "Weight": 0
+    },
+    "Edges": [],
+    "ElementAttributes": [
+        {
+            "Name": "Format",
+            "Type": "String"
+        }
+    ],
+    "Elements": [
+        {
+            "Attributes": {
+                "Caption": "Amount",
+                "Format": "#,##0;(#,##0)"
+            },
+            "Index": 1,
+            "Name": "Amount",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Staging Measure].[U4B Staging Measure].[Amount]"
+        }
+    ],
+    "Name": "U4B Staging Measure",
+    "Subsets": [],
+    "UniqueName": "[U4B Staging Measure].[U4B Staging Measure]"
+}

@@ -1,0 +1,38 @@
+{
+    "Dimensions": [
+        {
+            "Name": "Version"
+        },
+        {
+            "Name": "Period"
+        },
+        {
+            "Name": "Line of Business"
+        },
+        {
+            "Name": "Location"
+        },
+        {
+            "Name": "Department"
+        },
+        {
+            "Name": "U4B Trip Profile"
+        },
+        {
+            "Name": "U4B Sales Channel"
+        },
+        {
+            "Name": "U4B Org Segment"
+        },
+        {
+            "Name": "U4B Product"
+        },
+        {
+            "Name": "ANALYTICS.GL Operational"
+        },
+        {
+            "Name": "U4B PL Allocation Measure"
+        }
+    ],
+    "Name": "U4B PL Allocation"
+}
