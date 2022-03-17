@@ -218,7 +218,10 @@ WHILE(nCtr <= nMax);
       SUBSETCREATE(sDim, cSubset, 1);
       SUBSETELEMENTINSERT(sDim, cSubset, sElement, 1);
       VIEWSUBSETASSIGN(cCube, cViewName, sDim, cSubset);
-
+   ELSEIF(sDim @= 'Rate Type');
+      sMDX = '{TM1SubsetToSet([Rate Type], ''All Rate Types'')}';
+      SUBSETCREATEBYMDX(cSubset, sMdx, 1);
+      VIEWSUBSETASSIGN(cCube, cViewName, sDim, cSubset);
    ELSE;
       sMDX = '{TM1SORT( {TM1FILTERBYLEVEL({TM1SUBSETALL([ ' | sDim | '] )}, 0)}, ASC)}';
       SUBSETCREATEBYMDX(cSubset, sMdx, 1);
@@ -367,8 +370,10 @@ ENDIF;
 
 sDim = 'Rate Type';
 p = 1;
-WHILE(p <= DIMSIZ(sDim));
-   sRateType = DIMNM(sDim, p);
+sSubset = 'All Rate Types';
+count = SUBSETGETSIZE(sDim, sSubset);
+WHILE(p <= count);
+   sRateType = SUBSETGETELEMENTNAME(sDim, sSubset, p);
    IF(ELLEV(sDim, sRateType) = 0);
       CELLPUTN(vValue, cCube, 'Actual', sPeriod, 'FDS', sRateType, vLob, '0000', sLocation, vProduct, vFeature, sMetric, 'Amount');
    ENDIF;
