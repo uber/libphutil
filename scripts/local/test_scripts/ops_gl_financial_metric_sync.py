@@ -1,18 +1,16 @@
+
 from datetime import datetime
 
 from tm1tests.reconciliation import Reconciliation
 
 source_mdx = (
-"WITH MEMBER [Ops Metric].[Total_Support_Contacts] AS [Ops Metric].[Total Support Contacts]"+
 "SELECT NON EMPTY "+
-    "{[Ops Metric].[Completed Trips], [Ops Metric].[Vehicle Miles]," +
-    "[Ops Metric].[Non-P2P Rider Miles]," +
-    "[Ops Metric].[Total_Support_Contacts]," +
-    "[Ops Metric].[Cash Trips]"+
+    "{"+
+    "[Ops Metric].[Cash Gross Bookings]" +
     "} * "+
     "{[Line of Business].[Total Line of Business]}" +
 "ON ROWS,"+
-    "{TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER( {[Period].[%s]}, ALL, RECURSIVE )},0)} "+
+    "{[Period].[%s]}"+
 "ON COLUMNS "+
 "FROM "+
     "[Ops] "+
@@ -28,16 +26,13 @@ source_mdx = (
 )
 
 target_mdx = (
-"WITH MEMBER [Account].[Total_Support_Contacts] AS [Account].[Total Support Defects]"+
 "SELECT NON EMPTY "+
-    "{[Account].[Completed Trips], [Account].[Vehicle Miles]," +
-    "[Account].[Non-P2P Rider Miles]," +
-    "[Account].[Total_Support_Contacts]," +
-    "[Account].[Cash Trips]" +
+    "{"+
+    "[Account].[Cash Gross Bookings]" +
     "} * "+
     "{[Line of Business].[Total Line of Business]}"+
 "ON ROWS,"+
-     "{TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER( {[Month].[%s]}, ALL, RECURSIVE )}, 0)} "+
+     "{[Month].[%s]} "+
 "ON COLUMNS "+
 "FROM "+
     "[GL Reporting] "+
@@ -55,7 +50,7 @@ target_mdx = (
 
 class Mytest(Reconciliation):
 
-    name = 'Ops GL Metric Sync'
+    name = 'Ops GL Financial Metric Sync'
     email_to = []
     email_from = 'pa-eng@uber.com'
     alert_level = {'email': 'error'}
@@ -67,7 +62,7 @@ class Mytest(Reconciliation):
     
     def prepare(self):
         super().prepare()
-        now = datetime.now()
-        curr_yr = now.year if now.month > 1 else now.year - 1
-        self.source[0][2] = source_mdx %(curr_yr)
-        self.target[0][2] = target_mdx %(curr_yr)
+        session = self.apps_sessions['analytics']
+        current_actual_month=session.cubes.cells.get_value('System Info','Current Month, String')
+        self.source[0][2] = source_mdx %(current_actual_month)
+        self.target[0][2] = target_mdx %(current_actual_month)
