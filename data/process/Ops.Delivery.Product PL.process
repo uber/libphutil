@@ -225,7 +225,7 @@ cMerchTypeConsol = 'Total Merchant Type';
 cOrdCatConsol = 'Total Order Category';
 cDelMerchSegConsol = 'Total Merchant Segment';
 cDelFeatureConsol = 'All Delivery Features';
-cSourceConsol = 'Total Source Excl Sig Adj';
+cSourceConsol = 'Total External Excl Sig Adj';
 cLocationConsol = 'Total Location Incl Discontinued';
 cDeptConsol = 'Total Org';
 cLOBConsol = 'Delivery';
@@ -470,7 +470,7 @@ IF(sAllocAcc @= 'No Allocate');
    # ================= TAPTOOLS: START GENERATED CODE =================== #
    nDataProcedureDataOperations = nDataProcedureDataOperations + 1;
    # ================= TAPTOOLS: END GENERATED CODE ===================== #
-   CELLINCREMENTN(vValue, cTargetCube, vVersion, vPeriod, cTargetSource, vRateType, vLOB, '0000', vLocation, 'Unspecified Fulfillment type', 'Unspecified Merchant Type', 'Unspecified Order Category', 'Unspecified Merchant Segment', 'Unspecified Delivery Features', vGLOperational, 'Amount');
+   CELLINCREMENTN(vValue, cTargetCube, vVersion, vPeriod, cTargetSource, vRateType, vLOB, vDepartment, vLocation, 'Unspecified Fulfillment type', 'Unspecified Merchant Type', 'Unspecified Order Category', 'Unspecified Merchant Segment', 'Unspecified Delivery Features', vGLOperational, 'Amount');
 
 ELSE;
 
@@ -543,7 +543,7 @@ ELSE;
       # ================= TAPTOOLS: START GENERATED CODE =================== #
       nDataProcedureDataOperations = nDataProcedureDataOperations + 1;
       # ================= TAPTOOLS: END GENERATED CODE ===================== #
-      CELLINCREMENTN(vValue, cTargetCube, vVersion, vPeriod, cTargetSource, vRateType, vLOB, '0000', vLocation, 'Unspecified Fulfillment type', 'Unspecified Merchant Type', 'Unspecified Order Category', 'Unspecified Merchant Segment', 'Unspecified Delivery Features', vGLOperational, 'Amount');
+      CELLINCREMENTN(vValue, cTargetCube, vVersion, vPeriod, cTargetSource, vRateType, vLOB, vDepartment, vLocation, 'Unspecified Fulfillment type', 'Unspecified Merchant Type', 'Unspecified Order Category', 'Unspecified Merchant Segment', 'Unspecified Delivery Features', vGLOperational, 'Amount');
    ENDIF;
 
 ENDIF;
