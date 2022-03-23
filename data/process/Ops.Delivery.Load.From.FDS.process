@@ -150,8 +150,9 @@
 # ================= TAPTOOLS: START GENERATED CODE =================== #
 sProcessName = GETPROCESSNAME();
 IF(sProcessName @<> 'TAP.Call.Queue.Add Job To Queue' & sProcessName @<> 'TAP.CubeSaveData' & sProcessName @<> 'TAP.Call.Save' & sProcessName @<> 'TAP.Call.Save.Wrapper' & sProcessName @<> 'TAP.Call.CubeSaveData.Wrapper' & sProcessName @<> 'TAP.Call.Tests' & sProcessName @<> 'TAP.Call.Init' & sProcessName @<> 'TAP.Call.Export Application Stats' & sProcessName @<> 'TAP.Cube.Export Data to File' & SCAN('}drill', LOWER(sProcessName)) = 0);
-   sSDA.Status = CELLGETS('TAP System Info', 'Block Process Execution', 'Value');
-   IF(sSDA.Status @= 'Yes');
+   sBlock.Execution.Status = CELLGETS('TAP System Info', 'Block Process Execution', 'Value');
+   IF(UPPER(sBlock.Execution.Status) @= 'YES');
+      sBlock.Epilog.Execution = 'Yes';
       PROCESSBREAK;
    ENDIF;
 ENDIF;
@@ -253,6 +254,10 @@ WHILE(nCtr <= nMax);
       sElement = 'Amount';
       SUBSETCREATE(sDim, cSubset, 1);
       SUBSETELEMENTINSERT(sDim, cSubset, sElement, 1);
+      VIEWSUBSETASSIGN(cCube, cViewName, sDim, cSubset);
+   ELSEIF(sDim @= 'Rate Type');
+      sMDX = '{TM1SubsetToSet([Rate Type], ''All Rate Types'')}';
+      SUBSETCREATEBYMDX(cSubset, sMdx, 1);
       VIEWSUBSETASSIGN(cCube, cViewName, sDim, cSubset);
    ELSE;
       sMDX = '{TM1SORT( {TM1FILTERBYLEVEL({TM1SUBSETALL([ ' | sDim | '] )}, 0)}, ASC)}';
@@ -411,7 +416,9 @@ ENDIF;
 
 sDim = 'Rate Type';
 p = 1;
-WHILE(p <= DIMSIZ(sDim));
+sSubset = 'All Rate Types';
+count = SUBSETGETSIZE(sDim, sSubset);
+WHILE(p <= count);
    sRateType = DIMNM(sDim, p);
    IF(ELLEV(sDim, sRateType) = 0);
       # ================= TAPTOOLS: START GENERATED CODE =================== #
@@ -444,13 +451,9 @@ nDataProcedureRecordsCompleted = nDataProcedureRecordsCompleted + 1;
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
 
 # ================= TAPTOOLS: START GENERATED CODE =================== #
-sProcessName = GETPROCESSNAME();
-IF(sProcessName @<> 'TAP.Call.Queue.Add Job To Queue' & sProcessName @<> 'TAP.CubeSaveData' & sProcessName @<> 'TAP.Call.Save' & sProcessName @<> 'TAP.Call.Save.Wrapper' & sProcessName @<> 'TAP.Call.CubeSaveData.Wrapper' & sProcessName @<> 'TAP.Call.Tests' & sProcessName @<> 'TAP.Call.Init' & sProcessName @<> 'TAP.Call.Export Application Stats' & sProcessName @<> 'TAP.Cube.Export Data to File' & SCAN('}drill', LOWER(sProcessName)) = 0);
-   sSDA.Status = CELLGETS('TAP System Info', 'Block Process Execution', 'Value');
-   IF(sSDA.Status @= 'Yes');
-      LOGOUTPUT('INFO', 'Block Process Execution Flag is Yes in TAP System Info Cube. Skipping this process...');
-      PROCESSBREAK;
-   ENDIF;
+IF(sBlock.Epilog.Execution @= 'Yes');
+   LOGOUTPUT('INFO', 'Block Process Execution Flag is Yes in TAP System Info Cube. Skipping this process...');
+   PROCESSBREAK;
 ENDIF;
 IF(nPrologProcedureEndTime = 0);
    LOGOUTPUT('DEBUG', 'DATASOURCE: DatasourceType: "NULL"');
