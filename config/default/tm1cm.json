@@ -99,6 +99,11 @@
         "Eats Restaurant Type/*",
         "Freight Ops Metric/*",
         "Freight Shipper/*",
+        "Delivery Features/*",
+        "Delivery Fulfillment Type/*",
+        "Delivery Merchant Segment/*",
+        "Delivery Merchant Type/*",
+        "Delivery Order Category/*",
         "Source/*"
     ],
     "exclude_dimension_hierarchy_element": "",
