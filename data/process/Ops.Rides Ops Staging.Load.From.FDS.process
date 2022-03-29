@@ -113,6 +113,44 @@
 # BEGIN: PROLOG PROCEDURE                                                     #
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
 
+# ================= TAPTOOLS: START GENERATED CODE =================== #
+sProcessName = GETPROCESSNAME();
+IF(sProcessName @<> 'TAP.Call.Queue.Add Job To Queue' & sProcessName @<> 'TAP.CubeSaveData' & sProcessName @<> 'TAP.Call.Save' & sProcessName @<> 'TAP.Call.Save.Wrapper' & sProcessName @<> 'TAP.Call.CubeSaveData.Wrapper' & sProcessName @<> 'TAP.Call.Tests' & sProcessName @<> 'TAP.Call.Init' & sProcessName @<> 'TAP.Call.Export Application Stats' & sProcessName @<> 'TAP.Cube.Export Data to File' & SCAN('}drill', LOWER(sProcessName)) = 0);
+   sBlock.Execution.Status = CELLGETS('TAP System Info', 'Block Process Execution', 'Value');
+   IF(UPPER(sBlock.Execution.Status) @= 'YES');
+      sBlock.Epilog.Execution = 'Yes';
+      PROCESSBREAK;
+   ENDIF;
+ENDIF;
+LOGOUTPUT('DEBUG', 'PARAMETER: pTable: "' | pTable | '"');
+LOGOUTPUT('DEBUG', 'PARAMETER: pDebug: "' | NUMBERTOSTRING(pDebug) | '"');
+LOGOUTPUT('DEBUG', 'PARAMETER: pLevel: "' | pLevel | '"');
+LOGOUTPUT('DEBUG', 'PARAMETER: pStartDate: "' | pStartDate | '"');
+LOGOUTPUT('DEBUG', 'PARAMETER: pEndDate: "' | pEndDate | '"');
+LOGOUTPUT('DEBUG', 'PROGRESS: START PROLOG PROCEDURE');
+nMetadataProcedureRecordsStarted = 0;
+nMetadataProcedureRecordsSkipped = 0;
+nMetadataProcedureRecordsRejected = 0;
+nMetadataProcedureRecordsCompleted = 0;
+nDataProcedureRecordsStarted = 0;
+nDataProcedureRecordsSkipped = 0;
+nDataProcedureRecordsRejected = 0;
+nDataProcedureRecordsCompleted = 0;
+nPrologProcedureDataOperations = 0;
+nDataProcedureDataOperations = 0;
+nTotalDataOperations = 0;
+nPrologProcedureMetadataOperations = 0;
+nMetadataProcedureMetadataOperations = 0;
+nDataProcedureMetadataOperations = 0;
+nEpilogProcedureMetadataOperations = 0;
+nTotalProcedureMetadataOperations = 0;
+nPrologProcedureStartTime = NOW();
+nPrologProcedureEndTime = 0;
+nMetadataProcedureStartTime = 0;
+nMetadataProcedureEndTime = 0;
+nDataProcedureStartTime = 0;
+nDataProcedureEndTime = 0;
+# ================= TAPTOOLS: END GENERATED CODE ===================== #
 
 #****Begin: Generated Statements***
 #****End: Generated Statements****
@@ -129,6 +167,7 @@ cRateType = 'No Rate Type';
 cMeasure = 'Amount';
 cSource = 'FDS';
 nRecords = 1;
+nGLOps = 0;
 
 cMetricString = '';
 
@@ -199,6 +238,14 @@ END;
 
 
 
+# ================= TAPTOOLS: START GENERATED CODE =================== #
+nPrologProcedureEndTime = NOW();
+LOGOUTPUT('DEBUG', 'DATASOURCE: DatasourceType: "' | DatasourceType | '"');
+LOGOUTPUT('DEBUG', 'DATASOURCE: DatasourceNameForServer: "' | DatasourceNameForServer | '"');
+LOGOUTPUT('DEBUG', 'DATASOURCE: DatasourceCubeView: "' | DatasourceCubeView | '"');
+LOGOUTPUT('DEBUG', 'DATASOURCE: DatasourceDimensionSubset: "' | DatasourceDimensionSubset | '"');
+LOGOUTPUT('DEBUG', 'PROGRESS: END PROLOG PROCEDURE');
+# ================= TAPTOOLS: END GENERATED CODE ===================== #
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
 # END: PROLOG PROCEDURE                                                       #
@@ -219,6 +266,17 @@ END;
 # BEGIN: DATA PROCEDURE                                                       #
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
 
+# ================= TAPTOOLS: START GENERATED CODE =================== #
+nDataProcedureRecordsStarted = nDataProcedureRecordsStarted + 1;
+IF(nMetadataProcedureEndTime = 0);
+   LOGOUTPUT('DEBUG', 'PROGRESS: END METADATA PROCEDURE');
+   nMetadataProcedureEndTime = NOW();
+ENDIF;
+IF(nDataProcedureStartTime = 0);
+   LOGOUTPUT('DEBUG', 'PROGRESS: START DATA PROCEDURE');
+   nDataProcedureStartTime = NOW();
+ENDIF;
+# ================= TAPTOOLS: END GENERATED CODE ===================== #
 
 #****Begin: Generated Statements***
 #****End: Generated Statements****
@@ -302,6 +360,10 @@ ENDIF;
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
 #Scanning the Input to find metrics  to be zeroed out
 
+# Flag if Cash Gross Bookings metrics is loaded
+IF(sMetric @= 'Cash Gross Bookings');
+   nGLOPS = 1;
+ENDIF;
 
 IF(SCAN(sMetric, cMetricString) = 0);
    cMetricString = cMetricString | sMetric | '|';
@@ -328,23 +390,44 @@ IF(ELISANC('Rides Ops Metric', 'Net Inflows', sMetric) = 0 & SCAN('_usd', vMetri
    ENDIF;
 
 
+   # ================= TAPTOOLS: START GENERATED CODE =================== #
+   nDataProcedureDataOperations = nDataProcedureDataOperations + 1;
+   # ================= TAPTOOLS: END GENERATED CODE ===================== #
    CELLINCREMENTN(vValue, cCube, cVersion, sPeriod, cSource, vCurrency, cRateType, sLocation, sFlowType, sCarType, sMetric, cMeasure);
 
+   # ================= TAPTOOLS: START GENERATED CODE =================== #
+   nDataProcedureDataOperations = nDataProcedureDataOperations + 1;
+   # ================= TAPTOOLS: END GENERATED CODE ===================== #
    CELLINCREMENTN(vUSDValue, cCube, cVersion, sPeriod, cSource, vCurrency, 'USD', sLocation, sFlowType, sCarType, sMetric, cMeasure);
 
+   # ================= TAPTOOLS: START GENERATED CODE =================== #
+   nDataProcedureDataOperations = nDataProcedureDataOperations + 1;
+   # ================= TAPTOOLS: END GENERATED CODE ===================== #
    CELLPUTS(sOutputstring, 'Rides Ops Info', sMetric, sPeriod, 'Last Updated');
 
 ELSEIF(SCAN('_usd', vMetric) = 0);
 
+   # ================= TAPTOOLS: START GENERATED CODE =================== #
+   nDataProcedureDataOperations = nDataProcedureDataOperations + 1;
+   # ================= TAPTOOLS: END GENERATED CODE ===================== #
    CELLINCREMENTN(vValue, cCube, cVersion, sPeriod, cSource, vCurrency, cRateType, sLocation, sFlowType, sCarType, sMetric, cMeasure);
 
+   # ================= TAPTOOLS: START GENERATED CODE =================== #
+   nDataProcedureDataOperations = nDataProcedureDataOperations + 1;
+   # ================= TAPTOOLS: END GENERATED CODE ===================== #
    CELLPUTS(sOutputstring, 'Rides Ops Info', sMetric, sPeriod, 'Last Updated');
 ELSE;
 
 
+   # ================= TAPTOOLS: START GENERATED CODE =================== #
+   nDataProcedureDataOperations = nDataProcedureDataOperations + 1;
+   # ================= TAPTOOLS: END GENERATED CODE ===================== #
    CELLINCREMENTN(vValue, cCube, cVersion, sPeriod, cSource, vCurrency, 'USD', sLocation, sFlowType, sCarType, sMetric, cMeasure);
 ENDIF;
 
+# ================= TAPTOOLS: START GENERATED CODE =================== #
+nDataProcedureRecordsCompleted = nDataProcedureRecordsCompleted + 1;
+# ================= TAPTOOLS: END GENERATED CODE ===================== #
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
 # END: DATA PROCEDURE                                                         #
@@ -353,6 +436,27 @@ ENDIF;
 # BEGIN: EPILOG PROCEDURE                                                     #
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
 
+# ================= TAPTOOLS: START GENERATED CODE =================== #
+IF(sBlock.Epilog.Execution @= 'Yes');
+   LOGOUTPUT('INFO', 'Block Process Execution Flag is Yes in TAP System Info Cube. Skipping this process...');
+   PROCESSBREAK;
+ENDIF;
+IF(nPrologProcedureEndTime = 0);
+   LOGOUTPUT('DEBUG', 'DATASOURCE: DatasourceType: "NULL"');
+   LOGOUTPUT('DEBUG', 'PROGRESS: END PROLOG PROCEDURE');
+   nPrologProcedureEndTime = NOW();
+ENDIF;
+IF(nMetadataProcedureStartTime > 0 & nMetadataProcedureEndTime = 0);
+   LOGOUTPUT('DEBUG', 'PROGRESS: END METADATA PROCEDURE');
+   nMetadataProcedureEndTime = NOW();
+ENDIF;
+IF(nDataProcedureStartTime > 0 & nDataProcedureEndTime = 0);
+   LOGOUTPUT('DEBUG', 'PROGRESS: END DATA PROCEDURE');
+   nDataProcedureEndTime = NOW();
+ENDIF;
+LOGOUTPUT('DEBUG', 'PROGRESS: START EPILOG PROCEDURE');
+nEpilogProcedureStartTime = NOW();
+# ================= TAPTOOLS: END GENERATED CODE ===================== #
 
 #****Begin: Generated Statements***
 #****End: Generated Statements****
@@ -365,6 +469,45 @@ EXECUTEPROCESS(sProcess
    , 'pMetrics', cMetricString
 );
 
+# Run GL Sync batch for Cash Gross Bookings metrics b/w 1st and 15th of every month
+nDay = NUMBR(SUBST(TODAY(1), 9, 2));
+IF(nGLOps = 1 & (nDay >= 1 & nDay <= 15));
+   EXECUTEPROCESS('Ops.DIQ.GL Reporting.Sync'
+      , 'pInstance', 'PAC'
+      , 'pProcess', 'DIQ.Call.Batch'
+      , 'pParams', '[{"Name":"pDIQBatch","Value":"Batch - 1104"}]'
+   );
+ENDIF;
+
+# ================= TAPTOOLS: START GENERATED CODE =================== #
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: PrologProcedureRuntime: "' | NUMBERTOSTRING(ROUNDP((nPrologProcedureEndTime - nPrologProcedureStartTime) * 86400, 2)) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: PrologProcedureMetadataOperations: "' | NUMBERTOSTRING(nPrologProcedureMetadataOperations) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: PrologProcedureDataOperations: "' | NUMBERTOSTRING(nPrologProcedureDataOperations) | '"');
+
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: MetadataProcedureRuntime: "' | NUMBERTOSTRING(ROUNDP((nMetadataProcedureEndTime - nMetadataProcedureStartTime) * 86400, 2)) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: MetadataProcedureMetadataOperations: "' | NUMBERTOSTRING(nMetadataProcedureMetadataOperations) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: MetadataProcedureRecordsStarted: "' | NUMBERTOSTRING(nMetadataProcedureRecordsStarted) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: MetadataProcedureRecordsSkipped: "' | NUMBERTOSTRING(nMetadataProcedureRecordsSkipped) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: MetadataProcedureRecordsRejected: "' | NUMBERTOSTRING(nMetadataProcedureRecordsRejected) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: MetadataProcedureRecordsCompleted: "' | NUMBERTOSTRING(nMetadataProcedureRecordsCompleted) | '"');
+
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: DataProcedureRuntime: "' | NUMBERTOSTRING(ROUNDP((nDataProcedureEndTime - nDataProcedureStartTime) * 86400, 2)) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: DataProcedureMetadataOperations: "' | NUMBERTOSTRING(nDataProcedureMetadataOperations) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: DataProcedureDataOperations: "' | NUMBERTOSTRING(nDataProcedureDataOperations) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: DataProcedureRecordsStarted: "' | NUMBERTOSTRING(nDataProcedureRecordsStarted) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: DataProcedureRecordsSkipped: "' | NUMBERTOSTRING(nDataProcedureRecordsSkipped) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: DataProcedureRecordsRejected: "' | NUMBERTOSTRING(nDataProcedureRecordsRejected) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: DataProcedureRecordsCompleted: "' | NUMBERTOSTRING(nDataProcedureRecordsCompleted) | '"');
+
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: EpilogProcedureRuntime: "' | NUMBERTOSTRING(ROUNDP((NOW() - nEpilogProcedureStartTime) * 86400, 2)) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: EpilogProcedureMetadataOperations: "' | NUMBERTOSTRING(nEpilogProcedureMetadataOperations) | '"');
+
+nTotalDataOperations = nPrologProcedureDataOperations + nDataProcedureDataOperations;
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: TotalDataOperations: "' | NUMBERTOSTRING(nTotalDataOperations) | '"');
+nTotalMetadataOperations = nPrologProcedureMetadataOperations + nMetadataProcedureMetadataOperations + nDataProcedureMetadataOperations + nEpilogProcedureMetadataOperations;
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: TotalMetadataOperations: "' | NUMBERTOSTRING(nTotalMetadataOperations) | '"');
+LOGOUTPUT('DEBUG', 'PROGRESS: END EPILOG PROCEDURE');
+# ================= TAPTOOLS: END GENERATED CODE ===================== #
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
 # END: EPILOG PROCEDURE                                                       #
