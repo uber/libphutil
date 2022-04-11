@@ -193,6 +193,7 @@ nDataProcedureEndTime = 0;
 
 cCube = 'Delivery';
 nRecords = 1;
+sException = '';
 
 cMetricString = '';
 
@@ -363,6 +364,40 @@ IF(vSeg @= '\N' % vSeg @= '');
    vSeg = 'Unspecified Merchant Size';
 ENDIF;
 
+# Exceptions
+
+sDim = 'Delivery Fulfillment Type';
+
+IF(DIMIX(sDim, vFul) = 0);
+   IF(SCAN(vFul, sException) = 0);
+      sException = sException | sDim | '-' | vFul | ', ';
+   ENDIF;
+ENDIF;
+
+sDim = 'Delivery Merchant Type';
+
+IF(DIMIX(sDim, vMerType) = 0);
+   IF(SCAN(vMerType, sException) = 0);
+      sException = sException | sDim | '-' | vMerType | ', ';
+   ENDIF;
+ENDIF;
+
+sDim = 'Delivery Order Category';
+
+IF(DIMIX(sDim, vOrder) = 0);
+   IF(SCAN(vOrder, sException) = 0);
+      sException = sException | sDim | '-' | vOrder | ', ';
+   ENDIF;
+ENDIF;
+
+sDim = 'Delivery Merchant Segment';
+
+IF(DIMIX(sDim, vSeg) = 0);
+   IF(SCAN(vSeg, sException) = 0);
+      sException = sException | sDim | '-' | vSeg | ', ';
+   ENDIF;
+ENDIF;
+
 # Features
 
 sFeature = '';
@@ -474,6 +509,11 @@ nEpilogProcedureStartTime = NOW();
 
 #****Begin: Generated Statements***
 #****End: Generated Statements****
+
+IF(LONG(sException) > 0);
+   LOGOUTPUT('INFO', 'New elements data coming from FDS. Please check with Product team and add them to TM1');
+   LOGOUTPUT('INFO', 'New Elements : ' | sException);
+ENDIF;
 
 sProcess = 'Ops.Delivery.From Day Month';
 
