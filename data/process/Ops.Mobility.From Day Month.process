@@ -234,14 +234,28 @@ WHILE(cnt <= nSiz);
          sMDX = sMDX | ' + {TM1FILTERBYPATTERN( {TM1SUBSETALL( [Period] )}, ''WD ' | sStartMon | '-*'')}';
          sStartMon = ATTRS(sDim, sStartMon, 'Period + 1');
          nLoopCounter = nLoopCounter + 1;
-         # Loop counter is being used to prevent the while loop not to run for infinite number of times if wrong attribute values are given
-         # Setting the max Loop counter as 12 so that it won't run for more than an year in a single run
-         IF(sStartMon @= '' % nLoopCounter > 12);
+         IF(sStartMon @= '' % nLoopCounter > 120);
             LOGOUTPUT('ERROR', 'Period + 1 attribute value is setup incorrectly in Period dimension. Please check');
             PROCESSQUIT;
          ENDIF;
       END;
+
       SUBSETCREATEBYMDX(cSubsetName, sMdx, 1);
+
+      nCounter = 1;
+      nSize = SUBSETGETSIZE(sDim, cSubsetName);
+      WHILE(nCounter <= nSize);
+         sEle = SUBSETGETELEMENTNAME(sDim, cSubsetName, nCounter);
+         IF(SUBST(sEle, 1, 2) @= 'WD');
+            sEle = ATTRS('Period', 'WS' | SUBST(sEle, 3, LONG(sEle) - 2), 'Prior Period');
+            sPrevWeek = 'WD' | SUBST(sEle, 3, LONG(sEle) - 2);
+            IF(SUBSETELEMENTEXISTS(sDim, cSubsetName, sPrevWeek) = 0);
+               SUBSETELEMENTINSERT(sDim, cSubsetName, sPrevWeek, nSize + 1);
+            ENDIF;
+         ENDIF;
+         nCounter = nCounter + 1;
+      END;
+
       SUBSETMDXSET(sDim, cSubsetName, '');
       VIEWSUBSETASSIGN(sCube, cViewName, sDim, cSubsetName);
 
@@ -317,14 +331,27 @@ WHILE(cnt <= nSiz);
          sMDX = sMDX | ' + {TM1FILTERBYPATTERN( {TM1SUBSETALL( [Period] )}, ''WS ' | sStartMon | '-*'')}';
          sStartMon = ATTRS(sDim, sStartMon, 'Period + 1');
          nLoopCounter = nLoopCounter + 1;
-         # Loop counter is being used to prevent the while loop not to run for infinite number of times if wrong attribute values are given
-         # Setting the max Loop counter as 12 so that it won't run for more than an year in a single run
-         IF(sStartMon @= '' % nLoopCounter > 12);
+         IF(sStartMon @= '' % nLoopCounter > 120);
             LOGOUTPUT('ERROR', 'Period + 1 attribute value is setup incorrectly in Period dimension. Please check');
             PROCESSQUIT;
          ENDIF;
       END;
+
       SUBSETCREATEBYMDX(cSubsetTar, sMdx, 1);
+
+      nCounter = 1;
+      nSize = SUBSETGETSIZE(sDim, cSubsetTar);
+      WHILE(nCounter <= nSize);
+         sEle = SUBSETGETELEMENTNAME(sDim, cSubsetTar, nCounter);
+         IF(SUBST(sEle, 1, 2) @= 'WS');
+            sPrevWeek = ATTRS('Period', sEle, 'Prior Period');
+            IF(SUBSETELEMENTEXISTS(sDim, cSubsetTar, sPrevWeek) = 0);
+               SUBSETELEMENTINSERT(sDim, cSubsetTar, sPrevWeek, nSize + 1);
+            ENDIF;
+         ENDIF;
+         nCounter = nCounter + 1;
+      END;
+
       SUBSETMDXSET(sDim, cSubsetTar, '');
       VIEWSUBSETASSIGN(sCube, cViewTar, sDim, cSubsetTar);
 

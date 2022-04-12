@@ -255,7 +255,23 @@ WHILE(cnt <= nSiz);
             PROCESSQUIT;
          ENDIF;
       END;
+
       SUBSETCREATEBYMDX(cSubsetName, sMdx, 1);
+
+      nCounter = 1;
+      nSize = SUBSETGETSIZE(sDim, cSubsetName);
+      WHILE(nCounter <= nSize);
+         sEle = SUBSETGETELEMENTNAME(sDim, cSubsetName, nCounter);
+         IF(SUBST(sEle, 1, 2) @= 'WD');
+            sEle = ATTRS('Period', 'WS' | SUBST(sEle, 3, LONG(sEle) - 2), 'Prior Period');
+            sPrevWeek = 'WD' | SUBST(sEle, 3, LONG(sEle) - 2);
+            IF(SUBSETELEMENTEXISTS(sDim, cSubsetName, sPrevWeek) = 0);
+               SUBSETELEMENTINSERT(sDim, cSubsetName, sPrevWeek, nSize + 1);
+            ENDIF;
+         ENDIF;
+         nCounter = nCounter + 1;
+      END;
+
       SUBSETMDXSET(sDim, cSubsetName, '');
       VIEWSUBSETASSIGN(sCube, cViewName, sDim, cSubsetName);
 
@@ -328,7 +344,22 @@ WHILE(cnt <= nSiz);
             PROCESSQUIT;
          ENDIF;
       END;
+
       SUBSETCREATEBYMDX(cSubsetTar, sMdx, 1);
+
+      nCounter = 1;
+      nSize = SUBSETGETSIZE(sDim, cSubsetTar);
+      WHILE(nCounter <= nSize);
+         sEle = SUBSETGETELEMENTNAME(sDim, cSubsetTar, nCounter);
+         IF(SUBST(sEle, 1, 2) @= 'WS');
+            sPrevWeek = ATTRS('Period', sEle, 'Prior Period');
+            IF(SUBSETELEMENTEXISTS(sDim, cSubsetTar, sPrevWeek) = 0);
+               SUBSETELEMENTINSERT(sDim, cSubsetTar, sPrevWeek, nSize + 1);
+            ENDIF;
+         ENDIF;
+         nCounter = nCounter + 1;
+      END;
+
       SUBSETMDXSET(sDim, cSubsetTar, '');
       VIEWSUBSETASSIGN(sCube, cViewTar, sDim, cSubsetTar);
 
