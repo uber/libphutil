@@ -1,5 +1,22 @@
 SKIPCHECK;
 
+######## Derived Metrics Calculation
+
+['Ops PL Derived','Amount']=C:0;
+['Ratios','Amount']=C:0;
+['Alt Financial Metrics','Amount']=C:0;
+
+['Actual','CPT', 'Amount'] = C: ['Total Driver Payments'] \ ['Completed Trips'];
+
+['Actual','Avg. Basket Size', 'Amount'] = C: ['Fares / Basket'] \ ['Completed Trips'];
+
+['Actual','% of Orders', 'Amount']= C: ['Completed Trips'] \ DB('Delivery',!Version,!Period,!Source,!Rate Type,!Line of Business,!Department,!Location,'Total Fulfillment Type','Total Merchant Type','Total Order Category','Total Merchant Segment','All Delivery Features','Completed Trips',!Delivery Measure);
+
+['Actual','% of GB', 'Amount']= C: ['Gross Bookings'] \ DB('Delivery',!Version,!Period,!Source,!Rate Type,!Line of Business,!Department,!Location,'Total Fulfillment Type','Total Merchant Type','Total Order Category','Total Merchant Segment','All Delivery Features','Gross Bookings',!Delivery Measure);
+
+['Actual','Existing Rider/Eater Promo % of GB', 'Amount'] = C: ['Existing Rider/Eater Promos'] \ ['Gross Bookings'];
+
+######## END Dervied Metrics Calculation
 
 ['Actual', 'FDS', 'Amount'] = N: IF ( ATTRS( 'Delivery Ops Metrics', !Delivery Ops Metrics, 'Fx_Flag') @= 'Y',
                                                         DB('Delivery Staging',!Version,!Period,!Source,!Rate Type, 'Total Currency',!Line of Business,!Department,!Location,!Delivery Fulfillment Type,!Delivery Merchant Type,!Delivery Order Category,!Delivery Merchant Segment,!Delivery Features,!Delivery Ops Metrics,'Amount'),

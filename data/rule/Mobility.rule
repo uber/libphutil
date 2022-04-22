@@ -1,5 +1,14 @@
 SKIPCHECK;
 
+######## Derived Metrics Calculation
+
+['Ops PL Derived','Amount']=C:0;
+['Ratios','Amount']=C:0;
+['Alt Financial Metrics','Amount']=C:0;
+
+['Actual','Avg.Fare', 'Amount'] = C: ['Gross Bookings'] \ ['Completed Trips'];
+
+######## END Dervied Metrics Calculation
 
 ['Actual', 'FDS', 'Amount'] = N: IF ( ATTRS( 'Mobility Ops Metrics', !Mobility Ops Metrics, 'Fx_Flag') @= 'Y',
                                                         DB('Mobility Staging',!Version,!Period,!Source,!Rate Type, 'Total Currency' ,!Line of Business,!Department,!Location,!Product Type,!Mobility Features,!Mobility Ops Metrics, 'Amount'),
