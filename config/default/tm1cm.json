@@ -39,6 +39,13 @@
         "}ElementAttributes_Currency To",
         "}ElementAttributes_Rate Type",
         "}ElementAttributes_Freight Shipper",
+        "}ElementAttributes_Delivery Features",
+        "}ElementAttributes_Delivery Fulfillment Type",
+        "}ElementAttributes_Delivery Merchant Segment",
+        "}ElementAttributes_Delivery Merchant Type",
+        "}ElementAttributes_Delivery Order Category",
+        "}ElementAttributes_Delivery Ops Metrics",
+        "}ElementAttributes_Mobility Ops Metrics",
         "}ElementAttributes_Source",
         "}Capabilities",
         "}CubeSecurityProperties",
@@ -57,7 +64,14 @@
     "exclude_dimension_hierarchy_attribute_value": [
         "Ops/Ops Metric/Format",
         "Rides Ops/Rides Ops Metric/Format",
-        "Eats Ops/ Eats Ops Metric/Format"
+        "Eats Ops/ Eats Ops Metric/Format",
+        "Mobility/ Mobility Ops Metrics/Format",
+        "Delivery/ Delivery Ops Metrics/Format",
+        "Delivery/ Delivery Features/Format",
+        "Delivery/ Delivery Fulfillment Type/Format",
+        "Delivery/ Delivery Merchant Segment/Format",
+        "Delivery/ Delivery Merchant Type/Format",
+        "Delivery/ Delivery Order Category/Format"
     ],
 
 
@@ -104,6 +118,8 @@
         "Delivery Merchant Segment/*",
         "Delivery Merchant Type/*",
         "Delivery Order Category/*",
+        "Delivery Ops Metrics/*",
+        "Mobility Ops Metrics/*",
         "Source/*"
     ],
     "exclude_dimension_hierarchy_element": "",
