@@ -40,6 +40,13 @@ SKIPCHECK;
       CONTINUE
    );
 
+# Completed Trips via TI process after this date
+['Actual',{'FDS','Ops Adjustment'},'Line of Business' : {'1001', '1002', '2001', '2004', '2006'} ,'Completed Trips','Amount'] = N:
+IF ( Elisanc ( 'Period', 'Total Time - Month', !Period) = 1 & DAYNO ( SUBST (!Period, 1, 4) | '-' | SUBST (!Period, 6, 2) | '-' | '01') > 22705 %
+    Elisanc ( 'Period', 'Total Time - Week', !Period) = 1 & DAYNO ( SUBST (!Period, 4, 4) | '-' | SUBST (!Period, 9, 2) | '-' | SUBST (!Period, 12, 2)) > 22732  ,
+  STET,
+CONTINUE);
+
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=- =-=-=-#
 # Skip Support Contacts - loading via process
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- #

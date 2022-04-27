@@ -23,13 +23,14 @@ SKIPCHECK;
                                                         STET);
 
 
-
-
  # Rider Miles & Completed Trips
-['Actual', 'Product PL', {'P2P Miles', 'Completed Trips'}, 'Amount'] = N: ['FDS'];
-
+['Actual', 'Product PL', {'P2P Miles', 'Completed Trips'}, 'Amount'] = N: ['FDS Incl. Adj'];
 
 FEEDERS;
 
-['Actual', 'FDS', {'P2P Miles', 'Completed Trips'}, 'Amount'] => ['Product PL'];
+['Actual', 'FDS Incl. Adj', {'P2P Miles', 'Completed Trips'}, 'Amount'] => ['Product PL'];
+
+
+
+
 

@@ -3,116 +3,108 @@
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
 {
     "DataSource": {
-        "Type": "ODBC",
-        "dataSourceNameForClient": "TM1TEGRATOR",
-        "dataSourceNameForServer": "TM1TEGRATOR",
-        "query": "select * from \"pipe.eats_ops_tm1_daily_operational.20220207151115.UU8EEV\" LIMIT 10",
-        "userName": "epm",
-        "usesUnicode": true
+        "Type": "TM1CubeView",
+        "dataSourceNameForClient": "Mobility",
+        "dataSourceNameForServer": "Mobility",
+        "view": "View2"
     },
     "HasSecurityAccess": false,
-    "Name": "Ops.Delivery.Load.From.FDS",
+    "Name": "Ops.Load.Completed.Trips.From.Mobility",
     "Parameters": [
         {
-            "Name": "pTable",
+            "Name": "pVersion",
             "Prompt": "",
             "Type": "String",
-            "Value": ""
+            "Value": "Actual"
         },
         {
             "Name": "pStartDate",
             "Prompt": "",
             "Type": "String",
-            "Value": "2021-12-01"
+            "Value": ""
         },
         {
             "Name": "pEndDate",
             "Prompt": "",
             "Type": "String",
-            "Value": "2021-12-31"
-        },
-        {
-            "Name": "pLevel",
-            "Prompt": "",
-            "Type": "String",
-            "Value": "Day"
+            "Value": ""
         }
     ],
     "UIData": "CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
     "Variables": [
         {
             "EndByte": 0,
-            "Name": "vLocation",
+            "Name": "vVersion",
             "Position": 1,
             "StartByte": 0,
             "Type": "String"
         },
         {
             "EndByte": 0,
-            "Name": "vFul",
+            "Name": "vPeriod",
             "Position": 2,
             "StartByte": 0,
             "Type": "String"
         },
         {
             "EndByte": 0,
-            "Name": "vMem",
+            "Name": "vSource",
             "Position": 3,
             "StartByte": 0,
             "Type": "String"
         },
         {
             "EndByte": 0,
-            "Name": "vDir",
+            "Name": "vRateType",
             "Position": 4,
             "StartByte": 0,
             "Type": "String"
         },
         {
             "EndByte": 0,
-            "Name": "vU4B",
+            "Name": "vlob",
             "Position": 5,
             "StartByte": 0,
             "Type": "String"
         },
         {
             "EndByte": 0,
-            "Name": "vLob",
+            "Name": "vDepartment",
             "Position": 6,
             "StartByte": 0,
             "Type": "String"
         },
         {
             "EndByte": 0,
-            "Name": "vSeg",
+            "Name": "vLocation",
             "Position": 7,
             "StartByte": 0,
             "Type": "String"
         },
         {
             "EndByte": 0,
-            "Name": "vMerType",
+            "Name": "vProductType",
             "Position": 8,
             "StartByte": 0,
             "Type": "String"
         },
         {
             "EndByte": 0,
-            "Name": "vMetric",
+            "Name": "vFeatures",
             "Position": 9,
             "StartByte": 0,
             "Type": "String"
         },
         {
             "EndByte": 0,
-            "Name": "vOrder",
+            "Name": "vOpsmetric",
             "Position": 10,
             "StartByte": 0,
             "Type": "String"
         },
         {
             "EndByte": 0,
-            "Name": "vPeriod",
+            "Name": "vMeasure",
             "Position": 11,
             "StartByte": 0,
             "Type": "String"
@@ -156,10 +148,9 @@ IF(sProcessName @<> 'TAP.Call.Queue.Add Job To Queue' & sProcessName @<> 'TAP.Cu
       PROCESSBREAK;
    ENDIF;
 ENDIF;
-LOGOUTPUT('DEBUG', 'PARAMETER: pTable: "' | pTable | '"');
+LOGOUTPUT('DEBUG', 'PARAMETER: pVersion: "' | pVersion | '"');
 LOGOUTPUT('DEBUG', 'PARAMETER: pStartDate: "' | pStartDate | '"');
 LOGOUTPUT('DEBUG', 'PARAMETER: pEndDate: "' | pEndDate | '"');
-LOGOUTPUT('DEBUG', 'PARAMETER: pLevel: "' | pLevel | '"');
 LOGOUTPUT('DEBUG', 'PROGRESS: START PROLOG PROCEDURE');
 nMetadataProcedureRecordsStarted = 0;
 nMetadataProcedureRecordsSkipped = 0;
@@ -188,87 +179,254 @@ nDataProcedureEndTime = 0;
 #****Begin: Generated Statements***
 #****End: Generated Statements****
 
+# -=-=-=-=-=-=-==-=-==-===-==-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=#
+# Constants 
+# -=-=-=-=-=-=-==-=-==-===-==-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=#
 
-# Constants
+cCube = 'Mobility';
+cTrgCube = 'Ops';
+cVersion = pVersion;
+cPeriod = SUBST(pStartDate, 1, 7);
+cLOB = cCube;
+cSource = 'FDS Incl. Adj';
+cTrgSource = 'FDS Incl. Adj';
+cOpsMetric = 'Completed Trips';
 
-cCube = 'Delivery';
-nRecords = 1;
-sException = '';
+cRand = NUMBERTOSTRING(ROUND(RAND() * 100000));
+cRand = FILL('0', 6 - LONG(cRand)) | cRand;
+cRand = NUMBERTOSTRING(NOW()) | '.' | cRand;
+cRandomIntA = cRand;
 
-cMetricString = '';
+# -=-=-=-=-=-=-==-=-==-===-==-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=#
+# Process cancellation 
+# -=-=-=-=-=-=-==-=-==-===-==-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=#
 
-cUser = CELLGETS('System Info', 'SQL User Name GL Transactions', 'String');
-cPassword = CELLGETS('System Info', 'SQL Password GL Transactions', 'String');
+IF(DAYNO(SUBST(cPeriod, 1, 4) | '-' | SUBST(cPeriod, 6, 2) | '-' | '01') < 22705);
+   PROCESSBREAK;
+ENDIF;
+
+# -=-=-=-=-=-=-==-=-==-===-==-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=#
+# Clear Target View 
+# -=-=-=-=-=-=-==-=-==-===-==-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=#
+
+sCube = cTrgCube;
+nSiz = CUBEDIMENSIONCOUNTGET(sCube);
+
+cViewTrg = '}zTemp.' | GETPROCESSNAME() | '.' | cRandomIntA | ' Target';
+cSubsetTrg = '}zTemp.' | GETPROCESSNAME() | '.' | cRandomIntA | ' Target';
+
+VIEWCREATE(sCube, cViewTrg, 1);
+
+cnt = 1;
+
+WHILE(cnt <= nSiz);
+
+   sDim = TABDIM(sCube, cnt);
+
+   IF(sDim @= 'Period');
+      SUBSETCREATE(sDim, cSubsetTrg, 1);
+
+      # Month 
+      sPeriod = SUBST(pStartDate, 1, 7);
+      nLoopCounter = 1;
+      WHILE(ATTRN(sDim, sPeriod, 'Start of Period') <= ATTRN(sDim, SUBST(pEndDate, 1, 7), 'Start of Period'));
+         SUBSETELEMENTINSERT(sDim, cSubsetTrg, sPeriod, 1);
+         sPeriod = ATTRS(sDim, sPeriod, 'Next Period');
+         nLoopCounter = nLoopCounter + 1;
+         IF(sPeriod @= '' % nLoopCounter > 120);
+            LOGOUTPUT('ERROR', 'Period + 1 attribute value is setup incorrectly in Period dimension. Please check');
+            PROCESSQUIT;
+         ENDIF;
+      END;
 
 
-#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
-# Set Query
-#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+      # Week 
+      nPeriod = DAYNO(SUBST(pStartDate, 1, 10));
+      nEndPeriod = DAYNO(SUBST(pEndDate, 1, 10));
 
-DatasourceUsername = cUser;
-DatasourcePassword = cPassword;
-sQuery = EXPAND('SELECT * FROM "%pTable%"');
-DatasourceQuery = sQuery;
-
-#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
-# Subsets for View Zero Out
-#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
-
-cRandomIntA = NUMBERTOSTRING(INT(RAND() * 100000));
-cSubset = '}zTemp.' | GETPROCESSNAME() | '.' | cRandomIntA;
-cViewName = '}zTemp.' | GETPROCESSNAME() | '.' | cRandomIntA;
-VIEWCREATE(cCube, cViewName, 1);
-
-
-nCtr = 1;
-nMax = CUBEDIMENSIONCOUNTGET(cCube);
-
-WHILE(nCtr <= nMax);
-   sDim = TABDIM(cCube, nCtr);
-
-   IF(sDim @= 'Version');
-      sElement = 'Actual';
-      SUBSETCREATE(sDim, cSubset, 1);
-      SUBSETELEMENTINSERT(sDim, cSubset, sElement, 1);
-      VIEWSUBSETASSIGN(cCube, cViewName, sDim, cSubset);
-   ELSEIF(sDim @= 'Period');
-      SUBSETCREATE(sDim, cSubset, 1);
-      IF(pStartDate @<> '' & pEndDate @<> '' & pLevel @= 'Day');
-         nStartday = DAYNO(SUBST(pStartDate, 1, 10));
-         nEndday = DAYNO(SUBST(pEndDate, 1, 10));
-         WHILE(nStartday <= nEndDay);
-            sDay = DATE(nStartday, 1);
-            SUBSETELEMENTINSERT(sDim, cSubset, sDay, 1);
-            nStartday = nStartday + 1;
+      WHILE(nPeriod <= nEndPeriod);
+         sDay = DATE(nPeriod, 1);
+         nPar = ELPARN(sDim, sDay);
+         cnt = 1;
+         WHILE(cnt <= nPar);
+            sPar = ELPAR(sDim, sDay, cnt);
+            IF(ELISANC(sDim, 'Total Time - Week Day', sPar) = 1);
+               sWeek = 'WS ' | SUBST(sPar, 4, 10);
+               SUBSETELEMENTINSERT(sDim, cSubsetTrg, sWeek, 1);
+            ENDIF;
+            cnt = cnt + 1;
          END;
-      ENDIF;
-      VIEWSUBSETASSIGN(cCube, cViewName, sDim, cSubset);
+         nPeriod = DAYNO(SUBST(ATTRS(sDim, sWeek, 'Next Period'), 4, 10));
+      END;
+
+      VIEWSUBSETASSIGN(sCube, cViewTrg, sDim, cSubsetTrg);
+
+   ELSEIF(sDim @= 'Ops Measure');
+      SUBSETCREATE(sDim, cSubsetTrg, 1);
+      SUBSETELEMENTINSERT(sDim, cSubsetTrg, 'Amount', 1);
+      VIEWSUBSETASSIGN(sCube, cViewTrg, sDim, cSubsetTrg);
+
+   ELSEIF(sDim @= 'Ops Metric');
+      SUBSETCREATE(sDim, cSubsetTrg, 1);
+      SUBSETELEMENTINSERT(sDim, cSubsetTrg, cOpsMetric, 1);
+      VIEWSUBSETASSIGN(sCube, cViewTrg, sDim, cSubsetTrg);
+
+   ELSEIF(sDim @= 'Version');
+      SUBSETCREATE(sDim, cSubsetTrg, 1);
+      SUBSETELEMENTINSERT(sDim, cSubsetTrg, cVersion, 1);
+      VIEWSUBSETASSIGN(sCube, cViewTrg, sDim, cSubsetTrg);
+
+   ELSEIF(sDim @= 'Line of Business');
+      sMdx = '{TM1FILTERBYLEVEL({TM1DRILLDOWNMEMBER( {[Line of Business].[' | cLob | ']} , ALL, RECURSIVE)},0)}';
+      SUBSETCREATEBYMDX(cSubsetTrg, sMdx, 1);
+      SUBSETMDXSET(sDim, cSubsetTrg, '');
+      VIEWSUBSETASSIGN(sCube, cViewTrg, sDim, cSubsetTrg);
+
+   ELSEIF(sDim @= 'Location');
+      sMdx = '{TM1FILTERBYLEVEL({TM1DRILLDOWNMEMBER( {[Location].[Total Location Incl Discontinued]} , ALL, RECURSIVE)},0)}';
+      SUBSETCREATEBYMDX(cSubsetTrg, sMdx, 1);
+      SUBSETMDXSET(sDim, cSubsetTrg, '');
+      VIEWSUBSETASSIGN(sCube, cViewTrg, sDim, cSubsetTrg);
+
    ELSEIF(sDim @= 'Source');
-      sElement = 'FDS';
-      SUBSETCREATE(sDim, cSubset, 1);
-      SUBSETELEMENTINSERT(sDim, cSubset, sElement, 1);
-      VIEWSUBSETASSIGN(cCube, cViewName, sDim, cSubset);
-   ELSEIF(sDim @= 'Delivery Ops Metric');
-      SUBSETCREATE(sDim, cSubset, 1);
-      VIEWSUBSETASSIGN(cCube, cViewName, sDim, cSubset);
-   ELSEIF(sDim @= 'Delivery Staging Measure');
-      sElement = 'Amount';
-      SUBSETCREATE(sDim, cSubset, 1);
-      SUBSETELEMENTINSERT(sDim, cSubset, sElement, 1);
-      VIEWSUBSETASSIGN(cCube, cViewName, sDim, cSubset);
-   ELSEIF(sDim @= 'Rate Type');
-      sMDX = '{TM1SubsetToSet([Rate Type], ''All Rate Types'')}';
-      SUBSETCREATEBYMDX(cSubset, sMdx, 1);
-      VIEWSUBSETASSIGN(cCube, cViewName, sDim, cSubset);
+      sMdx = '{TM1FILTERBYLEVEL({TM1DRILLDOWNMEMBER( {[Source ].[' | cTrgSource | ']} , ALL, RECURSIVE)},0)}';
+      SUBSETCREATEBYMDX(cSubsetTrg, sMdx, 1);
+      SUBSETMDXSET(sDim, cSubsetTrg, '');
+      VIEWSUBSETASSIGN(sCube, cViewTrg, sDim, cSubsetTrg);
+
    ELSE;
-      sMDX = '{TM1SORT( {TM1FILTERBYLEVEL({TM1SUBSETALL([ ' | sDim | '] )}, 0)}, ASC)}';
-      SUBSETCREATEBYMDX(cSubset, sMdx, 1);
-      VIEWSUBSETASSIGN(cCube, cViewName, sDim, cSubset);
+      sMdx = EXPAND('{TM1FilterByLevel( {TM1SubsetAll([%sDim%].[%sDim%])}, 0) }');
+      SUBSETCREATEBYMDX(cSubsetTrg, sMdx, 1);
+      SUBSETMDXSET(sDim, cSubsetTrg, '');
+      VIEWSUBSETASSIGN(sCube, cViewTrg, sDim, cSubsetTrg);
+
    ENDIF;
 
-   nCtr = nCtr + 1;
+   cnt = cnt + 1;
 END;
 
+# -=-=-=-=-=-=-==-=-==-===-==-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=#
+# Create Source View
+# -=-=-=-=-=-=-==-=-==-===-==-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=#
+sCube = cCube;
+nSiz = CUBEDIMENSIONCOUNTGET(sCube);
+
+cViewSrc = '}zTemp.' | GETPROCESSNAME() | '.' | cRandomIntA | ' Source';
+cSubsetSrc = '}zTemp.' | GETPROCESSNAME() | '.' | cRandomIntA | ' Source';
+
+VIEWCREATE(sCube, cViewSrc, 1);
+
+cnt = 1;
+
+WHILE(cnt <= nSiz);
+
+   sDim = TABDIM(sCube, cnt);
+
+   IF(sDim @= 'Period');
+      SUBSETCREATE(sDim, cSubsetSrc, 1);
+
+      # Month 
+      sPeriod = SUBST(pStartDate, 1, 7);
+      nLoopCounter = 1;
+      WHILE(ATTRN(sDim, sPeriod, 'Start of Period') <= ATTRN(sDim, SUBST(pEndDate, 1, 7), 'Start of Period'));
+         SUBSETELEMENTINSERT(sDim, cSubsetSrc, sPeriod, 1);
+         sPeriod = ATTRS(sDim, sPeriod, 'Next Period');
+         nLoopCounter = nLoopCounter + 1;
+         IF(sPeriod @= '' % nLoopCounter > 120);
+            LOGOUTPUT('ERROR', 'Period + 1 attribute value is setup incorrectly in Period dimension. Please check');
+            PROCESSQUIT;
+         ENDIF;
+      END;
+
+      # Week 
+      nPeriod = DAYNO(SUBST(pStartDate, 1, 10));
+      nEndPeriod = DAYNO(SUBST(pEndDate, 1, 10));
+
+      WHILE(nPeriod <= nEndPeriod);
+         sDay = DATE(nPeriod, 1);
+         nPar = ELPARN(sDim, sDay);
+         cnt = 1;
+         WHILE(cnt <= nPar);
+            sPar = ELPAR(sDim, sDay, cnt);
+            IF(ELISANC(sDim, 'Total Time - Week Day', sPar) = 1);
+               sWeek = 'WS ' | SUBST(sPar, 4, 10);
+               SUBSETELEMENTINSERT(sDim, cSubsetSrc, sWeek, 1);
+            ENDIF;
+            cnt = cnt + 1;
+         END;
+         nPeriod = DAYNO(SUBST(ATTRS(sDim, sWeek, 'Next Period'), 4, 10));
+      END;
+
+      VIEWSUBSETASSIGN(sCube, cViewSrc, sDim, cSubsetSrc);
+
+   ELSEIF(sDim @= cCube | ' Measure');
+      SUBSETCREATE(sDim, cSubsetSrc, 1);
+      SUBSETELEMENTINSERT(sDim, cSubsetSrc, 'Amount', 1);
+      VIEWSUBSETASSIGN(sCube, cViewSrc, sDim, cSubsetSrc);
+
+   ELSEIF(sDim @= cCube | ' Ops Metrics');
+      SUBSETCREATE(sDim, cSubsetSrc, 1);
+      SUBSETELEMENTINSERT(sDim, cSubsetSrc, cOpsMetric, 1);
+      VIEWSUBSETASSIGN(sCube, cViewSrc, sDim, cSubsetSrc);
+
+   ELSEIF(sDim @= 'Version');
+      SUBSETCREATE(sDim, cSubsetSrc, 1);
+      SUBSETELEMENTINSERT(sDim, cSubsetSrc, cVersion, 1);
+      VIEWSUBSETASSIGN(sCube, cViewSrc, sDim, cSubsetSrc);
+
+   ELSEIF(sDim @= 'Line of Business');
+      sMdx = '{TM1FILTERBYLEVEL({TM1DRILLDOWNMEMBER( {[Line of Business].[' | cLob | ']} , ALL, RECURSIVE)},0)}';
+      SUBSETCREATEBYMDX(cSubsetSrc, sMdx, 1);
+      SUBSETMDXSET(sDim, cSubsetSrc, '');
+      VIEWSUBSETASSIGN(sCube, cViewSrc, sDim, cSubsetSrc);
+
+   ELSEIF(sDim @= 'Location');
+      sMdx = '{TM1FILTERBYLEVEL({TM1DRILLDOWNMEMBER( {[Location].[Total Location Incl Discontinued]} , ALL, RECURSIVE)},0)}';
+      SUBSETCREATEBYMDX(cSubsetSrc, sMdx, 1);
+      SUBSETMDXSET(sDim, cSubsetSrc, '');
+      VIEWSUBSETASSIGN(sCube, cViewSrc, sDim, cSubsetSrc);
+
+   ELSEIF(sDim @= 'Department');
+      sMdx = '{TM1FILTERBYLEVEL({TM1DRILLDOWNMEMBER( {[Department].[Total Org]} , ALL, RECURSIVE)},0)}';
+      SUBSETCREATEBYMDX(cSubsetSrc, sMdx, 1);
+      SUBSETMDXSET(sDim, cSubsetSrc, '');
+      VIEWSUBSETASSIGN(sCube, cViewSrc, sDim, cSubsetSrc);
+
+   ELSEIF(sDim @= 'Source');
+      sMdx = '{TM1FILTERBYLEVEL({TM1DRILLDOWNMEMBER( {[Source].[' | cSource | ']} , ALL, RECURSIVE)},0)}';
+      SUBSETCREATEBYMDX(cSubsetSrc, sMdx, 1);
+      SUBSETMDXSET(sDim, cSubsetSrc, '');
+      VIEWSUBSETASSIGN(sCube, cViewSrc, sDim, cSubsetSrc);
+
+   ELSE;
+      sMdx = EXPAND('{TM1FilterByLevel( {TM1SubsetAll([%sDim%].[%sDim%])}, 0) }');
+      SUBSETCREATEBYMDX(cSubsetSrc, sMdx, 1);
+      SUBSETMDXSET(sDim, cSubsetSrc, '');
+      VIEWSUBSETASSIGN(sCube, cViewSrc, sDim, cSubsetSrc);
+
+
+   ENDIF;
+
+   cnt = cnt + 1;
+END;
+
+# -=-=-=-=-=-=-==-=-==-===-==-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=#
+# Clear Target View
+# -=-=-=-=-=-=-==-=-==-===-==-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=#
+
+VIEWZEROOUT(cTrgCube, cViewTrg);
+
+# -=-=-=-=-=-=-==-=-==-===-==-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=#
+# Data source
+# -=-=-=-=-=-=-==-=-==-===-==-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=#
+
+VIEWEXTRACTSKIPZEROESSET(cCube, cViewSrc, 1);
+VIEWEXTRACTSKIPRULEVALUESSET(cCube, cViewSrc, 1);
+VIEWEXTRACTSKIPCALCSSET(cCube, cViewSrc, 1);
+
+DatasourceNameForServer = cCube;
+DatasourceType = 'VIEW';
+DatasourceCubeView = cViewSrc;
 # ================= TAPTOOLS: START GENERATED CODE =================== #
 nPrologProcedureEndTime = NOW();
 LOGOUTPUT('DEBUG', 'DATASOURCE: DatasourceType: "' | DatasourceType | '"');
@@ -313,164 +471,20 @@ ENDIF;
 #****End: Generated Statements****
 
 
-# Month
+# -=-=-=-=-=-=-==-=-==-===-==-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=#
+# Populate Ops - Completed Trips 
+# -=-=-=-=-=-=-==-=-==-===-==-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=#
 
-IF(pLevel @= 'Month');
-   sPeriod = SUBST(vPeriod, 1, 7);
-ELSEIF(pLevel @= 'Day');
-   sPeriod = vPeriod;
+IF(vSource @= 'Ops Adjustment');
+   sProductType = 'Unspecified Product Type';
 ELSE;
-   sPeriod = 'WS ' | vPeriod;
+   sProductType = vProductType;
 ENDIF;
 
-IF(SUBSETELEMENTEXISTS('Period', cSubset, sPeriod) = 0);
-   ITEMSKIP;
-ENDIF;
-
-#Metric
-sMetric = vMetric;
-
-# Location
-sDim = 'Location';
-IF(vLocation @= '\N' % vLocation @= '');
-   ITEMSKIP;
-ENDIF;
-sLocation = 'V' | vLocation;
-
-IF(DIMIX(sDim, sLocation) = 0);
-   ITEMSKIP;
-ENDIF;
-
-# LOB
-IF(vLob @= '\N' % vLob @= '' % DIMIX('Line of Business', vLob) = 0);
-   ITEMSKIP;
-ENDIF;
-
-#Delivery Fulfillment Type
-
-IF(vFul @= '\N' % vFul @= '');
-   vFul = 'Unspecified Fulfillment type';
-ENDIF;
-
-IF(vMerType @= '\N' % vMerType @= '');
-   vMerType = 'Unspecified Merchant Type';
-ENDIF;
-
-IF(vOrder @= '\N' % vOrder @= '');
-   vOrder = 'Unspecified Order Category';
-ENDIF;
-
-IF(vSeg @= '\N' % vSeg @= '');
-   vSeg = 'Unspecified Merchant Size';
-ENDIF;
-
-# Exceptions
-
-sDim = 'Delivery Fulfillment Type';
-
-IF(DIMIX(sDim, vFul) = 0);
-   IF(SCAN(vFul, sException) = 0);
-      sException = sException | sDim | '-' | vFul | ', ';
-   ENDIF;
-ENDIF;
-
-sDim = 'Delivery Merchant Type';
-
-IF(DIMIX(sDim, vMerType) = 0);
-   IF(SCAN(vMerType, sException) = 0);
-      sException = sException | sDim | '-' | vMerType | ', ';
-   ENDIF;
-ENDIF;
-
-sDim = 'Delivery Order Category';
-
-IF(DIMIX(sDim, vOrder) = 0);
-   IF(SCAN(vOrder, sException) = 0);
-      sException = sException | sDim | '-' | vOrder | ', ';
-   ENDIF;
-ENDIF;
-
-sDim = 'Delivery Merchant Segment';
-
-IF(DIMIX(sDim, vSeg) = 0);
-   IF(SCAN(vSeg, sException) = 0);
-      sException = sException | sDim | '-' | vSeg | ', ';
-   ENDIF;
-ENDIF;
-
-# Features
-
-sFeature = '';
-
-IF(vDir @= '\N' % vDir @= '' % vMem @= '\N' % vMem @= '' % vU4B @= '\N' % vU4B @= '');
-   sFeature = 'Unspecified Delivery Features';
-ENDIF;
-
-IF(vDir @= '1' % UPPER(vDir) @= 'TRUE');
-   sDir = 'T';
-ELSE;
-   sDir = 'F';
-ENDIF;
-
-IF(vMem @= '1' % UPPER(vMem) @= 'TRUE');
-   sMem = 'T';
-ELSE;
-   sMem = 'F';
-ENDIF;
-
-IF(vU4B @= '1' % UPPER(vU4B) @= 'TRUE');
-   sU4B = 'T';
-ELSE;
-   sU4B = 'F';
-ENDIF;
-
-IF(sFeature @<> 'Unspecified Delivery Features');
-   sFeature = 'Dir(' | sDir | ') Mem(' | sMem | ') U4B(' | sU4B | ')';
-ENDIF;
-
-#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
-# Clear Target View
-#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
-#Scanning the Input to find metrics  to be zeroed out
-
-IF(DIMIX('Delivery Ops Metrics', sMetric) = 0);
-   ITEMSKIP;
-ENDIF;
-
-
-IF(SCAN(sMetric, cMetricString) = 0);
-   cMetricString = cMetricString | sMetric | '|';
-   SUBSETDELETEALLELEMENTS('Delivery Ops Metrics', cSubset);
-   SUBSETELEMENTINSERT('Delivery Ops Metrics', cSubset, sMetric, 1);
-   VIEWZEROOUT(cCube, cViewName);
-ENDIF;
-
-#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
-# Load Data
-#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
-
-sDim = 'Rate Type';
-p = 1;
-sSubset = 'All Rate Types';
-count = SUBSETGETSIZE(sDim, sSubset);
-WHILE(p <= count);
-   sRateType = SUBSETGETELEMENTNAME(sDim, sSubset, p);
-   IF(ELLEV(sDim, sRateType) = 0);
-      # ================= TAPTOOLS: START GENERATED CODE =================== #
-      nDataProcedureDataOperations = nDataProcedureDataOperations + 1;
-      # ================= TAPTOOLS: END GENERATED CODE ===================== #
-      CELLPUTN(vValue, cCube, 'Actual', sPeriod, 'FDS', sRateType, vLob, '0000', sLocation, vFul, vMerType, vOrder, vSeg, sFeature, sMetric, 'Amount');
-   ENDIF;
-   p = p + 1;
-END;
-
-
-
-
-
-
-
-
+# ================= TAPTOOLS: START GENERATED CODE =================== #
+nDataProcedureDataOperations = nDataProcedureDataOperations + 1;
+# ================= TAPTOOLS: END GENERATED CODE ===================== #
+CELLINCREMENTN(vValue, cTrgCube, vVersion, vPeriod, vSource, vRateType, vLocation, vlob, sProductType, vOpsmetric, vMeasure);
 
 
 
@@ -509,27 +523,6 @@ nEpilogProcedureStartTime = NOW();
 
 #****Begin: Generated Statements***
 #****End: Generated Statements****
-
-IF(LONG(sException) > 0);
-   LOGOUTPUT('INFO', 'New elements data coming from FDS. Please check with Product team and add them to TM1');
-   LOGOUTPUT('INFO', 'New Elements : ' | sException);
-ENDIF;
-
-sProcess = 'Ops.Delivery.From Day Month';
-
-EXECUTEPROCESS(sProcess
-   , 'pStartDate', pStartDate
-   , 'pEndDate', pEndDate
-   , 'pMetrics', cMetricString
-);
-sProcess = 'Ops.Load.Completed.Trips.From.Delivery';
-
-EXECUTEPROCESS(sProcess
-   , 'pVersion', 'Actual'
-   , 'pStartDate', pStartDate
-   , 'pEndDate', pEndDate
-);
-
 
 # ================= TAPTOOLS: START GENERATED CODE =================== #
 LOGOUTPUT('DEBUG', 'PROCESS_METRIC: PrologProcedureRuntime: "' | NUMBERTOSTRING(ROUNDP((nPrologProcedureEndTime - nPrologProcedureStartTime) * 86400, 2)) | '"');

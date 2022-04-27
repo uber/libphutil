@@ -1,0 +1,206 @@
+{
+    "DefaultMember": {
+        "Attributes": {
+            "Caption": "Scheduled Time"
+        },
+        "IsPlaceholder": false,
+        "Name": "Scheduled Time",
+        "Ordinal": 1,
+        "Type": "Regular",
+        "UniqueName": "[Admin Playbook Measure].[Admin Playbook Measure].[Scheduled Time]",
+        "Weight": 0
+    },
+    "Edges": [],
+    "ElementAttributes": [
+        {
+            "Name": "picklist",
+            "Type": "String"
+        }
+    ],
+    "Elements": [
+        {
+            "Attributes": {
+                "Caption": "Scheduled Time"
+            },
+            "Index": 1,
+            "Name": "Scheduled Time",
+            "Type": "String",
+            "UniqueName": "[Admin Playbook Measure].[Admin Playbook Measure].[Scheduled Time]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Start Time"
+            },
+            "Index": 2,
+            "Name": "Start Time",
+            "Type": "String",
+            "UniqueName": "[Admin Playbook Measure].[Admin Playbook Measure].[Start Time]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Last Run Time"
+            },
+            "Index": 3,
+            "Name": "Last Run Time",
+            "Type": "String",
+            "UniqueName": "[Admin Playbook Measure].[Admin Playbook Measure].[Last Run Time]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Start Date"
+            },
+            "Index": 4,
+            "Name": "Start Date",
+            "Type": "String",
+            "UniqueName": "[Admin Playbook Measure].[Admin Playbook Measure].[Start Date]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Stop Date"
+            },
+            "Index": 5,
+            "Name": "Stop Date",
+            "Type": "String",
+            "UniqueName": "[Admin Playbook Measure].[Admin Playbook Measure].[Stop Date]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Time Frame"
+            },
+            "Index": 6,
+            "Name": "Time Frame",
+            "Type": "String",
+            "UniqueName": "[Admin Playbook Measure].[Admin Playbook Measure].[Time Frame]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Status",
+                "picklist": "static::Open:Close"
+            },
+            "Index": 7,
+            "Name": "Status",
+            "Type": "String",
+            "UniqueName": "[Admin Playbook Measure].[Admin Playbook Measure].[Status]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Primary Data Load Status"
+            },
+            "Index": 8,
+            "Name": "Primary Data Load Status",
+            "Type": "String",
+            "UniqueName": "[Admin Playbook Measure].[Admin Playbook Measure].[Primary Data Load Status]"
+        },
+        {
+            "Attributes": {
+                "Caption": "City Data Load Status"
+            },
+            "Index": 9,
+            "Name": "City Data Load Status",
+            "Type": "String",
+            "UniqueName": "[Admin Playbook Measure].[Admin Playbook Measure].[City Data Load Status]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Balance Sheet Load Status"
+            },
+            "Index": 10,
+            "Name": "Balance Sheet Load Status",
+            "Type": "String",
+            "UniqueName": "[Admin Playbook Measure].[Admin Playbook Measure].[Balance Sheet Load Status]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Value"
+            },
+            "Index": 11,
+            "Name": "Value",
+            "Type": "String",
+            "UniqueName": "[Admin Playbook Measure].[Admin Playbook Measure].[Value]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Time Increments"
+            },
+            "Index": 12,
+            "Name": "Time Increments",
+            "Type": "Numeric",
+            "UniqueName": "[Admin Playbook Measure].[Admin Playbook Measure].[Time Increments]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Current Actual Month"
+            },
+            "Index": 13,
+            "Name": "Current Actual Month",
+            "Type": "String",
+            "UniqueName": "[Admin Playbook Measure].[Admin Playbook Measure].[Current Actual Month]"
+        },
+        {
+            "Attributes": {
+                "Caption": "City Current Posted Date"
+            },
+            "Index": 14,
+            "Name": "City Current Posted Date",
+            "Type": "String",
+            "UniqueName": "[Admin Playbook Measure].[Admin Playbook Measure].[City Current Posted Date]"
+        },
+        {
+            "Attributes": {
+                "Caption": "City Prior Posted Date"
+            },
+            "Index": 15,
+            "Name": "City Prior Posted Date",
+            "Type": "String",
+            "UniqueName": "[Admin Playbook Measure].[Admin Playbook Measure].[City Prior Posted Date]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Primary Current Posted Date"
+            },
+            "Index": 16,
+            "Name": "Primary Current Posted Date",
+            "Type": "String",
+            "UniqueName": "[Admin Playbook Measure].[Admin Playbook Measure].[Primary Current Posted Date]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Primary Prior Posted Date"
+            },
+            "Index": 17,
+            "Name": "Primary Prior Posted Date",
+            "Type": "String",
+            "UniqueName": "[Admin Playbook Measure].[Admin Playbook Measure].[Primary Prior Posted Date]"
+        },
+        {
+            "Attributes": {
+                "Caption": "HFM Current Posted Date"
+            },
+            "Index": 18,
+            "Name": "HFM Current Posted Date",
+            "Type": "String",
+            "UniqueName": "[Admin Playbook Measure].[Admin Playbook Measure].[HFM Current Posted Date]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Added Rate Types"
+            },
+            "Index": 19,
+            "Name": "Added Rate Types",
+            "Type": "String",
+            "UniqueName": "[Admin Playbook Measure].[Admin Playbook Measure].[Added Rate Types]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Updated Rate Types"
+            },
+            "Index": 20,
+            "Name": "Updated Rate Types",
+            "Type": "String",
+            "UniqueName": "[Admin Playbook Measure].[Admin Playbook Measure].[Updated Rate Types]"
+        }
+    ],
+    "Name": "Admin Playbook Measure",
+    "Subsets": [],
+    "UniqueName": "[Admin Playbook Measure].[Admin Playbook Measure]"
+}

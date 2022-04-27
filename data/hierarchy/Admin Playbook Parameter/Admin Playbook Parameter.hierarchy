@@ -1,0 +1,146 @@
+{
+    "DefaultMember": {
+        "Attributes": {
+            "Caption": "Balance Sheet Sync"
+        },
+        "IsPlaceholder": false,
+        "Name": "Balance Sheet Sync",
+        "Ordinal": 1,
+        "Type": "Regular",
+        "UniqueName": "[Admin Playbook Parameter].[Admin Playbook Parameter].[Balance Sheet Sync]",
+        "Weight": 0
+    },
+    "Edges": [],
+    "ElementAttributes": [],
+    "Elements": [
+        {
+            "Attributes": {
+                "Caption": "Balance Sheet Sync"
+            },
+            "Index": 1,
+            "Name": "Balance Sheet Sync",
+            "Type": "Numeric",
+            "UniqueName": "[Admin Playbook Parameter].[Admin Playbook Parameter].[Balance Sheet Sync]"
+        },
+        {
+            "Attributes": {
+                "Caption": "NP Budget Sync"
+            },
+            "Index": 2,
+            "Name": "NP Budget Sync",
+            "Type": "Numeric",
+            "UniqueName": "[Admin Playbook Parameter].[Admin Playbook Parameter].[NP Budget Sync]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Oracle Primary Load"
+            },
+            "Index": 3,
+            "Name": "Oracle Primary Load",
+            "Type": "Numeric",
+            "UniqueName": "[Admin Playbook Parameter].[Admin Playbook Parameter].[Oracle Primary Load]"
+        },
+        {
+            "Attributes": {
+                "Caption": "OPS Data Sync"
+            },
+            "Index": 4,
+            "Name": "OPS Data Sync",
+            "Type": "Numeric",
+            "UniqueName": "[Admin Playbook Parameter].[Admin Playbook Parameter].[OPS Data Sync]"
+        },
+        {
+            "Attributes": {
+                "Caption": "HC Data Sync"
+            },
+            "Index": 5,
+            "Name": "HC Data Sync",
+            "Type": "Numeric",
+            "UniqueName": "[Admin Playbook Parameter].[Admin Playbook Parameter].[HC Data Sync]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Budget Data Sync"
+            },
+            "Index": 6,
+            "Name": "Budget Data Sync",
+            "Type": "Numeric",
+            "UniqueName": "[Admin Playbook Parameter].[Admin Playbook Parameter].[Budget Data Sync]"
+        },
+        {
+            "Attributes": {
+                "Caption": "LRP Data Sync"
+            },
+            "Index": 7,
+            "Name": "LRP Data Sync",
+            "Type": "Numeric",
+            "UniqueName": "[Admin Playbook Parameter].[Admin Playbook Parameter].[LRP Data Sync]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Pulse Data Sync"
+            },
+            "Index": 8,
+            "Name": "Pulse Data Sync",
+            "Type": "Numeric",
+            "UniqueName": "[Admin Playbook Parameter].[Admin Playbook Parameter].[Pulse Data Sync]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Last Time Run"
+            },
+            "Index": 9,
+            "Name": "Last Time Run",
+            "Type": "String",
+            "UniqueName": "[Admin Playbook Parameter].[Admin Playbook Parameter].[Last Time Run]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Oracle Sync"
+            },
+            "Index": 10,
+            "Name": "Oracle Sync",
+            "Type": "String",
+            "UniqueName": "[Admin Playbook Parameter].[Admin Playbook Parameter].[Oracle Sync]"
+        },
+        {
+            "Attributes": {
+                "Caption": "HC Budget Data Sync"
+            },
+            "Index": 11,
+            "Name": "HC Budget Data Sync",
+            "Type": "Numeric",
+            "UniqueName": "[Admin Playbook Parameter].[Admin Playbook Parameter].[HC Budget Data Sync]"
+        },
+        {
+            "Attributes": {
+                "Caption": "HFM Functional Load"
+            },
+            "Index": 12,
+            "Name": "HFM Functional Load",
+            "Type": "Numeric",
+            "UniqueName": "[Admin Playbook Parameter].[Admin Playbook Parameter].[HFM Functional Load]"
+        },
+        {
+            "Attributes": {
+                "Caption": "HFM Reporting Load"
+            },
+            "Index": 13,
+            "Name": "HFM Reporting Load",
+            "Type": "Numeric",
+            "UniqueName": "[Admin Playbook Parameter].[Admin Playbook Parameter].[HFM Reporting Load]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Exchange Rate Sync"
+            },
+            "Index": 14,
+            "Name": "Exchange Rate Sync",
+            "Type": "Numeric",
+            "UniqueName": "[Admin Playbook Parameter].[Admin Playbook Parameter].[Exchange Rate Sync]"
+        }
+    ],
+    "Name": "Admin Playbook Parameter",
+    "Subsets": [],
+    "UniqueName": "[Admin Playbook Parameter].[Admin Playbook Parameter]"
+}

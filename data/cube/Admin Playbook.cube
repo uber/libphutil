@@ -1,0 +1,11 @@
+{
+    "Dimensions": [
+        {
+            "Name": "Admin Playbook Parameter"
+        },
+        {
+            "Name": "Admin Playbook Measure"
+        }
+    ],
+    "Name": "Admin Playbook"
+}
