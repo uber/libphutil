@@ -1,0 +1,544 @@
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: PROPERTIES                                                           #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+{
+    "DataSource": {
+        "Type": "ODBC",
+        "dataSourceNameForClient": "TM1TEGRATOR",
+        "dataSourceNameForServer": "TM1TEGRATOR",
+        "query": "select * from \"pipe.rides_ops_tm1_monthly_operational.20200603063746.7FDSJN\"",
+        "userName": "epm",
+        "usesUnicode": true
+    },
+    "HasSecurityAccess": false,
+    "Name": "Ops.Load.Completed.Trips.Adj.Upload.UI",
+    "Parameters": [
+        {
+            "Name": "pTable",
+            "Prompt": "",
+            "Type": "String",
+            "Value": "pipe.ops_tm1_monthly_financials.20200219215020.EIX8JN"
+        },
+        {
+            "Name": "pLevel",
+            "Prompt": "",
+            "Type": "String",
+            "Value": "Month"
+        },
+        {
+            "Name": "pUser",
+            "Prompt": "",
+            "Type": "String",
+            "Value": ""
+        },
+        {
+            "Name": "pPWord",
+            "Prompt": "",
+            "Type": "String",
+            "Value": "corpfin"
+        },
+        {
+            "Name": "pForceLoad",
+            "Prompt": "",
+            "Type": "String",
+            "Value": ""
+        }
+    ],
+    "UIData": "CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
+    "Variables": [
+        {
+            "EndByte": 0,
+            "Name": "vLocation",
+            "Position": 1,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vLob",
+            "Position": 2,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vMetric",
+            "Position": 3,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vPeriod",
+            "Position": 4,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vValue",
+            "Position": 5,
+            "StartByte": 0,
+            "Type": "Numeric"
+        }
+    ],
+    "VariablesUIData": [
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=33\fColType=827\f"
+    ]
+}
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: PROPERTIES                                                             #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: PROLOG PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+# ================= TAPTOOLS: START GENERATED CODE =================== #
+sProcessName = GETPROCESSNAME();
+IF(sProcessName @<> 'TAP.Call.Queue.Add Job To Queue' & sProcessName @<> 'TAP.CubeSaveData' & sProcessName @<> 'TAP.Call.Save' & sProcessName @<> 'TAP.Call.Save.Wrapper' & sProcessName @<> 'TAP.Call.CubeSaveData.Wrapper' & sProcessName @<> 'TAP.Call.Tests' & sProcessName @<> 'TAP.Call.Init' & sProcessName @<> 'TAP.Call.Export Application Stats' & sProcessName @<> 'TAP.Cube.Export Data to File' & SCAN('}drill', LOWER(sProcessName)) = 0);
+   sBlock.Execution.Status = CELLGETS('TAP System Info', 'Block Process Execution', 'Value');
+   IF(UPPER(sBlock.Execution.Status) @= 'YES');
+      sBlock.Epilog.Execution = 'Yes';
+      PROCESSBREAK;
+   ENDIF;
+ENDIF;
+LOGOUTPUT('DEBUG', 'PARAMETER: pTable: "' | pTable | '"');
+LOGOUTPUT('DEBUG', 'PARAMETER: pLevel: "' | pLevel | '"');
+LOGOUTPUT('DEBUG', 'PARAMETER: pUser: "' | pUser | '"');
+LOGOUTPUT('DEBUG', 'PARAMETER: pPWord: "' | pPWord | '"');
+LOGOUTPUT('DEBUG', 'PARAMETER: pForceLoad: "' | pForceLoad | '"');
+LOGOUTPUT('DEBUG', 'PROGRESS: START PROLOG PROCEDURE');
+nMetadataProcedureRecordsStarted = 0;
+nMetadataProcedureRecordsSkipped = 0;
+nMetadataProcedureRecordsRejected = 0;
+nMetadataProcedureRecordsCompleted = 0;
+nDataProcedureRecordsStarted = 0;
+nDataProcedureRecordsSkipped = 0;
+nDataProcedureRecordsRejected = 0;
+nDataProcedureRecordsCompleted = 0;
+nPrologProcedureDataOperations = 0;
+nDataProcedureDataOperations = 0;
+nTotalDataOperations = 0;
+nPrologProcedureMetadataOperations = 0;
+nMetadataProcedureMetadataOperations = 0;
+nDataProcedureMetadataOperations = 0;
+nEpilogProcedureMetadataOperations = 0;
+nTotalProcedureMetadataOperations = 0;
+nPrologProcedureStartTime = NOW();
+nPrologProcedureEndTime = 0;
+nMetadataProcedureStartTime = 0;
+nMetadataProcedureEndTime = 0;
+nDataProcedureStartTime = 0;
+nDataProcedureEndTime = 0;
+# ================= TAPTOOLS: END GENERATED CODE ===================== #
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+# Process to load data in Mobility/Delivery cubes using upload UI
+
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+# Define Constants
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+
+cDepartment = '0000';
+cVersion = 'Actual';
+cMeasure = 'Amount';
+cSource = 'Ops Adjustment';
+sSkippedRecord = '';
+nRecord = 0;
+cPeriodMetricLOBString = '';
+cInstance = CELLGETS('TAP System Info', 'Instance Name', 'Value');
+cMonthEndPeriod = CELLGETS('Admin Play Book', 'Oracle Sync', 'Current Actual Month');
+cMonthEndStatus = CELLGETS('Admin Play Book', 'Oracle Sync', 'Status');
+
+
+sPassword = 'corpfin';
+IF(pPWord @<> sPassword);
+   PROCESSQUIT;
+ENDIF;
+
+nStart = 1;
+nCurPos = 1;
+
+cUser = CELLGETS('System Info', 'SQL User Name GL Transactions', 'String');
+cPassword = CELLGETS('System Info', 'SQL Password GL Transactions', 'String');
+
+#Turning Logging on
+
+cDLogging = CELLGETS('}CubeProperties', 'Delivery', 'Logging');
+cMLogging = CELLGETS('}CubeProperties', 'Mobility', 'Logging');
+cOLogging = CELLGETS('}CubeProperties', 'Ops', 'Logging');
+
+# ================= TAPTOOLS: START GENERATED CODE =================== #
+nPrologProcedureDataOperations = nPrologProcedureDataOperations + 1;
+# ================= TAPTOOLS: END GENERATED CODE ===================== #
+CELLPUTS('YES', '}CubeProperties', 'Delivery', 'Logging');
+# ================= TAPTOOLS: START GENERATED CODE =================== #
+nPrologProcedureDataOperations = nPrologProcedureDataOperations + 1;
+# ================= TAPTOOLS: END GENERATED CODE ===================== #
+CELLPUTS('YES', '}CubeProperties', 'Mobility', 'Logging');
+# ================= TAPTOOLS: START GENERATED CODE =================== #
+nPrologProcedureDataOperations = nPrologProcedureDataOperations + 1;
+# ================= TAPTOOLS: END GENERATED CODE ===================== #
+CELLPUTS('YES', '}CubeProperties', 'Ops', 'Logging');
+
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+# Set Query
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+
+DatasourceUsername = cUser;
+DatasourcePassword = cPassword;
+sQuery = EXPAND('SELECT * FROM "%pTable%"');
+DatasourceQuery = sQuery;
+
+
+
+
+# ================= TAPTOOLS: START GENERATED CODE =================== #
+nPrologProcedureEndTime = NOW();
+LOGOUTPUT('DEBUG', 'DATASOURCE: DatasourceType: "' | DatasourceType | '"');
+LOGOUTPUT('DEBUG', 'DATASOURCE: DatasourceNameForServer: "' | DatasourceNameForServer | '"');
+LOGOUTPUT('DEBUG', 'DATASOURCE: DatasourceCubeView: "' | DatasourceCubeView | '"');
+LOGOUTPUT('DEBUG', 'DATASOURCE: DatasourceDimensionSubset: "' | DatasourceDimensionSubset | '"');
+LOGOUTPUT('DEBUG', 'PROGRESS: END PROLOG PROCEDURE');
+# ================= TAPTOOLS: END GENERATED CODE ===================== #
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: PROLOG PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: METADATA PROCEDURE                                                   #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: METADATA PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: DATA PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+# ================= TAPTOOLS: START GENERATED CODE =================== #
+nDataProcedureRecordsStarted = nDataProcedureRecordsStarted + 1;
+IF(nMetadataProcedureEndTime = 0);
+   LOGOUTPUT('DEBUG', 'PROGRESS: END METADATA PROCEDURE');
+   nMetadataProcedureEndTime = NOW();
+ENDIF;
+IF(nDataProcedureStartTime = 0);
+   LOGOUTPUT('DEBUG', 'PROGRESS: START DATA PROCEDURE');
+   nDataProcedureStartTime = NOW();
+ENDIF;
+# ================= TAPTOOLS: END GENERATED CODE ===================== #
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+nRecord = nRecord + 1;
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+# Transformation
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+
+# Month
+
+IF(pLevel @= 'Month');
+   sPeriod = SUBST(vPeriod, 1, 7);
+ENDIF;
+
+IF(pForceLoad @<> 'epm');
+   IF(sPeriod @= cMonthEndPeriod & cMonthEndStatus @= 'Close');
+      sSkippedRecord = sSkippedRecord | 'Current Month is closed for Adjustments. Check at Line - ' | NUMBERTOSTRING(nRecord) | ', ';
+      ITEMSKIP;
+   ENDIF;
+
+   IF(cMonthEndStatus @= 'Close');
+      sSkippedRecord = sSkippedRecord | 'Adjustments are closed. Check at Line - ' | NUMBERTOSTRING(nRecord) | ',  ';
+      ITEMSKIP;
+   ENDIF;
+
+   IF(sPeriod @<> cMonthEndPeriod);
+      sSkippedRecord = sSkippedRecord | 'Can post for only current actual month. Check at Line - ' | NUMBERTOSTRING(nRecord) | ', ';
+      ITEMSKIP;
+   ENDIF;
+ENDIF;
+
+# Location
+
+IF(ELLEV('Location', vLocation) <> 0);
+   sLocation = vLocation;
+ELSE;
+   sLocation = 'v' | vLocation;
+ENDIF;
+
+IF(DIMIX('Location', sLocation) = 0);
+   sSkippedRecord = sSkippedRecord | 'Invalid Location at Line - ' | NUMBERTOSTRING(nRecord) | ', ';
+   ITEMSKIP;
+ENDIF;
+
+#LoB
+sLOB = vLOB;
+
+IF(ELISANC('Line of Business', 'Delivery', sLOB) = 1);
+   cCube = 'Delivery';
+ELSEIF(ELISANC('Line of Business', 'Mobility', sLOB) = 1);
+   cCube = 'Mobility';
+ELSEIF(ELISANC('Line of Business', 'Freight', sLOB) = 1);
+   cCube = 'Ops';
+ELSE;
+   sSkippedRecord = sSkippedRecord | 'Invalid LoB at Line - ' | NUMBERTOSTRING(nRecord) | ', ';
+   ITEMSKIP;
+ENDIF;
+
+# Metric
+sMetric = TRIM(vMetric);
+
+IF(sMetric @<> 'Completed Trips');
+   sSkippedRecord = sSkippedRecord | 'Invalid Metric at Line - ' | NUMBERTOSTRING(nRecord) | ', ';
+   ITEMSKIP;
+ENDIF;
+
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+# Clear Target View
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+#Scanning the Input to find Period , LOB and metric combination to be zeroed out
+
+IF(SCAN(sPeriod | '_' | sMetric | '_' | sLOB, cPeriodMetricLOBString) = 0);
+   IF(LONG(cPeriodMetricLOBString) = 0);
+      cPeriodMetricLOBString = sPeriod | '_' | sMetric | '_' | sLOB;
+   ELSE;
+      cPeriodMetricLOBString = cPeriodMetricLOBString | '|' | sPeriod | '_' | sMetric | '_' | sLOB;
+   ENDIF;
+
+   sLoopString = TRIM(cPeriodMetricLOBString);
+   sLoopString = sLoopString | IF(SUBST(sLoopString, LONG(sLoopString), 1) @<> '|', '|', '');
+
+   WHILE(nCurPos <= LONG(sLoopString));
+      sCurChar = SUBST(sLoopString, nCurPos, 1);
+      IF(sCurChar @= '|');
+         sPeriodMetricLOBElement = SUBST(sLoopString, nStart, nCurPos - nStart);
+         nSplit_1 = SCAN('_', sPeriodMetricLOBElement);
+         sPeriodElement = SUBST(sPeriodMetricLOBElement, 1, (nSplit_1 - 1));
+         sMetricLOBElement = SUBST(sPeriodMetricLOBElement, (nSplit_1 + 1), LONG(sPeriodMetricLOBElement) - nSplit_1);
+         nSplit_2 = SCAN('_', sMetricLOBElement);
+         sMetricElement = SUBST(sMetricLOBElement, 1, (nSplit_2 - 1));
+         sLOBElement = SUBST(sMetricLOBElement, (nSplit_2 + 1), LONG(sMetricLOBElement) - nSplit_2);
+
+         cRandomIntA = NUMBERTOSTRING(INT(RAND() * 100000));
+         cViewName = '}zTemp.' | GETPROCESSNAME() | '.' | cRandomIntA;
+         cSubsetName = '}zTemp.' | GETPROCESSNAME() | '.' | cRandomIntA;
+
+         VIEWCREATE(cCube, cViewName, 1);
+         nCtr = 1;
+         nMax = CUBEDIMENSIONCOUNTGET(cCube);
+         WHILE(nCtr <= nMax);
+            sDim = TABDIM(cCube, nCtr);
+            IF(sDim @= 'Version');
+               sElement = 'Actual';
+               SUBSETCREATE(sDim, cSubsetName, 1);
+               SUBSETELEMENTINSERT(sDim, cSubsetName, sElement, 1);
+               VIEWSUBSETASSIGN(cCube, cViewName, sDim, cSubsetName);
+            ELSEIF(sDim @= 'Period');
+               sElement = sPeriodElement;
+               SUBSETCREATE(sDim, cSubsetName, 1);
+               SUBSETELEMENTINSERT(sDim, cSubsetName, sElement, 1);
+               VIEWSUBSETASSIGN(cCube, cViewName, sDim, cSubsetName);
+            ELSEIF(sDim @= 'Source');
+               sElement = cSource;
+               SUBSETCREATE(sDim, cSubsetName, 1);
+               SUBSETELEMENTINSERT(sDim, cSubsetName, sElement, 1);
+               VIEWSUBSETASSIGN(cCube, cViewName, sDim, cSubsetName);
+            ELSEIF(sDim @= 'Line of Business');
+               sElement = sLOBElement;
+               SUBSETCREATE(sDim, cSubsetName, 1);
+               SUBSETELEMENTINSERT(sDim, cSubsetName, sElement, 1);
+               VIEWSUBSETASSIGN(cCube, cViewName, sDim, cSubsetName);
+            ELSEIF(sDim @= 'Delivery Ops Metrics');
+               sElement = sMetricElement;
+               SUBSETCREATE(sDim, cSubsetName, 1);
+               SUBSETELEMENTINSERT(sDim, cSubsetName, sElement, 1);
+               VIEWSUBSETASSIGN(cCube, cViewName, sDim, cSubsetName);
+            ELSEIF(sDim @= 'Mobility Ops Metrics');
+               sElement = sMetricElement;
+               SUBSETCREATE(sDim, cSubsetName, 1);
+               SUBSETELEMENTINSERT(sDim, cSubsetName, sElement, 1);
+               VIEWSUBSETASSIGN(cCube, cViewName, sDim, cSubsetName);
+            ELSEIF(sDim @= 'Ops Metrics');
+               sElement = sMetricElement;
+               SUBSETCREATE(sDim, cSubsetName, 1);
+               SUBSETELEMENTINSERT(sDim, cSubsetName, sElement, 1);
+               VIEWSUBSETASSIGN(cCube, cViewName, sDim, cSubsetName);
+            ELSE;
+               sMDX = '{TM1SORT( {TM1FILTERBYLEVEL({TM1SUBSETALL([ ' | sDim | '] )}, 0)}, ASC)}';
+               SUBSETCREATEBYMDX(cSubsetName, sMdx, 1);
+               VIEWSUBSETASSIGN(cCube, cViewName, sDim, cSubsetName);
+            ENDIF;
+            nCtr = nCtr + 1;
+         END;
+         VIEWZEROOUT(cCube, cViewName);
+         nStart = nCurPos + 1;
+      ENDIF;
+      nCurPos = nCurPos + 1;
+   END;
+ENDIF;
+
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+# Load Data
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+
+sDim = 'Rate Type';
+p = 1;
+sSubset = 'All Rate Types';
+count = SUBSETGETSIZE(sDim, sSubset);
+WHILE(p <= count);
+   sRateType = SUBSETGETELEMENTNAME(sDim, sSubset, p);
+   IF(ELLEV(sDim, sRateType) = 0);
+      IF(cCube @= 'Delivery');
+         # ================= TAPTOOLS: START GENERATED CODE =================== #
+         nDataProcedureDataOperations = nDataProcedureDataOperations + 1;
+         # ================= TAPTOOLS: END GENERATED CODE ===================== #
+         CELLINCREMENTN(vValue, cCube, cVersion, sPeriod, cSource, sRatetype, sLOB, cDepartment, sLocation, 'Unspecified Fulfillment type', 'Unspecified Merchant Type', 'Unspecified Order Category', ' Unspecified Merchant Segment', 'Unspecified Delivery Features', vMetric, cMeasure);
+      ELSEIF(cCube @= 'Mobility');
+         # ================= TAPTOOLS: START GENERATED CODE =================== #
+         nDataProcedureDataOperations = nDataProcedureDataOperations + 1;
+         # ================= TAPTOOLS: END GENERATED CODE ===================== #
+         CELLINCREMENTN(vValue, cCube, cVersion, sPeriod, cSource, sRatetype, sLOB, cDepartment, sLocation, 'Unspecified Product Type', 'Unspecified Mobility Features', vMetric, cMeasure);
+      ELSEIF(cCube @= 'Ops');
+         # ================= TAPTOOLS: START GENERATED CODE =================== #
+         nDataProcedureDataOperations = nDataProcedureDataOperations + 1;
+         # ================= TAPTOOLS: END GENERATED CODE ===================== #
+         CELLINCREMENTN(vValue, cCube, cVersion, sPeriod, cSource, sRatetype, sLocation, sLOB, 'Unspecified Product Type', vMetric, cMeasure);
+      ENDIF;
+   ENDIF;
+   #sSkippedRecord='load loop';
+   p = p + 1;
+END;
+
+
+# ================= TAPTOOLS: START GENERATED CODE =================== #
+nDataProcedureRecordsCompleted = nDataProcedureRecordsCompleted + 1;
+# ================= TAPTOOLS: END GENERATED CODE ===================== #
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: DATA PROCEDURE                                                         #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: EPILOG PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+# ================= TAPTOOLS: START GENERATED CODE =================== #
+IF(sBlock.Epilog.Execution @= 'Yes');
+   LOGOUTPUT('INFO', 'Block Process Execution Flag is Yes in TAP System Info Cube. Skipping this process...');
+   PROCESSBREAK;
+ENDIF;
+IF(nPrologProcedureEndTime = 0);
+   LOGOUTPUT('DEBUG', 'DATASOURCE: DatasourceType: "NULL"');
+   LOGOUTPUT('DEBUG', 'PROGRESS: END PROLOG PROCEDURE');
+   nPrologProcedureEndTime = NOW();
+ENDIF;
+IF(nMetadataProcedureStartTime > 0 & nMetadataProcedureEndTime = 0);
+   LOGOUTPUT('DEBUG', 'PROGRESS: END METADATA PROCEDURE');
+   nMetadataProcedureEndTime = NOW();
+ENDIF;
+IF(nDataProcedureStartTime > 0 & nDataProcedureEndTime = 0);
+   LOGOUTPUT('DEBUG', 'PROGRESS: END DATA PROCEDURE');
+   nDataProcedureEndTime = NOW();
+ENDIF;
+LOGOUTPUT('DEBUG', 'PROGRESS: START EPILOG PROCEDURE');
+nEpilogProcedureStartTime = NOW();
+# ================= TAPTOOLS: END GENERATED CODE ===================== #
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+IF(sSkippedRecord @= '' & nRecord > 0);
+   sHTML = '<body>Adjustments loaded successfully</body>';
+   LOGOUTPUT('Info', 'Adjustments loaded successfully by : ' | pUser | ' - ' | pTable);
+
+ELSE;
+   sHTML = '<body>Errors while loading adjustments : ' | sSkippedRecord | '</body>';
+   LOGOUTPUT('Info', 'Errors while loading adjustments by : ' | pUser | ' - ' | pTable);
+   LOGOUTPUT('Info', 'Skipped Records - ' | sSkippedRecord);
+ENDIF;
+
+IF(SCAN('.com', pUser) <> 0);
+
+   EXECUTEPROCESS('System.Send Email'
+      , 'pFrom', 'Ops@uber.com'
+      , 'pTo', pUser
+      , 'pSubject', cInstance | ' :  Adjustment Load Status'
+      , 'phtmlContent', sHTML
+   );
+
+ENDIF;
+
+IF(pForceLoad @= 'epm' % cMonthEndStatus @= 'Open');
+
+   sProcess = 'Ops.Load.Completed.Trips.From.Delivery';
+   RUNPROCESS(sProcess
+      , 'pVersion', 'Actual'
+      , 'pPeriod', cMonthEndPeriod
+   );
+
+   sProcess = 'Ops.Load.Completed.Trips.From.Mobility';
+   RUNPROCESS(sProcess
+      , 'pVersion', 'Actual'
+      , 'pPeriod', cMonthEndPeriod
+   );
+
+   RUNPROCESS('Ops.DIQ.GL Reporting.Sync'
+      , 'pInstance', 'PAC'
+      , 'pProcess', 'DIQ.Call.Batch'
+      , 'pParams', '[{"Name":"pDIQBatch","Value":"Batch - 1109"}]'
+   );
+
+ENDIF;
+
+#Reinstating original logging status
+
+CELLPUTS(cDLogging, '}CubeProperties', 'Delivery', 'Logging');
+CELLPUTS(cMLogging, '}CubeProperties', 'Mobility', 'Logging');
+CELLPUTS(cOLogging, '}CubeProperties', 'Ops', 'Logging');
+# ================= TAPTOOLS: START GENERATED CODE =================== #
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: PrologProcedureRuntime: "' | NUMBERTOSTRING(ROUNDP((nPrologProcedureEndTime - nPrologProcedureStartTime) * 86400, 2)) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: PrologProcedureMetadataOperations: "' | NUMBERTOSTRING(nPrologProcedureMetadataOperations) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: PrologProcedureDataOperations: "' | NUMBERTOSTRING(nPrologProcedureDataOperations) | '"');
+
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: MetadataProcedureRuntime: "' | NUMBERTOSTRING(ROUNDP((nMetadataProcedureEndTime - nMetadataProcedureStartTime) * 86400, 2)) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: MetadataProcedureMetadataOperations: "' | NUMBERTOSTRING(nMetadataProcedureMetadataOperations) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: MetadataProcedureRecordsStarted: "' | NUMBERTOSTRING(nMetadataProcedureRecordsStarted) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: MetadataProcedureRecordsSkipped: "' | NUMBERTOSTRING(nMetadataProcedureRecordsSkipped) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: MetadataProcedureRecordsRejected: "' | NUMBERTOSTRING(nMetadataProcedureRecordsRejected) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: MetadataProcedureRecordsCompleted: "' | NUMBERTOSTRING(nMetadataProcedureRecordsCompleted) | '"');
+
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: DataProcedureRuntime: "' | NUMBERTOSTRING(ROUNDP((nDataProcedureEndTime - nDataProcedureStartTime) * 86400, 2)) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: DataProcedureMetadataOperations: "' | NUMBERTOSTRING(nDataProcedureMetadataOperations) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: DataProcedureDataOperations: "' | NUMBERTOSTRING(nDataProcedureDataOperations) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: DataProcedureRecordsStarted: "' | NUMBERTOSTRING(nDataProcedureRecordsStarted) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: DataProcedureRecordsSkipped: "' | NUMBERTOSTRING(nDataProcedureRecordsSkipped) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: DataProcedureRecordsRejected: "' | NUMBERTOSTRING(nDataProcedureRecordsRejected) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: DataProcedureRecordsCompleted: "' | NUMBERTOSTRING(nDataProcedureRecordsCompleted) | '"');
+
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: EpilogProcedureRuntime: "' | NUMBERTOSTRING(ROUNDP((NOW() - nEpilogProcedureStartTime) * 86400, 2)) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: EpilogProcedureMetadataOperations: "' | NUMBERTOSTRING(nEpilogProcedureMetadataOperations) | '"');
+
+nTotalDataOperations = nPrologProcedureDataOperations + nDataProcedureDataOperations;
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: TotalDataOperations: "' | NUMBERTOSTRING(nTotalDataOperations) | '"');
+nTotalMetadataOperations = nPrologProcedureMetadataOperations + nMetadataProcedureMetadataOperations + nDataProcedureMetadataOperations + nEpilogProcedureMetadataOperations;
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: TotalMetadataOperations: "' | NUMBERTOSTRING(nTotalMetadataOperations) | '"');
+LOGOUTPUT('DEBUG', 'PROGRESS: END EPILOG PROCEDURE');
+# ================= TAPTOOLS: END GENERATED CODE ===================== #
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: EPILOG PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #

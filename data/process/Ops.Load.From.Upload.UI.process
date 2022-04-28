@@ -166,11 +166,6 @@ DatasourceQuery = sQuery;
 #****Begin: Generated Statements***
 #****End: Generated Statements****
 
-IF(pLevel @= 'Month');
-   IF(vMetric @= 'Completed Trips' % vMetric @= 'Rider Miles');
-      nGLOPS = 1;
-   ENDIF;
-ENDIF;
 
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
@@ -185,6 +180,9 @@ ENDIF;
 #****End: Generated Statements****
 
 
+IF(vMetric @= 'Completed Trips');
+   ITEMSKIP;
+ENDIF;
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
 # Transformation
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
@@ -354,13 +352,6 @@ END;
 #****Begin: Generated Statements***
 #****End: Generated Statements****
 
-IF(nGLOps = 1);
-   EXECUTEPROCESS('Ops.DIQ.GL Reporting.Sync'
-      , 'pInstance', 'PAC'
-      , 'pProcess', 'DIQ.Call.Batch'
-      , 'pParams', '[{"Name":"pDIQBatch","Value":"Batch - 1015"}]'
-   );
-ENDIF;
 
 
 
