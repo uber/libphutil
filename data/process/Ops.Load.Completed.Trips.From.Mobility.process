@@ -188,8 +188,7 @@ cTrgCube = 'Ops';
 cVersion = pVersion;
 cPeriod = SUBST(pStartDate, 1, 7);
 cLOB = cCube;
-cSource = 'FDS Incl. Adj';
-cTrgSource = 'FDS Incl. Adj';
+cSource = 'FDS';
 cOpsMetric = 'Completed Trips';
 
 cRand = NUMBERTOSTRING(ROUND(RAND() * 100000));
@@ -289,9 +288,8 @@ WHILE(cnt <= nSiz);
       VIEWSUBSETASSIGN(sCube, cViewTrg, sDim, cSubsetTrg);
 
    ELSEIF(sDim @= 'Source');
-      sMdx = '{TM1FILTERBYLEVEL({TM1DRILLDOWNMEMBER( {[Source ].[' | cTrgSource | ']} , ALL, RECURSIVE)},0)}';
-      SUBSETCREATEBYMDX(cSubsetTrg, sMdx, 1);
-      SUBSETMDXSET(sDim, cSubsetTrg, '');
+      SUBSETCREATE(sDim, cSubsetTrg, 1);
+      SUBSETELEMENTINSERT(sDim, cSubsetTrg, cSource, 1);
       VIEWSUBSETASSIGN(sCube, cViewTrg, sDim, cSubsetTrg);
 
    ELSE;
@@ -393,9 +391,8 @@ WHILE(cnt <= nSiz);
       VIEWSUBSETASSIGN(sCube, cViewSrc, sDim, cSubsetSrc);
 
    ELSEIF(sDim @= 'Source');
-      sMdx = '{TM1FILTERBYLEVEL({TM1DRILLDOWNMEMBER( {[Source].[' | cSource | ']} , ALL, RECURSIVE)},0)}';
-      SUBSETCREATEBYMDX(cSubsetSrc, sMdx, 1);
-      SUBSETMDXSET(sDim, cSubsetSrc, '');
+      SUBSETCREATE(sDim, cSubsetSrc, 1);
+      SUBSETELEMENTINSERT(sDim, cSubsetSrc, cSource, 1);
       VIEWSUBSETASSIGN(sCube, cViewSrc, sDim, cSubsetSrc);
 
    ELSE;
@@ -475,16 +472,10 @@ ENDIF;
 # Populate Ops - Completed Trips 
 # -=-=-=-=-=-=-==-=-==-===-==-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=#
 
-IF(vSource @= 'Ops Adjustment');
-   sProductType = 'Unspecified Product Type';
-ELSE;
-   sProductType = vProductType;
-ENDIF;
-
 # ================= TAPTOOLS: START GENERATED CODE =================== #
 nDataProcedureDataOperations = nDataProcedureDataOperations + 1;
 # ================= TAPTOOLS: END GENERATED CODE ===================== #
-CELLINCREMENTN(vValue, cTrgCube, vVersion, vPeriod, vSource, vRateType, vLocation, vlob, sProductType, vOpsmetric, vMeasure);
+CELLINCREMENTN(vValue, cTrgCube, vVersion, vPeriod, vSource, vRateType, vLocation, vlob, vProductType, vOpsmetric, vMeasure);
 
 
 

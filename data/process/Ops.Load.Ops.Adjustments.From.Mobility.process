@@ -4,12 +4,12 @@
 {
     "DataSource": {
         "Type": "TM1CubeView",
-        "dataSourceNameForClient": "Delivery",
-        "dataSourceNameForServer": "Delivery",
-        "view": "View1"
+        "dataSourceNameForClient": "Mobility",
+        "dataSourceNameForServer": "Mobility",
+        "view": "View2"
     },
     "HasSecurityAccess": false,
-    "Name": "Ops.Load.Completed.Trips.From.Delivery",
+    "Name": "Ops.Load.Ops.Adjustments.From.Mobility",
     "Parameters": [
         {
             "Name": "pVersion",
@@ -18,13 +18,7 @@
             "Value": "Actual"
         },
         {
-            "Name": "pStartDate",
-            "Prompt": "",
-            "Type": "String",
-            "Value": ""
-        },
-        {
-            "Name": "pEndDate",
+            "Name": "pPeriod",
             "Prompt": "",
             "Type": "String",
             "Value": ""
@@ -83,65 +77,41 @@
         },
         {
             "EndByte": 0,
-            "Name": "vDelFulType",
+            "Name": "vProductType",
             "Position": 8,
             "StartByte": 0,
             "Type": "String"
         },
         {
             "EndByte": 0,
-            "Name": "vDelMercType",
+            "Name": "vFeatures",
             "Position": 9,
             "StartByte": 0,
             "Type": "String"
         },
         {
             "EndByte": 0,
-            "Name": "vDelOrdType",
+            "Name": "vOpsmetric",
             "Position": 10,
             "StartByte": 0,
             "Type": "String"
         },
         {
             "EndByte": 0,
-            "Name": "vDelMerSeg",
+            "Name": "vMeasure",
             "Position": 11,
             "StartByte": 0,
             "Type": "String"
         },
         {
             "EndByte": 0,
-            "Name": "vDelFeat",
-            "Position": 12,
-            "StartByte": 0,
-            "Type": "String"
-        },
-        {
-            "EndByte": 0,
-            "Name": "vOpsmetric",
-            "Position": 13,
-            "StartByte": 0,
-            "Type": "String"
-        },
-        {
-            "EndByte": 0,
-            "Name": "vMeasure",
-            "Position": 14,
-            "StartByte": 0,
-            "Type": "String"
-        },
-        {
-            "EndByte": 0,
             "Name": "vValue",
-            "Position": 15,
+            "Position": 12,
             "StartByte": 0,
             "Type": "Numeric"
         }
     ],
     "VariablesUIData": [
-        "VarType=32\fColType=827\f",
-        "VarType=32\fColType=827\f",
-        "VarType=32\fColType=827\f",
         "VarType=32\fColType=827\f",
         "VarType=32\fColType=827\f",
         "VarType=32\fColType=827\f",
@@ -173,8 +143,7 @@ IF(sProcessName @<> 'TAP.Call.Queue.Add Job To Queue' & sProcessName @<> 'TAP.Cu
    ENDIF;
 ENDIF;
 LOGOUTPUT('DEBUG', 'PARAMETER: pVersion: "' | pVersion | '"');
-LOGOUTPUT('DEBUG', 'PARAMETER: pStartDate: "' | pStartDate | '"');
-LOGOUTPUT('DEBUG', 'PARAMETER: pEndDate: "' | pEndDate | '"');
+LOGOUTPUT('DEBUG', 'PARAMETER: pPeriod: "' | pPeriod | '"');
 LOGOUTPUT('DEBUG', 'PROGRESS: START PROLOG PROCEDURE');
 nMetadataProcedureRecordsStarted = 0;
 nMetadataProcedureRecordsSkipped = 0;
@@ -207,27 +176,19 @@ nDataProcedureEndTime = 0;
 # Constants 
 # -=-=-=-=-=-=-==-=-==-===-==-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=#
 
-cCube = 'Delivery';
+cCube = 'Mobility';
 cTrgCube = 'Ops';
 cVersion = pVersion;
-cPeriod = SUBST(pStartDate, 1, 7);
+cPeriod = pPeriod;
 cLOB = cCube;
-cSource = 'FDS';
+cSource = 'Ops Adjustment';
 cOpsMetric = 'Completed Trips';
-cProductType = 'Eats';
+cProductType = 'Unspecified Product Type';
 
 cRand = NUMBERTOSTRING(ROUND(RAND() * 100000));
 cRand = FILL('0', 6 - LONG(cRand)) | cRand;
 cRand = NUMBERTOSTRING(NOW()) | '.' | cRand;
 cRandomIntA = cRand;
-
-# -=-=-=-=-=-=-==-=-==-===-==-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=#
-# Process cancellation 
-# -=-=-=-=-=-=-==-=-==-===-==-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=#
-
-IF(DAYNO(SUBST(cPeriod, 1, 4) | '-' | SUBST(cPeriod, 6, 2) | '-' | '01') < 22705);
-   PROCESSBREAK;
-ENDIF;
 
 # -=-=-=-=-=-=-==-=-==-===-==-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=#
 # Clear Target View 
@@ -249,39 +210,7 @@ WHILE(cnt <= nSiz);
 
    IF(sDim @= 'Period');
       SUBSETCREATE(sDim, cSubsetTrg, 1);
-
-      # Month 
-      sPeriod = SUBST(pStartDate, 1, 7);
-      nLoopCounter = 1;
-      WHILE(ATTRN(sDim, sPeriod, 'Start of Period') <= ATTRN(sDim, SUBST(pEndDate, 1, 7), 'Start of Period'));
-         SUBSETELEMENTINSERT(sDim, cSubsetTrg, sPeriod, 1);
-         sPeriod = ATTRS(sDim, sPeriod, 'Next Period');
-         nLoopCounter = nLoopCounter + 1;
-         IF(sPeriod @= '' % nLoopCounter > 120);
-            LOGOUTPUT('ERROR', 'Period + 1 attribute value is setup incorrectly in Period dimension. Please check');
-            PROCESSQUIT;
-         ENDIF;
-      END;
-
-      # Week 
-      nPeriod = DAYNO(SUBST(pStartDate, 1, 10));
-      nEndPeriod = DAYNO(SUBST(pEndDate, 1, 10));
-
-      WHILE(nPeriod <= nEndPeriod);
-         sDay = DATE(nPeriod, 1);
-         nPar = ELPARN(sDim, sDay);
-         cnt = 1;
-         WHILE(cnt <= nPar);
-            sPar = ELPAR(sDim, sDay, cnt);
-            IF(ELISANC(sDim, 'Total Time - Week Day', sPar) = 1);
-               sWeek = 'WS ' | SUBST(sPar, 4, 10);
-               SUBSETELEMENTINSERT(sDim, cSubsetTrg, sWeek, 1);
-            ENDIF;
-            cnt = cnt + 1;
-         END;
-         nPeriod = DAYNO(SUBST(ATTRS(sDim, sWeek, 'Next Period'), 4, 10));
-      END;
-
+      SUBSETELEMENTINSERT(sDim, cSubsetTrg, cPeriod, 1);
       VIEWSUBSETASSIGN(sCube, cViewTrg, sDim, cSubsetTrg);
 
    ELSEIF(sDim @= 'Ops Measure');
@@ -322,7 +251,6 @@ WHILE(cnt <= nSiz);
       SUBSETMDXSET(sDim, cSubsetTrg, '');
       VIEWSUBSETASSIGN(sCube, cViewTrg, sDim, cSubsetTrg);
 
-
    ENDIF;
 
    cnt = cnt + 1;
@@ -347,39 +275,7 @@ WHILE(cnt <= nSiz);
 
    IF(sDim @= 'Period');
       SUBSETCREATE(sDim, cSubsetSrc, 1);
-
-      # Month 
-      sPeriod = SUBST(pStartDate, 1, 7);
-      nLoopCounter = 1;
-      WHILE(ATTRN(sDim, sPeriod, 'Start of Period') <= ATTRN(sDim, SUBST(pEndDate, 1, 7), 'Start of Period'));
-         SUBSETELEMENTINSERT(sDim, cSubsetSrc, sPeriod, 1);
-         sPeriod = ATTRS(sDim, sPeriod, 'Next Period');
-         nLoopCounter = nLoopCounter + 1;
-         IF(sPeriod @= '' % nLoopCounter > 120);
-            LOGOUTPUT('ERROR', 'Period + 1 attribute value is setup incorrectly in Period dimension. Please check');
-            PROCESSQUIT;
-         ENDIF;
-      END;
-
-      # Week 
-      nPeriod = DAYNO(SUBST(pStartDate, 1, 10));
-      nEndPeriod = DAYNO(SUBST(pEndDate, 1, 10));
-
-      WHILE(nPeriod <= nEndPeriod);
-         sDay = DATE(nPeriod, 1);
-         nPar = ELPARN(sDim, sDay);
-         cnt = 1;
-         WHILE(cnt <= nPar);
-            sPar = ELPAR(sDim, sDay, cnt);
-            IF(ELISANC(sDim, 'Total Time - Week Day', sPar) = 1);
-               sWeek = 'WS ' | SUBST(sPar, 4, 10);
-               SUBSETELEMENTINSERT(sDim, cSubsetSrc, sWeek, 1);
-            ENDIF;
-            cnt = cnt + 1;
-         END;
-         nPeriod = DAYNO(SUBST(ATTRS(sDim, sWeek, 'Next Period'), 4, 10));
-      END;
-
+      SUBSETELEMENTINSERT(sDim, cSubsetSrc, cPeriod, 1);
       VIEWSUBSETASSIGN(sCube, cViewSrc, sDim, cSubsetSrc);
 
    ELSEIF(sDim @= cCube | ' Measure');
@@ -493,7 +389,6 @@ ENDIF;
 #****End: Generated Statements****
 
 
-
 # -=-=-=-=-=-=-==-=-==-===-==-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=#
 # Populate Ops - Completed Trips 
 # -=-=-=-=-=-=-==-=-==-===-==-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=#
@@ -501,7 +396,7 @@ ENDIF;
 # ================= TAPTOOLS: START GENERATED CODE =================== #
 nDataProcedureDataOperations = nDataProcedureDataOperations + 1;
 # ================= TAPTOOLS: END GENERATED CODE ===================== #
-CELLINCREMENTN(vValue, cTrgCube, vVersion, vPeriod, vSource, vRateType, vLocation, vlob, cProductType, vOpsmetric, vMeasure);
+CELLINCREMENTN(vValue, cTrgCube, vVersion, vPeriod, vSource, vRateType, vLocation, vlob, vProductType, vOpsmetric, vMeasure);
 
 
 

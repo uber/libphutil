@@ -484,13 +484,13 @@ ENDIF;
 
 IF(pForceLoad @= 'epm' % cMonthEndStatus @= 'Open');
 
-   sProcess = 'Ops.Load.Completed.Trips.From.Delivery';
+   sProcess = 'Ops.Load.Ops.Adjustments.From.Delivery';
    RUNPROCESS(sProcess
       , 'pVersion', 'Actual'
       , 'pPeriod', cMonthEndPeriod
    );
 
-   sProcess = 'Ops.Load.Completed.Trips.From.Mobility';
+   sProcess = 'Ops.Load.Ops.Adjustments.From.Mobility';
    RUNPROCESS(sProcess
       , 'pVersion', 'Actual'
       , 'pPeriod', cMonthEndPeriod

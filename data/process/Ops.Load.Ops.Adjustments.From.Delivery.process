@@ -9,7 +9,7 @@
         "view": "View1"
     },
     "HasSecurityAccess": false,
-    "Name": "Ops.Load.Completed.Trips.From.Delivery",
+    "Name": "Ops.Load.Ops.Adjustments.From.Delivery",
     "Parameters": [
         {
             "Name": "pVersion",
@@ -18,13 +18,7 @@
             "Value": "Actual"
         },
         {
-            "Name": "pStartDate",
-            "Prompt": "",
-            "Type": "String",
-            "Value": ""
-        },
-        {
-            "Name": "pEndDate",
+            "Name": "pPeriod",
             "Prompt": "",
             "Type": "String",
             "Value": ""
@@ -173,8 +167,7 @@ IF(sProcessName @<> 'TAP.Call.Queue.Add Job To Queue' & sProcessName @<> 'TAP.Cu
    ENDIF;
 ENDIF;
 LOGOUTPUT('DEBUG', 'PARAMETER: pVersion: "' | pVersion | '"');
-LOGOUTPUT('DEBUG', 'PARAMETER: pStartDate: "' | pStartDate | '"');
-LOGOUTPUT('DEBUG', 'PARAMETER: pEndDate: "' | pEndDate | '"');
+LOGOUTPUT('DEBUG', 'PARAMETER: pPeriod: "' | pPeriod | '"');
 LOGOUTPUT('DEBUG', 'PROGRESS: START PROLOG PROCEDURE');
 nMetadataProcedureRecordsStarted = 0;
 nMetadataProcedureRecordsSkipped = 0;
@@ -210,24 +203,16 @@ nDataProcedureEndTime = 0;
 cCube = 'Delivery';
 cTrgCube = 'Ops';
 cVersion = pVersion;
-cPeriod = SUBST(pStartDate, 1, 7);
+cPeriod = pPeriod;
 cLOB = cCube;
-cSource = 'FDS';
+cSource = 'Ops Adjustment';
 cOpsMetric = 'Completed Trips';
-cProductType = 'Eats';
+cProductType = 'Unspecified Product Type';
 
 cRand = NUMBERTOSTRING(ROUND(RAND() * 100000));
 cRand = FILL('0', 6 - LONG(cRand)) | cRand;
 cRand = NUMBERTOSTRING(NOW()) | '.' | cRand;
 cRandomIntA = cRand;
-
-# -=-=-=-=-=-=-==-=-==-===-==-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=#
-# Process cancellation 
-# -=-=-=-=-=-=-==-=-==-===-==-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=#
-
-IF(DAYNO(SUBST(cPeriod, 1, 4) | '-' | SUBST(cPeriod, 6, 2) | '-' | '01') < 22705);
-   PROCESSBREAK;
-ENDIF;
 
 # -=-=-=-=-=-=-==-=-==-===-==-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=#
 # Clear Target View 
@@ -249,39 +234,7 @@ WHILE(cnt <= nSiz);
 
    IF(sDim @= 'Period');
       SUBSETCREATE(sDim, cSubsetTrg, 1);
-
-      # Month 
-      sPeriod = SUBST(pStartDate, 1, 7);
-      nLoopCounter = 1;
-      WHILE(ATTRN(sDim, sPeriod, 'Start of Period') <= ATTRN(sDim, SUBST(pEndDate, 1, 7), 'Start of Period'));
-         SUBSETELEMENTINSERT(sDim, cSubsetTrg, sPeriod, 1);
-         sPeriod = ATTRS(sDim, sPeriod, 'Next Period');
-         nLoopCounter = nLoopCounter + 1;
-         IF(sPeriod @= '' % nLoopCounter > 120);
-            LOGOUTPUT('ERROR', 'Period + 1 attribute value is setup incorrectly in Period dimension. Please check');
-            PROCESSQUIT;
-         ENDIF;
-      END;
-
-      # Week 
-      nPeriod = DAYNO(SUBST(pStartDate, 1, 10));
-      nEndPeriod = DAYNO(SUBST(pEndDate, 1, 10));
-
-      WHILE(nPeriod <= nEndPeriod);
-         sDay = DATE(nPeriod, 1);
-         nPar = ELPARN(sDim, sDay);
-         cnt = 1;
-         WHILE(cnt <= nPar);
-            sPar = ELPAR(sDim, sDay, cnt);
-            IF(ELISANC(sDim, 'Total Time - Week Day', sPar) = 1);
-               sWeek = 'WS ' | SUBST(sPar, 4, 10);
-               SUBSETELEMENTINSERT(sDim, cSubsetTrg, sWeek, 1);
-            ENDIF;
-            cnt = cnt + 1;
-         END;
-         nPeriod = DAYNO(SUBST(ATTRS(sDim, sWeek, 'Next Period'), 4, 10));
-      END;
-
+      SUBSETELEMENTINSERT(sDim, cSubsetTrg, cPeriod, 1);
       VIEWSUBSETASSIGN(sCube, cViewTrg, sDim, cSubsetTrg);
 
    ELSEIF(sDim @= 'Ops Measure');
@@ -347,39 +300,7 @@ WHILE(cnt <= nSiz);
 
    IF(sDim @= 'Period');
       SUBSETCREATE(sDim, cSubsetSrc, 1);
-
-      # Month 
-      sPeriod = SUBST(pStartDate, 1, 7);
-      nLoopCounter = 1;
-      WHILE(ATTRN(sDim, sPeriod, 'Start of Period') <= ATTRN(sDim, SUBST(pEndDate, 1, 7), 'Start of Period'));
-         SUBSETELEMENTINSERT(sDim, cSubsetSrc, sPeriod, 1);
-         sPeriod = ATTRS(sDim, sPeriod, 'Next Period');
-         nLoopCounter = nLoopCounter + 1;
-         IF(sPeriod @= '' % nLoopCounter > 120);
-            LOGOUTPUT('ERROR', 'Period + 1 attribute value is setup incorrectly in Period dimension. Please check');
-            PROCESSQUIT;
-         ENDIF;
-      END;
-
-      # Week 
-      nPeriod = DAYNO(SUBST(pStartDate, 1, 10));
-      nEndPeriod = DAYNO(SUBST(pEndDate, 1, 10));
-
-      WHILE(nPeriod <= nEndPeriod);
-         sDay = DATE(nPeriod, 1);
-         nPar = ELPARN(sDim, sDay);
-         cnt = 1;
-         WHILE(cnt <= nPar);
-            sPar = ELPAR(sDim, sDay, cnt);
-            IF(ELISANC(sDim, 'Total Time - Week Day', sPar) = 1);
-               sWeek = 'WS ' | SUBST(sPar, 4, 10);
-               SUBSETELEMENTINSERT(sDim, cSubsetSrc, sWeek, 1);
-            ENDIF;
-            cnt = cnt + 1;
-         END;
-         nPeriod = DAYNO(SUBST(ATTRS(sDim, sWeek, 'Next Period'), 4, 10));
-      END;
-
+      SUBSETELEMENTINSERT(sDim, cSubsetSrc, cPeriod, 1);
       VIEWSUBSETASSIGN(sCube, cViewSrc, sDim, cSubsetSrc);
 
    ELSEIF(sDim @= cCube | ' Measure');
@@ -497,6 +418,7 @@ ENDIF;
 # -=-=-=-=-=-=-==-=-==-===-==-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=#
 # Populate Ops - Completed Trips 
 # -=-=-=-=-=-=-==-=-==-===-==-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=#
+
 
 # ================= TAPTOOLS: START GENERATED CODE =================== #
 nDataProcedureDataOperations = nDataProcedureDataOperations + 1;
