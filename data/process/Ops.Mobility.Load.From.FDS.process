@@ -410,7 +410,6 @@ EXECUTEPROCESS(sProcess
    , 'pEndDate', pEndDate
    , 'pMetrics', cMetricString
 );
-);
 sProcess = 'Ops.Load.Completed.Trips.From.Mobility';
 
 EXECUTEPROCESS(sProcess

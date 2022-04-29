@@ -352,8 +352,15 @@ END;
 #****Begin: Generated Statements***
 #****End: Generated Statements****
 
+IF(pLevel @= 'Month');
 
+   EXECUTEPROCESS('Ops.DIQ.GL Reporting.Sync'
+      , 'pInstance', 'PAC'
+      , 'pProcess', 'DIQ.Call.Batch'
+      , 'pParams', '[{"Name":"pDIQBatch","Value":"Batch - 1110"}]'
+   );
 
+ENDIF;
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
 # END: EPILOG PROCEDURE                                                       #
