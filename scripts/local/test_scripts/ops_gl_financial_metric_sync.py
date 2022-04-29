@@ -1,52 +1,43 @@
 
 from datetime import datetime
-
 from tm1tests.reconciliation import Reconciliation
 
-source_mdx = (
-"SELECT NON EMPTY "+
-    "{"+
-    "[Ops Metric].[Cash Gross Bookings]" +
-    "} * "+
-    "{[Line of Business].[Total Line of Business]}" +
-"ON ROWS,"+
-    "{[Period].[%s]}"+
-"ON COLUMNS "+
-"FROM "+
-    "[Ops] "+
-"WHERE "+
-    "("+
-    "[Version].[Actual], "+
-    "[Location].[Total Location Incl Discontinued],"+
-    "[Source].[FDP],"+
-    "[Rate Type].[USD],"+
-    "[Product Type].[Total Product Type],"+
-    "[Ops Measure].[Amount]"+
-    ")"
-)
+source_mdx = """SELECT NON EMPTY 
+    {[Ops Metric].[Cash Gross Bookings]}*
+    {[Line of Business].[Total Line of Business]} 
+ON ROWS,
+NON EMPTY
+    {[Period].[%s]}*{TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER( {[Rate Type].[FX Rates]}, ALL, RECURSIVE )}, 0)}
+ON COLUMNS 
+FROM 
+    [Ops] 
+WHERE 
+    (
+    [Version].[Actual], 
+    [Location].[Total Location Incl Discontinued],
+    [Source].[FDP],
+    [Product Type].[Total Product Type],
+    [Ops Measure].[Amount]
+)"""
 
-target_mdx = (
-"SELECT NON EMPTY "+
-    "{"+
-    "[Account].[Cash Gross Bookings]" +
-    "} * "+
-    "{[Line of Business].[Total Line of Business]}"+
-"ON ROWS,"+
-     "{[Month].[%s]} "+
-"ON COLUMNS "+
-"FROM "+
-    "[GL Reporting] "+
-"WHERE "+
-    "("+
-    "[Version].[Actual], "+
-    "[Location].[Total Location Incl Discontinued],"+
-    "[Source].[OPS],"+
-    "[Rate Type].[USD],"+
-    "[Department].[Total Department],"+
-    "[Product Type].[Total Product Type],"+
-    "[GL Reporting Measure].[Amount]"+
-    ")"
-)
+target_mdx = """SELECT NON EMPTY 
+    {[Account].[Cash Gross Bookings]} * 
+    {[Line of Business].[Total Line of Business]}
+ON ROWS,
+NON EMPTY
+     {[Month].[%s]}*{TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER( {[Rate Type].[FX Rates]}, ALL, RECURSIVE )}, 0)} 
+ON COLUMNS 
+FROM 
+    [GL Reporting] 
+WHERE 
+    (
+    [Version].[Actual], 
+    [Location].[Total Location Incl Discontinued],
+    [Source].[OPS],
+    [Department].[Total Department],
+    [Product Type].[Total Product Type],
+    [GL Reporting Measure].[Amount]
+    )"""
 
 class Mytest(Reconciliation):
 
@@ -59,7 +50,7 @@ class Mytest(Reconciliation):
     schedule = '0 9 * * *'
     threshold = ('ge', 1)
     keyword = ['ops']
-    
+
     def prepare(self):
         super().prepare()
         session = self.apps_sessions['analytics']
