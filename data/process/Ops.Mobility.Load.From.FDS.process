@@ -370,10 +370,8 @@ ENDIF;
 
 sDim = 'Rate Type';
 p = 1;
-sSubset = 'All Rate Types';
-count = SUBSETGETSIZE(sDim, sSubset);
-WHILE(p <= count);
-   sRateType = SUBSETGETELEMENTNAME(sDim, sSubset, p);
+WHILE(p <= DIMSIZ(sDim));
+   sRateType = DIMNM(sDim, p);
    IF(ELLEV(sDim, sRateType) = 0);
       CELLPUTN(vValue, cCube, 'Actual', sPeriod, 'FDS', sRateType, vLob, '0000', sLocation, vProduct, vFeature, sMetric, 'Amount');
    ENDIF;

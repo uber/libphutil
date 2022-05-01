@@ -451,10 +451,8 @@ ENDIF;
 
 sDim = 'Rate Type';
 p = 1;
-sSubset = 'All Rate Types';
-count = SUBSETGETSIZE(sDim, sSubset);
-WHILE(p <= count);
-   sRateType = SUBSETGETELEMENTNAME(sDim, sSubset, p);
+WHILE(p <= DIMSIZ(sDim));
+   sRateType = DIMNM(sDim, p);
    IF(ELLEV(sDim, sRateType) = 0);
       # ================= TAPTOOLS: START GENERATED CODE =================== #
       nDataProcedureDataOperations = nDataProcedureDataOperations + 1;
