@@ -219,7 +219,7 @@ WHILE(nCtr <= nMax);
       SUBSETELEMENTINSERT(sDim, cSubset, sElement, 1);
       VIEWSUBSETASSIGN(cCube, cViewName, sDim, cSubset);
    ELSEIF(sDim @= 'Rate Type');
-      sMDX = '{TM1SubsetToSet([Rate Type], ''All Rate Types'')}';
+      sMDX = '{TM1FILTERBYLEVEL( {TM1SUBSETALL( [Rate Type] )}, 0)}';
       SUBSETCREATEBYMDX(cSubset, sMdx, 1);
       VIEWSUBSETASSIGN(cCube, cViewName, sDim, cSubset);
    ELSE;
