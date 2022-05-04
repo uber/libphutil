@@ -10,7 +10,7 @@ SELECT NON EMPTY
     ON ROWS,
     NON EMPTY
     {[Mobility Ops Metrics].[Gross Bookings],[Mobility Ops Metrics].[Pricing, Incentives, and Other Revenue],[Mobility Ops Metrics].[Net Effective Take Rate (NETR)],[Mobility Ops Metrics].[Variable Costs],[Mobility Ops Metrics].[Variable Contribution],
-    [Mobility Ops Metrics].[Operating Expenses],[Mobility Ops Metrics].[Adj EBITDA]}
+    [Mobility Ops Metrics].[Operating Expenses],[Mobility Ops Metrics].[Adj EBITDA],[Mobility Ops Metrics].[Completed Trips],[Mobility Ops Metrics].[Rider Miles]}
     ON COLUMNS
 FROM
     [Mobility]
@@ -35,7 +35,7 @@ SELECT NON EMPTY
     ON ROWS,
     NON EMPTY
     {[Mobility Ops Metrics].[Gross Bookings],[Mobility Ops Metrics].[Pricing, Incentives, and Other Revenue],[Mobility Ops Metrics].[Net Effective Take Rate (NETR)],[Mobility Ops Metrics].[Variable Costs],[Mobility Ops Metrics].[Variable Contribution],
-    [Mobility Ops Metrics].[Operating Expenses],[Mobility Ops Metrics].[Adj EBITDA]}
+    [Mobility Ops Metrics].[Operating Expenses],[Mobility Ops Metrics].[Adj EBITDA],[Mobility Ops Metrics].[Completed Trips],[Mobility Ops Metrics].[Rider Miles]}
     ON COLUMNS
 FROM
     [Mobility]
