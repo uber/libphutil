@@ -199,7 +199,12 @@ cMetricString = '';
 
 cUser = CELLGETS('System Info', 'SQL User Name GL Transactions', 'String');
 cPassword = CELLGETS('System Info', 'SQL Password GL Transactions', 'String');
+cMonthEndPeriod = CELLGETS('Admin Play Book', 'Oracle Sync', 'Current Actual Month');
+cMonthEndStatus = CELLGETS('Admin Play Book', 'Oracle Sync', 'Status');
 
+IF(cMonthEndStatus @= 'Close');
+   pStartDate = SUBST(pEndDate, 1, 7) | '-01';
+ENDIF;
 
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
 # Set Query
