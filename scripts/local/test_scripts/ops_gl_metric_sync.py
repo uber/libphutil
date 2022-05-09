@@ -1,11 +1,11 @@
-from datetime import datetime
 
+from datetime import datetime
 from tm1tests.reconciliation import Reconciliation
 
 source_mdx = (
 "WITH MEMBER [Ops Metric].[Total_Support_Contacts] AS [Ops Metric].[Total Support Contacts]"+
 "SELECT NON EMPTY "+
-    "{[Ops Metric].[Completed Trips], [Ops Metric].[Vehicle Miles]," +
+    "{[Ops Metric].[Vehicle Miles]," +
     "[Ops Metric].[Non-P2P Rider Miles]," +
     "[Ops Metric].[Total_Support_Contacts]," +
     "[Ops Metric].[Cash Trips]"+
@@ -30,7 +30,7 @@ source_mdx = (
 target_mdx = (
 "WITH MEMBER [Account].[Total_Support_Contacts] AS [Account].[Total Support Defects]"+
 "SELECT NON EMPTY "+
-    "{[Account].[Completed Trips], [Account].[Vehicle Miles]," +
+    "{[Account].[Vehicle Miles]," +
     "[Account].[Non-P2P Rider Miles]," +
     "[Account].[Total_Support_Contacts]," +
     "[Account].[Cash Trips]" +
@@ -61,7 +61,7 @@ class Mytest(Reconciliation):
     alert_level = {'email': 'error'}
     source = [['ops', 'mdx', source_mdx]]
     target = [['analytics', 'mdx', target_mdx]]
-    schedule = None
+    schedule = '0 9 * * *'
     threshold = ('ge', 1)
     keyword = ['ops']
     

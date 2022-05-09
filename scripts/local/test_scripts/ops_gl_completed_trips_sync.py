@@ -3,11 +3,9 @@ from datetime import datetime
 from tm1tests.reconciliation import Reconciliation
 
 source_mdx = """SELECT NON EMPTY 
-    {[Ops Metric].[Cash Gross Bookings]}*
-    {[Line of Business].[Total Line of Business]} 
+    {[Ops Metric].[Completed Trips]} 
 ON ROWS,
-NON EMPTY
-    {[Period].[%s]}*{TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER( {[Rate Type].[FX Rates]}, ALL, RECURSIVE )}, 0)}
+    {[Period].[%s]}
 ON COLUMNS 
 FROM 
     [Ops] 
@@ -16,16 +14,16 @@ WHERE
     [Version].[Actual], 
     [Location].[Total Location Incl Discontinued],
     [Source].[FDP],
+    [Rate Type].[USD],
+    [Line of Business].[Total Line of Business],
     [Product Type].[Total Product Type],
     [Ops Measure].[Amount]
-)"""
+    )"""
 
 target_mdx = """SELECT NON EMPTY 
-    {[Account].[Cash Gross Bookings]} * 
-    {[Line of Business].[Total Line of Business]}
+    {[Account].[Completed Trips]}
 ON ROWS,
-NON EMPTY
-     {[Month].[%s]}*{TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER( {[Rate Type].[FX Rates]}, ALL, RECURSIVE )}, 0)} 
+     {[Month].[%s]}
 ON COLUMNS 
 FROM 
     [GL Reporting] 
@@ -34,6 +32,8 @@ WHERE
     [Version].[Actual], 
     [Location].[Total Location Incl Discontinued],
     [Source].[OPS],
+    [Line of Business].[Total Line of Business],
+    [Rate Type].[USD],
     [Department].[Total Department],
     [Product Type].[Total Product Type],
     [GL Reporting Measure].[Amount]
@@ -41,7 +41,7 @@ WHERE
 
 class Mytest(Reconciliation):
 
-    name = 'Ops GL Financial Metric Sync'
+    name = 'Ops - Analytics Completed Trips Recon'
     email_to = []
     email_from = 'pa-eng@uber.com'
     alert_level = {'email': 'error'}
@@ -50,7 +50,7 @@ class Mytest(Reconciliation):
     schedule = None
     threshold = ('ge', 1)
     keyword = ['ops']
-
+    
     def prepare(self):
         super().prepare()
         session = self.apps_sessions['ops']
