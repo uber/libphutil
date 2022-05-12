@@ -142,6 +142,11 @@ nCurPos = 1;
 cUser = CELLGETS('System Info', 'SQL User Name GL Transactions', 'String');
 cPassword = CELLGETS('System Info', 'SQL Password GL Transactions', 'String');
 
+#Turning Logging on
+
+cLogging = CELLGETS('}CubeProperties', 'Ops', 'Logging');
+CELLPUTS('YES', '}CubeProperties', 'Ops', 'Logging');
+
 
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
 # Set Query
@@ -351,6 +356,10 @@ END;
 
 #****Begin: Generated Statements***
 #****End: Generated Statements****
+
+#Reinstating original logging status
+
+CELLPUTS(cLogging, '}CubeProperties', 'Ops', 'Logging');
 
 IF(pLevel @= 'Month');
 
