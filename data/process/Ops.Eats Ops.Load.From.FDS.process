@@ -318,6 +318,10 @@ ENDIF;
 #Scanning the Input to find Period and metric combination to be zeroed out
 sMetric = vMetric;
 
+IF(DIMIX('Eats Ops Metric', sMetric) = 0);
+   ITEMSKIP;
+ENDIF;
+
 IF(pLevel @= 'Month');
    IF(sMetric @= 'Completed Deliveries' % sMetric @= 'Rider Miles');
       nGLOPS = 1;
