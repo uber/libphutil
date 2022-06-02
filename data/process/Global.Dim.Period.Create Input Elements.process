@@ -7,7 +7,38 @@
     },
     "HasSecurityAccess": false,
     "Name": "Global.Dim.Period.Create Input Elements",
-    "Parameters": [],
+    "Parameters": [
+        {
+            "Name": "pTapQueueAdd",
+            "Prompt": "OPT: Queue Enable (Y or N)",
+            "Type": "String",
+            "Value": ""
+        },
+        {
+            "Name": "pTapQueueGroupId",
+            "Prompt": "OPT: Queue Job ID (Unique)",
+            "Type": "String",
+            "Value": ""
+        },
+        {
+            "Name": "pTapQueueJobId",
+            "Prompt": "OPT: Queue Group ID (Shared)",
+            "Type": "String",
+            "Value": ""
+        },
+        {
+            "Name": "pTapQueuePriority",
+            "Prompt": "OPT: Queue Priority -100 to 100 (Priority)",
+            "Type": "String",
+            "Value": ""
+        },
+        {
+            "Name": "pEndYear",
+            "Prompt": "",
+            "Type": "String",
+            "Value": ""
+        }
+    ],
     "UIData": "CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
     "Variables": [],
     "VariablesUIData": []
@@ -31,11 +62,7 @@
 cDim = 'Period';
 
 cYearStart = '2010';
-cWeek2018 = 53;
-cWeek2019 = 52;
-cWeek2020 = 52;
-cWeek2021 = 52;
-cYearEnd = '2021';
+cYearEnd = pEndYear;
 
 cPrefix = '';
 
@@ -54,59 +81,19 @@ WHILE(i <= nEnd);
 END;
 
 # ==================================================================== #
-# Create Week Elements
+# Create Day Elements
 # ==================================================================== #
 
-i = NUMBR(cYearStart);
-sDim = cDim;
-sHier = sDim;
-
-i = NUMBR(cYearStart);
-WHILE(i <= NUMBR(cYearEnd));
-   #Year Input
-   #DIMENSIONELEMENTINSERT(sDim, '', numbertostring(i), 'C');
-   p = 1;
-   WHILE(p <= 12);
-      sEle = cPrefix | NUMBERTOSTRING(i) | '-' | FILL('0', 2 - LONG(NUMBERTOSTRING(p))) | NUMBERTOSTRING(p);
-      # Month Input
-      #DIMENSIONELEMENTINSERT(sDim, '', sEle, 'C');
-      IF(p = 1 & i = 2010);
-         n = 4;
-         d = 31;
-      ELSE;
-         IF(ATTRN('Month', ATTRS('Month', sEle, 'Period-1'), 'Calendar Day') = 31 & ATTRN('Month', sEle, 'Calendar Day') = 31);
-            n = n - 31;
-            d = 31;
-         ELSEIF(ATTRN('Month', ATTRS('Month', sEle, 'Period-1'), 'Calendar Day') = 30 & ATTRN('Month', sEle, 'Calendar Day') = 31);
-            n = n - 30;
-            d = 31;
-         ELSEIF(ATTRN('Month', ATTRS('Month', sEle, 'Period-1'), 'Calendar Day') = 28 & ATTRN('Month', sEle, 'Calendar Day') = 31);
-            n = n - 28;
-            d = 31;
-         ELSEIF(ATTRN('Month', ATTRS('Month', sEle, 'Period-1'), 'Calendar Day') = 31 & ATTRN('Month', sEle, 'Calendar Day') = 28);
-            n = n - 31;
-            d = 28;
-         ELSEIF(ATTRN('Month', ATTRS('Month', sEle, 'Period-1'), 'Calendar Day') = 31 & ATTRN('Month', sEle, 'Calendar Day') = 29);
-            n = n - 31;
-            d = 29;
-         ELSEIF(ATTRN('Month', ATTRS('Month', sEle, 'Period-1'), 'Calendar Day') = 31 & ATTRN('Month', sEle, 'Calendar Day') = 30);
-            n = n - 31;
-            d = 30;
-         ELSE;
-            n = n - 29;
-            d = 31;
-         ENDIF;
-      ENDIF;
-      WHILE(n <= d);
-         sEle1 = 'WS ' | sEle | '-' | FILL('0', 2 - LONG(NUMBERTOSTRING(n))) | NUMBERTOSTRING(n);
-         # Week Input
-         DIMENSIONELEMENTINSERT(sDim, '', sEle1, 'N');
-         n = n + 7;
-      END;
-      p = p + 1;
-   END;
+i = DAYNO(EXPAND('%cYearStart%-01-01'));
+nEnd = DAYNO(EXPAND('%cYearEnd%-12-31'));
+WHILE(i <= nEnd);
+   sEle = cPrefix | TIMST(i, '\Y-\m-\d', 0);
+   IF(DIMIX('cDim',sEle)=0);
+   	DIMENSIONELEMENTINSERT(sDim, '', sEle, 'N');
+   ENDIF;
    i = i + 1;
 END;
+
 
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #

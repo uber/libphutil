@@ -7,7 +7,38 @@
     },
     "HasSecurityAccess": false,
     "Name": "Global.Call.Build Period Dimension",
-    "Parameters": [],
+    "Parameters": [
+        {
+            "Name": "pTapQueueAdd",
+            "Prompt": "OPT: Queue Enable (Y or N)",
+            "Type": "String",
+            "Value": ""
+        },
+        {
+            "Name": "pTapQueueGroupId",
+            "Prompt": "OPT: Queue Job ID (Unique)",
+            "Type": "String",
+            "Value": ""
+        },
+        {
+            "Name": "pTapQueueJobId",
+            "Prompt": "OPT: Queue Group ID (Shared)",
+            "Type": "String",
+            "Value": ""
+        },
+        {
+            "Name": "pTapQueuePriority",
+            "Prompt": "OPT: Queue Priority -100 to 100 (Priority)",
+            "Type": "String",
+            "Value": ""
+        },
+        {
+            "Name": "pEndYear",
+            "Prompt": "",
+            "Type": "String",
+            "Value": "2024"
+        }
+    ],
     "UIData": "CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
     "Variables": [],
     "VariablesUIData": []
@@ -24,13 +55,52 @@
 #****End: Generated Statements****
 
 
+
+############################################################
+# ********* PERIOD DIM AND ITS ATTRIBUTE CREATION********************************
+############################################################
+
 EXECUTEPROCESS('Global.Dim.Period.Create Dimension');
 EXECUTEPROCESS('Global.Dim.Period.Create Attributes');
-EXECUTEPROCESS('Global.Dim.Period.Create Input Elements');
+
+###############################################################
+# ********* MONTH/DAY ELEMENT CREATION & MONTH ATTRIBUTES UPDATE **********
+###############################################################
+
+EXECUTEPROCESS('Global.Dim.Period.Create Input Elements','pEndYear',pEndYear);
 EXECUTEPROCESS('Global.Dim.Period.Update Input Attributes');
+
+#############################################################
+# ********* WEEK ELEMENT CREATION AND ITS ATTRIBUTES UPDATE ****************
+#############################################################
+
+EXECUTEPROCESS('Global.Dim.Period.Create.Week.Input Elements','pEndYear',pEndYear);
+EXECUTEPROCESS('Global.Dim.Period.Update.Week.Input.Attributes');
+
+#########################################################
+# *********** DAY ATTRIBUTES UPDATE AND MONTH HIERARCHY BUILD *******
+#########################################################
+
+EXECUTEPROCESS('Global.Dim.Period.Day.Update Input Attributes');
 EXECUTEPROCESS('Global.Dim.Period.Build Hierarchy');
+
+##########################################################
+# ********* HIERARCHY ATTRIBUTES UPDATE ******************************************* 
+##########################################################
+
+
+EXECUTEPROCESS('Global.Dim.Period.Update.Hierarchy.Attributes');
+
+############################################################
+# *********DAY/WEEK/YTG/QTD/YTDHIERARCHY BUILD *********************************
+############################################################
+
+EXECUTEPROCESS('Global.Dim.Period.Day.Build.Hierarchy');
+EXECUTEPROCESS('Global.Dim.Period.Day.Week.Build Hierarchy');
 EXECUTEPROCESS('Global.Dim.Period.Hier.YTD.Ele.Update');
 EXECUTEPROCESS('Global.Dim.Period.Hier.QTD.Ele.Update');
+EXECUTEPROCESS('Global.Dim.Period.Hier.YTG.Ele.Update');
+
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
 # END: PROLOG PROCEDURE                                                       #

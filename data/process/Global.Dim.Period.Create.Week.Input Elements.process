@@ -6,7 +6,7 @@
         "Type": "None"
     },
     "HasSecurityAccess": false,
-    "Name": "Global.Dim.Period.Create Attributes",
+    "Name": "Global.Dim.Period.Create.Week.Input Elements",
     "Parameters": [
         {
             "Name": "pTapQueueAdd",
@@ -31,6 +31,12 @@
             "Prompt": "OPT: Queue Priority -100 to 100 (Priority)",
             "Type": "String",
             "Value": ""
+        },
+        {
+            "Name": "pEndYear",
+            "Prompt": "",
+            "Type": "String",
+            "Value": ""
         }
     ],
     "UIData": "CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
@@ -48,106 +54,75 @@
 #****Begin: Generated Statements***
 #****End: Generated Statements****
 
+
+# ==================================================================== #
+# Globals
+# ==================================================================== #
+
 cDim = 'Period';
+
+cYearStart = '2010';
+cYearEnd = pEndYear;
+
+cPrefix = '';
+
+# ==================================================================== #
+# Create Week Elements
+# ==================================================================== #
+
+i = NUMBR(cYearStart);
 sDim = cDim;
+sHier = sDim;
 
-i = 10;
-WHILE(i >= -10);
-   sSign = IF(i < 0, '-', '+');
-   IF(i <> 0);
-      sAttr = 'Year' | sSign | NUMBERTOSTRING(ABS(i));
-      ATTRINSERT(sDim, '', sAttr, 'S');
-   ENDIF;
-   i = i - 1;
+i = NUMBR(cYearStart);
+WHILE(i <= NUMBR(cYearEnd));
+   #Year Input
+   #DIMENSIONELEMENTINSERT(sDim, '', numbertostring(i), 'C');
+   p = 1;
+   WHILE(p <= 12);
+      sEle = cPrefix | NUMBERTOSTRING(i) | '-' | FILL('0', 2 - LONG(NUMBERTOSTRING(p))) | NUMBERTOSTRING(p);
+      # Month Input
+      #DIMENSIONELEMENTINSERT(sDim, '', sEle, 'C');
+      IF(p = 1 & i = 2010);
+         n = 4;
+         d = 31;
+      ELSE;
+         IF(ATTRN('Period', ATTRS('Period', sEle, 'Period-1'), 'Calendar Day') = 31 & ATTRN('Period', sEle, 'Calendar Day') = 31);
+            n = n - 31;
+            d = 31;
+         ELSEIF(ATTRN('Period', ATTRS('Period', sEle, 'Period-1'), 'Calendar Day') = 30 & ATTRN('Period', sEle, 'Calendar Day') = 31);
+            n = n - 30;
+            d = 31;
+         ELSEIF(ATTRN('Period', ATTRS('Period', sEle, 'Period-1'), 'Calendar Day') = 28 & ATTRN('Period', sEle, 'Calendar Day') = 31);
+            n = n - 28;
+            d = 31;
+         ELSEIF(ATTRN('Period', ATTRS('Period', sEle, 'Period-1'), 'Calendar Day') = 31 & ATTRN('Period', sEle, 'Calendar Day') = 28);
+            n = n - 31;
+            d = 28;
+         ELSEIF(ATTRN('Period', ATTRS('Period', sEle, 'Period-1'), 'Calendar Day') = 31 & ATTRN('Period', sEle, 'Calendar Day') = 29);
+            n = n - 31;
+            d = 29;
+         ELSEIF(ATTRN('Period', ATTRS('Period', sEle, 'Period-1'), 'Calendar Day') = 31 & ATTRN('Period', sEle, 'Calendar Day') = 30);
+            n = n - 31;
+            d = 30;
+         ELSE;
+            n = n - 29;
+            d = 31;
+         ENDIF;
+      ENDIF;
+      WHILE(n <= d);
+         sEle1 = 'WS ' | sEle | '-' | FILL('0', 2 - LONG(NUMBERTOSTRING(n))) | NUMBERTOSTRING(n);
+         sEle2 = 'WD ' | sEle | '-' | FILL('0', 2 - LONG(NUMBERTOSTRING(n))) | NUMBERTOSTRING(n);
+         # Week Input
+         DIMENSIONELEMENTINSERT(sDim, '', sEle1, 'N');
+         DIMENSIONELEMENTINSERT(sDim, '', sEle2, 'N');
+         n = n + 7;
+      END;
+      p = p + 1;
+   END;
+   i = i + 1;
 END;
 
-i = 1;
-WHILE(i >= -1);
-   sSign = IF(i < 0, '-', '+');
-   IF(i <> 0);
-      sAttr = 'Half' | sSign | NUMBERTOSTRING(ABS(i));
-      ATTRINSERT(sDim, '', sAttr, 'S');
-   ENDIF;
-   i = i - 1;
-END;
-
-i = 4;
-WHILE(i >= -4);
-   sSign = IF(i < 0, '-', '+');
-   IF(i <> 0);
-      sAttr = 'Quarter' | sSign | NUMBERTOSTRING(ABS(i));
-      ATTRINSERT(sDim, '', sAttr, 'S');
-   ENDIF;
-   i = i - 1;
-END;
-
-i = 12;
-WHILE(i >= -12);
-   sSign = IF(i < 0, '-', '+');
-   IF(i <> 0);
-      sAttr = 'Month' | sSign | NUMBERTOSTRING(ABS(i));
-      ATTRINSERT(sDim, '', sAttr, 'S');
-   ENDIF;
-   i = i - 1;
-END;
-
-i = 53;
-WHILE(i >= -53);
-   sSign = IF(i < 0, '-', '+');
-   IF(i <> 0);
-      sAttr = 'Week' | sSign | NUMBERTOSTRING(ABS(i));
-      ATTRINSERT(sDim, '', sAttr, 'S');
-   ENDIF;
-   i = i - 1;
-END;
-
-i = 25;
-WHILE(i >= -25);
-   sSign = IF(i < 0, '-', '+');
-   IF(i <> 0);
-      sAttr = 'Period' | sSign | NUMBERTOSTRING(ABS(i));
-      ATTRINSERT(sDim, '', sAttr, 'S');
-   ENDIF;
-   i = i - 1;
-END;
-
-
-ATTRINSERT(sDim, '', 'Week Element', 'S');
-ATTRINSERT(sDim, '', 'Year Element', 'S');
-ATTRINSERT(sDim, '', 'Half Element', 'S');
-ATTRINSERT(sDim, '', 'Quarter Element', 'S');
-ATTRINSERT(sDim, '', 'Month Element', 'S');
-
-ATTRINSERT(sDim, '', 'Level', 'S');
-
-ATTRINSERT(sDim, '', 'Next Period', 'S');
-ATTRINSERT(sDim, '', 'Prior Period', 'S');
-ATTRINSERT(sDim, '', 'End of Period', 'N');
-ATTRINSERT(sDim, '', 'Start of Period', 'N');
-ATTRINSERT(sDim, '', 'Last Leaf', 'S');
-ATTRINSERT(sDim, '', 'First Leaf', 'S');
-
-ATTRINSERT(sDim, '', 'Calendar Day', 'N');
-ATTRINSERT(sDim, '', 'Business Day', 'N');
-ATTRINSERT(sDim, '', 'Week Day', 'N');
-
-ATTRINSERT(sDim, '', 'Month Name', 'S');
-
-ATTRINSERT(sDim, '', 'AltName', 'A');
-ATTRINSERT(sDim, '', 'InputName', 'A');
-ATTRINSERT(sDim, '', 'Caption', 'S');
-
-ATTRINSERT(sDim, '', 'Week', 'S');
-ATTRINSERT(sDim, '', 'Week Element', 'S');
-ATTRINSERT(sDim, '', 'Week Year', 'S');
-ATTRINSERT(sDim, '', 'Week Year Element', 'S');
-ATTRINSERT(sDim, '', 'Week Day', 'N');
-ATTRINSERT(sDim, '', 'Day Element', 'S');
-ATTRINSERT(sDim, '', 'Input Type', 'S');
-ATTRINSERT(sDim, '', 'Year', 'S');
-ATTRINSERT(sDim, '', 'Half', 'S');
-ATTRINSERT(sDim, '', 'Quarter', 'S');
-ATTRINSERT(sDim, '', 'Month', 'S');
 
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #

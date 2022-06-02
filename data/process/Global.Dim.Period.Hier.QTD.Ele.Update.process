@@ -7,7 +7,32 @@
     },
     "HasSecurityAccess": false,
     "Name": "Global.Dim.Period.Hier.QTD.Ele.Update",
-    "Parameters": [],
+    "Parameters": [
+        {
+            "Name": "pTapQueueAdd",
+            "Prompt": "OPT: Queue Enable (Y or N)",
+            "Type": "String",
+            "Value": ""
+        },
+        {
+            "Name": "pTapQueueGroupId",
+            "Prompt": "OPT: Queue Job ID (Unique)",
+            "Type": "String",
+            "Value": ""
+        },
+        {
+            "Name": "pTapQueueJobId",
+            "Prompt": "OPT: Queue Group ID (Shared)",
+            "Type": "String",
+            "Value": ""
+        },
+        {
+            "Name": "pTapQueuePriority",
+            "Prompt": "OPT: Queue Priority -100 to 100 (Priority)",
+            "Type": "String",
+            "Value": ""
+        }
+    ],
     "UIData": "CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
     "Variables": [],
     "VariablesUIData": []
@@ -37,7 +62,7 @@ cSub = EXPAND('zzTemp.%cRand%');
 # ==================================================================== #
 
 sDim = cDimPeriod;
-sDim1 = 'Month';
+sDim1 = 'Period';
 sSub = cSub | '.Period';
 sMDX = EXPAND('{TM1SORT( EXCEPT( {TM1FILTERBYPATTERN( [%sDim%].[%sDim%].Members, "????-??")},' | 'UNION({TM1FILTERBYPATTERN( [%sDim%].[%sDim%].Members, "????-H?")}, {TM1FILTERBYPATTERN( [%sDim%].[%sDim%].Members' | ', "????-Q?")})), ASC)}');
 SUBSETCREATE(sDim, sSub, 0);
@@ -146,6 +171,8 @@ WHILE(i <= SUBSETGETSIZE(sDim, sSub));
 
    i = i + 1;
 END;
+# ================= TAPTOOLS: START GENERATED CODE =================== #
+# ================= TAPTOOLS: END GENERATED CODE ===================== #
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
 # END: PROLOG PROCEDURE                                                       #

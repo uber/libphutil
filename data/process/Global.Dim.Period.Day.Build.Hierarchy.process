@@ -6,7 +6,7 @@
         "Type": "None"
     },
     "HasSecurityAccess": false,
-    "Name": "Global.Dim.Period.Create Attributes",
+    "Name": "Global.Dim.Period.Day.Build.Hierarchy",
     "Parameters": [
         {
             "Name": "pTapQueueAdd",
@@ -48,107 +48,93 @@
 #****Begin: Generated Statements***
 #****End: Generated Statements****
 
-cDim = 'Period';
-sDim = cDim;
+# ==================================================================== #
+# Globals
+# ==================================================================== #
 
-i = 10;
-WHILE(i >= -10);
-   sSign = IF(i < 0, '-', '+');
-   IF(i <> 0);
-      sAttr = 'Year' | sSign | NUMBERTOSTRING(ABS(i));
-      ATTRINSERT(sDim, '', sAttr, 'S');
-   ENDIF;
-   i = i - 1;
-END;
+cDim = 'Period';
+
+cTopEle = 'Total Time - Day';
+
+cRand = NUMBERTOSTRING(ROUND(RAND() * 100000));
+cRand = FILL('0', 6 - LONG(cRand)) | cRand;
+
+cView = EXPAND('zzTemp.%cRand%');
+cSub = EXPAND('zzTemp.%cRand%');
+
+# ==================================================================== #
+# Create Subsets
+# ==================================================================== #
+
+sDim = cDim;
+sHier = cDim;
+sDimHier =cDim;
+
+sSub = cSub | '.Input';
+sMDX = EXPAND('{FILTER({TM1SORT( {TM1FILTERBYPATTERN( { [%sDim%].[%sDim%].Members }, "????-??-??")}, ASC)}, [%sDim%].[End of Period] >= 43101.000000)}');
+
+SUBSETCREATE(sDimHier, sSub, 1);
+SUBSETMDXSET(sDimHier, sSub, sMDX);
+SUBSETMDXSET(sDimHier, sSub, '');
+
+# ==================================================================== #
+# Create Top Element
+# ==================================================================== #
+
+DIMENSIONELEMENTINSERT(cDim, DIMNM(sHier, 1), cTopEle, 'C');
+
+# ==================================================================== #
+# Create Rollups
+# ==================================================================== #
+
+sSub = cSub | '.Input';
+sHier = cDim;
 
 i = 1;
-WHILE(i >= -1);
-   sSign = IF(i < 0, '-', '+');
-   IF(i <> 0);
-      sAttr = 'Half' | sSign | NUMBERTOSTRING(ABS(i));
-      ATTRINSERT(sDim, '', sAttr, 'S');
-   ENDIF;
-   i = i - 1;
+WHILE(i <= SUBSETGETSIZE(cDim, sSub));
+   sEleLeaf = SUBSETGETELEMENTNAME(sHier, sSub, i);
+
+   # Top/Year Element Relationship
+   sElePar = cTopEle;
+   sEle = ATTRS(sHier, sEleLeaf, 'Year Element');
+   sEle='Day ' | sEle;
+   DIMENSIONELEMENTINSERT(cDim, '', sEle, 'C');
+   DIMENSIONELEMENTCOMPONENTADD(cDim, sElePar, sEle, 1);  
+
+   # Year/Half Element Relationship
+   sElePar = sEle;
+   sEle = ATTRS(sHier, sEleLeaf, 'Half Element');
+   sEle='Day ' | sEle;
+   DIMENSIONELEMENTINSERT(cDim, '', sElePar, 'C');
+   DIMENSIONELEMENTINSERT(cDim, '', sEle, 'C');
+   DIMENSIONELEMENTCOMPONENTADD(cDim, sElePar, sEle, 1);
+
+   # Half/Quarter Element Relationship
+   sElePar = sEle;
+   sEle = ATTRS(sHier, sEleLeaf, 'Quarter Element');
+   sEle='Day ' | sEle;
+   DIMENSIONELEMENTINSERT(cDim, '', sElePar, 'C');
+   DIMENSIONELEMENTINSERT(cDim, '', sEle, 'C');
+   DIMENSIONELEMENTCOMPONENTADD(cDim, sElePar, sEle, 1);
+
+   # Quarter/Month Element Relationship
+   sElePar = sEle;
+   sEle = ATTRS(sHier, sEleLeaf, 'Month Element');
+   sEle='Day ' | sEle;
+   DIMENSIONELEMENTINSERT(cDim, '', sElePar, 'C');
+   DIMENSIONELEMENTINSERT(cDim, '', sEle, 'C');
+   DIMENSIONELEMENTCOMPONENTADD(cDim, sElePar, sEle, 1);
+
+
+   # Month/Day Element Relationship
+    sElePar = sEle;
+    sEle = sEleLeaf;
+    DIMENSIONELEMENTCOMPONENTADD(cDim, sElePar, sEle, 1);
+
+   i = i + 1;
 END;
-
-i = 4;
-WHILE(i >= -4);
-   sSign = IF(i < 0, '-', '+');
-   IF(i <> 0);
-      sAttr = 'Quarter' | sSign | NUMBERTOSTRING(ABS(i));
-      ATTRINSERT(sDim, '', sAttr, 'S');
-   ENDIF;
-   i = i - 1;
-END;
-
-i = 12;
-WHILE(i >= -12);
-   sSign = IF(i < 0, '-', '+');
-   IF(i <> 0);
-      sAttr = 'Month' | sSign | NUMBERTOSTRING(ABS(i));
-      ATTRINSERT(sDim, '', sAttr, 'S');
-   ENDIF;
-   i = i - 1;
-END;
-
-i = 53;
-WHILE(i >= -53);
-   sSign = IF(i < 0, '-', '+');
-   IF(i <> 0);
-      sAttr = 'Week' | sSign | NUMBERTOSTRING(ABS(i));
-      ATTRINSERT(sDim, '', sAttr, 'S');
-   ENDIF;
-   i = i - 1;
-END;
-
-i = 25;
-WHILE(i >= -25);
-   sSign = IF(i < 0, '-', '+');
-   IF(i <> 0);
-      sAttr = 'Period' | sSign | NUMBERTOSTRING(ABS(i));
-      ATTRINSERT(sDim, '', sAttr, 'S');
-   ENDIF;
-   i = i - 1;
-END;
-
-
-ATTRINSERT(sDim, '', 'Week Element', 'S');
-ATTRINSERT(sDim, '', 'Year Element', 'S');
-ATTRINSERT(sDim, '', 'Half Element', 'S');
-ATTRINSERT(sDim, '', 'Quarter Element', 'S');
-ATTRINSERT(sDim, '', 'Month Element', 'S');
-
-ATTRINSERT(sDim, '', 'Level', 'S');
-
-ATTRINSERT(sDim, '', 'Next Period', 'S');
-ATTRINSERT(sDim, '', 'Prior Period', 'S');
-ATTRINSERT(sDim, '', 'End of Period', 'N');
-ATTRINSERT(sDim, '', 'Start of Period', 'N');
-ATTRINSERT(sDim, '', 'Last Leaf', 'S');
-ATTRINSERT(sDim, '', 'First Leaf', 'S');
-
-ATTRINSERT(sDim, '', 'Calendar Day', 'N');
-ATTRINSERT(sDim, '', 'Business Day', 'N');
-ATTRINSERT(sDim, '', 'Week Day', 'N');
-
-ATTRINSERT(sDim, '', 'Month Name', 'S');
-
-ATTRINSERT(sDim, '', 'AltName', 'A');
-ATTRINSERT(sDim, '', 'InputName', 'A');
-ATTRINSERT(sDim, '', 'Caption', 'S');
-
-ATTRINSERT(sDim, '', 'Week', 'S');
-ATTRINSERT(sDim, '', 'Week Element', 'S');
-ATTRINSERT(sDim, '', 'Week Year', 'S');
-ATTRINSERT(sDim, '', 'Week Year Element', 'S');
-ATTRINSERT(sDim, '', 'Week Day', 'N');
-ATTRINSERT(sDim, '', 'Day Element', 'S');
-ATTRINSERT(sDim, '', 'Input Type', 'S');
-ATTRINSERT(sDim, '', 'Year', 'S');
-ATTRINSERT(sDim, '', 'Half', 'S');
-ATTRINSERT(sDim, '', 'Quarter', 'S');
-ATTRINSERT(sDim, '', 'Month', 'S');
-
+# ================= TAPTOOLS: START GENERATED CODE =================== #
+# ================= TAPTOOLS: END GENERATED CODE ===================== #
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
 # END: PROLOG PROCEDURE                                                       #

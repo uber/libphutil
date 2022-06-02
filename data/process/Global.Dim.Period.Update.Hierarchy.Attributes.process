@@ -6,7 +6,7 @@
         "Type": "None"
     },
     "HasSecurityAccess": false,
-    "Name": "Global.Dim.Period.Create Attributes",
+    "Name": "Global.Dim.Period.Update.Hierarchy.Attributes",
     "Parameters": [
         {
             "Name": "pTapQueueAdd",
@@ -48,106 +48,136 @@
 #****Begin: Generated Statements***
 #****End: Generated Statements****
 
-cDim = 'Period';
-sDim = cDim;
+# ==================================================================== #
+# Globals
+# ==================================================================== #
 
-i = 10;
-WHILE(i >= -10);
-   sSign = IF(i < 0, '-', '+');
-   IF(i <> 0);
-      sAttr = 'Year' | sSign | NUMBERTOSTRING(ABS(i));
-      ATTRINSERT(sDim, '', sAttr, 'S');
-   ENDIF;
-   i = i - 1;
-END;
+cDimMonth = 'Period';
+
+cRand = NUMBERTOSTRING(ROUND(RAND() * 100000));
+cRand = FILL('0', 6 - LONG(cRand)) | cRand;
+
+cView = EXPAND('zzTemp.%cRand%');
+cSub = EXPAND('zzTemp.%cRand%');
+
+# ==================================================================== #
+# Create Subsets
+# ==================================================================== #
+
+sDim = cDimMonth;
+sHier = EXPAND('%sDim%');
+
+sSub = cSub | '.Year';
+sMDX = EXPAND('{TM1SORT( {TM1FILTERBYPATTERN( { [%sDim%].[%sDim%].Members }, "????")}, ASC)}');
+SUBSETCREATE(sHier, sSub, 0);
+SUBSETMDXSET(sHier, sSub, sMDX);
+SUBSETMDXSET(sHier, sSub, '');
+
+sSub = cSub | '.Half';
+sMDX = EXPAND('{TM1SORT( {TM1FILTERBYPATTERN( { [%sDim%].[%sDim%].Members }, "????-H?")}, ASC)}');
+SUBSETCREATE(sHier, sSub, 0);
+SUBSETMDXSET(sHier, sSub, sMDX);
+SUBSETMDXSET(sHier, sSub, '');
+
+sSub = cSub | '.Quarter';
+sMDX = EXPAND('{TM1SORT( {TM1FILTERBYPATTERN( { [%sDim%].[%sDim%].Members }, "????-Q?")}, ASC)}');
+SUBSETCREATE(sHier, sSub, 0);
+SUBSETMDXSET(sHier, sSub, sMDX);
+SUBSETMDXSET(sHier, sSub, '');
+
+# ==================================================================== #
+# Update Attribute - Year
+# ==================================================================== #
 
 i = 1;
-WHILE(i >= -1);
-   sSign = IF(i < 0, '-', '+');
-   IF(i <> 0);
-      sAttr = 'Half' | sSign | NUMBERTOSTRING(ABS(i));
-      ATTRINSERT(sDim, '', sAttr, 'S');
-   ENDIF;
-   i = i - 1;
+sDim = cDimMonth;
+sSub = cSub | '.Year';
+sHier = EXPAND('%sDim%');
+
+
+WHILE(i <= SUBSETGETSIZE(sHier, sSub));
+   sEle = SUBSETGETELEMENTNAME(sHier, sSub, i);
+
+   sAttr = 'Input Type';
+   sAttrVal = 'Year';
+   ATTRPUTS(sAttrVal, sHier, sEle, sAttr);
+
+   sAttr = 'Year';
+   sAttrVal = SUBST(sEle, 1, 4);
+   ATTRPUTS(sAttrVal, sHier, sEle, sAttr);
+
+   i = i + 1;
 END;
 
-i = 4;
-WHILE(i >= -4);
-   sSign = IF(i < 0, '-', '+');
-   IF(i <> 0);
-      sAttr = 'Quarter' | sSign | NUMBERTOSTRING(ABS(i));
-      ATTRINSERT(sDim, '', sAttr, 'S');
-   ENDIF;
-   i = i - 1;
+# ==================================================================== #
+# Update Attribute - Half
+# ==================================================================== #
+
+i = 1;
+sDim = cDimMonth;
+sSub = cSub | '.Half';
+sHier = EXPAND('%sDim%');
+
+WHILE(i <= SUBSETGETSIZE(sHier, sSub));
+   sEle = SUBSETGETELEMENTNAME(sHier, sSub, i);
+
+   sAttr = 'Input Type';
+   sAttrVal = 'Half';
+   ATTRPUTS(sAttrVal, sHier, sEle, sAttr);
+
+   sAttr = 'Month Name';
+   sAttrVal = 'H' | SUBST(sEle, 7, 1);
+   ATTRPUTS(sAttrVal, sHier, sEle, sAttr);
+
+   sAttr = 'Year';
+   sAttrVal = SUBST(sEle, 1, 4);
+   ATTRPUTS(sAttrVal, sHier, sEle, sAttr);
+
+   sAttr = 'Half';
+   sAttrVal = 'H' | SUBST(sEle, 7, 1);
+   ATTRPUTS(sAttrVal, sHier, sEle, sAttr);
+
+   i = i + 1;
 END;
 
-i = 12;
-WHILE(i >= -12);
-   sSign = IF(i < 0, '-', '+');
-   IF(i <> 0);
-      sAttr = 'Month' | sSign | NUMBERTOSTRING(ABS(i));
-      ATTRINSERT(sDim, '', sAttr, 'S');
+# ==================================================================== #
+# Update Attribute - Quarter
+# ==================================================================== #
+
+i = 1;
+sDim = cDimMonth;
+sSub = cSub | '.Quarter';
+sHier = EXPAND('%sDim%');
+
+WHILE(i <= SUBSETGETSIZE(sHier, sSub));
+   sEle = SUBSETGETELEMENTNAME(sHier, sSub, i);
+
+   sAttr = 'Input Type';
+   sAttrVal = 'Quarter';
+   ATTRPUTS(sAttrVal, sHier, sEle, sAttr);
+
+   sAttr = 'Month Name';
+   sAttrVal = 'Q' | SUBST(sEle, 7, 1);
+   ATTRPUTS(sAttrVal, sHier, sEle, sAttr);
+
+   sAttr = 'Year';
+   sAttrVal = SUBST(sEle, 1, 4);
+   ATTRPUTS(sAttrVal, sHier, sEle, sAttr);
+
+   sAttr = 'Half';
+   IF(NUMBR(SUBST(sEle, 7, 1)) <= 2);
+      sAttrVal = 'H1';
+   ELSE;
+      sAttrVal = 'H2';
    ENDIF;
-   i = i - 1;
+   ATTRPUTS(sAttrVal, sHier, sEle, sAttr);
+
+   sAttr = 'Quarter';
+   sAttrVal = 'Q' | SUBST(sEle, 7, 1);
+   ATTRPUTS(sAttrVal, sHier, sEle, sAttr);
+
+   i = i + 1;
 END;
-
-i = 53;
-WHILE(i >= -53);
-   sSign = IF(i < 0, '-', '+');
-   IF(i <> 0);
-      sAttr = 'Week' | sSign | NUMBERTOSTRING(ABS(i));
-      ATTRINSERT(sDim, '', sAttr, 'S');
-   ENDIF;
-   i = i - 1;
-END;
-
-i = 25;
-WHILE(i >= -25);
-   sSign = IF(i < 0, '-', '+');
-   IF(i <> 0);
-      sAttr = 'Period' | sSign | NUMBERTOSTRING(ABS(i));
-      ATTRINSERT(sDim, '', sAttr, 'S');
-   ENDIF;
-   i = i - 1;
-END;
-
-
-ATTRINSERT(sDim, '', 'Week Element', 'S');
-ATTRINSERT(sDim, '', 'Year Element', 'S');
-ATTRINSERT(sDim, '', 'Half Element', 'S');
-ATTRINSERT(sDim, '', 'Quarter Element', 'S');
-ATTRINSERT(sDim, '', 'Month Element', 'S');
-
-ATTRINSERT(sDim, '', 'Level', 'S');
-
-ATTRINSERT(sDim, '', 'Next Period', 'S');
-ATTRINSERT(sDim, '', 'Prior Period', 'S');
-ATTRINSERT(sDim, '', 'End of Period', 'N');
-ATTRINSERT(sDim, '', 'Start of Period', 'N');
-ATTRINSERT(sDim, '', 'Last Leaf', 'S');
-ATTRINSERT(sDim, '', 'First Leaf', 'S');
-
-ATTRINSERT(sDim, '', 'Calendar Day', 'N');
-ATTRINSERT(sDim, '', 'Business Day', 'N');
-ATTRINSERT(sDim, '', 'Week Day', 'N');
-
-ATTRINSERT(sDim, '', 'Month Name', 'S');
-
-ATTRINSERT(sDim, '', 'AltName', 'A');
-ATTRINSERT(sDim, '', 'InputName', 'A');
-ATTRINSERT(sDim, '', 'Caption', 'S');
-
-ATTRINSERT(sDim, '', 'Week', 'S');
-ATTRINSERT(sDim, '', 'Week Element', 'S');
-ATTRINSERT(sDim, '', 'Week Year', 'S');
-ATTRINSERT(sDim, '', 'Week Year Element', 'S');
-ATTRINSERT(sDim, '', 'Week Day', 'N');
-ATTRINSERT(sDim, '', 'Day Element', 'S');
-ATTRINSERT(sDim, '', 'Input Type', 'S');
-ATTRINSERT(sDim, '', 'Year', 'S');
-ATTRINSERT(sDim, '', 'Half', 'S');
-ATTRINSERT(sDim, '', 'Quarter', 'S');
-ATTRINSERT(sDim, '', 'Month', 'S');
 
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
