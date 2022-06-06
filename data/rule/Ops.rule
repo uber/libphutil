@@ -15,6 +15,8 @@
 FEEDSTRINGS;
 SKIPCHECK;
 
+['Reported'] = STET;
+
 # ==========================#
 # Calculate Avg. Fare
 # ==========================#
@@ -46,6 +48,8 @@ IF ( Elisanc ( 'Period', 'Total Time - Month', !Period) = 1 & DAYNO ( SUBST (!Pe
     Elisanc ( 'Period', 'Total Time - Week', !Period) = 1 & DAYNO ( SUBST (!Period, 4, 4) | '-' | SUBST (!Period, 9, 2) | '-' | SUBST (!Period, 12, 2)) > 22732  ,
   STET,
 CONTINUE);
+
+['Actual','Ops Post Reported Adjs','Completed Trips','Amount']=IF( ELISANC('Period','Total Time - Month', !Period)=1 & DAYNO ( SUBST (!Period, 1, 4) | '-' | SUBST (!Period, 6, 2) | '-' | '01') <= DAYNO(DB('Admin Play Book','Oracle Sync','Current Actual Month') |'-'| '01') , ['FDS'] - ['Reported'],STET);
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=- =-=-=-#
 # Skip Support Contacts - loading via process
@@ -500,6 +504,7 @@ FEEDERS;
 
 ['Completed Trips',  'Amount'] => ['CPT'];
 
+['Actual',{'FDS','Reported'},'Completed Trips','Amount'] => ['Ops Post Reported Adjs'];
 
 
 

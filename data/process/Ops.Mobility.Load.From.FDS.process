@@ -419,6 +419,18 @@ EXECUTEPROCESS(sProcess
    , 'pEndDate', pEndDate
 );
 
+# Copying completed trips data on 2nd day of the month from FDS metric to Reported metric in Ops cube
+nDay = Numbr(SUBST(TODAY(1),9,2));
+cMonth = ATTRS('Period',SUBST(TODAY(1),1,7),'Prior Period');
+IF(nDay=1 % nDay = 2); 
+   EXECUTEPROCESS('Bedrock.Cube.Data.Copy.IntraCube',
+       'pCube','Ops',
+        'pFilter','Version:Actual & Period:'|cMonth|' & Source:FDS & Line of Business:Mobility & Ops Metric: Completed Trips',
+       'pElementMapping','Source: FDS->Reported'
+
+   );
+ENDIF;
+
 
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
