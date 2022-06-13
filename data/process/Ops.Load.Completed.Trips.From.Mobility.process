@@ -216,11 +216,11 @@ cSubsetTrg = '}zTemp.' | GETPROCESSNAME() | '.' | cRandomIntA | ' Target';
 
 VIEWCREATE(sCube, cViewTrg, 1);
 
-cnt = 1;
+nDimcount = 1;
 
-WHILE(cnt <= nSiz);
+WHILE(nDimcount <= nSiz);
 
-   sDim = TABDIM(sCube, cnt);
+   sDim = TABDIM(sCube, nDimcount);
 
    IF(sDim @= 'Period');
       SUBSETCREATE(sDim, cSubsetTrg, 1);
@@ -302,7 +302,7 @@ WHILE(cnt <= nSiz);
 
    ENDIF;
 
-   cnt = cnt + 1;
+   nDimcount = nDimcount + 1;
 END;
 
 # -=-=-=-=-=-=-==-=-==-===-==-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=#
@@ -316,11 +316,11 @@ cSubsetSrc = '}zTemp.' | GETPROCESSNAME() | '.' | cRandomIntA | ' Source';
 
 VIEWCREATE(sCube, cViewSrc, 1);
 
-cnt = 1;
+nDimcount = 1;
 
-WHILE(cnt <= nSiz);
+WHILE(nDimcount <= nSiz);
 
-   sDim = TABDIM(sCube, cnt);
+   sDim = TABDIM(sCube, nDimcount);
 
    IF(sDim @= 'Period');
       SUBSETCREATE(sDim, cSubsetSrc, 1);
@@ -408,7 +408,7 @@ WHILE(cnt <= nSiz);
 
    ENDIF;
 
-   cnt = cnt + 1;
+   nDimcount = nDimcount + 1;
 END;
 
 # -=-=-=-=-=-=-==-=-==-===-==-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=#
