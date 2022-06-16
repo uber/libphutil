@@ -19,3 +19,5 @@ notify:
 
   - email: "${BUILDKITE_BUILD_AUTHOR_EMAIL:-epm-eng@uber.com}"
     if: build.state == "failed"
+
+timeout_in_minutes: 240
