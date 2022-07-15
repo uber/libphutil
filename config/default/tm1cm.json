@@ -55,8 +55,8 @@
         "ANALYTICS.*",
         "}ElementAttributes_PAC.*",
         "PAC.*",
-        "}ElementAttributes_SecMeta*"
-
+        "}ElementAttributes_SecMeta*",
+        "}ElementAttributes_*tm1serverlog"
     ],
     "exclude_cube_view": "",
     "exclude_dimension_attribute": "",
@@ -71,10 +71,9 @@
         "Delivery/ Delivery Fulfillment Type/Format",
         "Delivery/ Delivery Merchant Segment/Format",
         "Delivery/ Delivery Merchant Type/Format",
-        "Delivery/ Delivery Order Category/Format"
-    ],
-
-
+        "Delivery/ Delivery Order Category/Format",
+        "*tm1serverlog/*/*"
+    ],    
     "exclude_dimension": [
         "TAP*",
         "}Stats*",
@@ -87,7 +86,8 @@
         "ANALYTICS.*",
         "}ElementAttributes_PAC.*",
         "PAC.*",
-        "}*"
+        "}*",
+        "*tm1serverlog"
     ],
     "exclude_dimension_hierarchy": [
         "}*/*",
@@ -120,7 +120,8 @@
         "Delivery Order Category/*",
         "Delivery Ops Metrics/*",
         "Mobility Ops Metrics/*",
-        "Source/*"
+        "Source/*",
+        "*tm1serverlog/*"
     ],
     "exclude_dimension_hierarchy_element": "",
     "exclude_dimension_hierarchy_subset": "",
