@@ -46,7 +46,7 @@
 
 # ================= TAPTOOLS: START GENERATED CODE =================== #
 sProcessName = GETPROCESSNAME();
-IF(sProcessName @<> 'TAP.Call.Queue.Add Job To Queue' & sProcessName @<> 'TAP.CubeSaveData' & sProcessName @<> 'TAP.Call.Save' & sProcessName @<> 'TAP.Call.Save.Wrapper' & sProcessName @<> 'TAP.Call.CubeSaveData.Wrapper' & sProcessName @<> 'TAP.Call.Tests' & sProcessName @<> 'TAP.Call.Init' & sProcessName @<> 'TAP.Call.Export Application Stats' & sProcessName @<> 'TAP.Cube.Export Data to File' & SCAN('}drill', LOWER(sProcessName)) = 0);
+IF(sProcessName @<> 'TAP.Call.Queue.Add Job To Queue' & sProcessName @<> 'TAP.CubeSaveData' & sProcessName @<> 'TAP.Call.Save' & sProcessName @<> 'TAP.Call.Recurring' & sProcessName @<> 'DIQ.Call.Batch' & sProcessName @<> 'TAP.Call.Save.Wrapper' & sProcessName @<> 'TAP.Call.CubeSaveData.Wrapper' & sProcessName @<> 'TAP.Call.Tests' & sProcessName @<> 'TAP.Call.Init' & sProcessName @<> 'TAP.Call.Export Application Stats' & sProcessName @<> 'TAP.Cube.Export Data to File' & SCAN('}drill', LOWER(sProcessName)) = 0);
    sBlock.Execution.Status = CELLGETS('TAP System Info', 'Block Process Execution', 'Value');
    IF(UPPER(sBlock.Execution.Status) @= 'YES');
       sBlock.Epilog.Execution = 'Yes';
@@ -108,14 +108,15 @@ cRand = NUMBERTOSTRING(NOW()) | '.' | cRand;
 cSub = '}zTemp.' | cRand;
 
 cPythonExe = CELLGETS('TAP System Info', 'Python Executable', 'Value');
-cScriptRunPath = CELLGETS('TAP System Info', 'Scripts Shared Path', 'Value');
-cScriptRun = cScriptRunPath | '/tap/rushti/rushti.py';
-cScriptConfig = cScriptRunPath | '/tap/rushti/config.ini';
+cScriptRunPath = CELLGETS('TAP System Info', 'Scripts Local Path', 'Value');
+cScriptRun = cScriptRunPath | '/rushti/rushti.py';
+cScriptConfig = cScriptRunPath | '/rushti/config.ini';
 
 cInstance = CELLGETS('TAP System Info', 'Instance Name', 'Value');
 cBatchUser = CELLGETS('TAP System Info', 'Batch Username', 'Value');
 cBatchPassword = CELLGETS('TAP System Info', 'Batch Password', 'Value');
 cBatchNamespace = CELLGETS('TAP System Info', 'Batch Namespace', 'Value');
+cServiceName = CELLGETS('TAP System Info', 'Service Name', 'Value');
 cServer = CELLGETS('TAP Application Info', CELLGETS('TAP System Info', 'Service Name', 'Value'), 'Endpoint');
 cPort = '443';
 cThreads = '100';
@@ -126,7 +127,7 @@ cSpace = ' ';
 # ==================================================================== #
 
 cTIprocess = 'Ops.Mobility.Product PL';
-cScriptBatch = cScriptRunPath | '/tap/rushti/opsmobilitypl.txt';
+cScriptBatch = cScriptRunPath | '/rushti/opsmobilitypl.txt';
 cDimAccount = 'ANALYTICS.GL Operational';
 
 # ==================================================================== #
@@ -155,6 +156,32 @@ ELSE;
       ENDIF;
       i = i + 1;
    END;
+ENDIF;
+
+# ==================================================================== #
+# Create config.ini
+# ==================================================================== #
+
+IF(FILEEXISTS(cScriptConfig) = 0);
+
+   sOutput = '[' | cInstance | ']';
+   ASCIIOUTPUT(cScriptConfig, sOutput);
+
+   sOutput = 'address=' | cServer;
+   ASCIIOUTPUT(cScriptConfig, sOutput);
+
+   sOutput = 'port=443';
+   ASCIIOUTPUT(cScriptConfig, sOutput);
+
+   sOutput = 'user=' | cBatchUser;
+   ASCIIOUTPUT(cScriptConfig, sOutput);
+
+   sOutput = 'namespace=' | cBatchNamespace;
+   ASCIIOUTPUT(cScriptConfig, sOutput);
+
+   sOutput = 'ssl=True';
+   ASCIIOUTPUT(cScriptConfig, sOutput);
+
 ENDIF;
 
 # ==================================================================== #
@@ -225,8 +252,8 @@ LOGOUTPUT('DEBUG', 'PROGRESS: END PROLOG PROCEDURE');
 
 # ================= TAPTOOLS: START GENERATED CODE =================== #
 IF(sBlock.Epilog.Execution @= 'Yes');
-   LOGOUTPUT('INFO', 'Block Process Execution Flag is Yes in TAP System Info Cube. Skipping this process...');
-   PROCESSBREAK;
+   LOGOUTPUT('ERROR', 'Block Process Execution Flag is Yes in TAP System Info Cube. Skipping this process...');
+   PROCESSERROR;
 ENDIF;
 IF(nPrologProcedureEndTime = 0);
    LOGOUTPUT('DEBUG', 'DATASOURCE: DatasourceType: "NULL"');
@@ -253,10 +280,11 @@ nEpilogProcedureStartTime = NOW();
 # Run Ti 
 # ==================================================================== #
 
-cTemplateScriptRun = '%cPythonExe% %cScriptRun% %cScriptBatch% %cThreads%';
+cTemplateScriptRun = '%cPythonExe% %cScriptRun% %cScriptBatch% %cThreads% %cServiceName%';
 sCommand = EXPAND(cTemplateScriptRun);
 EXECUTECOMMAND(sCommand, 1);
 
+LOGOUTPUT('INFO', 'PYTHON SCRIPT EXECUTION -- COMPLETED --> ' | sCommand);
 # ================= TAPTOOLS: START GENERATED CODE =================== #
 LOGOUTPUT('DEBUG', 'PROCESS_METRIC: PrologProcedureRuntime: "' | NUMBERTOSTRING(ROUNDP((nPrologProcedureEndTime - nPrologProcedureStartTime) * 86400, 2)) | '"');
 LOGOUTPUT('DEBUG', 'PROCESS_METRIC: PrologProcedureMetadataOperations: "' | NUMBERTOSTRING(nPrologProcedureMetadataOperations) | '"');
