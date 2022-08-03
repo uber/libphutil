@@ -115,7 +115,7 @@
 
 # ================= TAPTOOLS: START GENERATED CODE =================== #
 sProcessName = GETPROCESSNAME();
-IF(sProcessName @<> 'TAP.Call.Queue.Add Job To Queue' & sProcessName @<> 'TAP.CubeSaveData' & sProcessName @<> 'TAP.Call.Save' & sProcessName @<> 'TAP.Call.Save.Wrapper' & sProcessName @<> 'TAP.Call.CubeSaveData.Wrapper' & sProcessName @<> 'TAP.Call.Tests' & sProcessName @<> 'TAP.Call.Init' & sProcessName @<> 'TAP.Call.Export Application Stats' & sProcessName @<> 'TAP.Cube.Export Data to File' & SCAN('}drill', LOWER(sProcessName)) = 0);
+IF(sProcessName @<> 'TAP.Call.Queue.Add Job To Queue' & sProcessName @<> 'TAP.CubeSaveData' & sProcessName @<> 'TAP.Call.Save' & sProcessName @<> 'TAP.Call.Recurring' & sProcessName @<> 'DIQ.Call.Batch' & sProcessName @<> 'TAP.Call.Save.Wrapper' & sProcessName @<> 'TAP.Call.CubeSaveData.Wrapper' & sProcessName @<> 'TAP.Call.Tests' & sProcessName @<> 'TAP.Call.Init' & sProcessName @<> 'TAP.Call.Export Application Stats' & sProcessName @<> 'TAP.Cube.Export Data to File' & SCAN('}drill', LOWER(sProcessName)) = 0);
    sBlock.Execution.Status = CELLGETS('TAP System Info', 'Block Process Execution', 'Value');
    IF(UPPER(sBlock.Execution.Status) @= 'YES');
       sBlock.Epilog.Execution = 'Yes';
@@ -428,8 +428,8 @@ nDataProcedureRecordsCompleted = nDataProcedureRecordsCompleted + 1;
 
 # ================= TAPTOOLS: START GENERATED CODE =================== #
 IF(sBlock.Epilog.Execution @= 'Yes');
-   LOGOUTPUT('INFO', 'Block Process Execution Flag is Yes in TAP System Info Cube. Skipping this process...');
-   PROCESSBREAK;
+   LOGOUTPUT('ERROR', 'Block Process Execution Flag is Yes in TAP System Info Cube. Skipping this process...');
+   PROCESSERROR;
 ENDIF;
 IF(nPrologProcedureEndTime = 0);
    LOGOUTPUT('DEBUG', 'DATASOURCE: DatasourceType: "NULL"');
@@ -459,17 +459,21 @@ EXECUTEPROCESS(sProcess
    , 'pMetrics', cMetricString
 );
 
-
 # Run GL Sync batch for Cash Gross Bookings metrics b/w 1st and 15th of every month
-nDay = NUMBR(SUBST(TODAY(1), 9, 2));
-IF(nGLOps = 1 & (nDay >= 1 & nDay <= 15));
-   EXECUTEPROCESS('Ops.DIQ.GL Reporting.Sync'
-      , 'pInstance', 'PAC'
-      , 'pProcess', 'DIQ.Call.Batch'
-      , 'pParams', '[{"Name":"pDIQBatch","Value":"Batch - 1104"}]'
-   );
-ENDIF;
+# HA Check to ensure that the batch is called only from one instance
 
+nDay = NUMBR(SUBST(TODAY(1), 9, 2));
+sBatchTriggerFlag = CELLGETS('TAP System Info', 'Trigger Batch From TI', 'Value');
+
+IF(UPPER(sBatchTriggerFlag) @= 'YES');
+   IF(nGLOps = 1 & (nDay >= 1 & nDay <= 15));
+      EXECUTEPROCESS('Ops.DIQ.GL Reporting.Sync'
+         , 'pInstance', 'PAC'
+         , 'pProcess', 'DIQ.Call.Batch'
+         , 'pParams', '[{"Name":"pDIQBatch","Value":"Batch - 1104"}]'
+      );
+   ENDIF;
+ENDIF;
 
 # ================= TAPTOOLS: START GENERATED CODE =================== #
 LOGOUTPUT('DEBUG', 'PROCESS_METRIC: PrologProcedureRuntime: "' | NUMBERTOSTRING(ROUNDP((nPrologProcedureEndTime - nPrologProcedureStartTime) * 86400, 2)) | '"');
