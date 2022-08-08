@@ -471,14 +471,20 @@ ELSE;
    LOGOUTPUT('Info', 'Skipped Records - ' | sSkippedRecord);
 ENDIF;
 
-IF(SCAN('.com', pUser) <> 0);
 
-   EXECUTEPROCESS('System.Send Email'
-      , 'pFrom', 'Ops@uber.com'
-      , 'pTo', pUser
-      , 'pSubject', cInstance | ' :  Adjustment Load Status'
-      , 'phtmlContent', sHTML
-   );
+# HA Check to ensure that the batch is called only from one instance
+sBatchTriggerFlag = CELLGETS('TAP System Info', 'Trigger Batch From TI', 'Value');
+IF(UPPER(sBatchTriggerFlag) @= 'YES');
+   IF(SCAN('.com', pUser) <> 0);
+
+      EXECUTEPROCESS('System.Send Email'
+         , 'pFrom', 'Ops@uber.com'
+         , 'pTo', pUser
+         , 'pSubject', cInstance | ' :  Adjustment Load Status'
+         , 'phtmlContent', sHTML
+      );
+
+   ENDIF;
 
 ENDIF;
 
