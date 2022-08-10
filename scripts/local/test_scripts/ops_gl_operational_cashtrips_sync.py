@@ -5,7 +5,7 @@ from tm1tests.reconciliation import Reconciliation
 source_mdx = """SELECT NON EMPTY
     {[Ops Metric].[Cash Trips]}
     ON ROWS,
-    {TM1FILTERBYLEVEL({TM1DRILLDOWNMEMBER({[Period].[%s]},ALL,RECURSIVE)},0)}
+    {%s}
     ON COLUMNS
 FROM
     [Ops]
@@ -23,7 +23,7 @@ WHERE (
 target_mdx = """SELECT NON EMPTY
     {[Account].[Cash Trips]}
     ON ROWS,
-    {TM1FILTERBYLEVEL({TM1DRILLDOWNMEMBER({[Month].[%s]},ALL,RECURSIVE)},0)}
+    {%s}
     ON COLUMNS
 FROM
     [GL Operational]
@@ -48,12 +48,17 @@ class Mytest(Reconciliation):
     alert_level = {'email': 'error'}
     source = [['ops', 'mdx', source_mdx]]
     target = [['analytics', 'mdx', target_mdx]]
+    schedule = '5 16 * * *'
     threshold = ('ge', 1)
 
     def prepare(self):
         super().prepare()
         session = self.apps_sessions['analytics']
-        current_actual_month = session.cubes.cells.get_value('System Info','Current Month, String')
-        year = current_actual_month[:4]        
-        self.source[0][2] =  source_mdx % (year)
-        self.target[0][2] =  target_mdx % (year)
+        sCurrentMonth = session.cubes.cells.get_value('System Info','Current Month, String')
+        now = datetime.now()
+        curr_year = str(now.year)
+        prev_year = str(int(curr_year) - 1)
+        sMonth = "[Month].[{}-01]:[Month].[{}]".format(prev_year, sCurrentMonth)
+        sPeriod = "[Period].[{}-01]:[Period].[{}]".format(prev_year, sCurrentMonth)        
+        self.source[0][2] =  source_mdx % (sPeriod)
+        self.target[0][2] =  target_mdx % (sMonth)
