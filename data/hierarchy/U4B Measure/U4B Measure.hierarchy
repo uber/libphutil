@@ -1,17 +1,22 @@
 {
     "DefaultMember": {
         "Attributes": {
-            "Caption": "Amount",
-            "Format": "#,##0;(#,##0)"
+            "Caption": "Per Trip"
         },
         "IsPlaceholder": false,
-        "Name": "Amount",
+        "Name": "Per Trip",
         "Ordinal": 1,
         "Type": "Regular",
-        "UniqueName": "[U4B Measure].[U4B Measure].[Amount]",
+        "UniqueName": "[U4B Measure].[U4B Measure].[Per Trip]",
         "Weight": 0
     },
-    "Edges": [],
+    "Edges": [
+        {
+            "ComponentName": "Amount",
+            "ParentName": "Per Trip",
+            "Weight": 1
+        }
+    ],
     "ElementAttributes": [
         {
             "Name": "Format",
@@ -28,6 +33,15 @@
             "Name": "Amount",
             "Type": "Numeric",
             "UniqueName": "[U4B Measure].[U4B Measure].[Amount]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Per Trip"
+            },
+            "Index": 2,
+            "Name": "Per Trip",
+            "Type": "Consolidated",
+            "UniqueName": "[U4B Measure].[U4B Measure].[Per Trip]"
         }
     ],
     "Name": "U4B Measure",
