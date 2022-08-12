@@ -2,6 +2,10 @@ SKIPCHECK;
 
 ######## Derived Metrics Calculation
 
+['Mobility Measure':'Per Trip'] =
+   ['Mobility Measure':'Amount'] \
+   ['Department':'0000', 'Mobility Ops Metrics':'Completed Trips', 'Mobility Measure':'Amount'];
+
 ['Ops PL Derived','Amount']=C:0;
 ['Ratios','Amount']=C:0;
 ['Alt Financial Metrics','Amount']=C:0;

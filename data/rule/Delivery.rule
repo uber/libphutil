@@ -2,6 +2,10 @@ SKIPCHECK;
 
 ######## Derived Metrics Calculation
 
+['Delivery Measure':'Per Trip'] =
+   ['Delivery Measure':'Amount'] \
+   ['Department':'0000', 'Delivery Ops Metrics':'Completed Trips', 'Delivery Measure':'Amount'];
+
 ['Ops PL Derived','Amount']=C:0;
 ['Ratios','Amount']=C:0;
 ['Alt Financial Metrics','Amount']=C:0;
@@ -29,8 +33,3 @@ SKIPCHECK;
 FEEDERS;
 
 ['Actual', 'FDS Incl. Adj', {'P2P Miles', 'Completed Trips'}, 'Amount'] => ['Product PL'];
-
-
-
-
-
