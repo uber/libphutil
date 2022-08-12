@@ -114,6 +114,7 @@ EOF
         repo_name=$extract_replica_name
 
         ## Run tm1cm command on the new connect.json file created
+        shell_build1
         execute_tm1cm 
         
     done
