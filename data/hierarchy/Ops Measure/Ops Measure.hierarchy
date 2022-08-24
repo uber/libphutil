@@ -51,6 +51,11 @@
             "ComponentName": "Amount",
             "ParentName": "Amount (M)",
             "Weight": 1
+        },
+        {
+            "ComponentName": "Amount",
+            "ParentName": "Per Trip",
+            "Weight": 1
         }
     ],
     "ElementAttributes": [
@@ -148,6 +153,16 @@
             "Name": "Amount",
             "Type": "Numeric",
             "UniqueName": "[Ops Measure].[Ops Measure].[Amount]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Per Trip",
+                "Format": "#,##0.00;(#,##0.00)"
+            },
+            "Index": 10,
+            "Name": "Per Trip",
+            "Type": "Consolidated",
+            "UniqueName": "[Ops Measure].[Ops Measure].[Per Trip]"
         }
     ],
     "Name": "Ops Measure",
