@@ -58,12 +58,16 @@ CONTINUE);
 [{'Support Contacts - Virtual', 'Support Contacts - Greenlight', 'Support Contacts - Automation'}] = N: STET;
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=- =-=-=-=-=-=-=-=-=-=-=-=-=-=- =-=-=-= #
-# POP, YOY, POP %, YOY %, % of Gross Bookings, % of Adjusted Net Revenue
+# POP, YOY, POP %, YOY %, % of Gross Bookings, % of Adjusted Net Revenue, Per Trip Calculation
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=- =-=-=-=-=-=-=-=-=-=-=-=-=-=- =-=-=-= #
 
 ['% of Gross Bookings'] = ['Amount'] \ ['Gross Bookings','Amount'];
 
 ['% of Adjusted Net Revenue'] = ['Amount'] \ ['Adjusted Net Revenue', 'Amount'];
+
+['Ops Measure':'Per Trip'] =
+   ['Ops Measure':'Amount'] \
+   ['Ops Metric':'Completed Trips', 'Ops Measure':'Amount'];
 
 ['PoP Growth'] =
    (
@@ -505,6 +509,7 @@ FEEDERS;
 ['Completed Trips',  'Amount'] => ['CPT'];
 
 ['Actual',{'FDS','Reported'},'Completed Trips','Amount'] => ['Ops Post Reported Adjs'];
+
 
 
 
