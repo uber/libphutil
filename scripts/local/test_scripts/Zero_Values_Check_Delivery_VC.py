@@ -1,4 +1,3 @@
-
 from datetime import datetime
 from datetime import timedelta
 from tm1tests.validation import Validation
@@ -51,11 +50,11 @@ class Mytest(Validation):
       
         # Form the MDX based on day 
         if (int(two_days_ago)>15):
-          period_mdx = "{FILTER({TM1FILTERBYLEVEL({TM1DRILLDOWNMEMBER( {TM1FILTERBYPATTERN( {TM1SUBSETALL( [Period] )}, 'Day " +  current_month  + "')}, ALL, RECURSIVE )}, 0)} , [Period].[End of Period] < " + str(int(day_no))  + ")}" 
+          period_mdx = "{FILTER({TM1FILTERBYLEVEL({TM1DRILLDOWNMEMBER( {TM1FILTERBYPATTERN( {TM1SUBSETALL( [Period] )}, 'Day " +  current_month  + "')}, ALL, RECURSIVE )}, 0)} , [Period].[End of Period] <= " + str(int(day_no))  + ")}" 
           len_period_elements = len(ops.dimensions.execute_mdx(dimension_name="Period", mdx=period_mdx))
           TOTAL_RECORD_COUNT = len_period_elements * 2
         else:
-          period_mdx = "{ UNION({FILTER({TM1FILTERBYLEVEL({TM1DRILLDOWNMEMBER( {TM1FILTERBYPATTERN( {TM1SUBSETALL( [Period] )},'Day " + current_month + "')}, ALL, RECURSIVE )}, 0)} , [Period].[End of Period] < "+ str(int(day_no)) +")},{TM1FILTERBYLEVEL({TM1DRILLDOWNMEMBER( {TM1FILTERBYPATTERN( {TM1SUBSETALL( [Period] )},'Day " + previous_month + "')}, ALL, RECURSIVE )}, 0)} )}" 
+          period_mdx = "{ UNION({FILTER({TM1FILTERBYLEVEL({TM1DRILLDOWNMEMBER( {TM1FILTERBYPATTERN( {TM1SUBSETALL( [Period] )},'Day " + current_month + "')}, ALL, RECURSIVE )}, 0)} , [Period].[End of Period] <= "+ str(int(day_no)) +")},{TM1FILTERBYLEVEL({TM1DRILLDOWNMEMBER( {TM1FILTERBYPATTERN( {TM1SUBSETALL( [Period] )},'Day " + previous_month + "')}, ALL, RECURSIVE )}, 0)} )}" 
           len_period_elements = len(ops.dimensions.execute_mdx(dimension_name="Period", mdx=period_mdx))
           TOTAL_RECORD_COUNT = len_period_elements * 2  
         
