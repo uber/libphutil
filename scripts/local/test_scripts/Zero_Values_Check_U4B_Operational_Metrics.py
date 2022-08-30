@@ -26,7 +26,7 @@ MDX = """SELECT
         )"""
 
 class Mytest(Validation):
-    name = 'U4B P0 Metrics-Data Check for Zero values for all Months'
+    name = 'U4B Operational Metrics-Data Check for Zero values for all Months'
     email_to = []
     email_from = 'pa-eng@uber.com'
     alert_level = {'email': 'error'}
