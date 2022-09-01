@@ -60,7 +60,7 @@ class Mytest(Validation):
             len_period_elements = len(ops.dimensions.execute_mdx(dimension_name="Period", mdx=period_mdx))
 
         self.source[0][2] = MDX % (period_mdx)
-        NONZERO_RECORD_COUNT = 2 * len_period_elements * 2
+        NONZERO_RECORD_COUNT = len_period_elements * 2
 
 
     def execute(self):
