@@ -1,0 +1,91 @@
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: PROPERTIES                                                           #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+{
+    "DataSource": {
+        "Type": "None"
+    },
+    "HasSecurityAccess": false,
+    "Name": "Temp_Add_Location_3787",
+    "Parameters": [
+        {
+            "Name": "pAdd3787",
+            "Prompt": "",
+            "Type": "Numeric",
+            "Value": 0
+        }
+    ],
+    "UIData": "CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
+    "Variables": [],
+    "VariablesUIData": []
+}
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: PROPERTIES                                                             #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: PROLOG PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+sDim = 'Location';
+
+IF(pAdd3787 = 1);
+   DIMENSIONELEMENTCOMPONENTDELETEDIRECT(sDim, 'Italy (PU)', '7109');
+   sElem = 'Malta (Territory)';
+   IF(DIMIX(sDim, sElem) = 0);
+      DIMENSIONELEMENTINSERTDIRECT(sDim, '', sElem, 'C');
+   ENDIF;
+   sElem = 'Malta (PU)';
+   IF(DIMIX(sDim, sElem) = 0);
+      DIMENSIONELEMENTINSERTDIRECT(sDim, '', sElem, 'C');
+   ENDIF;
+   DIMENSIONELEMENTCOMPONENTADDDIRECT(sDim, sElem, '3787', 1);
+   DIMENSIONELEMENTCOMPONENTADDDIRECT(sDim, sElem, '7109', 1);
+   DIMENSIONELEMENTCOMPONENTADDDIRECT(sDim, 'Malta (Territory)', sElem, 1);
+   DIMENSIONELEMENTCOMPONENTADDDIRECT(sDim, 'Southern Europe (Sub Region)', 'Malta (Territory)', 1);
+   DIMENSIONELEMENTCOMPONENTADDDIRECT(sDim, 'Country - Malta', '3787', 1);
+ENDIF;
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: PROLOG PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: METADATA PROCEDURE                                                   #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: METADATA PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: DATA PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: DATA PROCEDURE                                                         #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: EPILOG PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: EPILOG PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
