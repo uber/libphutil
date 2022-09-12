@@ -177,6 +177,15 @@ cMetricString = '';
 cUser = CELLGETS('System Info', 'SQL User Name GL Transactions', 'String');
 cPassword = CELLGETS('System Info', 'SQL Password GL Transactions', 'String');
 
+cApp = CELLGETS('TAP System Info', 'Service Name', 'Value');
+
+IF(cApp @= 'ops-1' & SCAN('netr', pTable) = 0);
+   PROCESSBREAK();
+ENDIF;
+
+IF(cApp @= 'ops' & SCAN('netr', pTable) > 0);
+   PROCESSBREAK();
+ENDIF;
 
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
 # Set Query

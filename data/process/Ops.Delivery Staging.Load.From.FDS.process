@@ -202,6 +202,17 @@ nDataProcedureEndTime = 0;
 #****Begin: Generated Statements***
 #****End: Generated Statements****
 
+cApp = CELLGETS('TAP System Info', 'Service Name', 'Value');
+
+IF(cApp @= 'ops-1' & SCAN('netr', pTable) = 0);
+   PROCESSBREAK();
+ENDIF;
+
+IF(cApp @= 'ops' & SCAN('netr', pTable) > 0);
+   PROCESSBREAK();
+ENDIF;
+
+
 # Process to load Delivery Financial Metrics from FDS to Delivery Staging cube
 # Constants
 
