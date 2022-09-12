@@ -1,4 +1,3 @@
-
 from datetime import datetime
 from tm1tests.reconciliation import Reconciliation
 
@@ -6,7 +5,7 @@ source_mdx = """SELECT NON EMPTY
     {[Ops Metric].[Completed Trips]}
 ON ROWS,
 NON EMPTY
-    {[Period].[%s]}
+    {[Period].[%s]} * %s
 ON COLUMNS 
 FROM 
     [Ops] 
@@ -15,17 +14,17 @@ WHERE
     [Version].[Actual], 
     [Location].[Total Location Incl Discontinued],
     [Source].[Ops Adjustment],
-    [Rate Type].[FX Rates],
     [Line of Business].[Total Line of Business],
     [Product Type].[Total Product Type],
     [Ops Measure].[Amount]
 )"""
 
+
 target_mdx = """SELECT NON EMPTY 
     {[Account].[Completed Trips]}
 ON ROWS,
 NON EMPTY
-     {[Month].[%s]}
+     {[Month].[%s]} * %s
 ON COLUMNS 
 FROM 
     [GL Reporting] 
@@ -36,7 +35,6 @@ WHERE
     [Source].[Ops Adjustment],
     [Department].[Total Department],
     [Line of Business].[Total Line of Business],
-    [Rate Type].[FX Rates],
     [Product Type].[Total Product Type],
     [GL Reporting Measure].[Amount]
     )"""
@@ -57,5 +55,6 @@ class Mytest(Reconciliation):
         super().prepare()
         now = datetime.now()
         curr_yr = now.year if now.month > 1 else now.year - 1
-        self.source[0][2] = source_mdx %(curr_yr)
-        self.target[0][2] = target_mdx %(curr_yr)
+        FX = "{TM1SORT( {TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER( {TM1FILTERBYPATTERN( {TM1SUBSETALL( [Rate Type] )}, 'FX Rates')}, ALL, RECURSIVE )}, 0)}, ASC)}"
+        self.source[0][2] = source_mdx %(curr_yr,FX)
+        self.target[0][2] = target_mdx %(curr_yr,FX)
