@@ -207,7 +207,7 @@ nDataProcedureEndTime = 0;
 sCube = 'Delivery';
 nSiz = CUBEDIMENSIONCOUNTGET(sCube);
 
-cRand = NUMBERTOSTRING(ROUND(RAND() * 100000));
+cRand = NUMBERTOSTRING(ROUND(RAND()));
 cRand = FILL('0', 6 - LONG(cRand)) | cRand;
 cRand = NUMBERTOSTRING(NOW()) | '.' | cRand;
 cRandomIntA = cRand;
