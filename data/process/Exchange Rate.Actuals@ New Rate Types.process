@@ -85,7 +85,7 @@ IF(LONG(sAddedRateTypes) > 0);
    cPort = '443';
    cThreads = '30';
 
-   sProcessName = 'Cubes.Update Fore New Rate Type';
+   sProcessName = 'Cubes.Update For New Rate Type';
 
    sTemplateProcessAll = '';
    cTemplateScriptRun = '%cPythonExe% %cScriptRun% --server ''%cServer%'' --port %cPort% --user ''%cBatchUser%'' --password ''%cBatchPassword%'' --namespace ''%cBatchNamespace%'' --threads ''%cThreads%'' %sTemplateProcessAll%';

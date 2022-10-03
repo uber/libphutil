@@ -6,7 +6,7 @@
         "Type": "None"
     },
     "HasSecurityAccess": false,
-    "Name": "Cubes.Update Fore New Rate Type",
+    "Name": "Cubes.Update For New Rate Type",
     "Parameters": [
         {
             "Name": "pPeriod",
@@ -87,20 +87,8 @@ nDataProcedureEndTime = 0;
 
 
 sCube = pCube;
-IF(sCube @= 'U4B' % sCube @= 'U4B Staging');
-   mPfilterDim = 'U4B Ops Metrics';
-ELSEIF(sCube @= 'Delivery' % sCube @= 'Delivery Staging');
-   mPfilterDim = 'Delivery Ops Metrics';
-ELSEIF(sCube @= 'Ops');
-   mPfilterDim = 'Ops Metric';
-ELSEIF(sCube @= 'Mobility' % sCube @= 'Mobility Staging');
-   mPfilterDim = 'Mobility Ops Metrics';
-ELSEIF(sCube @= 'Eats Ops' % sCube @= 'Eats Ops Staging');
-   mPfilterDim = 'Eats Ops Metric';
-ELSEIF(sCube @= 'Rides Ops' % sCube @= 'Rides Ops Staging');
-   mPfilterDim = 'Rides Ops Metric';
-   #Continue for all the required cube
-ENDIF;
+CubeDimCount = CUBEDIMENSIONCOUNTGET(sCube);
+mPfilterDim = TABDIM(sCube, CubeDimCount - 1);
 
 mPfilterEle = '';
 vSubViewDestroy = 1;
