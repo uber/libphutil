@@ -124,6 +124,7 @@
         "Delivery Ops Metrics/*",
         "Mobility Ops Metrics/*",
         "U4B Ops Metrics/*",
+        "GL Operational/*",
         "Operational PL FDS Metrics/*",
         "Source/*",
         "*tm1serverlog/*"

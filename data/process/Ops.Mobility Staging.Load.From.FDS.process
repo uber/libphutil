@@ -235,7 +235,7 @@ WHILE(nCtr <= nMax);
       SUBSETELEMENTINSERT(sDim, cSubset, sElement, 1);
       VIEWSUBSETASSIGN(cCube, cViewName, sDim, cSubset);
    ELSEIF(sDim @= 'Mobility Ops Metrics');
-      sMDX = '{TM1DRILLDOWNMEMBER( {[Mobility Ops Metrics].[GAAP Contribution], [Mobility Ops Metrics].[Total Incentives]}, ALL, RECURSIVE )}';
+      sMDX = '{TM1FILTERBYLEVEL({TM1DRILLDOWNMEMBER( {[Mobility Ops Metrics].[GAAP Contribution]}, ALL, RECURSIVE )},0)}';
       SUBSETCREATEBYMDX(cSubset, sMDX, 1);
       VIEWSUBSETASSIGN(cCube, cViewName, sDim, cSubset);
    ELSEIF(sDim @= 'Mobility Staging Measure');

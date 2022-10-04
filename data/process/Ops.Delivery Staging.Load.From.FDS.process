@@ -280,7 +280,7 @@ WHILE(nCtr <= nMax);
       SUBSETELEMENTINSERT(sDim, cSubset, sElement, 1);
       VIEWSUBSETASSIGN(cCube, cViewName, sDim, cSubset);
    ELSEIF(sDim @= 'Delivery Ops Metrics');
-      sMDX = '{TM1DRILLDOWNMEMBER( {[Delivery Ops Metrics].[GAAP Contribution], [Delivery Ops Metrics].[Total Incentives]}, ALL, RECURSIVE )}';
+      sMDX = '{TM1FILTERBYLEVEL({TM1DRILLDOWNMEMBER( {[Delivery Ops Metrics].[GAAP Contribution]}, ALL, RECURSIVE )},0)}';
       SUBSETCREATEBYMDX(cSubset, sMDX, 1);
       VIEWSUBSETASSIGN(cCube, cViewName, sDim, cSubset);
    ELSEIF(sDim @= 'Delivery Staging Measure');

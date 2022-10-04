@@ -245,7 +245,7 @@ WHILE(cnt <= nSiz);
    sDim = TABDIM(sCube, cnt);
 
    IF(sDim @= 'U4B Ops Metrics');
-      sMDX = '{TM1FILTERBYLEVEL({TM1DRILLDOWNMEMBER( {[U4B Ops Metrics].[GAAP Contribution], [U4B Ops Metrics].[Total Incentives]}, ALL, RECURSIVE )}, 0)}';
+      sMDX = '{TM1FILTERBYLEVEL({TM1DRILLDOWNMEMBER( {[U4B Ops Metrics].[GAAP Contribution]}, ALL, RECURSIVE )},0)}';
       SUBSETCREATEBYMDX(cSubsetname, sMDX, 1);
       VIEWSUBSETASSIGN(sCube, cViewName, sDim, cSubsetName);
 
@@ -335,7 +335,7 @@ WHILE(cnt <= nSiz);
    sDim = TABDIM(sCube, cnt);
 
    IF(sDim @= 'U4B Ops Metrics');
-      sMDX = '{TM1FILTERBYLEVEL({TM1DRILLDOWNMEMBER( {[U4B Ops Metrics].[GAAP Contribution], [U4B Ops Metrics].[Total Incentives]}, ALL, RECURSIVE )}, 0)}';
+      sMDX = '{TM1FILTERBYLEVEL({TM1DRILLDOWNMEMBER( {[U4B Ops Metrics].[GAAP Contribution]}, ALL, RECURSIVE )},0)}';
       SUBSETCREATEBYMDX(cSubsetTar, sMDX, 1);
       VIEWSUBSETASSIGN(sCube, cViewTar, sDim, cSubsetTar);
 
