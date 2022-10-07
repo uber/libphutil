@@ -10,7 +10,7 @@ SELECT NON EMPTY
     {[Period].[%s],[Period].[%s]}
     ON ROWS,
     NON EMPTY
-    {[U4B Ops Metrics].[Gross Bookings],[U4B Ops Metrics].[Pricing, Incentives, and Other Revenue],[U4B Ops Metrics].[Net Effective Take Rate (NETR)],[U4B Ops Metrics].[Variable Costs],[U4B Ops Metrics].[Variable Contribution],
+    {[U4B Ops Metrics].[Gross Bookings],[U4B Ops Metrics].[Net Effective Take Rate (NETR)],[U4B Ops Metrics].[Variable Costs],[U4B Ops Metrics].[Variable Contribution],
     [U4B Ops Metrics].[Operating Expenses],[U4B Ops Metrics].[Adj EBITDA]}
     ON COLUMNS
 FROM
@@ -37,7 +37,7 @@ SELECT NON EMPTY
     {[Period].[%s],[Period].[%s]}
     ON ROWS,
     NON EMPTY
-    {[U4B Ops Metrics].[Gross Bookings],[U4B Ops Metrics].[Pricing, Incentives, and Other Revenue],[U4B Ops Metrics].[Net Effective Take Rate (NETR)],[U4B Ops Metrics].[Variable Costs],[U4B Ops Metrics].[Variable Contribution],
+    {[U4B Ops Metrics].[Gross Bookings],[U4B Ops Metrics].[Net Effective Take Rate (NETR)],[U4B Ops Metrics].[Variable Costs],[U4B Ops Metrics].[Variable Contribution],
     [U4B Ops Metrics].[Operating Expenses],[U4B Ops Metrics].[Adj EBITDA]}
     ON COLUMNS
 FROM

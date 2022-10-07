@@ -6,7 +6,7 @@ source_mdx = """SELECT NON EMPTY
     {{TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER( {[Period].[%s]}, ALL, RECURSIVE )}, 0)} + {TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER( {[Period].[%s]}, ALL, RECURSIVE )}, 0)}}
     ON ROWS,
     NON EMPTY
-    {[Delivery Ops Metrics].[Gross Bookings],[Delivery Ops Metrics].[Pricing, Incentives, and Other Revenue],[Delivery Ops Metrics].[Net Effective Take Rate (NETR)],[Delivery Ops Metrics].[Variable Costs],[Delivery Ops Metrics].[Variable Contribution],
+    {[Delivery Ops Metrics].[Gross Bookings],[Delivery Ops Metrics].[Net Effective Take Rate (NETR)],[Delivery Ops Metrics].[Variable Costs],[Delivery Ops Metrics].[Variable Contribution],
     [Delivery Ops Metrics].[Operating Expenses],[Delivery Ops Metrics].[Adj EBITDA]}
     ON COLUMNS
 FROM
@@ -30,7 +30,7 @@ target_mdx = """SELECT NON EMPTY
     {{TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER( {[Period].[%s]}, ALL, RECURSIVE )}, 0)} + {TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER( {[Period].[%s]}, ALL, RECURSIVE )}, 0)}}
     ON ROWS,
     NON EMPTY
-    {[Delivery Ops Metrics].[Gross Bookings],[Delivery Ops Metrics].[Pricing, Incentives, and Other Revenue],[Delivery Ops Metrics].[Net Effective Take Rate (NETR)],[Delivery Ops Metrics].[Variable Costs],[Delivery Ops Metrics].[Variable Contribution],
+    {[Delivery Ops Metrics].[Gross Bookings],[Delivery Ops Metrics].[Net Effective Take Rate (NETR)],[Delivery Ops Metrics].[Variable Costs],[Delivery Ops Metrics].[Variable Contribution],
     [Delivery Ops Metrics].[Operating Expenses],[Delivery Ops Metrics].[Adj EBITDA]}
     ON COLUMNS
 FROM

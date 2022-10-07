@@ -6,7 +6,7 @@ source_mdx = """SELECT NON EMPTY
     {{TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER( {[Period].[%s]}, ALL, RECURSIVE )}, 0)}}
     ON ROWS,
     NON EMPTY
-    {[U4B Ops Metrics].[Gross Bookings],[U4B Ops Metrics].[Pricing, Incentives, and Other Revenue],[U4B Ops Metrics].[Net Effective Take Rate (NETR)],[U4B Ops Metrics].[Variable Costs],[U4B Ops Metrics].[Variable Contribution],
+    {[U4B Ops Metrics].[Gross Bookings],[U4B Ops Metrics].[Net Effective Take Rate (NETR)],[U4B Ops Metrics].[Variable Costs],[U4B Ops Metrics].[Variable Contribution],
     [U4B Ops Metrics].[Operating Expenses],[U4B Ops Metrics].[Adj EBITDA]}
     ON COLUMNS
 FROM
@@ -29,7 +29,7 @@ target_mdx = """SELECT NON EMPTY
     {{TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER( {[Period].[%s]}, ALL, RECURSIVE )}, 0)}}
     ON ROWS,
     NON EMPTY
-    {[U4B Ops Metrics].[Gross Bookings],[U4B Ops Metrics].[Pricing, Incentives, and Other Revenue],[U4B Ops Metrics].[Net Effective Take Rate (NETR)],[U4B Ops Metrics].[Variable Costs],[U4B Ops Metrics].[Variable Contribution],
+    {[U4B Ops Metrics].[Gross Bookings],[U4B Ops Metrics].[Net Effective Take Rate (NETR)],[U4B Ops Metrics].[Variable Costs],[U4B Ops Metrics].[Variable Contribution],
     [U4B Ops Metrics].[Operating Expenses],[U4B Ops Metrics].[Adj EBITDA]}
     ON COLUMNS
 FROM

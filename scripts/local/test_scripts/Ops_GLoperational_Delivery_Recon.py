@@ -6,7 +6,7 @@ source_mdx = """SELECT NON EMPTY
     {[Month].[%s]}
     ON ROWS,
     NON EMPTY
-    {[GL Operational].[Gross Bookings],[GL Operational].[Pricing, Incentives, and Other Revenue],[GL Operational].[Net Effective Take Rate (NETR)],[GL Operational].[Variable Costs],[GL Operational].[Variable Contribution],
+    {[GL Operational].[Gross Bookings],[GL Operational].[Net Effective Take Rate (NETR)],[GL Operational].[Variable Costs],[GL Operational].[Variable Contribution],
     [GL Operational].[Operating Expenses],[GL Operational].[Adj EBITDA]}
     ON COLUMNS
 FROM
@@ -27,7 +27,7 @@ target_mdx = """SELECT NON EMPTY
     {[Period].[%s]}
     ON ROWS,
     NON EMPTY
-    {[Delivery Ops Metrics].[Gross Bookings],[Delivery Ops Metrics].[Pricing, Incentives, and Other Revenue],[Delivery Ops Metrics].[Net Effective Take Rate (NETR)],[Delivery Ops Metrics].[Variable Costs],[Delivery Ops Metrics].[Variable Contribution],
+    {[Delivery Ops Metrics].[Gross Bookings],[Delivery Ops Metrics].[Net Effective Take Rate (NETR)],[Delivery Ops Metrics].[Variable Costs],[Delivery Ops Metrics].[Variable Contribution],
     [Delivery Ops Metrics].[Operating Expenses],[Delivery Ops Metrics].[Adj EBITDA]}
     ON COLUMNS
 FROM

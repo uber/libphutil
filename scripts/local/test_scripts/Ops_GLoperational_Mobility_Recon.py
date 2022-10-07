@@ -7,7 +7,7 @@ source_mdx = """SELECT NON EMPTY
     {[Month].[%s]}
     ON ROWS,
     NON EMPTY
-    {[GL Operational].[Gross Bookings],[GL Operational].[Pricing, Incentives, and Other Revenue],[GL Operational].[Net Effective Take Rate (NETR)],[GL Operational].[Variable Costs],[GL Operational].[Variable Contribution],
+    {[GL Operational].[Gross Bookings],[GL Operational].[Net Effective Take Rate (NETR)],[GL Operational].[Variable Costs],[GL Operational].[Variable Contribution],
     [GL Operational].[Operating Expenses],[GL Operational].[Adj EBITDA]}
     ON COLUMNS
 FROM
@@ -28,7 +28,7 @@ target_mdx = """SELECT NON EMPTY
     {[Period].[%s]}
     ON ROWS,
     NON EMPTY
-    {[Mobility Ops Metrics].[Gross Bookings],[Mobility Ops Metrics].[Pricing, Incentives, and Other Revenue],[Mobility Ops Metrics].[Net Effective Take Rate (NETR)],[Mobility Ops Metrics].[Variable Costs],[Mobility Ops Metrics].[Variable Contribution],
+    {[Mobility Ops Metrics].[Gross Bookings],[Mobility Ops Metrics].[Net Effective Take Rate (NETR)],[Mobility Ops Metrics].[Variable Costs],[Mobility Ops Metrics].[Variable Contribution],
     [Mobility Ops Metrics].[Operating Expenses],[Mobility Ops Metrics].[Adj EBITDA]}
     ON COLUMNS
 FROM
