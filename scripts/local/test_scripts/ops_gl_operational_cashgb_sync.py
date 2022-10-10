@@ -1,4 +1,3 @@
-
 from datetime import datetime
 from tm1tests.reconciliation import Reconciliation
 
@@ -53,11 +52,16 @@ class Mytest(Reconciliation):
 
     def prepare(self):
         super().prepare()
-        session = self.apps_sessions['analytics']
-        sCurrentMonth = session.cubes.cells.get_value('System Info','Current Month, String')
         now = datetime.now()
         curr_year = str(now.year)
         prev_year = str(int(curr_year) - 1)
+        prev_month = str(int(now.month) - 1)
+        if len(prev_month) == 1:
+            prev_month = '0'+prev_month
+        if prev_month == '01':
+            sCurrentMonth = prev_year+'-12'
+        else:
+            sCurrentMonth = curr_year+'-'+prev_month
         sMonth = "[Month].[{}-01]:[Month].[{}]".format(prev_year, sCurrentMonth)
         sPeriod = "[Period].[{}-01]:[Period].[{}]".format(prev_year, sCurrentMonth)
         self.source[0][2] =  source_mdx % (sPeriod)
