@@ -90,7 +90,8 @@
         "}ElementAttributes_PAC.*",
         "PAC.*",
         "}*",
-        "*tm1serverlog"
+        "*tm1serverlog",
+        "InactiveClients"
     ],
     "exclude_dimension_hierarchy": [
         "}*/*",
@@ -127,7 +128,8 @@
         "GL Operational/*",
         "Operational PL FDS Metrics/*",
         "Source/*",
-        "*tm1serverlog/*"
+        "*tm1serverlog/*",
+        "InactiveClients/*"
     ],
     "exclude_dimension_hierarchy_element": "",
     "exclude_dimension_hierarchy_subset": "",
@@ -139,7 +141,11 @@
         "zTemp*",
         "}*"
     ],
-    "exclude_rule": "",
+    "exclude_rule": [
+        "Mobility PL Allocation",
+        "U4B PL Allocation",
+        "Delivery PL Allocation"
+    ],
     "exclude_file": "",
     "backup_on_migrate": true,
     "backup_allow_override": true,
