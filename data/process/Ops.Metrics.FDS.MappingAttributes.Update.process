@@ -1,0 +1,420 @@
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: PROPERTIES                                                           #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+{
+    "DataSource": {
+        "Type": "TM1CubeView",
+        "dataSourceNameForClient": "Operational PL Mapping",
+        "dataSourceNameForServer": "Operational PL Mapping",
+        "view": "Default"
+    },
+    "HasSecurityAccess": false,
+    "Name": "Ops.Metrics.FDS.MappingAttributes.Update",
+    "Parameters": [],
+    "UIData": "CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
+    "Variables": [
+        {
+            "EndByte": 0,
+            "Name": "vMeasure",
+            "Position": 3,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vFDSMetric",
+            "Position": 1,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vLOB",
+            "Position": 2,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vValue",
+            "Position": 4,
+            "StartByte": 0,
+            "Type": "String"
+        }
+    ],
+    "VariablesUIData": [
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f"
+    ]
+}
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: PROPERTIES                                                             #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: PROLOG PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+# ================= TAPTOOLS: START GENERATED CODE =================== #
+sProcessName = GETPROCESSNAME();
+IF(sProcessName @<> 'TAP.Call.Queue.Add Job To Queue' & sProcessName @<> 'TAP.CubeSaveData' & sProcessName @<> 'TAP.Call.Save' & sProcessName @<> 'TAP.Call.Recurring' & sProcessName @<> 'DIQ.Call.Batch' & sProcessName @<> 'TAP.Call.Save.Wrapper' & sProcessName @<> 'TAP.Call.CubeSaveData.Wrapper' & sProcessName @<> 'TAP.Call.Tests' & sProcessName @<> 'TAP.Call.Init' & sProcessName @<> 'TAP.Call.Export Application Stats' & sProcessName @<> 'TAP.Cube.Export Data to File' & SCAN('}drill', LOWER(sProcessName)) = 0);
+   sBlock.Execution.Status = CELLGETS('TAP System Info', 'Block Process Execution', 'Value');
+   IF(UPPER(sBlock.Execution.Status) @= 'YES');
+      sBlock.Epilog.Execution = 'Yes';
+      PROCESSBREAK;
+   ENDIF;
+ENDIF;
+LOGOUTPUT('DEBUG', 'PROGRESS: START PROLOG PROCEDURE');
+nMetadataProcedureRecordsStarted = 0;
+nMetadataProcedureRecordsSkipped = 0;
+nMetadataProcedureRecordsRejected = 0;
+nMetadataProcedureRecordsCompleted = 0;
+nDataProcedureRecordsStarted = 0;
+nDataProcedureRecordsSkipped = 0;
+nDataProcedureRecordsRejected = 0;
+nDataProcedureRecordsCompleted = 0;
+nPrologProcedureDataOperations = 0;
+nDataProcedureDataOperations = 0;
+nTotalDataOperations = 0;
+nPrologProcedureMetadataOperations = 0;
+nMetadataProcedureMetadataOperations = 0;
+nDataProcedureMetadataOperations = 0;
+nEpilogProcedureMetadataOperations = 0;
+nTotalProcedureMetadataOperations = 0;
+nPrologProcedureStartTime = NOW();
+nPrologProcedureEndTime = 0;
+nMetadataProcedureStartTime = 0;
+nMetadataProcedureEndTime = 0;
+nDataProcedureStartTime = 0;
+nDataProcedureEndTime = 0;
+# ================= TAPTOOLS: END GENERATED CODE ===================== #
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+# -=-=-=-=-=-=-==-=-==-===-==-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=#
+# Define Variables
+# -=-=-=-=-=-=-==-=-==-===-==-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=#
+
+sCube = 'Operational PL Mapping';
+nSiz = CUBEDIMENSIONCOUNTGET(sCube);
+
+cRand = NUMBERTOSTRING(ROUND(RAND() * 100000));
+cRand = FILL('0', 6 - LONG(cRand)) | cRand;
+cRand = NUMBERTOSTRING(NOW()) | '.' | cRand;
+cRandomIntA = cRand;
+
+# -=-=-=-=-=-=-==-=-==-===-==-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=#
+# Create Source View
+# -=-=-=-=-=-=-==-=-==-===-==-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=#
+
+cViewName = '}zTemp.' | GETPROCESSNAME() | '.' | cRandomIntA | ' Source';
+cSubsetName = '}zTemp.' | GETPROCESSNAME() | '.' | cRandomIntA | 'Source';
+
+VIEWCREATE(sCube, cViewName, 1);
+
+cnt = 1;
+
+WHILE(cnt <= nSiz);
+
+   sDim = TABDIM(sCube, cnt);
+
+   IF(sDim @= 'Line of Business');
+      SUBSETCREATE(sDim, cSubsetName, 1);
+      SUBSETELEMENTINSERT(sDim, cSubsetName, 'Delivery', 1);
+      SUBSETELEMENTINSERT(sDim, cSubsetName, 'Mobility', 1);
+      VIEWSUBSETASSIGN(sCube, cViewName, sDim, cSubsetName);
+
+   ELSEIF(sDim @= 'Operational PL Mapping Measure');
+      SUBSETCREATE(sDim, cSubsetName, 1);
+      SUBSETELEMENTINSERT(sDim, cSubsetName, 'TM1 Metric', 1);
+      VIEWSUBSETASSIGN(sCube, cViewName, sDim, cSubsetName);
+
+   ELSE;
+      sMdx = EXPAND('{TM1FilterByLevel( {TM1SubsetAll([%sDim%].[%sDim%])}, 0) }');
+      SUBSETCREATEBYMDX(cSubsetName, sMdx, 1);
+      SUBSETMDXSET(sDim, cSubsetName, '');
+      VIEWSUBSETASSIGN(sCube, cViewName, sDim, cSubsetName);
+
+   ENDIF;
+
+   cnt = cnt + 1;
+
+END;
+
+
+# -=-=-=-=-=-=-==-=-==-===-==-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=#
+# Zero out the FDS Attribute of Mobilty , Delivery and U4B Ops metrics before update
+# -=-=-=-=-=-=-==-=-==-===-==-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=#
+
+sMobCube = '}ElementAttributes_Mobility Ops Metrics';
+sDelCube = '}ElementAttributes_Delivery Ops Metrics';
+sU4BCube = '}ElementAttributes_U4B Ops Metrics';
+
+TargetViewName = '}zTemp.' | GETPROCESSNAME() | '.' | cRandomIntA | ' Target';
+TargetSubsetName = '}zTemp.' | GETPROCESSNAME() | '.' | cRandomIntA | ' Target';
+
+#### Zero out FDS attribute of Mobility Ops metrics
+
+VIEWCREATE(sMobCube, TargetViewName, 1);
+
+sDim = 'Mobility Ops Metrics';
+sMdx = EXPAND('{TM1FilterByLevel( {TM1SubsetAll([%sDim%].[%sDim%])}, 0) }');
+SUBSETCREATEBYMDX(TargetSubsetName, sMdx, 1);
+SUBSETMDXSET(sDim, TargetSubsetName, '');
+VIEWSUBSETASSIGN(sMobCube, TargetViewName, sDim, TargetSubsetName);
+
+sDim = '}ElementAttributes_Mobility Ops Metrics';
+SUBSETCREATE(sDim, TargetSubsetName, 1);
+SUBSETELEMENTINSERT(sDim, TargetSubsetName, 'FDS', 1);
+VIEWSUBSETASSIGN(sMobCube, TargetViewName, sDim, TargetSubsetName);
+
+VIEWZEROOUT(sMobCube, TargetViewName);
+
+#### Zero out FDS attribute of Delivery Ops metrics
+
+VIEWCREATE(sDelCube, TargetViewName, 1);
+
+sDim = 'Delivery Ops Metrics';
+sMdx = EXPAND('{TM1FilterByLevel( {TM1SubsetAll([%sDim%].[%sDim%])}, 0) }');
+SUBSETCREATEBYMDX(TargetSubsetName, sMdx, 1);
+SUBSETMDXSET(sDim, TargetSubsetName, '');
+VIEWSUBSETASSIGN(sDelCube, TargetViewName, sDim, TargetSubsetName);
+
+sDim = '}ElementAttributes_Delivery Ops Metrics';
+SUBSETCREATE(sDim, TargetSubsetName, 1);
+SUBSETELEMENTINSERT(sDim, TargetSubsetName, 'FDS', 1);
+VIEWSUBSETASSIGN(sDelCube, TargetViewName, sDim, TargetSubsetName);
+
+VIEWZEROOUT(sDelCube, TargetViewName);
+
+#### Zero out FDS attribute of U4B Ops metrics
+
+VIEWCREATE(sU4BCube, TargetViewName, 1);
+
+sDim = 'U4B Ops Metrics';
+sMdx = EXPAND('{TM1FilterByLevel( {TM1SubsetAll([%sDim%].[%sDim%])}, 0) }');
+SUBSETCREATEBYMDX(TargetSubsetName, sMdx, 1);
+SUBSETMDXSET(sDim, TargetSubsetName, '');
+VIEWSUBSETASSIGN(sU4BCube, TargetViewName, sDim, TargetSubsetName);
+
+sDim = '}ElementAttributes_U4B Ops Metrics';
+SUBSETCREATE(sDim, TargetSubsetName, 1);
+SUBSETELEMENTINSERT(sDim, TargetSubsetName, 'FDS', 1);
+VIEWSUBSETASSIGN(sU4BCube, TargetViewName, sDim, TargetSubsetName);
+
+VIEWZEROOUT(sU4BCube, TargetViewName);
+
+# -=-=-=-=-=-=-==-=-==-===-==-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=#
+# Data source
+# -=-=-=-=-=-=-==-=-==-===-==-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=#
+cCube = 'Operational PL Mapping';
+
+VIEWEXTRACTSKIPZEROESSET(cCube, cViewName, 1);
+VIEWEXTRACTSKIPRULEVALUESSET(cCube, cViewName, 1);
+VIEWEXTRACTSKIPCALCSSET(cCube, cViewName, 0);
+
+DatasourceNameForServer = cCube;
+DatasourceType = 'VIEW';
+DatasourceCubeView = cViewName;
+# ================= TAPTOOLS: START GENERATED CODE =================== #
+nPrologProcedureEndTime = NOW();
+LOGOUTPUT('DEBUG', 'DATASOURCE: DatasourceType: "' | DatasourceType | '"');
+LOGOUTPUT('DEBUG', 'DATASOURCE: DatasourceNameForServer: "' | DatasourceNameForServer | '"');
+LOGOUTPUT('DEBUG', 'DATASOURCE: DatasourceCubeView: "' | DatasourceCubeView | '"');
+LOGOUTPUT('DEBUG', 'DATASOURCE: DatasourceDimensionSubset: "' | DatasourceDimensionSubset | '"');
+LOGOUTPUT('DEBUG', 'PROGRESS: END PROLOG PROCEDURE');
+# ================= TAPTOOLS: END GENERATED CODE ===================== #
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: PROLOG PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: METADATA PROCEDURE                                                   #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: METADATA PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: DATA PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+# ================= TAPTOOLS: START GENERATED CODE =================== #
+nDataProcedureRecordsStarted = nDataProcedureRecordsStarted + 1;
+IF(nMetadataProcedureEndTime = 0);
+   LOGOUTPUT('DEBUG', 'PROGRESS: END METADATA PROCEDURE');
+   nMetadataProcedureEndTime = NOW();
+ENDIF;
+IF(nDataProcedureStartTime = 0);
+   LOGOUTPUT('DEBUG', 'PROGRESS: START DATA PROCEDURE');
+   nDataProcedureStartTime = NOW();
+ENDIF;
+# ================= TAPTOOLS: END GENERATED CODE ===================== #
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+### Populate the FDS attribute in Mobility, Delivery and U4b Ops Metrics
+
+
+IF(vLOB @= 'Mobility' & vValue @<> '');
+
+   IF(DIMIX('Mobility Ops Metrics', vValue) > 0);
+      # ================= TAPTOOLS: START GENERATED CODE =================== #
+      nDataProcedureMetadataOperations = nDataProcedureMetadataOperations + 1;
+      # ================= TAPTOOLS: END GENERATED CODE ===================== #
+      ATTRPUTS(vFDSMetric, 'Mobility Ops Metrics', vValue, 'FDS');
+   ENDIF;
+
+   IF(DIMIX('U4B Ops Metrics', vValue) > 0);
+      # ================= TAPTOOLS: START GENERATED CODE =================== #
+      nDataProcedureMetadataOperations = nDataProcedureMetadataOperations + 1;
+      # ================= TAPTOOLS: END GENERATED CODE ===================== #
+      ATTRPUTS(vFDSMetric, 'U4B Ops Metrics', vValue, 'FDS');
+   ENDIF;
+
+ENDIF;
+
+IF(vLOB @= 'Delivery' & vValue @<> '');
+
+   IF(DIMIX('Delivery Ops Metrics', vValue) > 0);
+      # ================= TAPTOOLS: START GENERATED CODE =================== #
+      nDataProcedureMetadataOperations = nDataProcedureMetadataOperations + 1;
+      # ================= TAPTOOLS: END GENERATED CODE ===================== #
+      ATTRPUTS(vFDSMetric, 'Delivery Ops Metrics', vValue, 'FDS');
+   ENDIF;
+
+   IF(DIMIX('U4B Ops Metrics', vValue) > 0);
+      # ================= TAPTOOLS: START GENERATED CODE =================== #
+      nDataProcedureMetadataOperations = nDataProcedureMetadataOperations + 1;
+      # ================= TAPTOOLS: END GENERATED CODE ===================== #
+      ATTRPUTS(vFDSMetric, 'U4B Ops Metrics', vValue, 'FDS');
+   ENDIF;
+
+ENDIF;
+# ================= TAPTOOLS: START GENERATED CODE =================== #
+nDataProcedureRecordsCompleted = nDataProcedureRecordsCompleted + 1;
+# ================= TAPTOOLS: END GENERATED CODE ===================== #
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: DATA PROCEDURE                                                         #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: EPILOG PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+# ================= TAPTOOLS: START GENERATED CODE =================== #
+IF(sBlock.Epilog.Execution @= 'Yes');
+   LOGOUTPUT('ERROR', 'Block Process Execution Flag is Yes in TAP System Info Cube. Skipping this process...');
+   PROCESSERROR;
+ENDIF;
+IF(nPrologProcedureEndTime = 0);
+   LOGOUTPUT('DEBUG', 'DATASOURCE: DatasourceType: "NULL"');
+   LOGOUTPUT('DEBUG', 'PROGRESS: END PROLOG PROCEDURE');
+   nPrologProcedureEndTime = NOW();
+ENDIF;
+IF(nMetadataProcedureStartTime > 0 & nMetadataProcedureEndTime = 0);
+   LOGOUTPUT('DEBUG', 'PROGRESS: END METADATA PROCEDURE');
+   nMetadataProcedureEndTime = NOW();
+ENDIF;
+IF(nDataProcedureStartTime > 0 & nDataProcedureEndTime = 0);
+   LOGOUTPUT('DEBUG', 'PROGRESS: END DATA PROCEDURE');
+   nDataProcedureEndTime = NOW();
+ENDIF;
+LOGOUTPUT('DEBUG', 'PROGRESS: START EPILOG PROCEDURE');
+nEpilogProcedureStartTime = NOW();
+# ================= TAPTOOLS: END GENERATED CODE ===================== #
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+### Update the _fds metrics with correct name 
+
+sDim = 'Mobility Ops Metrics';
+
+i = 1;
+WHILE(i <= DIMSIZ(sDim));
+   sEle = DIMNM(sDim, i);
+   IF(DTYPE(sDim, sEle) @= 'N' & SCAN('_FDS', UPPER(sEle)) > 0);
+      sElement = SUBST(sEle, 1, LONG(sEle) - 4);
+      # ================= TAPTOOLS: START GENERATED CODE =================== #
+      nEpilogProcedureMetadataOperations = nEpilogProcedureMetadataOperations + 1;
+      # ================= TAPTOOLS: END GENERATED CODE ===================== #
+      ATTRPUTS(sElement, sDim, sEle, 'FDS');
+   ENDIF;
+   i = i + 1;
+END;
+
+sDim = 'Delivery Ops Metrics';
+
+i = 1;
+WHILE(i <= DIMSIZ(sDim));
+   sEle = DIMNM(sDim, i);
+   IF(DTYPE(sDim, sEle) @= 'N' & SCAN('_FDS', UPPER(sEle)) > 0);
+      sElement = SUBST(sEle, 1, LONG(sEle) - 4);
+      # ================= TAPTOOLS: START GENERATED CODE =================== #
+      nEpilogProcedureMetadataOperations = nEpilogProcedureMetadataOperations + 1;
+      # ================= TAPTOOLS: END GENERATED CODE ===================== #
+      ATTRPUTS(sElement, sDim, sEle, 'FDS');
+   ENDIF;
+   i = i + 1;
+END;
+
+sDim = 'U4B Ops Metrics';
+
+i = 1;
+WHILE(i <= DIMSIZ(sDim));
+   sEle = DIMNM(sDim, i);
+   IF(DTYPE(sDim, sEle) @= 'N' & SCAN('_FDS', UPPER(sEle)) > 0);
+      sElement = SUBST(sEle, 1, LONG(sEle) - 4);
+      # ================= TAPTOOLS: START GENERATED CODE =================== #
+      nEpilogProcedureMetadataOperations = nEpilogProcedureMetadataOperations + 1;
+      # ================= TAPTOOLS: END GENERATED CODE ===================== #
+      ATTRPUTS(sElement, sDim, sEle, 'FDS');
+   ENDIF;
+   i = i + 1;
+END;
+
+# ================= TAPTOOLS: START GENERATED CODE =================== #
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: PrologProcedureRuntime: "' | NUMBERTOSTRING(ROUNDP((nPrologProcedureEndTime - nPrologProcedureStartTime) * 86400, 2)) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: PrologProcedureMetadataOperations: "' | NUMBERTOSTRING(nPrologProcedureMetadataOperations) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: PrologProcedureDataOperations: "' | NUMBERTOSTRING(nPrologProcedureDataOperations) | '"');
+
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: MetadataProcedureRuntime: "' | NUMBERTOSTRING(ROUNDP((nMetadataProcedureEndTime - nMetadataProcedureStartTime) * 86400, 2)) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: MetadataProcedureMetadataOperations: "' | NUMBERTOSTRING(nMetadataProcedureMetadataOperations) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: MetadataProcedureRecordsStarted: "' | NUMBERTOSTRING(nMetadataProcedureRecordsStarted) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: MetadataProcedureRecordsSkipped: "' | NUMBERTOSTRING(nMetadataProcedureRecordsSkipped) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: MetadataProcedureRecordsRejected: "' | NUMBERTOSTRING(nMetadataProcedureRecordsRejected) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: MetadataProcedureRecordsCompleted: "' | NUMBERTOSTRING(nMetadataProcedureRecordsCompleted) | '"');
+
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: DataProcedureRuntime: "' | NUMBERTOSTRING(ROUNDP((nDataProcedureEndTime - nDataProcedureStartTime) * 86400, 2)) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: DataProcedureMetadataOperations: "' | NUMBERTOSTRING(nDataProcedureMetadataOperations) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: DataProcedureDataOperations: "' | NUMBERTOSTRING(nDataProcedureDataOperations) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: DataProcedureRecordsStarted: "' | NUMBERTOSTRING(nDataProcedureRecordsStarted) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: DataProcedureRecordsSkipped: "' | NUMBERTOSTRING(nDataProcedureRecordsSkipped) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: DataProcedureRecordsRejected: "' | NUMBERTOSTRING(nDataProcedureRecordsRejected) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: DataProcedureRecordsCompleted: "' | NUMBERTOSTRING(nDataProcedureRecordsCompleted) | '"');
+
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: EpilogProcedureRuntime: "' | NUMBERTOSTRING(ROUNDP((NOW() - nEpilogProcedureStartTime) * 86400, 2)) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: EpilogProcedureMetadataOperations: "' | NUMBERTOSTRING(nEpilogProcedureMetadataOperations) | '"');
+
+nTotalDataOperations = nPrologProcedureDataOperations + nDataProcedureDataOperations;
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: TotalDataOperations: "' | NUMBERTOSTRING(nTotalDataOperations) | '"');
+nTotalMetadataOperations = nPrologProcedureMetadataOperations + nMetadataProcedureMetadataOperations + nDataProcedureMetadataOperations + nEpilogProcedureMetadataOperations;
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: TotalMetadataOperations: "' | NUMBERTOSTRING(nTotalMetadataOperations) | '"');
+LOGOUTPUT('DEBUG', 'PROGRESS: END EPILOG PROCEDURE');
+# ================= TAPTOOLS: END GENERATED CODE ===================== #
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: EPILOG PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
