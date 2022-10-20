@@ -168,6 +168,14 @@ cMeasure = 'Amount';
 cSource = 'FDS';
 nRecords = 1;
 
+###Record count dashboard
+cRecordCount = 0;
+cLoaddate = TODAY(1);
+cCubeDash = 'Dashboard';
+mDash = 'Dashboard Measure';
+cRCube = 'Eats Ops';
+rMetric = 'Financial';
+##
 cMetricString = '';
 
 nStart = 1;
@@ -383,12 +391,12 @@ IF(ELISANC('Eats Ops Metric', 'Net Inflows', sMetric) = 0 & SCAN('_usd', vMetric
    nDataProcedureDataOperations = nDataProcedureDataOperations + 1;
    # ================= TAPTOOLS: END GENERATED CODE ===================== #
    CELLINCREMENTN(vValue, cCube, cVersion, sPeriod, cSource, vCurrency, cRateType, sLocation, sProductType, sRestType, sMetric, cMeasure);
-
+   cRecordCount = cRecordCount + 1;
    # ================= TAPTOOLS: START GENERATED CODE =================== #
    nDataProcedureDataOperations = nDataProcedureDataOperations + 1;
    # ================= TAPTOOLS: END GENERATED CODE ===================== #
    CELLINCREMENTN(vUSDValue, cCube, cVersion, sPeriod, cSource, vCurrency, 'USD', sLocation, sProductType, sRestType, sMetric, cMeasure);
-
+   cRecordCount = cRecordCount + 1;
    # ================= TAPTOOLS: START GENERATED CODE =================== #
    nDataProcedureDataOperations = nDataProcedureDataOperations + 1;
    # ================= TAPTOOLS: END GENERATED CODE ===================== #
@@ -401,7 +409,7 @@ ELSEIF(SCAN('_usd', vMetric) = 0);
    nDataProcedureDataOperations = nDataProcedureDataOperations + 1;
    # ================= TAPTOOLS: END GENERATED CODE ===================== #
    CELLINCREMENTN(vValue, cCube, cVersion, sPeriod, cSource, vCurrency, cRateType, sLocation, sProductType, sRestType, sMetric, cMeasure);
-
+   cRecordCount = cRecordCount + 1;
    # ================= TAPTOOLS: START GENERATED CODE =================== #
    nDataProcedureDataOperations = nDataProcedureDataOperations + 1;
    # ================= TAPTOOLS: END GENERATED CODE ===================== #
@@ -413,6 +421,7 @@ ELSE;
    nDataProcedureDataOperations = nDataProcedureDataOperations + 1;
    # ================= TAPTOOLS: END GENERATED CODE ===================== #
    CELLINCREMENTN(vValue, cCube, cVersion, sPeriod, cSource, vCurrency, 'USD', sLocation, sProductType, sRestType, sMetric, cMeasure);
+   cRecordCount = cRecordCount + 1;
 ENDIF;
 
 # ================= TAPTOOLS: START GENERATED CODE =================== #
@@ -474,7 +483,8 @@ IF(UPPER(sBatchTriggerFlag) @= 'YES');
       );
    ENDIF;
 ENDIF;
-
+##Record Count update
+CELLINCREMENTN(cRecordCount, cCubeDash, cRCube, 'FDS', cLoaddate, 'Actual', 'No Rate Type', rMetric);
 # ================= TAPTOOLS: START GENERATED CODE =================== #
 LOGOUTPUT('DEBUG', 'PROCESS_METRIC: PrologProcedureRuntime: "' | NUMBERTOSTRING(ROUNDP((nPrologProcedureEndTime - nPrologProcedureStartTime) * 86400, 2)) | '"');
 LOGOUTPUT('DEBUG', 'PROCESS_METRIC: PrologProcedureMetadataOperations: "' | NUMBERTOSTRING(nPrologProcedureMetadataOperations) | '"');

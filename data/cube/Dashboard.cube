@@ -1,0 +1,23 @@
+{
+    "Dimensions": [
+        {
+            "Name": "Dashboard Cube"
+        },
+        {
+            "Name": "Source"
+        },
+        {
+            "Name": "Period"
+        },
+        {
+            "Name": "Version"
+        },
+        {
+            "Name": "Rate Type"
+        },
+        {
+            "Name": "Dashboard Measure"
+        }
+    ],
+    "Name": "Dashboard"
+}
