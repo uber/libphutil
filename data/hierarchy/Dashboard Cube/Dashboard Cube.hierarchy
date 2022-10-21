@@ -1,0 +1,83 @@
+{
+    "DefaultMember": {
+        "Attributes": {
+            "Caption": "Ops"
+        },
+        "IsPlaceholder": false,
+        "Name": "Ops",
+        "Ordinal": 1,
+        "Type": "Regular",
+        "UniqueName": "[Dashboard Cube].[Dashboard Cube].[Ops]",
+        "Weight": 0
+    },
+    "Edges": [],
+    "ElementAttributes": [],
+    "Elements": [
+        {
+            "Attributes": {
+                "Caption": "Ops"
+            },
+            "Index": 1,
+            "Name": "Ops",
+            "Type": "Numeric",
+            "UniqueName": "[Dashboard Cube].[Dashboard Cube].[Ops]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Delivery"
+            },
+            "Index": 2,
+            "Name": "Delivery",
+            "Type": "Numeric",
+            "UniqueName": "[Dashboard Cube].[Dashboard Cube].[Delivery]"
+        },
+        {
+            "Attributes": {
+                "Caption": "U4B"
+            },
+            "Index": 3,
+            "Name": "U4B",
+            "Type": "Numeric",
+            "UniqueName": "[Dashboard Cube].[Dashboard Cube].[U4B]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Eats Ops"
+            },
+            "Index": 4,
+            "Name": "Eats Ops",
+            "Type": "Numeric",
+            "UniqueName": "[Dashboard Cube].[Dashboard Cube].[Eats Ops]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Rides Ops"
+            },
+            "Index": 5,
+            "Name": "Rides Ops",
+            "Type": "Numeric",
+            "UniqueName": "[Dashboard Cube].[Dashboard Cube].[Rides Ops]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Freight Ops"
+            },
+            "Index": 6,
+            "Name": "Freight Ops",
+            "Type": "Numeric",
+            "UniqueName": "[Dashboard Cube].[Dashboard Cube].[Freight Ops]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Mobility"
+            },
+            "Index": 7,
+            "Name": "Mobility",
+            "Type": "Numeric",
+            "UniqueName": "[Dashboard Cube].[Dashboard Cube].[Mobility]"
+        }
+    ],
+    "Name": "Dashboard Cube",
+    "Subsets": [],
+    "UniqueName": "[Dashboard Cube].[Dashboard Cube]"
+}

@@ -1,0 +1,58 @@
+{
+    "DefaultMember": {
+        "Attributes": {
+            "Caption": "Total Count"
+        },
+        "IsPlaceholder": false,
+        "Name": "Total Count",
+        "Ordinal": 1,
+        "Type": "Regular",
+        "UniqueName": "[Dashboard Measure].[Dashboard Measure].[Total Count]",
+        "Weight": 0
+    },
+    "Edges": [
+        {
+            "ComponentName": "Financial",
+            "ParentName": "Total Count",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Operational",
+            "ParentName": "Total Count",
+            "Weight": 1
+        }
+    ],
+    "ElementAttributes": [],
+    "Elements": [
+        {
+            "Attributes": {
+                "Caption": "Total Count"
+            },
+            "Index": 1,
+            "Name": "Total Count",
+            "Type": "Consolidated",
+            "UniqueName": "[Dashboard Measure].[Dashboard Measure].[Total Count]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Financial"
+            },
+            "Index": 2,
+            "Name": "Financial",
+            "Type": "Numeric",
+            "UniqueName": "[Dashboard Measure].[Dashboard Measure].[Financial]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Operational"
+            },
+            "Index": 3,
+            "Name": "Operational",
+            "Type": "Numeric",
+            "UniqueName": "[Dashboard Measure].[Dashboard Measure].[Operational]"
+        }
+    ],
+    "Name": "Dashboard Measure",
+    "Subsets": [],
+    "UniqueName": "[Dashboard Measure].[Dashboard Measure]"
+}
