@@ -16,6 +16,18 @@
             "Prompt": "",
             "Type": "String",
             "Value": "2021-12"
+        },
+        {
+            "Name": "pMetric",
+            "Prompt": "",
+            "Type": "String",
+            "Value": "Ops PL"
+        },
+        {
+            "Name": "pRateType",
+            "Prompt": "",
+            "Type": "String",
+            "Value": "USD | USD at 2022 Plan | USD at 2023 Plan |"
         }
     ],
     "UIData": "CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
@@ -137,6 +149,8 @@ IF(sProcessName @<> 'TAP.Call.Queue.Add Job To Queue' & sProcessName @<> 'TAP.Cu
    ENDIF;
 ENDIF;
 LOGOUTPUT('DEBUG', 'PARAMETER: pMonth: "' | pMonth | '"');
+LOGOUTPUT('DEBUG', 'PARAMETER: pMetric: "' | pMetric | '"');
+LOGOUTPUT('DEBUG', 'PARAMETER: pRateType: "' | pRateType | '"');
 LOGOUTPUT('DEBUG', 'PROGRESS: START PROLOG PROCEDURE');
 nMetadataProcedureRecordsStarted = 0;
 nMetadataProcedureRecordsSkipped = 0;
@@ -269,6 +283,29 @@ WHILE(cnt <= nSiz);
       SUBSETELEMENTINSERT(sDim, cSubsetName, 'Amount', 1);
       VIEWSUBSETASSIGN(sCube, cViewName, sDim, cSubsetName);
 
+   ELSEIF(sDim @= 'Analytics.GL Operational');
+      SUBSETCREATE(sDim, cSubsetName, 1);
+      SUBSETELEMENTINSERT(sDim, cSubsetName, pMetric, 1);
+      VIEWSUBSETASSIGN(sCube, cViewName, sDim, cSubsetName);
+
+   ELSEIF(sDim @= 'Analytics.Rate Type');
+      SUBSETCREATE(sDim, cSubsetName, 1);
+      nCurr = 1;
+      nPos = 1;
+      nMax = LONG(pRateType);
+
+      WHILE(nCurr <= nMax);
+         IF(SUBST(pRatetype, nCurr, 1) @= '|');
+            sRateType = SUBST(pRateType, nPos, (nCurr - nPos));
+            sElem = TRIM(sRateType);
+            SUBSETELEMENTINSERT(sDim, cSubsetName, sElem, 1);
+            nPos = nCurr + 1;
+         ENDIF;
+         nCurr = nCurr + 1;
+      END;
+
+      VIEWSUBSETASSIGN(sCube, cViewName, sDim, cSubsetName);
+
    ELSE;
       sMdx = EXPAND('{TM1FilterByLevel( {TM1SubsetAll([%sDim%].[%sDim%])}, 0) }');
       SUBSETCREATEBYMDX(cSubsetName, sMdx, 1);
@@ -317,6 +354,30 @@ WHILE(cnt <= nSiz);
    ELSEIF(sDim @= 'Source');
       SUBSETCREATE(sDim, cSubsetTar, 1);
       SUBSETELEMENTINSERT(sDim, cSubsetTar, 'Oracle', 1);
+      VIEWSUBSETASSIGN(sCube, cViewTar, sDim, cSubsetTar);
+
+   ELSEIF(sDim @= 'U4B Ops Metrics');
+      SUBSETCREATE(sDim, cSubsetTar, 1);
+      SUBSETELEMENTINSERT(sDim, cSubsetTar, pMetric, 1);
+      VIEWSUBSETASSIGN(sCube, cViewTar, sDim, cSubsetTar);
+
+   ELSEIF(sDim @= 'Rate Type');
+      SUBSETCREATE(sDim, cSubsetTar, 1);
+
+      nCurr = 1;
+      nPos = 1;
+      nMax = LONG(pRateType);
+
+      WHILE(nCurr <= nMax);
+         IF(SUBST(pRateType, nCurr, 1) @= '|');
+            sRateType = SUBST(pRateType, nPos, (nCurr - nPos));
+            sElem = TRIM(sRateType);
+            SUBSETELEMENTINSERT(sDim, cSubsetTar, sElem, 1);
+            nPos = nCurr + 1;
+         ENDIF;
+         nCurr = nCurr + 1;
+      END;
+
       VIEWSUBSETASSIGN(sCube, cViewTar, sDim, cSubsetTar);
 
    ELSE;
@@ -391,6 +452,7 @@ ENDIF;
 
 #****Begin: Generated Statements***
 #****End: Generated Statements****
+
 
 # -=-=-=-=-=-=-==-=-==-===-==-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=#
 ## Skip variables based on user inputted source  
@@ -471,6 +533,7 @@ IF(CELLISUPDATEABLE('U4B', vVersion, vMonth, 'Oracle', vRateType, vLob, vDept, v
    # ================= TAPTOOLS: END GENERATED CODE ===================== #
    CELLINCREMENTN(nVal, 'U4B', vVersion, vMonth, 'Oracle', vRateType, vLob, vDept, vLoc, 'Unspecified U4B Org Segment', 'Unspecified U4B Product', 'Unspecified U4B Sales Channel', 'Unspecified U4B Trip Profile', vMetric, 'Amount');
 ENDIF;
+
 
 
 
