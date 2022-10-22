@@ -139,7 +139,7 @@
 
 # ================= TAPTOOLS: START GENERATED CODE =================== #
 sProcessName = GETPROCESSNAME();
-IF(sProcessName @<> 'TAP.Call.Queue.Add Job To Queue' & sProcessName @<> 'TAP.CubeSaveData' & sProcessName @<> 'TAP.Call.Save' & sProcessName @<> 'TAP.Call.Save.Wrapper' & sProcessName @<> 'TAP.Call.CubeSaveData.Wrapper' & sProcessName @<> 'TAP.Call.Tests' & sProcessName @<> 'TAP.Call.Init' & sProcessName @<> 'TAP.Call.Export Application Stats' & sProcessName @<> 'TAP.Cube.Export Data to File' & SCAN('}drill', LOWER(sProcessName)) = 0);
+IF(sProcessName @<> 'TAP.Call.Queue.Add Job To Queue' & sProcessName @<> 'TAP.CubeSaveData' & sProcessName @<> 'TAP.Call.Save' & sProcessName @<> 'TAP.Call.Recurring' & sProcessName @<> 'DIQ.Call.Batch' & sProcessName @<> 'TAP.Call.Save.Wrapper' & sProcessName @<> 'TAP.Call.CubeSaveData.Wrapper' & sProcessName @<> 'TAP.Call.Tests' & sProcessName @<> 'TAP.Call.Init' & sProcessName @<> 'TAP.Call.Export Application Stats' & sProcessName @<> 'TAP.Cube.Export Data to File' & SCAN('}drill', LOWER(sProcessName)) = 0);
    sBlock.Execution.Status = CELLGETS('TAP System Info', 'Block Process Execution', 'Value');
    IF(UPPER(sBlock.Execution.Status) @= 'YES');
       sBlock.Epilog.Execution = 'Yes';
@@ -194,6 +194,14 @@ ENDIF;
 cCube = 'U4B Staging';
 cCubeMap = 'Operational PL Mapping';
 nRecords = 1;
+###Record count dashboard
+cRecordCount = 0;
+cLoaddate = TODAY(1);
+cCubeDash = 'Dashboard';
+mDash = 'Dashboard Measure';
+cRCube = 'U4B';
+rMetric = 'Financial';
+##
 
 cMetricString = '';
 
@@ -404,11 +412,13 @@ IF(SCAN('_usd', vMetric) = 0);
    nDataProcedureDataOperations = nDataProcedureDataOperations + 1;
    # ================= TAPTOOLS: END GENERATED CODE ===================== #
    CELLINCREMENTN(vValue, cCube, 'Actual', sPeriod, 'FDS', 'No Rate Type', vCurrency, vLob, '0000', sLocation, vSegment, vProduct, vChannel, vProfile, sMetric, 'Amount');
+   cRecordCount = cRecordCount + 1;
 ELSE;
    # ================= TAPTOOLS: START GENERATED CODE =================== #
    nDataProcedureDataOperations = nDataProcedureDataOperations + 1;
    # ================= TAPTOOLS: END GENERATED CODE ===================== #
    CELLINCREMENTN(vValue, cCube, 'Actual', sPeriod, 'FDS', 'USD', vCurrency, vLob, '0000', sLocation, vSegment, vProduct, vChannel, vProfile, sMetric, 'Amount');
+   cRecordCount = cRecordCount + 1;
 ENDIF;
 
 
@@ -428,8 +438,8 @@ nDataProcedureRecordsCompleted = nDataProcedureRecordsCompleted + 1;
 
 # ================= TAPTOOLS: START GENERATED CODE =================== #
 IF(sBlock.Epilog.Execution @= 'Yes');
-   LOGOUTPUT('INFO', 'Block Process Execution Flag is Yes in TAP System Info Cube. Skipping this process...');
-   PROCESSBREAK;
+   LOGOUTPUT('ERROR', 'Block Process Execution Flag is Yes in TAP System Info Cube. Skipping this process...');
+   PROCESSERROR;
 ENDIF;
 IF(nPrologProcedureEndTime = 0);
    LOGOUTPUT('DEBUG', 'DATASOURCE: DatasourceType: "NULL"');
@@ -452,6 +462,8 @@ nEpilogProcedureStartTime = NOW();
 #****End: Generated Statements****
 
 
+##Record Count update
+CELLINCREMENTN(cRecordCount, cCubeDash, cRCube, 'FDS', cLoaddate, 'Actual', 'No Rate Type', rMetric);
 # ================= TAPTOOLS: START GENERATED CODE =================== #
 LOGOUTPUT('DEBUG', 'PROCESS_METRIC: PrologProcedureRuntime: "' | NUMBERTOSTRING(ROUNDP((nPrologProcedureEndTime - nPrologProcedureStartTime) * 86400, 2)) | '"');
 LOGOUTPUT('DEBUG', 'PROCESS_METRIC: PrologProcedureMetadataOperations: "' | NUMBERTOSTRING(nPrologProcedureMetadataOperations) | '"');

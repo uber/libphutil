@@ -154,6 +154,15 @@ cRateType = 'USD';
 cMeasure = 'Amount';
 cSource = 'FDS';
 nRecords = 1;
+###Record count dashboard
+cRecordCount = 0;
+cLoaddate = TODAY(1);
+cCubeDash = 'Dashboard';
+cRCube = 'Ops';
+mDash = 'Dashboard Measure';
+rMetric = 'Operational';
+##
+
 
 cPeriodMetricLOBString = '';
 
@@ -400,6 +409,7 @@ IF(vMetric @= 'Support Contacts - Virtual' % vMetric @= 'Support Contacts - Gree
          nDataProcedureDataOperations = nDataProcedureDataOperations + 1;
          # ================= TAPTOOLS: END GENERATED CODE ===================== #
          CELLINCREMENTN(vValue, cCube, cVersion, sPeriod, cSource, sRatetype, sLocation, sLOB, sProductType, vMetric, cMeasure);
+         cRecordCount = cRecordCount + 1;
       ENDIF;
       p = p + 1;
    END;
@@ -415,16 +425,19 @@ ELSE;
             nDataProcedureDataOperations = nDataProcedureDataOperations + 1;
             # ================= TAPTOOLS: END GENERATED CODE ===================== #
             CELLPUTN(vValue, cCube, cVersion, sPeriod, cSource, sRatetype, 'CustomLeaf:' | sLocation | ' Input', 'CustomLeaf:Total Rides & Eats Input', sProductType, vMetric, cMeasure);
+            cRecordCount = cRecordCount + 1;
          ELSEIF(ELLEV('Line of Business', vLOB) > 0 & ELLEV('Location', sLocation) = 0);
             # ================= TAPTOOLS: START GENERATED CODE =================== #
             nDataProcedureDataOperations = nDataProcedureDataOperations + 1;
             # ================= TAPTOOLS: END GENERATED CODE ===================== #
             CELLPUTN(vValue, cCube, cVersion, sPeriod, cSource, sRatetype, sLocation, 'CustomLeaf:Total Rides & Eats Input', sProductType, vMetric, cMeasure);
+            cRecordCount = cRecordCount + 1;
          ELSEIF(ELLEV('Line of Business', vLOB) = 0 & ELLEV('Location', sLocation) > 0);
             # ================= TAPTOOLS: START GENERATED CODE =================== #
             nDataProcedureDataOperations = nDataProcedureDataOperations + 1;
             # ================= TAPTOOLS: END GENERATED CODE ===================== #
             CELLPUTN(vValue, cCube, cVersion, sPeriod, cSource, sRatetype, 'CustomLeaf:' | sLocation | ' Input', sLOB, sProductType, vMetric, cMeasure);
+            cRecordCount = cRecordCount + 1;
          ELSE;
             ITEMSKIP;
          ENDIF;
@@ -482,6 +495,8 @@ IF(UPPER(sBatchTriggerFlag) @= 'YES');
    ENDIF;
 ENDIF;
 
+##Record Count update
+CELLINCREMENTN(cRecordCount, cCubeDash, cRCube, 'FDS', cLoaddate, 'Actual', 'No Rate Type', rMetric);
 # ================= TAPTOOLS: START GENERATED CODE =================== #
 LOGOUTPUT('DEBUG', 'PROCESS_METRIC: PrologProcedureRuntime: "' | NUMBERTOSTRING(ROUNDP((nPrologProcedureEndTime - nPrologProcedureStartTime) * 86400, 2)) | '"');
 LOGOUTPUT('DEBUG', 'PROCESS_METRIC: PrologProcedureMetadataOperations: "' | NUMBERTOSTRING(nPrologProcedureMetadataOperations) | '"');
