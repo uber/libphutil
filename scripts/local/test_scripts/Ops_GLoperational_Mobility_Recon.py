@@ -19,7 +19,7 @@ WHERE (
     [Source].[Total External Excl Sig Adj],
     [Rate Type].[USD],
     [Line of Business].[Mobility],
-    [Department].[Total Org],
+    [Department].[Total Department],
     [Product Type].[Total Product Type],
     [GL Operational Measure].[Amount]
 )"""
@@ -38,7 +38,7 @@ WHERE (
     [Source].[Oracle],
     [Rate Type].[USD],
     [Line of Business].[Mobility],   
-    [Department].[Total Org],
+    [Department].[Total Department],
     [Product Type].[Total Product Type],
     [Mobility Features].[All Mobility Features],
     [Location].[Total Location Incl Discontinued],

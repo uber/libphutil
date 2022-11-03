@@ -389,7 +389,7 @@ WHILE(nDimcount <= nSiz);
       VIEWSUBSETASSIGN(sCube, cViewSrc, sDim, cSubsetSrc);
 
    ELSEIF(sDim @= 'Department');
-      sMdx = '{TM1FILTERBYLEVEL({TM1DRILLDOWNMEMBER( {[Department].[Total Org]} , ALL, RECURSIVE)},0)}';
+      sMdx = '{TM1FILTERBYLEVEL({TM1DRILLDOWNMEMBER( {[Department].[Total Department]} , ALL, RECURSIVE)},0)}';
       SUBSETCREATEBYMDX(cSubsetSrc, sMdx, 1);
       SUBSETMDXSET(sDim, cSubsetSrc, '');
       VIEWSUBSETASSIGN(sCube, cViewSrc, sDim, cSubsetSrc);

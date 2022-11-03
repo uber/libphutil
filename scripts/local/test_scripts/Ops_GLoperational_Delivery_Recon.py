@@ -18,7 +18,7 @@ WHERE (
     [Source].[Total External Excl Sig Adj],
     [Rate Type].[USD],
     [Line of Business].[Delivery],
-    [Department].[Total Org],
+    [Department].[Total Department],
     [Product Type].[Total Product Type],
     [GL Operational Measure].[Amount]
 )"""
@@ -37,7 +37,7 @@ WHERE (
     [Source].[Oracle],
     [Rate Type].[USD],
     [Line of Business].[Delivery],   
-    [Department].[Total Org],
+    [Department].[Total Department],
     [Delivery Fulfillment Type].[Total Fulfillment Type],
     [Delivery Merchant Type].[Total Merchant Type],
     [Delivery Order Category].[Total Order Category],

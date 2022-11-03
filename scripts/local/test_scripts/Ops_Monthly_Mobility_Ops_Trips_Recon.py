@@ -15,7 +15,7 @@ WHERE (
     [Source].[FDS Incl. Adj],
     [Rate Type].[FX Rates],
     [Line of Business].[Mobility],
-    [Department].[Total Org],
+    [Department].[Total Department],
     [Product Type].[Total Product Type],
     [Mobility Features].[All Mobility Features],
     [Location].[Total Location Incl Discontinued],

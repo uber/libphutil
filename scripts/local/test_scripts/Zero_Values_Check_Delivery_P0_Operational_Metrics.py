@@ -16,7 +16,7 @@ WHERE (
     [Version].[Actual],
     [Source].[FDS],
     [Line of Business].[Delivery],
-    [Department].[Total Org],
+    [Department].[Total Department],
     [Delivery Fulfillment Type].[Total Fulfillment Type],
     [Delivery Merchant Type].[Total Merchant Type],
     [Delivery Order Category].[Total Order Category],
