@@ -223,7 +223,7 @@ WHILE(cnt <= nSiz);
 
    ELSEIF(sDim @= 'Analytics.Source');
       SUBSETCREATE(sDim, cSubsetName, 1);
-      SUBSETELEMENTINSERT(sDim, cSubsetName, 'Total External', 1);
+      SUBSETELEMENTINSERT(sDim, cSubsetName, 'Total External Excl Sig Adj', 1);
       VIEWSUBSETASSIGN(sCube, cViewName, sDim, cSubsetName);
 
    ELSEIF(sDim @= 'Analytics.Account');
