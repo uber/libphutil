@@ -179,16 +179,6 @@ nDataProcedureEndTime = 0;
 #****Begin: Generated Statements***
 #****End: Generated Statements****
 
-cApp = CELLGETS('TAP System Info', 'Service Name', 'Value');
-
-IF(cApp @= 'ops-1' & SCAN('netr', pTable) = 0);
-   PROCESSBREAK();
-ENDIF;
-
-IF(cApp @= 'ops' & SCAN('netr', pTable) > 0);
-   PROCESSBREAK();
-ENDIF;
-
 # Process to load Delivery Financial Metrics from FDS to Delivery Staging cube
 # Constants
 cCube = 'U4B Staging';
@@ -202,6 +192,18 @@ mDash = 'Dashboard Measure';
 cRCube = 'U4B';
 rMetric = 'Financial';
 ##
+
+cApp = CELLGETS('TAP System Info', 'Service Name', 'Value');
+
+IF(cApp @= 'ops-1' & SCAN('netr', pTable) = 0);
+   PROCESSBREAK();
+ENDIF;
+
+IF(cApp @= 'ops' & SCAN('netr', pTable) > 0);
+   PROCESSBREAK();
+ENDIF;
+
+
 
 cMetricString = '';
 
@@ -463,7 +465,7 @@ nEpilogProcedureStartTime = NOW();
 
 
 ##Record Count update
-CELLINCREMENTN(cRecordCount, 'Dashboard', cRCube, 'FDS', cLoaddate, 'Actual', 'No Rate Type', rMetric);
+CELLINCREMENTN(cRecordCount, cCubeDash, cRCube, 'FDS', cLoaddate, 'Actual', 'No Rate Type', rMetric);
 # ================= TAPTOOLS: START GENERATED CODE =================== #
 LOGOUTPUT('DEBUG', 'PROCESS_METRIC: PrologProcedureRuntime: "' | NUMBERTOSTRING(ROUNDP((nPrologProcedureEndTime - nPrologProcedureStartTime) * 86400, 2)) | '"');
 LOGOUTPUT('DEBUG', 'PROCESS_METRIC: PrologProcedureMetadataOperations: "' | NUMBERTOSTRING(nPrologProcedureMetadataOperations) | '"');
