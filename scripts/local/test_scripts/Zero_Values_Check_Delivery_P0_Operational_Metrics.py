@@ -32,7 +32,7 @@ class Mytest(Validation):
     email_from = 'pa-eng@uber.com'
     alert_level = {'email': 'error'}
     source = [['ops', 'mdx', MDX]]
-    schedule = '0 16 * * *'
+    schedule = '45 15 * * *'
     keyword = ['completed_trips_validation']
 
     def prepare(self):
@@ -55,11 +55,11 @@ class Mytest(Validation):
       
         # Form the MDX based on day 
         if (int(one_day_ago)>15):
-          period_mdx = "{FILTER({TM1FILTERBYLEVEL({TM1DRILLDOWNMEMBER( {TM1FILTERBYPATTERN( {TM1SUBSETALL( [Period] )}, 'Day " +  current_month  + "')}, ALL, RECURSIVE )}, 0)} , [Period].[End of Period] < " + str(int(day_no))  + ")}" 
+          period_mdx = "{FILTER({TM1FILTERBYLEVEL({TM1DRILLDOWNMEMBER( {TM1FILTERBYPATTERN( {TM1SUBSETALL( [Period] )}, 'Day " +  current_month  + "')}, ALL, RECURSIVE )}, 0)} , [Period].[End of Period] <= " + str(int(day_no))  + ")}" 
           len_period_elements = len(ops.dimensions.execute_mdx(dimension_name="Period", mdx=period_mdx))
           TOTAL_RECORD_COUNT = Num_Rate_Elements * 2 * len_period_elements  
         else:
-          period_mdx = "{ UNION({FILTER({TM1FILTERBYLEVEL({TM1DRILLDOWNMEMBER( {TM1FILTERBYPATTERN( {TM1SUBSETALL( [Period] )},'Day " + current_month + "')}, ALL, RECURSIVE )}, 0)} , [Period].[End of Period] < "+ str(int(day_no)) +")},{TM1FILTERBYLEVEL({TM1DRILLDOWNMEMBER( {TM1FILTERBYPATTERN( {TM1SUBSETALL( [Period] )},'Day " + previous_month + "')}, ALL, RECURSIVE )}, 0)} )}" 
+          period_mdx = "{ UNION({FILTER({TM1FILTERBYLEVEL({TM1DRILLDOWNMEMBER( {TM1FILTERBYPATTERN( {TM1SUBSETALL( [Period] )},'Day " + current_month + "')}, ALL, RECURSIVE )}, 0)} , [Period].[End of Period] <= "+ str(int(day_no)) +")},{TM1FILTERBYLEVEL({TM1DRILLDOWNMEMBER( {TM1FILTERBYPATTERN( {TM1SUBSETALL( [Period] )},'Day " + previous_month + "')}, ALL, RECURSIVE )}, 0)} )}" 
           len_period_elements = len(ops.dimensions.execute_mdx(dimension_name="Period", mdx=period_mdx))
           TOTAL_RECORD_COUNT = Num_Rate_Elements * 2 * len_period_elements  
         
