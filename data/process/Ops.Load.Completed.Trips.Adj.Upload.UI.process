@@ -491,13 +491,13 @@ ENDIF;
 IF(pForceLoad @= 'epm' % cMonthEndStatus @= 'Open');
 
    sProcess = 'Ops.Load.Ops.Adjustments.From.Delivery';
-   RUNPROCESS(sProcess
+   EXECUTEPROCESS(sProcess
       , 'pVersion', 'Actual'
       , 'pPeriod', cMonthEndPeriod
    );
 
    sProcess = 'Ops.Load.Ops.Adjustments.From.Mobility';
-   RUNPROCESS(sProcess
+   EXECUTEPROCESS(sProcess
       , 'pVersion', 'Actual'
       , 'pPeriod', cMonthEndPeriod
    );
@@ -505,7 +505,7 @@ IF(pForceLoad @= 'epm' % cMonthEndStatus @= 'Open');
    # HA Check to ensure that the batch is called only from one instance
    sBatchTriggerFlag = CELLGETS('TAP System Info', 'Trigger Batch From TI', 'Value');
    IF(UPPER(sBatchTriggerFlag) @= 'YES');
-      RUNPROCESS('Ops.DIQ.GL Reporting.Sync'
+      EXECUTEPROCESS('Ops.DIQ.GL Reporting.Sync'
          , 'pInstance', 'PAC'
          , 'pProcess', 'DIQ.Call.Batch'
          , 'pParams', '[{"Name":"pDIQBatch","Value":"Batch - 1109"}]'
