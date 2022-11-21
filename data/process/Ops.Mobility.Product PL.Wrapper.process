@@ -140,7 +140,7 @@ sSub = cSub;
 sEleAnc = IF(cAccount @= '', 'Ops PL', cAccount);
 
 IF(SUBSETEXISTS(sDim, sSub) = 0);
-   SUBSETCREATE(sDim, sSub);
+   SUBSETCREATE(sDim, sSub, 1);
 ENDIF;
 SUBSETDELETEALLELEMENTS(sDim, sSub);
 

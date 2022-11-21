@@ -69,19 +69,19 @@ sHier = EXPAND('%sDim%');
 
 sSub = cSub | '.Year';
 sMDX = EXPAND('{TM1SORT( {TM1FILTERBYPATTERN( { [%sDim%].[%sDim%].Members }, "????")}, ASC)}');
-SUBSETCREATE(sHier, sSub, 0);
+SUBSETCREATE(sHier, sSub, 1);
 SUBSETMDXSET(sHier, sSub, sMDX);
 SUBSETMDXSET(sHier, sSub, '');
 
 sSub = cSub | '.Half';
 sMDX = EXPAND('{TM1SORT( {TM1FILTERBYPATTERN( { [%sDim%].[%sDim%].Members }, "????-H?")}, ASC)}');
-SUBSETCREATE(sHier, sSub, 0);
+SUBSETCREATE(sHier, sSub, 1);
 SUBSETMDXSET(sHier, sSub, sMDX);
 SUBSETMDXSET(sHier, sSub, '');
 
 sSub = cSub | '.Quarter';
 sMDX = EXPAND('{TM1SORT( {TM1FILTERBYPATTERN( { [%sDim%].[%sDim%].Members }, "????-Q?")}, ASC)}');
-SUBSETCREATE(sHier, sSub, 0);
+SUBSETCREATE(sHier, sSub, 1);
 SUBSETMDXSET(sHier, sSub, sMDX);
 SUBSETMDXSET(sHier, sSub, '');
 

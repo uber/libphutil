@@ -83,7 +83,7 @@ sSub = cSub;
 sEleAnc = IF(cMonth @= '', 'Total Time - Month', cMonth);
 
 IF(SUBSETEXISTS(sDim, sSub) = 0);
-   SUBSETCREATE(sDim, sSub);
+   SUBSETCREATE(sDim, sSub, 1);
 ENDIF;
 SUBSETDELETEALLELEMENTS(sDim, sSub);
 
@@ -107,7 +107,7 @@ sSub = cSub;
 sEleAnc = IF(cRateType @= '', 'FX Rates', cRateType);
 
 IF(SUBSETEXISTS(sDim, sSub) = 0);
-   SUBSETCREATE(sDim, sSub);
+   SUBSETCREATE(sDim, sSub, 1);
 ENDIF;
 SUBSETDELETEALLELEMENTS(sDim, sSub);
 

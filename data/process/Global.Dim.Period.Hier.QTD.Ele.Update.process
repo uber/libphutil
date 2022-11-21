@@ -65,7 +65,7 @@ sDim = cDimPeriod;
 sDim1 = 'Period';
 sSub = cSub | '.Period';
 sMDX = EXPAND('{TM1SORT( EXCEPT( {TM1FILTERBYPATTERN( [%sDim%].[%sDim%].Members, "????-??")},' | 'UNION({TM1FILTERBYPATTERN( [%sDim%].[%sDim%].Members, "????-H?")}, {TM1FILTERBYPATTERN( [%sDim%].[%sDim%].Members' | ', "????-Q?")})), ASC)}');
-SUBSETCREATE(sDim, sSub, 0);
+SUBSETCREATE(sDim, sSub, 1);
 SUBSETMDXSET(sDim, sSub, sMDX);
 SUBSETMDXSET(sDim, sSub, '');
 
