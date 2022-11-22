@@ -1,0 +1,305 @@
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: PROPERTIES                                                           #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+{
+    "DataSource": {
+        "Type": "TM1DimensionSubset",
+        "dataSourceNameForClient": "ANALYTICS.GL Operational",
+        "dataSourceNameForServer": "ANALYTICS.GL Operational",
+        "subset": "Delete_Sub"
+    },
+    "HasSecurityAccess": false,
+    "Name": "Metadata.Ops.Metrics.Hierarchy update From GL Operational",
+    "Parameters": [
+        {
+            "Name": "pTargetDim",
+            "Prompt": "",
+            "Type": "String",
+            "Value": "Mobility Ops Metrics"
+        },
+        {
+            "Name": "pSourceDim",
+            "Prompt": "",
+            "Type": "String",
+            "Value": "ANALYTICS.GL Operational"
+        },
+        {
+            "Name": "sAlias",
+            "Prompt": "",
+            "Type": "String",
+            "Value": "Code - Description"
+        },
+        {
+            "Name": "sHierarchy",
+            "Prompt": "",
+            "Type": "String",
+            "Value": "Ops PL"
+        }
+    ],
+    "UIData": "CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
+    "Variables": [
+        {
+            "EndByte": 0,
+            "Name": "vElement",
+            "Position": 1,
+            "StartByte": 0,
+            "Type": "String"
+        }
+    ],
+    "VariablesUIData": [
+        "VarType=32\fColType=827\f",
+        "VarName=V2\fVarType=32\fColType=1165\fVarFormula=V2=:DIMIX ('}Element_Attributes_' |'ANALYTICS.GL Operational' , 'Code - Description' );: :v2 = '}Element_Attributes_' |'ANALYTICS.GL Operational';:\fVarFormulaDestination=BOTH\f"
+    ]
+}
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: PROPERTIES                                                             #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: PROLOG PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+# ================= TAPTOOLS: START GENERATED CODE =================== #
+sProcessName = GETPROCESSNAME();
+IF(sProcessName @<> 'TAP.Call.Queue.Add Job To Queue' & sProcessName @<> 'TAP.CubeSaveData' & sProcessName @<> 'TAP.Call.Save' & sProcessName @<> 'TAP.Call.Recurring' & sProcessName @<> 'DIQ.Call.Batch' & sProcessName @<> 'TAP.Call.Save.Wrapper' & sProcessName @<> 'TAP.Call.CubeSaveData.Wrapper' & sProcessName @<> 'TAP.Call.Tests' & sProcessName @<> 'TAP.Call.Init' & sProcessName @<> 'TAP.Call.Export Application Stats' & sProcessName @<> 'TAP.Cube.Export Data to File' & SCAN('}drill', LOWER(sProcessName)) = 0);
+   sBlock.Execution.Status = CELLGETS('TAP System Info', 'Block Process Execution', 'Value');
+   IF(UPPER(sBlock.Execution.Status) @= 'YES');
+      sBlock.Epilog.Execution = 'Yes';
+      PROCESSBREAK;
+   ENDIF;
+ENDIF;
+LOGOUTPUT('DEBUG', 'PARAMETER: pTargetDim: "' | pTargetDim | '"');
+LOGOUTPUT('DEBUG', 'PROGRESS: START PROLOG PROCEDURE');
+nMetadataProcedureRecordsStarted = 0;
+nMetadataProcedureRecordsSkipped = 0;
+nMetadataProcedureRecordsRejected = 0;
+nMetadataProcedureRecordsCompleted = 0;
+nDataProcedureRecordsStarted = 0;
+nDataProcedureRecordsSkipped = 0;
+nDataProcedureRecordsRejected = 0;
+nDataProcedureRecordsCompleted = 0;
+nPrologProcedureDataOperations = 0;
+nDataProcedureDataOperations = 0;
+nTotalDataOperations = 0;
+nPrologProcedureMetadataOperations = 0;
+nMetadataProcedureMetadataOperations = 0;
+nDataProcedureMetadataOperations = 0;
+nEpilogProcedureMetadataOperations = 0;
+nTotalProcedureMetadataOperations = 0;
+nPrologProcedureStartTime = NOW();
+nPrologProcedureEndTime = 0;
+nMetadataProcedureStartTime = 0;
+nMetadataProcedureEndTime = 0;
+nDataProcedureStartTime = 0;
+nDataProcedureEndTime = 0;
+# ================= TAPTOOLS: END GENERATED CODE ===================== #
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#pSourceDim = 'ANALYTICS.GL Operational';
+#sHierarchy = 'Net Effective Take Rate (NETR)';
+cRand = NUMBERTOSTRING(ROUND(RAND() * 100000));
+cRand = FILL('0', 6 - LONG(cRand)) | cRand;
+cRand = NUMBERTOSTRING(NOW()) | '.' | cRand;
+
+Attrcub = '}ElementAttributes_' | pTargetDim;
+SouAttrcube = '}ElementAttributes_' | pSourceDim;
+###Create Target Subset to Unwind Hierarchy
+cRandomIntA = cRand | pTargetDim;
+TargetMDX = '{TM1DRILLDOWNMEMBER( {TM1FILTERBYPATTERN( {TM1SUBSETALL( [' | pTargetDim | '] )}, "'| sHierarchy|'")}, ALL, RECURSIVE )}';
+TargetSub = 'zTemp.' | GETPROCESSNAME() | '.' | cRandomIntA;
+SUBSETDESTROY(pTargetDim, TargetSub);
+SUBSETCREATEBYMDX(TargetSub, TargetMDX, 0);
+SUBSETMDXSET(pTargetDim, TargetSub, '');
+
+
+
+##Logic to remove Existing Consolidation in Target Dim
+i = 1;
+TarSubZiz = SUBSETGETSIZE(pTargetdim, TargetSub);
+WHILE(i <= TarSubZiz);
+   Ele = SUBSETGETELEMENTNAME(pTargetdim, TargetSub, i);
+   IF(ELCOMPN(pTargetdim, Ele) > 0);
+      parent = Ele;
+      CompN = ELCOMPN(pTargetdim, parent);
+      k = 1;
+      WHILE(k <= CompN);
+         # Child = SubsetGetElementName( Targetdim ,TargetSub ,i+1);
+         Child = ELEMENTCOMPONENT(pTargetdim, '', Parent, 1);
+         IF(ELEMENTISANCESTOR(pTargetdim, '', parent, Child) > 0);
+            # ================= TAPTOOLS: START GENERATED CODE =================== #
+            nPrologProcedureMetadataOperations = nPrologProcedureMetadataOperations + 1;
+            # ================= TAPTOOLS: END GENERATED CODE ===================== #
+            DIMENSIONELEMENTCOMPONENTDELETE(pTargetDim, Parent, Child);
+         ENDIF;
+         k = K + 1;
+      END;
+      IF(ELCOMPN(pTargetdim, Child) > 0);
+         Parent = Child;
+      ENDIF;
+   ELSE;
+      IF(ELEMENTISANCESTOR(pTargetdim, '', parent, Child) > 0);
+         # ================= TAPTOOLS: START GENERATED CODE =================== #
+         nPrologProcedureMetadataOperations = nPrologProcedureMetadataOperations + 1;
+         # ================= TAPTOOLS: END GENERATED CODE ===================== #
+         DIMENSIONELEMENTCOMPONENTDELETE(pTargetDim, Parent, Child);
+      ENDIF;
+   ENDIF;
+   i = i + 1;
+END;
+
+###Create Source Subset
+
+cRandomIntA = cRand | pSourceDim;
+TargetMDX = '{TM1DRILLDOWNMEMBER( {TM1FILTERBYPATTERN( {TM1SUBSETALL( [' | pSourceDim | '] )}, "'|sHierarchy|'")}, ALL, RECURSIVE )}';
+SourceSub = 'zTemp.' | GETPROCESSNAME() | '.' | cRandomIntA;
+SUBSETDESTROY(pSourceDim, SourceSub);
+SUBSETCREATEBYMDX(SourceSub, TargetMDX, 0);
+SUBSETMDXSET(pSourceDim, SourceSub, '');
+#SubsetAliasSet(  pSourceDim , SourceSub, 'Code - Description' );
+
+
+### Assign Data Source ###
+DatasourceNameForServer = pSourceDim;
+DatasourceNameForClient = pSourceDim;
+DatasourceType = 'SUBSET';
+DatasourceDimensionSubset = SourceSub;
+
+
+# ================= TAPTOOLS: START GENERATED CODE =================== #
+nPrologProcedureEndTime = NOW();
+LOGOUTPUT('DEBUG', 'DATASOURCE: DatasourceType: "' | DatasourceType | '"');
+LOGOUTPUT('DEBUG', 'DATASOURCE: DatasourceNameForServer: "' | DatasourceNameForServer | '"');
+LOGOUTPUT('DEBUG', 'DATASOURCE: DatasourceCubeView: "' | DatasourceCubeView | '"');
+LOGOUTPUT('DEBUG', 'DATASOURCE: DatasourceDimensionSubset: "' | DatasourceDimensionSubset | '"');
+LOGOUTPUT('DEBUG', 'PROGRESS: END PROLOG PROCEDURE');
+# ================= TAPTOOLS: END GENERATED CODE ===================== #
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: PROLOG PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: METADATA PROCEDURE                                                   #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+# ================= TAPTOOLS: START GENERATED CODE =================== #
+nMetadataProcedureRecordsStarted = nMetadataProcedureRecordsStarted + 1;
+IF(nMetadataProcedureStartTime = 0);
+   LOGOUTPUT('DEBUG', 'PROGRESS: START METADATA PROCEDURE');
+   nMetadataProcedureStartTime = NOW();
+ENDIF;
+# ================= TAPTOOLS: END GENERATED CODE ===================== #
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+nIndex = 1;
+nLimit = ELCOMPN(pSourceDim, vElement);
+WHILE(nIndex <= nLimit);
+   sElName = ELCOMP(pSourceDim, vElement, nIndex);
+   sDecendant = ELEMENTCOMPONENT(pSourceDim, '', vElement, nIndex);
+  IF( DIMIX ('}ElementAttributes_' | pSourceDim , sAlias ) > 0 );
+     eleName = ATTRS(pSourceDim, sDecendant, sAlias );
+     IF(eleName @= '' );
+       eleName = sDecendant;
+     ENDIF;
+   else;
+   
+   eleName = sDecendant;
+  ENDIF;
+   nElWeight = ELWEIGHT(pSourceDim, vElement, sDecendant);
+   # ================= TAPTOOLS: START GENERATED CODE =================== #
+   nMetadataProcedureMetadataOperations = nMetadataProcedureMetadataOperations + 1;
+   # ================= TAPTOOLS: END GENERATED CODE ===================== #
+   DIMENSIONELEMENTCOMPONENTADD(pTargetDim, vElement, eleName, nElWeight);
+   nIndex = nIndex + 1;
+
+END;
+
+
+
+# ================= TAPTOOLS: START GENERATED CODE =================== #
+nMetadataProcedureRecordsCompleted = nMetadataProcedureRecordsCompleted + 1;
+# ================= TAPTOOLS: END GENERATED CODE ===================== #
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: METADATA PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: DATA PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+# ================= TAPTOOLS: START GENERATED CODE =================== #
+nDataProcedureRecordsStarted = nDataProcedureRecordsStarted + 1;
+IF(nMetadataProcedureEndTime = 0);
+   LOGOUTPUT('DEBUG', 'PROGRESS: END METADATA PROCEDURE');
+   nMetadataProcedureEndTime = NOW();
+ENDIF;
+IF(nDataProcedureStartTime = 0);
+   LOGOUTPUT('DEBUG', 'PROGRESS: START DATA PROCEDURE');
+   nDataProcedureStartTime = NOW();
+ENDIF;
+# ================= TAPTOOLS: END GENERATED CODE ===================== #
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+nIndex = 1;
+nLimit = ELCOMPN(pSourceDim, vElement);
+WHILE(nIndex <= nLimit);
+   sElName = ELCOMP(pSourceDim, vElement, nIndex);
+   sDecendant = ELEMENTCOMPONENT(pSourceDim, '', vElement, nIndex);
+   IF(ELLEV(pSourceDim, sDecendant) < 1);
+      # ================= TAPTOOLS: START GENERATED CODE =================== #
+      nDataProcedureDataOperations = nDataProcedureDataOperations + 1;
+      # ================= TAPTOOLS: END GENERATED CODE ===================== #
+      CELLPUTS('Y', Attrcub, sDecendant, 'Fx_Flag');
+   ENDIF;
+   nIndex = nIndex + 1;
+END;
+
+# ================= TAPTOOLS: START GENERATED CODE =================== #
+nDataProcedureRecordsCompleted = nDataProcedureRecordsCompleted + 1;
+# ================= TAPTOOLS: END GENERATED CODE ===================== #
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: DATA PROCEDURE                                                         #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: EPILOG PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+# ================= TAPTOOLS: START GENERATED CODE =================== #
+IF(sBlock.Epilog.Execution @= 'Yes');
+   LOGOUTPUT('ERROR', 'Block Process Execution Flag is Yes in TAP System Info Cube. Skipping this process...');
+   PROCESSERROR;
+ENDIF;
+IF(nPrologProcedureEndTime = 0);
+   LOGOUTPUT('DEBUG', 'DATASOURCE: DatasourceType: "NULL"');
+   LOGOUTPUT('DEBUG', 'PROGRESS: END PROLOG PROCEDURE');
+   nPrologProcedureEndTime = NOW();
+ENDIF;
+IF(nMetadataProcedureStartTime > 0 & nMetadataProcedureEndTime = 0);
+   LOGOUTPUT('DEBUG', 'PROGRESS: END METADATA PROCEDURE');
+   nMetadataProcedureEndTime = NOW();
+ENDIF;
+IF(nDataProcedureStartTime > 0 & nDataProcedureEndTime = 0);
+   LOGOUTPUT('DEBUG', 'PROGRESS: END DATA PROCEDURE');
+   nDataProcedureEndTime = NOW();
+ENDIF;
+LOGOUTPUT('DEBUG', 'PROGRESS: START EPILOG PROCEDURE');
+nEpilogProcedureStartTime = NOW();
+# ================= TAPTOOLS: END GENERATED CODE ===================== #
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+# ================= TAPTOOLS: START GENERATED CODE =================== #
+
+# ================= TAPTOOLS: END GENERATED CODE ===================== #
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: EPILOG PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
