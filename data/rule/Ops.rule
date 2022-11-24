@@ -27,6 +27,11 @@ SKIPCHECK;
 
 ['Actual', 'X-Platform Users %', 'Amount'] = ['X-Platform Users'] \ DB('Ops',!Version, !Period, !Source,!Rate Type, 'Total Location By Country', !Line of Business,!Product Type, 'X-Platform Users','Amount');
 
+['Actual', 'P3 Miles Per Trip', 'Amount'] = C: ['Total P3 Miles'] \ ['Completed Trips - Rides Insurance CM'];
+
+['Actual', 'P2 Miles Per Trip', 'Amount'] = C: ['Total P2 Miles'] \ ['Completed Trips - Rides Insurance CM'];
+
+['Actual', 'Total Miles per Trip', 'Amount'] = C: ['Total Mileage (Mileage Type)'] \ ['Completed Trips - Rides Insurance CM'];
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=- =-=-=-=-=-=-=-=-#
 # STET Freight monthly completed trips - 2020 onwards
@@ -58,7 +63,7 @@ CONTINUE);
 [{'Support Contacts - Virtual', 'Support Contacts - Greenlight', 'Support Contacts - Automation'}] = N: STET;
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=- =-=-=-=-=-=-=-=-=-=-=-=-=-=- =-=-=-= #
-# POP, YOY, POP %, YOY %, % of Gross Bookings, % of Adjusted Net Revenue, Per Trip Calculation
+# POP, YOY, POP %, YOY %, % of Gross Bookings, % of Adjusted Net Revenue , Per Trip Calculation
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=- =-=-=-=-=-=-=-=-=-=-=-=-=-=- =-=-=-= #
 
 ['% of Gross Bookings'] = ['Amount'] \ ['Gross Bookings','Amount'];
@@ -68,6 +73,19 @@ CONTINUE);
 ['Ops Measure':'Per Trip'] =
    ['Ops Measure':'Amount'] \
    ['Ops Metric':'Completed Trips', 'Ops Measure':'Amount'];
+
+['Ops Measure':'Per P3 Mile'] =
+   ['Ops Measure':'Amount'] \
+   ['Ops Metric':'Total P3 Miles', 'Ops Measure':'Amount'];
+
+['Ops Measure':'Per P2 Mile'] =
+   ['Ops Measure':'Amount'] \
+   ['Ops Metric':'Total P2 Miles', 'Ops Measure':'Amount'];
+
+['Ops Measure':'Per Mile'] =
+   ['Ops Measure':'Amount'] \
+   ['Ops Metric':'Total Mileage (Mileage Type)', 'Ops Measure':'Amount'];
+
 
 ['PoP Growth'] =
    (

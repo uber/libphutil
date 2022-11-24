@@ -6,6 +6,18 @@ SKIPCHECK;
    ['Delivery Measure':'Amount'] \
    ['Department':'0000', 'Delivery Ops Metrics':'Completed Trips', 'Delivery Measure':'Amount'];
 
+['Delivery Measure':'Per P3 Mile'] =
+   ['Delivery Measure':'Amount'] \
+   ['Department':'0000', 'Delivery Ops Metrics':'Total P3 Miles', 'Delivery Measure':'Amount'];
+
+['Delivery Measure':'Per P2 Mile'] =
+   ['Delivery Measure':'Amount'] \
+   ['Department':'0000', 'Delivery Ops Metrics':'Total P2 Miles', 'Delivery Measure':'Amount'];
+
+['Delivery Measure':'Per Mile'] =
+   ['Delivery Measure':'Amount'] \
+   ['Department':'0000', 'Delivery Ops Metrics':'Total Mileage (Mileage Type)', 'Delivery Measure':'Amount'];
+
 ['Ops PL Derived','Amount']=C:0;
 ['Ratios','Amount']=C:0;
 ['Alt Financial Metrics','Amount']=C:0;
@@ -19,6 +31,12 @@ SKIPCHECK;
 ['Actual','% of GB', 'Amount']= C: ['Gross Bookings'] \ DB('Delivery',!Version,!Period,!Source,!Rate Type,!Line of Business,!Department,!Location,'Total Fulfillment Type','Total Merchant Type','Total Order Category','Total Merchant Segment','All Delivery Features','Gross Bookings',!Delivery Measure);
 
 ['Actual','Existing Rider/Eater Promo % of GB', 'Amount'] = C: ['Existing Rider/Eater Promos'] \ ['Gross Bookings'];
+
+['Actual','P3 Miles Per Trip', 'Amount'] = C: ['Total P3 Miles'] \ ['Completed Trips - Rides Insurance CM'];
+
+['Actual','P2 Miles Per Trip', 'Amount'] = C: ['Total P2 Miles'] \ ['Completed Trips - Rides Insurance CM'];
+
+['Actual','Total Miles per Trip', 'Amount'] = C: ['Total Mileage (Mileage Type)'] \ ['Completed Trips - Rides Insurance CM'];
 
 ######## END Dervied Metrics Calculation
 

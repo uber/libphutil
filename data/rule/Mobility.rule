@@ -6,11 +6,29 @@ SKIPCHECK;
    ['Mobility Measure':'Amount'] \
    ['Department':'0000', 'Mobility Ops Metrics':'Completed Trips', 'Mobility Measure':'Amount'];
 
+['Mobility Measure':'Per P3 Mile'] =
+   ['Mobility Measure':'Amount'] \
+   ['Department':'0000', 'Mobility Ops Metrics':'Total P3 Miles', 'Mobility Measure':'Amount'];
+
+['Mobility Measure':'Per P2 Mile'] =
+   ['Mobility Measure':'Amount'] \
+   ['Department':'0000', 'Mobility Ops Metrics':'Total P2 Miles', 'Mobility Measure':'Amount'];
+
+['Mobility Measure':'Per Mile'] =
+   ['Mobility Measure':'Amount'] \
+   ['Department':'0000', 'Mobility Ops Metrics':'Total Mileage (Mileage Type)', 'Mobility Measure':'Amount'];
+
 ['Ops PL Derived','Amount']=C:0;
 ['Ratios','Amount']=C:0;
 ['Alt Financial Metrics','Amount']=C:0;
 
 ['Actual','Avg.Fare', 'Amount'] = C: ['Gross Bookings'] \ ['Completed Trips'];
+
+['Actual','P3 Miles Per Trip', 'Amount'] = C: ['Total P3 Miles'] \ ['Completed Trips - Rides Insurance CM'];
+
+['Actual','P2 Miles Per Trip', 'Amount'] = C: ['Total P2 Miles'] \ ['Completed Trips - Rides Insurance CM'];
+
+['Actual','Total Miles per Trip', 'Amount'] = C: ['Total Mileage (Mileage Type)'] \ ['Completed Trips - Rides Insurance CM'];
 
 ######## END Dervied Metrics Calculation
 
