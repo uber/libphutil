@@ -15,6 +15,21 @@
             "ComponentName": "Amount",
             "ParentName": "Per Trip",
             "Weight": 1
+        },
+        {
+            "ComponentName": "Amount",
+            "ParentName": "Per P3 Mile",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Amount",
+            "ParentName": "Per P2 Mile",
+            "Weight": 1
+        },
+        {
+            "ComponentName": "Amount",
+            "ParentName": "Per Mile",
+            "Weight": 1
         }
     ],
     "ElementAttributes": [
@@ -42,6 +57,33 @@
             "Name": "Per Trip",
             "Type": "Consolidated",
             "UniqueName": "[Delivery Measure].[Delivery Measure].[Per Trip]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Per P3 Mile"
+            },
+            "Index": 3,
+            "Name": "Per P3 Mile",
+            "Type": "Consolidated",
+            "UniqueName": "[Delivery Measure].[Delivery Measure].[Per P3 Mile]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Per P2 Mile"
+            },
+            "Index": 4,
+            "Name": "Per P2 Mile",
+            "Type": "Consolidated",
+            "UniqueName": "[Delivery Measure].[Delivery Measure].[Per P2 Mile]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Per Mile"
+            },
+            "Index": 5,
+            "Name": "Per Mile",
+            "Type": "Consolidated",
+            "UniqueName": "[Delivery Measure].[Delivery Measure].[Per Mile]"
         }
     ],
     "Name": "Delivery Measure",
