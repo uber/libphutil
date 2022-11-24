@@ -99,7 +99,7 @@ IF(LONG(sRateTypeAdded) > 0);
 
    sCube5 = 'U4B Staging';
    cTemplateProcess5 = '--process ''%sProcessName%'' pCubeName ''%sCube5%'' ';
-   cTemplateProcess5 = EXPAND(cTemplateProcess4);
+   cTemplateProcess5 = EXPAND(cTemplateProcess5);
 
    sCommand = EXPAND(cTemplateScriptRun);
 
