@@ -194,6 +194,8 @@ nDataProcedureEndTime = 0;
 
 cCube = 'Mobility';
 nRecords = 1;
+nTrips = 0;
+nMiles = 0;
 
 ###Record count dashboard
 cRecordCount = 0;
@@ -431,6 +433,11 @@ IF(DIMIX('Mobility Ops Metrics', sMetric) = 0);
    ITEMSKIP;
 ENDIF;
 
+IF(sMetric @= 'Completed Trips');
+   nTrips = 1;
+ELSEIF(sMetric @= 'Completed Trips - Rides Insurance CM' % sMetric @= 'P2 P2P Miles' % sMetric @= 'P3 P2P Miles' % sMetric @= 'P2 Non-P2P Miles' % sMetric @= 'P3 Non-P2P Miles');
+   nMiles = 1;
+ENDIF;
 
 IF(SCAN(sMetric, cMetricString) = 0);
    cMetricString = cMetricString | sMetric | '|';
@@ -438,6 +445,7 @@ IF(SCAN(sMetric, cMetricString) = 0);
    SUBSETELEMENTINSERT('Mobility Ops Metrics', cSubset, sMetric, 1);
    VIEWZEROOUT(cCube, cViewName);
 ENDIF;
+
 
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
 # Load Data
@@ -495,31 +503,34 @@ nEpilogProcedureStartTime = NOW();
 #****Begin: Generated Statements***
 #****End: Generated Statements****
 
+IF(nTrips = 1);
 
-sProcess = 'Ops.Mobility.From Day Month';
-
-EXECUTEPROCESS(sProcess
-   , 'pStartDate', pStartDate
-   , 'pEndDate', pEndDate
-   , 'pMetrics', cMetricString
-);
-sProcess = 'Ops.Load.Completed.Trips.From.Mobility';
-
-EXECUTEPROCESS(sProcess
-   , 'pVersion', 'Actual'
-   , 'pStartDate', pStartDate
-   , 'pEndDate', pEndDate
-);
-
-# Copying completed trips data on 2nd day of the month from FDS metric to Reported metric in Ops cube
-nDay = NUMBR(SUBST(TODAY(1), 9, 2));
-cMonth = ATTRS('Period', SUBST(TODAY(1), 1, 7), 'Prior Period');
-IF(nDay = 1 % nDay = 2);
-   EXECUTEPROCESS('Bedrock.Cube.Data.Copy.IntraCube'
-      , 'pCube', 'Ops'
-      , 'pFilter', 'Version:Actual & Period:' | cMonth | ' & Source:FDS & Line of Business:Mobility & Ops Metric: Completed Trips'
-      , 'pElementMapping', 'Source: FDS->Reported'
+   #Sync Day to Month process
+   sProcess = 'Ops.Mobility.From Day Month';
+   EXECUTEPROCESS(sProcess
+      , 'pStartDate', pStartDate
+      , 'pEndDate', pEndDate
+      , 'pMetrics', cMetricString
    );
+
+   #Sync to Ops
+   sProcess = 'Ops.Load.Completed.Trips.From.Mobility';
+   EXECUTEPROCESS(sProcess
+      , 'pVersion', 'Actual'
+      , 'pStartDate', pStartDate
+      , 'pEndDate', pEndDate
+   );
+
+   # Copying completed trips data on 2nd day of the month from FDS metric to Reported metric in Ops cube
+   nDay = NUMBR(SUBST(TODAY(1), 9, 2));
+   cMonth = ATTRS('Period', SUBST(TODAY(1), 1, 7), 'Prior Period');
+   IF(nDay = 1 % nDay = 2);
+      EXECUTEPROCESS('Bedrock.Cube.Data.Copy.IntraCube'
+         , 'pCube', 'Ops'
+         , 'pFilter', 'Version:Actual & Period:' | cMonth | ' & Source:FDS & Line of Business:Mobility & Ops Metric: Completed Trips'
+         , 'pElementMapping', 'Source: FDS->Reported'
+      );
+   ENDIF;
 ENDIF;
 
 

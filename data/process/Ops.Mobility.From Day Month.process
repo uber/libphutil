@@ -499,6 +499,18 @@ nEpilogProcedureStartTime = NOW();
 #****Begin: Generated Statements***
 #****End: Generated Statements****
 
+IF(pMetrics @= 'Completed Trips - Rides Insurance CM | P2 P2P Miles | P3 P2P Miles | P2 Non-P2P Miles | P3 Non-P2P Miles |');
+
+   #Sync to Ops
+   sProcess = 'Ops.Load.Operational.Metrics.From.Mobility';
+   EXECUTEPROCESS(sProcess
+      , 'pVersion', 'Actual'
+      , 'pStartDate', pStartDate
+      , 'pEndDate', pEndDate
+      , 'pMetrics', pMetrics
+   );
+
+ENDIF;
 # ================= TAPTOOLS: START GENERATED CODE =================== #
 LOGOUTPUT('DEBUG', 'PROCESS_METRIC: PrologProcedureRuntime: "' | NUMBERTOSTRING(ROUNDP((nPrologProcedureEndTime - nPrologProcedureStartTime) * 86400, 2)) | '"');
 LOGOUTPUT('DEBUG', 'PROCESS_METRIC: PrologProcedureMetadataOperations: "' | NUMBERTOSTRING(nPrologProcedureMetadataOperations) | '"');

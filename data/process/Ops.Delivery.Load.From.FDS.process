@@ -195,6 +195,8 @@ cCube = 'Delivery';
 nRecords = 1;
 sException = '';
 nTrips = 0;
+nMiles = 0;
+
 ###Record count dashboard
 cRecordCount = 0;
 cLoaddate = TODAY(1);
@@ -453,6 +455,8 @@ ENDIF;
 
 IF(sMetric @= 'Completed Trips');
    nTrips = 1;
+ELSEIF(sMetric @= 'Completed Trips - Rides Insurance CM' % sMetric @= 'P2 P2P Miles' % sMetric @= 'P3 P2P Miles' % sMetric @= 'P2 Non-P2P Miles' % sMetric @= 'P3 Non-P2P Miles' % sMetric @= 'P2P Miles');
+   nMiles = 1;
 ENDIF;
 
 IF(SCAN(sMetric, cMetricString) = 0);
@@ -531,25 +535,27 @@ IF(LONG(sException) > 0);
    LOGOUTPUT('INFO', 'New Elements : ' | sException);
 ENDIF;
 
-sProcess = 'Ops.Delivery.From Day Month';
-
-EXECUTEPROCESS(sProcess
-   , 'pStartDate', pStartDate
-   , 'pEndDate', pEndDate
-   , 'pMetrics', cMetricString
-);
 
 IF(nTrips = 1);
 
-   sProcess = 'Ops.Load.Completed.Trips.From.Delivery';
+   sProcess = 'Ops.Delivery.From Day Month';
 
+   EXECUTEPROCESS(sProcess
+      , 'pStartDate', pStartDate
+      , 'pEndDate', pEndDate
+      , 'pMetrics', cMetricString
+   );
+
+
+   #Sync to Ops
+   sProcess = 'Ops.Load.Completed.Trips.From.Delivery';
    EXECUTEPROCESS(sProcess
       , 'pVersion', 'Actual'
       , 'pStartDate', pStartDate
       , 'pEndDate', pEndDate
    );
 
-
+   # Copying completed trips data on 2nd day of the month from FDS metric to Reported metric in Ops cube
    nDay = NUMBR(SUBST(TODAY(1), 9, 2));
    cMonth = ATTRS('Period', SUBST(TODAY(1), 1, 7), 'Prior Period');
    IF(nDay = 1 % nDay = 2);
@@ -559,6 +565,7 @@ IF(nTrips = 1);
          , 'pElementMapping', 'Source: FDS->Reported'
       );
    ENDIF;
+
 ENDIF;
 
 ##Record Count update
