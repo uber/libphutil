@@ -6,7 +6,7 @@
         "Type": "None"
     },
     "HasSecurityAccess": false,
-    "Name": "Cube.Copy.Ops.ops.to.Analytics.GLOperational&Reporting",
+    "Name": "Cube.Copy.Ops.ops.to.Analytics.GLOperational.Reporting",
     "Parameters": [],
     "UIData": "CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
     "Variables": [],
@@ -67,7 +67,6 @@ sAddedRateTypes = CELLGETS('Admin Playbook', 'Exchange Rate Sync', 'Added Rate T
 IF(LONG(sAddedRateTypes) > 0 & UPPER(sBatchTriggerFlag) @= 'YES');
 
    cPythonExe = CELLGETS('TAP System Info', 'Python Executable', 'Value');
-
    cScriptRun = CELLGETS('TAP System Info', 'Scripts Shared Path', 'Value');
    cScriptRun = cScriptRun | '/tap/tap-runti-in-parallel.py';
 
