@@ -82,7 +82,7 @@ IF(LONG(sAddedRateTypes) > 0 & UPPER(sBatchTriggerFlag) @= 'YES');
    cThreads = '30';
 
    pPeriod = '';
-   sProcessName = 'Cube.Data.Copy_Ops.ops.to.GLOperational&Reporting';
+   sProcessName = 'Cube.Data.Copy_Ops.ops.to.GLOperational.Reporting';
    vElement = 'Analytics Sync';
    #Identify all the leaf ubder Analytics Sync
    pSourceDim = 'Ops Metric';
