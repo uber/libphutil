@@ -196,6 +196,7 @@ nRecords = 1;
 sException = '';
 nTrips = 0;
 nMiles = 0;
+np2pmiles = 0;
 
 ###Record count dashboard
 cRecordCount = 0;
@@ -457,6 +458,8 @@ IF(sMetric @= 'Completed Trips');
    nTrips = 1;
 ELSEIF(sMetric @= 'Completed Trips - Rides Insurance CM' % sMetric @= 'P2 P2P Miles' % sMetric @= 'P3 P2P Miles' % sMetric @= 'P2 Non-P2P Miles' % sMetric @= 'P3 Non-P2P Miles' % sMetric @= 'P2P Miles');
    nMiles = 1;
+ELSEIF(sMetric @= 'P2P Miles');
+   np2pmiles = 1;
 ENDIF;
 
 IF(SCAN(sMetric, cMetricString) = 0);
@@ -533,6 +536,17 @@ nEpilogProcedureStartTime = NOW();
 IF(LONG(sException) > 0);
    LOGOUTPUT('INFO', 'New elements data coming from FDS. Please check with Product team and add them to TM1');
    LOGOUTPUT('INFO', 'New Elements : ' | sException);
+ENDIF;
+
+
+IF(np2pmiles = 1);
+
+   sProcess = 'Ops.Delivery.From Day Month';
+   EXECUTEPROCESS(sProcess
+      , 'pStartDate', pStartDate
+      , 'pEndDate', pEndDate
+      , 'pMetrics', cMetricString
+   );
 ENDIF;
 
 
