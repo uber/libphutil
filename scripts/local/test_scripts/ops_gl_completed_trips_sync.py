@@ -13,7 +13,7 @@ WHERE
     (
     [Version].[Actual], 
     [Location].[Total Location Incl Discontinued],
-    [Source].[FDP],
+    [Source].[Ops Incl Post Reported Adjs],
     [Rate Type].[USD],
     [Line of Business].[Total Line of Business],
     [Product Type].[Total Product Type],
@@ -31,7 +31,7 @@ WHERE
     (
     [Version].[Actual], 
     [Location].[Total Location Incl Discontinued],
-    [Source].[OPS],
+    [Source].[Ops Incl Post Reported Adjs],
     [Line of Business].[Total Line of Business],
     [Rate Type].[USD],
     [Department].[Total Department],
