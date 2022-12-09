@@ -19,7 +19,7 @@ WHERE (
     [Version].[Actual],
     [Source].[FDS],
     [Rate Type].[USD],
-    [Line of Business].[Delivery],   
+    [Line of Business].[Delivery],
     [Department].[Total Department],
     [Delivery Fulfillment Type].[Total Fulfillment Type],
     [Delivery Merchant Type].[Total Merchant Type],
@@ -47,7 +47,7 @@ WHERE (
     [Version].[Actual],
     [Source].[FDS],
     [Rate Type].[USD],
-    [Line of Business].[Delivery],   
+    [Line of Business].[Delivery],
     [Department].[Total Department],
     [Delivery Fulfillment Type].[Total Fulfillment Type],
     [Delivery Merchant Type].[Total Merchant Type],
@@ -66,7 +66,7 @@ class Mytest(Reconciliation):
     alert_level = {'email': 'error'}
     source = [['ops', 'mdx', source_mdx]]
     target = [['ops', 'mdx', target_mdx]]
-    schedule = '0 18 * * *'
+    schedule = '0 19 * * *'
     keyword = ['Delivery']
     threshold = ('ge', 1)
 
