@@ -37,10 +37,10 @@ SKIPCHECK;
                                                         STET);
 
  # Rider Miles & Completed Trips
-['Actual', 'Product PL', {'Rider Miles', 'Completed Trips'}, 'Amount'] = N: ['FDS Incl. Adj'];
+#Populate only Month level data
+['Actual', 'Product PL', {'Rider Miles', 'Completed Trips'}, 'Amount'] = N:IF(DB('}ElementAttributes_Period',!Period,'Input Type') @= 'Month' , ['FDS Incl. Adj'] , continue );
 
 FEEDERS;
-
-['Actual', 'FDS Incl. Adj', {'Rider Miles', 'Completed Trips'}, 'Amount'] => ['Product PL'];
-
+##Feed Only Monthly Level Data
+['Actual', 'FDS Incl. Adj', {'Rider Miles', 'Completed Trips'}, 'Amount' ,'Total Time - Month'] => ['Product PL'];
 

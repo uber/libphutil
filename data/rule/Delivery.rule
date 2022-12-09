@@ -44,10 +44,10 @@ SKIPCHECK;
                                                         DB('Delivery Staging',!Version,!Period,!Source,!Rate Type, 'Total Currency',!Line of Business,!Department,!Location,!Delivery Fulfillment Type,!Delivery Merchant Type,!Delivery Order Category,!Delivery Merchant Segment,!Delivery Features,!Delivery Ops Metrics,'Amount'),
                                                         STET);
 
-
  # Rider Miles & Completed Trips
-['Actual', 'Product PL', {'P2P Miles', 'Completed Trips'}, 'Amount'] = N: ['FDS Incl. Adj'];
+#Populate only Month level data
+['Actual', 'Product PL', {'P2P Miles', 'Completed Trips'}, 'Amount'] = N:IF(DB('}ElementAttributes_Period',!Period,'Input Type') @= 'Month' , ['FDS Incl. Adj'] , Continue );
 
 FEEDERS;
-
-['Actual', 'FDS Incl. Adj', {'P2P Miles', 'Completed Trips'}, 'Amount'] => ['Product PL'];
+##Feed Only Monthly Level Data
+['Actual', 'FDS Incl. Adj', {'P2P  Miles', 'Completed Trips'}, 'Amount' ,'Total Time - Month'] => ['Product PL'];
