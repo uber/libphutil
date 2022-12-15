@@ -57,16 +57,22 @@ nDataProcedureEndTime = 0;
 #****End: Generated Statements****
 
 
-
-
 #############################################Update the DIQ Index cube for Ops-> Analytics DIQ##########################
 
 sBatchTriggerFlag = CELLGETS('TAP System Info', 'Trigger Batch From TI', 'Value');
 sAddedRateTypes = CELLGETS('Admin Playbook', 'Exchange Rate Sync', 'Added Rate Types');
-
-IF(LONG(sAddedRateTypes) > 0 & UPPER(sBatchTriggerFlag) @= 'YES');
+sLoopString = TRIM(sAddedRateTypes);
+sLoopString = sLoopString | IF(SUBST(sLoopString, LONG(sLoopString), 1) @<> '|', '|', '');
+nStart = 1;
+nCurPos = 1;
+WHILE(nCurPos <= LONG(sLoopString));
+   sCurChar = SUBST(sLoopString, nCurPos, 1);
+   IF(sCurChar @= '|');
+      sRateType = SUBST(sLoopString, nStart, nCurPos - nStart);
+     IF(LONG(sAddedRateTypes) > 0 &  UPPER(sBatchTriggerFlag) @= 'YES');
 
    cPythonExe = CELLGETS('TAP System Info', 'Python Executable', 'Value');
+
    cScriptRun = CELLGETS('TAP System Info', 'Scripts Shared Path', 'Value');
    cScriptRun = cScriptRun | '/tap/tap-runti-in-parallel.py';
 
@@ -93,7 +99,8 @@ IF(LONG(sAddedRateTypes) > 0 & UPPER(sBatchTriggerFlag) @= 'YES');
       pMetric = pMetric | sElName;
       nIndex = nIndex + 1;
    END;
-   sTemplateProcessAll = '';
+    sTemplateProcessAll = '';
+    sAddedRateTypes = sRateType ;
    cTemplateScriptRun = '%cPythonExe% %cScriptRun% --server ''%cAnalyticsServer%'' --port %cPort% --user ''%cBatchUser%'' --password ''%cBatchPassword%'' --namespace ''%cBatchNamespace%'' --threads ''%cThreads%'' %sTemplateProcessAll%';
 
    cTemplateProcess_GO = '--process ''%sProcessName%'' pMetric ''% pMetric%'' sAddedRateTypes ''% sAddedRateTypes%'' ';
@@ -110,8 +117,11 @@ IF(LONG(sAddedRateTypes) > 0 & UPPER(sBatchTriggerFlag) @= 'YES');
 
    EXECUTECOMMAND(sCommand, 1);
 
-ENDIF;
-
+      ENDIF;
+        nStart = nCurPos + 1;
+     ENDIF;
+      nCurPos = nCurPos + 1;
+END;
 # ================= TAPTOOLS: START GENERATED CODE =================== #
 nPrologProcedureEndTime = NOW();
 LOGOUTPUT('DEBUG', 'DATASOURCE: DatasourceType: "' | DatasourceType | '"');

@@ -76,68 +76,79 @@ nDataProcedureEndTime = 0;
 #Run this process only in Ops
 sBatchTriggerFlag = CELLGETS('TAP System Info', 'Trigger Batch From TI', 'Value');
 sAddedRateTypes = CELLGETS('Admin Playbook', 'Exchange Rate Sync', 'Added Rate Types');
+sLoopString = TRIM(sAddedRateTypes);
+sLoopString = sLoopString | IF(SUBST(sLoopString, LONG(sLoopString), 1) @<> '|', '|', '');
+nStart = 1;
+nCurPos = 1;
+WHILE(nCurPos <= LONG(sLoopString));
+   sCurChar = SUBST(sLoopString, nCurPos, 1);
+   IF(sCurChar @= '|');
+      sRateType = SUBST(sLoopString, nStart, nCurPos - nStart);
+      IF(TRIM(sRateType) @<> '' & UPPER(sBatchTriggerFlag) @= 'YES');
 
-IF(LONG(sAddedRateTypes) > 0 & UPPER(sBatchTriggerFlag) @= 'YES');
+       cPythonExe = CELLGETS('TAP System Info', 'Python Executable', 'Value');
 
-   cPythonExe = CELLGETS('TAP System Info', 'Python Executable', 'Value');
+        cScriptRun = CELLGETS('TAP System Info', 'Scripts Shared Path', 'Value');
+       cScriptRun = cScriptRun | '/tap/tap-runti-in-parallel.py';
 
-   cScriptRun = CELLGETS('TAP System Info', 'Scripts Shared Path', 'Value');
-   cScriptRun = cScriptRun | '/tap/tap-runti-in-parallel.py';
+       cBatchUser = CELLGETS('TAP System Info', 'Batch Username', 'Value');
+       cBatchPassword = CELLGETS('TAP System Info', 'Batch Password', 'Value');
+         cBatchNamespace = CELLGETS('TAP System Info', 'Batch Namespace', 'Value');
+       cPACServer = CELLGETS('TAP Application Info', 'PAC', 'Endpoint');
+       cPort = '443';
+      cThreads = '30';
 
-   cBatchUser = CELLGETS('TAP System Info', 'Batch Username', 'Value');
-   cBatchPassword = CELLGETS('TAP System Info', 'Batch Password', 'Value');
-   cBatchNamespace = CELLGETS('TAP System Info', 'Batch Namespace', 'Value');
-   cPACServer = CELLGETS('TAP Application Info', 'PAC', 'Endpoint');
-   cPort = '443';
-   cThreads = '30';
+       pPeriod = '';
+       pRate = sRateType;
+       pMetric = 'Analytics Sync';
+       sProcessName = 'Ops.Cube.Update.DiqConfig.Ops Financial';
+       sTemplateProcessAll = '';
+      cTemplateScriptRun = '%cPythonExe% %cScriptRun% --server ''%cPACServer%'' --port %cPort% --user ''%cBatchUser%'' --password ''%cBatchPassword%'' --namespace ''%cBatchNamespace%'' --threads ''%cThreads%'' %sTemplateProcessAll%';
 
-   pPeriod = '';
-   pRate = sAddedRateTypes;
-   pMetric = 'Analytics Sync';
-   sProcessName = 'Ops.Cube.Update.DiqConfig.Ops Financial';
-   sTemplateProcessAll = '';
-   cTemplateScriptRun = '%cPythonExe% %cScriptRun% --server ''%cPACServer%'' --port %cPort% --user ''%cBatchUser%'' --password ''%cBatchPassword%'' --namespace ''%cBatchNamespace%'' --threads ''%cThreads%'' %sTemplateProcessAll%';
-
-   cTemplateProcess_GO = '--process ''%sProcessName%'' pDIQ_Index ''% pDIQ_Index%'' pPeriod ''%pPeriod%'' pRate ''% pRate%'' pMetric ''% pMetric%'' ';
-
-
-   i = 1;
-   MONTH = SUBST(TODAY(1), 1, 7);
-   pPeriod = MONTH;
-   pMonth = '';
-   ##Export additional Month to make sure it will be in sync with Analytics MEC
-   WHILE(i <= 37);
-      pPeriod = pPeriod | pMonth;
-
-      sTemplateProcessAll = sTemplateProcessAll | EXPAND(cTemplateProcess_GO);
-
-      sMonth = ATTRS('Month', MONTH, 'Period-1');
-      pMonth = '+' | sMonth;
-      MONTH = sMonth;
-      i = i + 1;
-   END;
+      cTemplateProcess_GO = '--process ''%sProcessName%'' pDIQ_Index ''% pDIQ_Index%'' pPeriod ''%pPeriod%'' pRate ''% pRate%'' pMetric ''% pMetric%'' ';
 
 
-   sCommand = EXPAND(cTemplateScriptRun);
+       i = 1;
+       MONTH = SUBST(TODAY(1), 1, 7);
+       pPeriod = MONTH;
+       pMonth = '';
+       ##Export additional Month to make sure it will be in sync with Analytics MEC
+        WHILE(i <= 37);
+         pPeriod = pPeriod | pMonth;
 
-   EXECUTECOMMAND(sCommand, 1);
+         sTemplateProcessAll = sTemplateProcessAll | EXPAND(cTemplateProcess_GO);
 
-   ##Call Sync DIQ 
-
-   sProcessName = 'DIQ.Call.Batch';
-   sTemplateProcessAll = '';
-   cTemplateScriptRun = '%cPythonExe% %cScriptRun% --server ''%cPACServer%'' --port %cPort% --user ''%cBatchUser%'' --password ''%cBatchPassword%'' --namespace ''%cBatchNamespace%'' --threads ''%cThreads%'' %sTemplateProcessAll%';
-
-   cTemplateProcess_GO = '--process ''%sProcessName%'' pDIQBatch ''%pDIQ_Batch%'' ';
-
-   sTemplateProcessAll = sTemplateProcessAll | EXPAND(cTemplateProcess_GO);
-
-   sCommand = EXPAND(cTemplateScriptRun);
-
-   EXECUTECOMMAND(sCommand, 1);
+          sMonth = ATTRS('Month', MONTH, 'Period-1');
+         pMonth = '+' | sMonth;
+          MONTH = sMonth;
+          i = i + 1;
+       END;
 
 
-ENDIF;
+       sCommand = EXPAND(cTemplateScriptRun);
+
+       EXECUTECOMMAND(sCommand, 1);
+
+      ##Call Sync DIQ 
+
+      sProcessName = 'DIQ.Call.Batch';
+       sTemplateProcessAll = '';
+       cTemplateScriptRun = '%cPythonExe% %cScriptRun% --server ''%cPACServer%'' --port %cPort% --user ''%cBatchUser%'' --password ''%cBatchPassword%'' --namespace ''%cBatchNamespace%'' --threads ''%cThreads%'' %sTemplateProcessAll%';
+
+      cTemplateProcess_GO = '--process ''%sProcessName%'' pDIQBatch ''%pDIQ_Batch%'' ';
+
+       sTemplateProcessAll = sTemplateProcessAll | EXPAND(cTemplateProcess_GO);
+
+       sCommand = EXPAND(cTemplateScriptRun);
+
+       EXECUTECOMMAND(sCommand, 1);
+
+
+         ENDIF;
+        nStart = nCurPos + 1;
+     ENDIF;
+      nCurPos = nCurPos + 1;
+END;
 
 # ================= TAPTOOLS: START GENERATED CODE =================== #
 nPrologProcedureEndTime = NOW();
