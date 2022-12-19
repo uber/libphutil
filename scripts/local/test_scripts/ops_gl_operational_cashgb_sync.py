@@ -47,7 +47,7 @@ class Mytest(Reconciliation):
     alert_level = {'email': 'error'}
     source = [['ops', 'mdx', source_mdx]]
     target = [['analytics', 'mdx', target_mdx]]
-    schedule = '0 12 * * *'
+    schedule = '0 10 * * *'
     threshold = ('ge', 1)
 
     def prepare(self):
