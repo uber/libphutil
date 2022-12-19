@@ -468,21 +468,7 @@ EXECUTEPROCESS(sProcess
    , 'pMetrics', cMetricString
 );
 
-# Run GL Sync batch for Cash Gross Bookings metrics b/w 1st and 15th of every month
-# HA Check to ensure that the batch is called only from one instance
 
-nDay = NUMBR(SUBST(TODAY(1), 9, 2));
-sBatchTriggerFlag = CELLGETS('TAP System Info', 'Trigger Batch From TI', 'Value');
-
-IF(UPPER(sBatchTriggerFlag) @= 'YES');
-   IF(nGLOps = 1 & (nDay >= 1 & nDay <= 15));
-      EXECUTEPROCESS('Ops.DIQ.GL Reporting.Sync'
-         , 'pInstance', 'PAC'
-         , 'pProcess', 'DIQ.Call.Batch'
-         , 'pParams', '[{"Name":"pDIQBatch","Value":"Batch - 1104"}]'
-      );
-   ENDIF;
-ENDIF;
 ##Record Count update
 CELLINCREMENTN(cRecordCount, cCubeDash, cRCube, 'FDS', cLoaddate, 'Actual', 'No Rate Type', rMetric);
 # ================= TAPTOOLS: START GENERATED CODE =================== #
