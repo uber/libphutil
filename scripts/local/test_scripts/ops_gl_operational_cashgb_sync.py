@@ -32,7 +32,7 @@ WHERE (
     [Rate Type].[USD],
     [Line of Business].[Total Line of Business],
     [Location].[Total Location Incl Discontinued],
-    [Department].[Total Department],   
+    [Department].[Total Department],
     [Product Type].[Total Product Type],
     [GL Operational].[GL Operational Stat Accounts],
     [GL Operational Measure].[Amount]
@@ -56,12 +56,12 @@ class Mytest(Reconciliation):
         curr_year = str(now.year)
         prev_year = str(int(curr_year) - 1)
         prev_month = str(int(now.month) - 1)
+        if prev_month == '0':
+           curr_year = prev_year
+           prev_month = '12'
         if len(prev_month) == 1:
-            prev_month = '0'+prev_month
-        if prev_month == '01':
-            sCurrentMonth = prev_year+'-12'
-        else:
-            sCurrentMonth = curr_year+'-'+prev_month
+           prev_month = '0'+prev_month
+        sCurrentMonth = curr_year+'-'+prev_month
         sMonth = "[Month].[{}-01]:[Month].[{}]".format(prev_year, sCurrentMonth)
         sPeriod = "[Period].[{}-01]:[Period].[{}]".format(prev_year, sCurrentMonth)
         self.source[0][2] =  source_mdx % (sPeriod)
