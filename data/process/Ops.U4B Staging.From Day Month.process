@@ -212,14 +212,6 @@ nDataProcedureEndTime = 0;
 
 cApp = CELLGETS('TAP System Info', 'Service Name', 'Value');
 
-IF(cApp @= 'ops-1' & SCAN('netr', pTable) = 0);
-   PROCESSBREAK();
-ENDIF;
-
-IF(cApp @= 'ops' & SCAN('netr', pTable) > 0);
-   PROCESSBREAK();
-ENDIF;
-
 sCube = 'U4B Staging';
 nSiz = CUBEDIMENSIONCOUNTGET(sCube);
 
