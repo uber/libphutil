@@ -6,6 +6,10 @@ FEEDSTRINGS;
 SKIPCHECK;
 
 
+## All _fds accounts must not be allocated
+
+[{'Location':'Total Location Incl Discontinued'},'U4B PL Allocation Measure':{'Source','Allocation Method','Allocation Method Override','Mapping for Alloc TI'}] = S: IF(SCAN('_FDS',UPPER(!ANALYTICS.GL Operational))>0,'',CONTINUE);
+
 ['Source'] =S:
    IF ( ELLEV ('Line of Business', !Line of Business) = 0 & ELLEV ('ANALYTICS.GL Operational', !ANALYTICS.GL Operational) <> 0 , '', STET);
 
@@ -34,6 +38,10 @@ IF (  ELLEV ('Line of Business', !Line of Business) = 0 & ELLEV ('ANALYTICS.GL O
   Continue),
 Continue);
 
+### Accounts under support service hierarchy to use "Support Services_fds" as allocation method
+
+[{'Location':'Total Location Incl Discontinued'},'Allocation Method'] = S: IF(ELISANC('ANALYTICS.GL Operational', 'Core Support',!ANALYTICS.GL Operational )=1,'Support Services_fds',CONTINUE);
+
 [{'Location':'Total Location Incl Discontinued'},'Allocation Method Override' ] = S:
 IF ( ELLEV ('Line of Business', !Line of Business) = 0  & ELLEV ('ANALYTICS.GL Operational', !ANALYTICS.GL Operational) = 0,
  IF (DB('U4B',!Version,!Period,'FDS','USD','Total Line of Business',!Department,'Total Location Incl Discontinued','Total U4B Org Segment','Total U4B Product','Total U4B Sales Channel','Total U4B Trip Profile',!ANALYTICS.GL Operational,'Amount') <> 0
@@ -61,15 +69,6 @@ Continue);
      Continue),
 '');
 
-#Hardr coded the mapping for Restuarant Payments until we fix upstream FDS data for mobility
-
-[{'Location':'Total Location Incl Discontinued'},'Restaurant Payments','Mapping for Alloc TI' ] = S:
-IF ( ELLEV ('ANALYTICS.GL Operational', !ANALYTICS.GL Operational) = 0,
-      IF (  DB('U4B',!Version,!Period,'FDS','USD','Total Line of Business',!Department,'Total Location Incl Discontinued','Total U4B Org Segment','Total U4B Product','Total U4B Sales Channel','Total U4B Trip Profile',!ANALYTICS.GL Operational | '_fds','Amount') <> 0, !ANALYTICS.GL Operational | '_fds',
-          IF ( DB('U4B',!Version,!Period,'FDS','USD','Total Line of Business',!Department,'Total Location Incl Discontinued','Total U4B Org Segment','Total U4B Product','Total U4B Sales Channel','Total U4B Trip Profile', ATTRS ('ANALYTICS.GL Operational', !ANALYTICS.GL Operational, 'GL Operational L1') | '_fds','Amount')<> 0,
-                ATTRS ('ANALYTICS.GL Operational', !ANALYTICS.GL Operational, 'GL Operational L1') | '_fds',
-    DB('U4B PL Allocation',!Version,!Period,!Line of Business,!Location,!Department,!U4B Trip Profile,!U4B Sales Channel,!U4B Org Segment,!U4B Product,!ANALYTICS.GL Operational,'Allocation Method'))),
-'');
 
 [{'Location':'Total Location Incl Discontinued'},'Mapping for Alloc TI' ] = S:
 IF ( ELLEV ('ANALYTICS.GL Operational', !ANALYTICS.GL Operational) = 0,
@@ -79,4 +78,5 @@ IF ( ELLEV ('ANALYTICS.GL Operational', !ANALYTICS.GL Operational) = 0,
                 ATTRS ('ANALYTICS.GL Operational', !ANALYTICS.GL Operational, 'GL Operational L1') | '_fds',
     DB('U4B PL Allocation',!Version,!Period,!Line of Business,!Location,!Department,!U4B Trip Profile,!U4B Sales Channel,!U4B Org Segment,!U4B Product,!ANALYTICS.GL Operational,'Allocation Method')))),
 '');
+
 

@@ -141,11 +141,7 @@
         "zTemp*",
         "}*"
     ],
-    "exclude_rule": [
-        "Mobility PL Allocation",
-        "U4B PL Allocation",
-        "Delivery PL Allocation"
-    ],
+    "exclude_rule": "",
     "exclude_file": "",
     "backup_on_migrate": true,
     "backup_allow_override": true,

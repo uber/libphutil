@@ -5,6 +5,10 @@
 FEEDSTRINGS;
 SKIPCHECK;
 
+## All _fds accounts must not be allocated
+
+[{'Location':'Total Location Incl Discontinued'},'Mobility PL Allocation Measure':{'Allocation Method','Allocation Method Override','Mapping for Alloc TI'}] = S: IF(SCAN('_FDS',UPPER(!ANALYTICS.GL Operational))>0,'',CONTINUE);
+
 ## Check if there is override allocation
 
 ['Allocation Method'] =S:
@@ -27,6 +31,11 @@ IF (  ELLEV ('Line of Business', !Line of Business) = 0 & ELLEV ('ANALYTICS.GL O
      IF( ATTRS('Mobility Ops Metrics', ATTRS ('ANALYTICS.GL Operational', !ANALYTICS.GL Operational, 'GL Operational L1') | '_fds' , 'FDS') @<> '', ATTRS('Mobility Ops Metrics',ATTRS ('ANALYTICS.GL Operational', !ANALYTICS.GL Operational, 'GL Operational L1') | '_fds' , 'FDS'), 'Calculated' ),
   Continue),
 Continue);
+
+### Accounts under support service hierarchy to use "Support Services_fds" as allocation method
+
+#[{'Location':'Total Location Incl Discontinued'},'Allocation Method'] = S: IF(ELISANC('ANALYTICS.GL Operational', 'Core Support',!ANALYTICS.GL Operational )=1 % !ANALYTICS.GL Operational@='Allocated Support Costs','Support Services',CONTINUE);
+
 
 [{'Location':'Total Location Incl Discontinued'},'Allocation Method Override' ] = S:
 IF ( ELLEV ('Line of Business', !Line of Business) = 0  & ELLEV ('ANALYTICS.GL Operational', !ANALYTICS.GL Operational) = 0,
@@ -64,3 +73,5 @@ IF ( ELLEV ('ANALYTICS.GL Operational', !ANALYTICS.GL Operational) = 0,
                 ATTRS ('ANALYTICS.GL Operational', !ANALYTICS.GL Operational, 'GL Operational L1') | '_fds',
     DB('Mobility PL Allocation',!Version,!Period,!Line of Business,!Location, !Department, !ProductType,!ANALYTICS.GL Operational ,'Allocation Method')))),
 '');
+
+
