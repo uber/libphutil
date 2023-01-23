@@ -6,40 +6,18 @@
         "Type": "None"
     },
     "HasSecurityAccess": false,
-    "Name": "Metadata.Ops.Metrics.Hierarchy update From GL Operational",
+    "Name": "Metadata.Ops.Metrics.Hierarchy.From.GL.Operational.Master",
     "Parameters": [
         {
-            "Name": "pTargetDim",
-            "Prompt": "Mobility Ops Metrics",
-            "Type": "String",
-            "Value": ""
-        },
-        {
-            "Name": "pSourceDim",
-            "Prompt": "GL Operational",
-            "Type": "String",
-            "Value": ""
-        },
-        {
             "Name": "pHierarchy",
-            "Prompt": "Ops PL",
+            "Prompt": "",
             "Type": "String",
             "Value": ""
         }
     ],
     "UIData": "",
-    "Variables": [
-        {
-            "EndByte": 0,
-            "Name": "vElement",
-            "Position": 1,
-            "StartByte": 0,
-            "Type": "String"
-        }
-    ],
-    "VariablesUIData": [
-        "VarType=32\fColType=827\f"
-    ]
+    "Variables": [],
+    "VariablesUIData": []
 }
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
 # END: PROPERTIES                                                             #
@@ -57,8 +35,6 @@ IF(sProcessName @<> 'TAP.Call.Queue.Add Job To Queue' & sProcessName @<> 'TAP.Cu
       PROCESSBREAK;
    ENDIF;
 ENDIF;
-LOGOUTPUT('DEBUG', 'PARAMETER: pTargetDim: "' | pTargetDim | '"');
-LOGOUTPUT('DEBUG', 'PARAMETER: pSourceDim: "' | pSourceDim | '"');
 LOGOUTPUT('DEBUG', 'PARAMETER: pHierarchy: "' | pHierarchy | '"');
 LOGOUTPUT('DEBUG', 'PROGRESS: START PROLOG PROCEDURE');
 nMetadataProcedureRecordsStarted = 0;
@@ -87,71 +63,28 @@ nDataProcedureEndTime = 0;
 #****Begin: Generated Statements***
 #****End: Generated Statements****
 
-cRand = NUMBERTOSTRING(ROUND(RAND() * 100000));
-cRand = FILL('0', 6 - LONG(cRand)) | cRand;
-cRand = NUMBERTOSTRING(NOW()) | '.' | cRand;
-
-TarAttrcub = '}ElementAttributes_' | pTargetDim;
-SouAttrcube = '}ElementAttributes_' | pSourceDim;
-DimSizSouAttrcube = DIMSIZ(SouAttrcube);
-
-###Create Target Subset to Unwind Hierarchy
-cRandomIntA = cRand | pTargetDim;
-IF(DIMIX(pTargetDim, pHierarchy) > 0);
-   TargetMDX = '{TM1DRILLDOWNMEMBER( {TM1FILTERBYPATTERN( {TM1SUBSETALL( [' | pTargetDim | '] )}, "' | pHierarchy | '")}, ALL, RECURSIVE )}';
-   TargetSub = 'zTemp.' | GETPROCESSNAME() | '.' | cRandomIntA;
-   SUBSETDESTROY(pTargetDim, TargetSub);
-   SUBSETCREATEBYMDX(TargetSub, TargetMDX, 0);
-   SUBSETMDXSET(pTargetDim, TargetSub, '');
-
-   ##Logic to remove Existing Consolidation in Target Dim
-   i = 1;
-   TarSubZiz = SUBSETGETSIZE(pTargetdim, TargetSub);
-   WHILE(i <= TarSubZiz);
-      Ele = SUBSETGETELEMENTNAME(pTargetdim, TargetSub, i);
-      IF(ELCOMPN(pTargetdim, Ele) > 0);
-         parent = Ele;
-         CompN = ELCOMPN(pTargetdim, parent);
-         k = 1;
-         WHILE(k <= CompN);
-            Child = ELEMENTCOMPONENT(pTargetdim, '', Parent, 1);
-            IF(ELEMENTISANCESTOR(pTargetdim, '', parent, Child) > 0);
-               # ================= TAPTOOLS: START GENERATED CODE =================== #
-               nPrologProcedureMetadataOperations = nPrologProcedureMetadataOperations + 1;
-               # ================= TAPTOOLS: END GENERATED CODE ===================== #
-               DIMENSIONELEMENTCOMPONENTDELETE(pTargetDim, Parent, Child);
-            ENDIF;
-            k = K + 1;
-         END;
-         IF(ELCOMPN(pTargetdim, Child) > 0);
-            Parent = Child;
-         ENDIF;
-      ELSE;
-         IF(ELEMENTISANCESTOR(pTargetdim, '', parent, Child) > 0);
-            # ================= TAPTOOLS: START GENERATED CODE =================== #
-            nPrologProcedureMetadataOperations = nPrologProcedureMetadataOperations + 1;
-            # ================= TAPTOOLS: END GENERATED CODE ===================== #
-            DIMENSIONELEMENTCOMPONENTDELETE(pTargetDim, Parent, Child);
-         ENDIF;
-      ENDIF;
-      i = i + 1;
-   END;
-ENDIF;
-
-###Create Source Subset
-cRandomIntA = cRand | pSourceDim;
-SourceMDX = '{TM1DRILLDOWNMEMBER( {TM1FILTERBYPATTERN( {TM1SUBSETALL( [' | pSourceDim | '] )}, "' | pHierarchy | '")}, ALL, RECURSIVE )}';
-SourceSub = 'zTemp.' | GETPROCESSNAME() | '.' | cRandomIntA;
-SUBSETDESTROY(pSourceDim, SourceSub);
-SUBSETCREATEBYMDX(SourceSub, SourceMDX, 0);
-SUBSETMDXSET(pSourceDim, SourceSub, '');
+pSourceDim = 'GL Operational';
+pTargetMobility = 'Mobility Ops metrics';
+pTargetDelivery = 'Delivery Ops metrics';
+pTargetU4b = 'U4B Ops metrics';
 
 
-### Assign Data Source ###
-DatasourceNameForServer = pSourceDim;
-DatasourceNameForClient = pSourceDim;
-DatasourceType = 'SUBSET';
-DatasourceDimensionSubset = SourceSub;
+Copyprocess = 'Metadata.Ops.Metrics.Hierarchy update From GL Operational';
+EXECUTEPROCESS(Copyprocess
+   , 'pTargetDim', pTargetMobility
+   , 'pSourceDim', pSourceDim
+   , 'pHierarchy', pHierarchy
+);
+EXECUTEPROCESS(Copyprocess
+   , 'pTargetDim', pTargetDelivery
+   , 'pSourceDim', pSourceDim
+   , 'pHierarchy', pHierarchy
+);
+EXECUTEPROCESS(Copyprocess
+   , 'pTargetDim', pTargetU4b
+   , 'pSourceDim', pSourceDim
+   , 'pHierarchy', pHierarchy
+);
 
 # ================= TAPTOOLS: START GENERATED CODE =================== #
 nPrologProcedureEndTime = NOW();
@@ -169,38 +102,9 @@ LOGOUTPUT('DEBUG', 'PROGRESS: END PROLOG PROCEDURE');
 # BEGIN: METADATA PROCEDURE                                                   #
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
 
-# ================= TAPTOOLS: START GENERATED CODE =================== #
-nMetadataProcedureRecordsStarted = nMetadataProcedureRecordsStarted + 1;
-IF(nMetadataProcedureStartTime = 0);
-   LOGOUTPUT('DEBUG', 'PROGRESS: START METADATA PROCEDURE');
-   nMetadataProcedureStartTime = NOW();
-ENDIF;
-# ================= TAPTOOLS: END GENERATED CODE ===================== #
 #****Begin: Generated Statements***
 #****End: Generated Statements****
 
-nIndex = 1;
-nLimit = ELCOMPN(pSourceDim, vElement);
-IF(DIMIX(pTargetDim, vElement) = 0);
-   # ================= TAPTOOLS: START GENERATED CODE =================== #
-   nMetadataProcedureMetadataOperations = nMetadataProcedureMetadataOperations + 1;
-   # ================= TAPTOOLS: END GENERATED CODE ===================== #
-   DIMENSIONELEMENTINSERT(pTargetDim, '', vElement, 'C');
-ENDIF;
-WHILE(nIndex <= nLimit);
-   sElName = ELCOMP(pSourceDim, vElement, nIndex);
-   sDecendant = ELEMENTCOMPONENT(pSourceDim, '', vElement, nIndex);
-   eleName = sDecendant;
-   nElWeight = ELWEIGHT(pSourceDim, vElement, sDecendant);
-   # ================= TAPTOOLS: START GENERATED CODE =================== #
-   nMetadataProcedureMetadataOperations = nMetadataProcedureMetadataOperations + 1;
-   # ================= TAPTOOLS: END GENERATED CODE ===================== #
-   DIMENSIONELEMENTCOMPONENTADD(pTargetDim, vElement, eleName, nElWeight);
-   nIndex = nIndex + 1;
-END;
-# ================= TAPTOOLS: START GENERATED CODE =================== #
-nMetadataProcedureRecordsCompleted = nMetadataProcedureRecordsCompleted + 1;
-# ================= TAPTOOLS: END GENERATED CODE ===================== #
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
 # END: METADATA PROCEDURE                                                     #
@@ -209,55 +113,9 @@ nMetadataProcedureRecordsCompleted = nMetadataProcedureRecordsCompleted + 1;
 # BEGIN: DATA PROCEDURE                                                       #
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
 
-# ================= TAPTOOLS: START GENERATED CODE =================== #
-nDataProcedureRecordsStarted = nDataProcedureRecordsStarted + 1;
-IF(nMetadataProcedureEndTime = 0);
-   LOGOUTPUT('DEBUG', 'PROGRESS: END METADATA PROCEDURE');
-   nMetadataProcedureEndTime = NOW();
-ENDIF;
-IF(nDataProcedureStartTime = 0);
-   LOGOUTPUT('DEBUG', 'PROGRESS: START DATA PROCEDURE');
-   nDataProcedureStartTime = NOW();
-ENDIF;
-# ================= TAPTOOLS: END GENERATED CODE ===================== #
 #****Begin: Generated Statements***
 #****End: Generated Statements****
 
-
-nIndex = 1;
-nLimit = ELCOMPN(pSourceDim, vElement);
-
-WHILE(nIndex <= nLimit);
-   i = 1;
-   sElName = ELCOMP(pSourceDim, vElement, nIndex);
-   sDecendant = ELEMENTCOMPONENT(pSourceDim, '', vElement, nIndex);
-   IF(ELLEV(pSourceDim, sDecendant) < 1);
-      #populate FX Flag
-      # ================= TAPTOOLS: START GENERATED CODE =================== #
-      nDataProcedureDataOperations = nDataProcedureDataOperations + 1;
-      # ================= TAPTOOLS: END GENERATED CODE ===================== #
-      CELLPUTS('Y', TarAttrcub, sDecendant, 'Fx_Flag');
-      #Copy the source Attribute Values
-      WHILE(i <= DimSizSouAttrcube);
-         eleAttSource = DIMNM(SouAttrcube, i);
-         IF(DIMIX(TarAttrcub, eleAttSource) > 0);
-            Val = CELLGETS(SouAttrcube, sDecendant, eleAttSource);
-            # ================= TAPTOOLS: START GENERATED CODE =================== #
-            nDataProcedureDataOperations = nDataProcedureDataOperations + 1;
-            # ================= TAPTOOLS: END GENERATED CODE ===================== #
-            CELLPUTS(Val, TarAttrcub, sDecendant, eleAttSource);
-         ENDIF;
-         i = i + 1;
-      END;
-   ENDIF;
-   nIndex = nIndex + 1;
-END;
-
-
-
-# ================= TAPTOOLS: START GENERATED CODE =================== #
-nDataProcedureRecordsCompleted = nDataProcedureRecordsCompleted + 1;
-# ================= TAPTOOLS: END GENERATED CODE ===================== #
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
 # END: DATA PROCEDURE                                                         #
