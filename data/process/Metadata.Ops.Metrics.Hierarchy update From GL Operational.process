@@ -232,11 +232,9 @@ WHILE(nIndex <= nLimit);
    sElName = ELCOMP(pSourceDim, vElement, nIndex);
    sDecendant = ELEMENTCOMPONENT(pSourceDim, '', vElement, nIndex);
    IF(ELLEV(pSourceDim, sDecendant) < 1);
-      #populate FX Flag
       # ================= TAPTOOLS: START GENERATED CODE =================== #
       nDataProcedureDataOperations = nDataProcedureDataOperations + 1;
       # ================= TAPTOOLS: END GENERATED CODE ===================== #
-      CELLPUTS('Y', TarAttrcub, sDecendant, 'Fx_Flag');
       #Copy the source Attribute Values
       WHILE(i <= DimSizSouAttrcube);
          eleAttSource = DIMNM(SouAttrcube, i);
