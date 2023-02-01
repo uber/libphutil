@@ -6,18 +6,34 @@
         "Type": "None"
     },
     "HasSecurityAccess": false,
-    "Name": "Metadata.Ops.Metrics.Hierarchy.From.GL.Operational.Master",
+    "Name": "Metadata.Ops.Metrics.update.FX.Flag",
     "Parameters": [
         {
+            "Name": "pTargetDim",
+            "Prompt": "Mobility Ops Metrics",
+            "Type": "String",
+            "Value": ""
+        },
+        {
             "Name": "pHierarchy",
-            "Prompt": "",
+            "Prompt": "GAAP Contribution",
             "Type": "String",
             "Value": ""
         }
     ],
     "UIData": "",
-    "Variables": [],
-    "VariablesUIData": []
+    "Variables": [
+        {
+            "EndByte": 0,
+            "Name": "vElement",
+            "Position": 1,
+            "StartByte": 0,
+            "Type": "String"
+        }
+    ],
+    "VariablesUIData": [
+        "VarType=32\fColType=827\f"
+    ]
 }
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
 # END: PROPERTIES                                                             #
@@ -35,6 +51,7 @@ IF(sProcessName @<> 'TAP.Call.Queue.Add Job To Queue' & sProcessName @<> 'TAP.Cu
       PROCESSBREAK;
    ENDIF;
 ENDIF;
+LOGOUTPUT('DEBUG', 'PARAMETER: pTargetDim: "' | pTargetDim | '"');
 LOGOUTPUT('DEBUG', 'PARAMETER: pHierarchy: "' | pHierarchy | '"');
 LOGOUTPUT('DEBUG', 'PROGRESS: START PROLOG PROCEDURE');
 nMetadataProcedureRecordsStarted = 0;
@@ -63,52 +80,26 @@ nDataProcedureEndTime = 0;
 #****Begin: Generated Statements***
 #****End: Generated Statements****
 
-pSourceDim = 'GL Operational';
-pTargetMobility = 'Mobility Ops metrics';
-pTargetDelivery = 'Delivery Ops metrics';
-pTargetU4b = 'U4B Ops metrics';
+cRand = NUMBERTOSTRING(ROUND(RAND() * 100000));
+cRand = FILL('0', 6 - LONG(cRand)) | cRand;
+cRand = NUMBERTOSTRING(NOW()) | '.' | cRand;
+TarAttrcub = '}ElementAttributes_' | pTargetDim;
 
-#Sync hierarchies from GL Operational
-Copyprocess = 'Metadata.Ops.Metrics.Hierarchy update From GL Operational';
-EXECUTEPROCESS(Copyprocess
-   , 'pTargetDim', pTargetMobility
-   , 'pSourceDim', pSourceDim
-   , 'pHierarchy', pHierarchy
-);
+###Create Target Subset to Unwind Hierarchy
+cRandomIntA = cRand | pTargetDim;
+IF(DIMIX(pTargetDim, pHierarchy) > 0);
+   TargetMDX = '{TM1FILTERBYLEVEL({TM1DRILLDOWNMEMBER( {TM1FILTERBYPATTERN( {TM1SUBSETALL( [' | pTargetDim | '] )}, "' | pHierarchy | '")}, ALL, RECURSIVE )}, 0)}';
+   TargetSub = 'zTemp.' | GETPROCESSNAME() | '.' | cRandomIntA;
+   SUBSETDESTROY(pTargetDim, TargetSub);
+   SUBSETCREATEBYMDX(TargetSub, TargetMDX, 1);
+   SUBSETMDXSET(pTargetDim, TargetSub, '');
 
-EXECUTEPROCESS(Copyprocess
-   , 'pTargetDim', pTargetDelivery
-   , 'pSourceDim', pSourceDim
-   , 'pHierarchy', pHierarchy
-);
-
-EXECUTEPROCESS(Copyprocess
-   , 'pTargetDim', pTargetU4b
-   , 'pSourceDim', pSourceDim
-   , 'pHierarchy', pHierarchy
-);
-
-#Update FX flag for the elements under 'GAAP Contribution'
-updateprocess = 'Metadata.Ops.Metrics.update.FX.Flag';
-pGAAPHierarchy = 'GAAP Contribution';
-EXECUTEPROCESS(updateprocess
-   , 'pTargetDim', pTargetMobility
-   , 'pHierarchy', pGAAPHierarchy
-);
-
-EXECUTEPROCESS(updateprocess
-   , 'pTargetDim', pTargetDelivery
-   , 'pHierarchy', pGAAPHierarchy
-);
-
-EXECUTEPROCESS(updateprocess
-   , 'pTargetDim', pTargetU4b
-   , 'pHierarchy', pGAAPHierarchy
-);
-
-#Update FDS Mapping Attributes
-Updateprocess = 'Ops.Metrics.FDS.MappingAttributes.Update';
-EXECUTEPROCESS(updateprocess);
+   ### Assign Data Source ###
+   DatasourceNameForServer = pTargetDim;
+   DatasourceNameForClient = pTargetDim;
+   DatasourceType = 'SUBSET';
+   DatasourceDimensionSubset = TargetSub;
+ENDIF;
 # ================= TAPTOOLS: START GENERATED CODE =================== #
 nPrologProcedureEndTime = NOW();
 LOGOUTPUT('DEBUG', 'DATASOURCE: DatasourceType: "' | DatasourceType | '"');
@@ -125,9 +116,20 @@ LOGOUTPUT('DEBUG', 'PROGRESS: END PROLOG PROCEDURE');
 # BEGIN: METADATA PROCEDURE                                                   #
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
 
+# ================= TAPTOOLS: START GENERATED CODE =================== #
+nMetadataProcedureRecordsStarted = nMetadataProcedureRecordsStarted + 1;
+IF(nMetadataProcedureStartTime = 0);
+   LOGOUTPUT('DEBUG', 'PROGRESS: START METADATA PROCEDURE');
+   nMetadataProcedureStartTime = NOW();
+ENDIF;
+# ================= TAPTOOLS: END GENERATED CODE ===================== #
 #****Begin: Generated Statements***
 #****End: Generated Statements****
 
+CELLPUTS('Y', TarAttrcub, vElement, 'Fx_Flag');
+# ================= TAPTOOLS: START GENERATED CODE =================== #
+nMetadataProcedureRecordsCompleted = nMetadataProcedureRecordsCompleted + 1;
+# ================= TAPTOOLS: END GENERATED CODE ===================== #
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
 # END: METADATA PROCEDURE                                                     #
@@ -138,6 +140,7 @@ LOGOUTPUT('DEBUG', 'PROGRESS: END PROLOG PROCEDURE');
 
 #****Begin: Generated Statements***
 #****End: Generated Statements****
+
 
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
