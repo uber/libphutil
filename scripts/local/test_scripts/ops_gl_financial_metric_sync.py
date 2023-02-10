@@ -28,7 +28,7 @@ NON EMPTY
      {[Month].[%s]}*{TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER( {[Rate Type].[FX Rates]}, ALL, RECURSIVE )}, 0)} 
 ON COLUMNS 
 FROM 
-    [GL Reporting] 
+    [GL Operational] 
 WHERE 
     (
     [Version].[Actual], 
@@ -36,7 +36,8 @@ WHERE
     [Source].[OPS],
     [Department].[Total Department],
     [Product Type].[Total Product Type],
-    [GL Reporting Measure].[Amount]
+    [GL Operational Measure].[Amount],
+    [GL Operational].[Cash Gross Bookings]
     )"""
 
 class Mytest(Reconciliation):

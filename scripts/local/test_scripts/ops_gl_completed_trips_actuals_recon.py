@@ -31,7 +31,7 @@ ON ROWS,
     }
 ON COLUMNS
 FROM
-    [GL Reporting]
+    [GL Operational]
 WHERE
     (
     [Version].[Actual],
@@ -41,7 +41,8 @@ WHERE
     [Rate Type].[USD],
     [Department].[Total Department],
     [Product Type].[Total Product Type],
-    [GL Reporting Measure].[Amount]
+    [GL Operational Measure].[Amount],
+    [GL Operational].[Completed Trips]
     )"""
 
 class Mytest(Reconciliation):
