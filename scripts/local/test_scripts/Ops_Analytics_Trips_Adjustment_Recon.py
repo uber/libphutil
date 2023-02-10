@@ -27,7 +27,7 @@ NON EMPTY
      {[Month].[%s]} * %s
 ON COLUMNS 
 FROM 
-    [GL Reporting] 
+    [GL Operational] 
 WHERE 
     (
     [Version].[Actual], 
@@ -36,12 +36,13 @@ WHERE
     [Department].[Total Department],
     [Line of Business].[Total Line of Business],
     [Product Type].[Total Product Type],
-    [GL Reporting Measure].[Amount]
+    [GL Operational Measure].[Amount],
+    [GL Operational].[Completed Trips]
     )"""
 
 class Mytest(Reconciliation):
 
-    name = 'Ops GL Reporting Completed Trips Adjustment Recon'
+    name = 'Ops GL Operational Completed Trips Adjustment Recon'
     email_to = []
     email_from = 'pa-eng@uber.com'
     alert_level = {'email': 'error'}
