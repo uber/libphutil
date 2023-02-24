@@ -352,13 +352,9 @@ CONTINUE);
 # Rides N-level rules
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=- #
 
-['Version' : 'Actual', 'Line of Business':'1002', 'Product Type' : {'Expresspool', 'Pool'}, 'Ops Metric' : 'P2P Rider Miles'] = N :
 
-   DB('Rides Ops', !Version, !Period, !Source, !Rate Type, !Location, 'P2P', !Product Type, 'Rider Miles', 'Amount');
 
-['Version' : 'Actual', 'Line of Business':'1002', 'Product Type' : {'Expresspool', 'Pool'}, 'Ops Metric' : 'Non-P2P Rider Miles'] = N :
 
-   DB('Rides Ops', !Version, !Period, !Source, !Rate Type, !Location, 'Non P2P', !Product Type,  'Rider Miles', 'Amount');
 
 ['Version' : 'Actual', 'Line of Business':'1002', 'Product Type' : {'Expresspool', 'Pool'}] = N :
 
@@ -369,28 +365,6 @@ CONTINUE);
    ,
       CONTINUE
    );
-
-
-['Version' : 'Actual', 'Line of Business':'1001',  'Ops Metric' : 'P2P Rider Miles'] = N :
-
-   IF(
-      (!Product Type @<> 'Expresspool' & !Product Type @<> 'Pool')
-   ,
-      DB('Rides Ops', !Version, !Period, !Source, !Rate Type, !Location, 'P2P', !Product Type, 'Rider Miles', 'Amount')
-   ,
-      CONTINUE
-   );
-
-['Version' : 'Actual', 'Line of Business':'1001',  'Ops Metric' : 'Non-P2P Rider Miles'] = N :
-
-   IF(
-      (!Product Type @<> 'Expresspool' & !Product Type @<> 'Pool')
-   ,
-      DB('Rides Ops', !Version, !Period, !Source, !Rate Type, !Location, 'Non P2P', !Product Type, 'Rider Miles', 'Amount')
-   ,
-      CONTINUE
-   );
-
 
 ['Version' : 'Actual', 'Line of Business':'1001'] = N :
 
@@ -461,10 +435,6 @@ CONTINUE);
 
 ['Version' : 'Actual', 'Line of Business':'2001', 'Product Type' : 'Eats', 'Continuing Driver Trips'] = N:
    DB('Eats Ops', !Version, !Period, !Source, !Rate Type, !Location, 'Total Eats Product Type', 'Total Eats Restaurant Type', 'Continuing Courier Deliveries', 'Amount');
-
-['Version' : 'Actual', 'Line of Business':'2001', 'Product Type' : 'Eats', 'P2P Rider Miles'] = N:
-   DB('Eats Ops', !Version, !Period, !Source, !Rate Type, !Location, 'Total Eats Product Type', 'Total Eats Restaurant Type', 'Rider Miles', 'Amount');
-
 
 ['Version' : 'Actual', 'Line of Business':'2001', 'Product Type' : 'Eats'] = N:
 

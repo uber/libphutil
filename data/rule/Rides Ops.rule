@@ -161,10 +161,6 @@ FEEDERS;
 ['Amount'] => DB('Ops', !Version, !Period, !Source, !Rate Type, !Location, '1001', !Rides Car Type, !Rides Ops Metric,'Amount');
 ['Expresspool','Amount'] => DB('Ops', !Version, !Period, !Source, !Rate Type, !Location, '1002', !Rides Car Type, !Rides Ops Metric,'Amount');
 ['Pool','Amount'] => DB('Ops', !Version, !Period, !Source, !Rate Type, !Location, '1002', !Rides Car Type, !Rides Ops Metric,'Amount');
-['P2P','Rider Miles', 'Amount'] => DB('Ops',!Version,!Period,!Source,!Rate Type,!Location,'1001',!Rides Car Type,'P2P Rider Miles','Amount');
-['Non P2P','Rider Miles', 'Amount'] => DB('Ops',!Version,!Period,!Source,!Rate Type,!Location,'1001',!Rides Car Type,'Non-P2P Rider Miles','Amount');
-['Expresspool', 'P2P','Rider Miles', 'Amount'] => DB('Ops',!Version,!Period,!Source,!Rate Type,!Location,'1002',!Rides Car Type,'P2P Rider Miles','Amount');
-['Pool', 'Non P2P','Rider Miles', 'Amount'] => DB('Ops',!Version,!Period,!Source,!Rate Type,!Location,'1002',!Rides Car Type,'Non-P2P Rider Miles','Amount');
 
 
 

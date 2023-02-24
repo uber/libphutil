@@ -242,5 +242,3 @@ FEEDERS;
 
 ['Actual', 'FDS', 'Unspecified Eats Product Type', 'Unspecified Restaurant Type', 'Continuing Courier Deliveries', 'Amount'] =>DB('Ops', 'Actual', !Period, 'FDS', !Rate Type, !Location, '2001', 'EATS', 'Continuing Driver Trips', 'Amount');
 
-['Actual', 'FDS', 'Unspecified Eats Product Type', 'Unspecified Restaurant Type', 'Rider Miles', 'Amount'] =>DB('Ops', 'Actual', !Period, 'FDS', !Rate Type, !Location, '2001', 'EATS', 'P2P Rider Miles', 'Amount');
-
