@@ -46,8 +46,10 @@ SKIPCHECK;
 
  # Rider Miles & Completed Trips
 #Populate only Month level data
-['Actual', 'Product PL', {'P2P Miles', 'Completed Trips'}, 'Amount'] = N:IF(DB('}ElementAttributes_Period',!Period,'Input Type') @= 'Month' , ['FDS Incl. Adj'] , Continue );
+['Actual', 'Product PL','Completed Trips', 'Amount'] = N:IF(DB('}ElementAttributes_Period',!Period,'Input Type') @= 'Month' , ['FDS Incl. Adj'] , Continue );
 
 FEEDERS;
 ##Feed Only Monthly Level Data
-['Actual', 'FDS Incl. Adj', {'P2P  Miles', 'Completed Trips'}, 'Amount' ,'Total Time - Month'] => ['Product PL'];
+['Actual', 'FDS Incl. Adj', 'Completed Trips', 'Amount' ,'Total Time - Month'] => ['Product PL'];
+
+
