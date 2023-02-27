@@ -11,7 +11,8 @@ SELECT NON EMPTY
     ON ROWS,
     NON EMPTY
     {[Delivery Ops Metrics].[Gross Bookings],[Delivery Ops Metrics].[Net Effective Take Rate (NETR)],[Delivery Ops Metrics].[Variable Costs],[Delivery Ops Metrics].[Variable Contribution],
-    [Delivery Ops Metrics].[Operating Expenses],[Delivery Ops Metrics].[Adj EBITDA],[Delivery Ops Metrics].[Completed Trips],[Delivery Ops Metrics].[P2P Miles]}
+    [Delivery Ops Metrics].[Operating Expenses],[Delivery Ops Metrics].[Adj EBITDA],[Delivery Ops Metrics].[Completed Trips],[Delivery Ops Metrics].[P2 Non-P2P Miles],[Delivery Ops Metrics].[P2 P2P Miles],
+    [Delivery Ops Metrics].[P3 Non-P2P Miles],[Delivery Ops Metrics].[P3 P2P Miles],[Delivery Ops Metrics].[Completed Trips - Rides Insurance CM]}
     ON COLUMNS
 FROM
     [Delivery]
@@ -39,7 +40,8 @@ SELECT NON EMPTY
     ON ROWS,
     NON EMPTY
     {[Delivery Ops Metrics].[Gross Bookings],[Delivery Ops Metrics].[Net Effective Take Rate (NETR)],[Delivery Ops Metrics].[Variable Costs],[Delivery Ops Metrics].[Variable Contribution],
-    [Delivery Ops Metrics].[Operating Expenses],[Delivery Ops Metrics].[Adj EBITDA],[Delivery Ops Metrics].[Completed Trips],[Delivery Ops Metrics].[P2P Miles]}
+    [Delivery Ops Metrics].[Operating Expenses],[Delivery Ops Metrics].[Adj EBITDA],[Delivery Ops Metrics].[Completed Trips],[Delivery Ops Metrics].[P2 Non-P2P Miles],[Delivery Ops Metrics].[P2 P2P Miles],
+    [Delivery Ops Metrics].[P3 Non-P2P Miles],[Delivery Ops Metrics].[P3 P2P Miles],[Delivery Ops Metrics].[Completed Trips - Rides Insurance CM]}
     ON COLUMNS
 FROM
     [Delivery]

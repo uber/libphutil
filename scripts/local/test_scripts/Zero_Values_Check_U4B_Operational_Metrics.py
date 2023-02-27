@@ -8,15 +8,14 @@ MDX = """SELECT
     NON EMPTY
     %s
     ON columns,
-    NON EMPTY{[U4B Ops Metrics].[Rider Miles],
-    [U4B Ops Metrics].[P2P Miles],
+    NON EMPTY{[U4B Ops Metrics].[P2 Non-P2P Miles],[U4B Ops Metrics].[P2 P2P Miles],[U4B Ops Metrics].[P3 Non-P2P Miles],[U4B Ops Metrics].[P3 P2P Miles],[U4B Ops Metrics].[Completed Trips - Rides Insurance CM],
     [U4B Ops Metrics].[Completed Trips]} * {TM1FILTERBYLEVEL( {TM1SUBSETALL( [Rate Type] )}, 0)}
     ON ROWS
     FROM [U4B]
     WHERE ([Version].[Actual],
     [Source].[FDS],
     [U4B Measure].[Amount],
-    [Department].[Total Org],
+    [Department].[Total Department],
     [Location].[Total Location by Country],
     [U4B Org Segment].[Total U4B Org Segment],
     [U4B Product].[Total U4B Product],
@@ -26,7 +25,7 @@ MDX = """SELECT
         )"""
 
 class Mytest(Validation):
-    name = 'U4B Operational Metrics-Data Check for Zero values for all Months'
+    name = 'U4B Operational- Completed Trips and Miles Metrics -Data Check for Zero values for all Months'
     email_to = []
     email_from = 'pa-eng@uber.com'
     alert_level = {'email': 'error'}

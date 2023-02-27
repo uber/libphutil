@@ -8,7 +8,7 @@ MDX = """SELECT NON EMPTY
     %s 
     ON ROWS,
 NON EMPTY
-    {TM1FILTERBYLEVEL( {TM1SUBSETALL( [Rate Type] )}, 0)}*{[Delivery Ops Metrics].[Completed Trips],[Delivery Ops Metrics].[P2P Miles]}
+    {TM1FILTERBYLEVEL( {TM1SUBSETALL( [Rate Type] )}, 0)}*{[Delivery Ops Metrics].[Completed Trips],[Delivery Ops Metrics].[P2 P2P Miles],[Delivery Ops Metrics].[P3 P2P Miles],[Delivery Ops Metrics].[Completed Trips - Rides Insurance CM]}
     ON COLUMNS
 FROM
     [Delivery]
@@ -27,7 +27,7 @@ WHERE (
 )"""
 
 class Mytest(Validation):
-    name = 'Delivery - Completed Trips Data Check for Zero values'
+    name = 'Delivery Operational- Completed Trips and Miles Metrics Data Check for Zero values'
     email_to = []
     email_from = 'pa-eng@uber.com'
     alert_level = {'email': 'error'}

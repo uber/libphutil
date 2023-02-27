@@ -11,7 +11,8 @@ SELECT NON EMPTY
     ON ROWS,
     NON EMPTY
     {[U4B Ops Metrics].[Gross Bookings],[U4B Ops Metrics].[Net Effective Take Rate (NETR)],[U4B Ops Metrics].[Variable Costs],[U4B Ops Metrics].[Variable Contribution],
-    [U4B Ops Metrics].[Operating Expenses],[U4B Ops Metrics].[Adj EBITDA]}
+    [U4B Ops Metrics].[Operating Expenses],[U4B Ops Metrics].[Adj EBITDA],[U4B Ops Metrics].[P2 Non-P2P Miles],[U4B Ops Metrics].[P2 P2P Miles],[U4B Ops Metrics].[P3 Non-P2P Miles],[U4B Ops Metrics].[P3 P2P Miles],
+    [U4B Ops Metrics].[Completed Trips - Rides Insurance CM]}
     ON COLUMNS
 FROM
     [U4B]
@@ -38,7 +39,8 @@ SELECT NON EMPTY
     ON ROWS,
     NON EMPTY
     {[U4B Ops Metrics].[Gross Bookings],[U4B Ops Metrics].[Net Effective Take Rate (NETR)],[U4B Ops Metrics].[Variable Costs],[U4B Ops Metrics].[Variable Contribution],
-    [U4B Ops Metrics].[Operating Expenses],[U4B Ops Metrics].[Adj EBITDA]}
+    [U4B Ops Metrics].[Operating Expenses],[U4B Ops Metrics].[Adj EBITDA],[U4B Ops Metrics].[P2 Non-P2P Miles],[U4B Ops Metrics].[P2 P2P Miles],[U4B Ops Metrics].[P3 Non-P2P Miles],[U4B Ops Metrics].[P3 P2P Miles],
+    [U4B Ops Metrics].[Completed Trips - Rides Insurance CM]}
     ON COLUMNS
 FROM
     [U4B]

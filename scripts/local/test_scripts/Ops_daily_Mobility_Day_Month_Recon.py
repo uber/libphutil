@@ -10,7 +10,8 @@ SELECT NON EMPTY
     ON ROWS,
     NON EMPTY
     {[Mobility Ops Metrics].[Gross Bookings],[Mobility Ops Metrics].[Net Effective Take Rate (NETR)],[Mobility Ops Metrics].[Variable Costs],[Mobility Ops Metrics].[Variable Contribution],
-    [Mobility Ops Metrics].[Operating Expenses],[Mobility Ops Metrics].[Adj EBITDA],[Mobility Ops Metrics].[Completed Trips],[Mobility Ops Metrics].[Rider Miles]}
+    [Mobility Ops Metrics].[Operating Expenses],[Mobility Ops Metrics].[Adj EBITDA],[Mobility Ops Metrics].[Completed Trips],[Mobility Ops Metrics].[P2 Non-P2P Miles],[Mobility Ops Metrics].[P2 P2P Miles],
+    [Mobility Ops Metrics].[P3 Non-P2P Miles],[Mobility Ops Metrics].[P3 P2P Miles],[Mobility Ops Metrics].[Completed Trips - Rides Insurance CM]}
     ON COLUMNS
 FROM
     [Mobility]
@@ -35,7 +36,8 @@ SELECT NON EMPTY
     ON ROWS,
     NON EMPTY
     {[Mobility Ops Metrics].[Gross Bookings],[Mobility Ops Metrics].[Net Effective Take Rate (NETR)],[Mobility Ops Metrics].[Variable Costs],[Mobility Ops Metrics].[Variable Contribution],
-    [Mobility Ops Metrics].[Operating Expenses],[Mobility Ops Metrics].[Adj EBITDA],[Mobility Ops Metrics].[Completed Trips],[Mobility Ops Metrics].[Rider Miles]}
+    [Mobility Ops Metrics].[Operating Expenses],[Mobility Ops Metrics].[Adj EBITDA],[Mobility Ops Metrics].[Completed Trips],[Mobility Ops Metrics].[P2 Non-P2P Miles],[Mobility Ops Metrics].[P2 P2P Miles],
+    [Mobility Ops Metrics].[P3 Non-P2P Miles],[Mobility Ops Metrics].[P3 P2P Miles],[Mobility Ops Metrics].[Completed Trips - Rides Insurance CM]}
     ON COLUMNS
 FROM
     [Mobility]

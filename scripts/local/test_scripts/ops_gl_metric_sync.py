@@ -6,7 +6,6 @@ source_mdx = (
 "WITH MEMBER [Ops Metric].[Total_Support_Contacts] AS [Ops Metric].[Total Support Contacts]"+
 "SELECT NON EMPTY "+
     "{[Ops Metric].[Vehicle Miles]," +
-    "[Ops Metric].[Non-P2P Rider Miles]," +
     "[Ops Metric].[Total_Support_Contacts]"+
     "} * "+
     "{[Line of Business].[Total Line of Business]}" +
@@ -30,7 +29,6 @@ target_mdx = (
 "WITH MEMBER [Account].[Total_Support_Contacts] AS [Account].[Total Support Defects]"+
 "SELECT NON EMPTY "+
     "{[Account].[Vehicle Miles]," +
-    "[Account].[Non-P2P Rider Miles]," +
     "[Account].[Total_Support_Contacts]"+
     "} * "+
     "{[Line of Business].[Total Line of Business]}"+
