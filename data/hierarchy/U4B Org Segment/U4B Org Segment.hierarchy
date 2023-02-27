@@ -48,6 +48,11 @@
             "Weight": 1
         },
         {
+            "ComponentName": "Marketstar",
+            "ParentName": "Total U4B Org Segment",
+            "Weight": 1
+        },
+        {
             "ComponentName": "Inside Sales",
             "ParentName": "Inside + Scaled Sales",
             "Weight": 1
@@ -254,6 +259,16 @@
             "Name": "Unspecified U4B Org Segment",
             "Type": "Numeric",
             "UniqueName": "[U4B Org Segment].[U4B Org Segment].[Unspecified U4B Org Segment]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Marketstar",
+                "FDS_Value": "Marketstar"
+            },
+            "Index": 17,
+            "Name": "Marketstar",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Org Segment].[U4B Org Segment].[Marketstar]"
         }
     ],
     "Name": "U4B Org Segment",
