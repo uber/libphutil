@@ -260,6 +260,23 @@ WHILE(nDimcount <= nSiz);
          nPeriod = DAYNO(SUBST(ATTRS(sDim, sWeek, 'Next Period'), 4, 10));
       END;
 
+      #Day
+      IF(pStartDate @<> '' & pEndDate @<> '');
+         nStartday = DAYNO(SUBST(pStartDate, 1, 10));
+         nEndday = DAYNO(SUBST(pEndDate, 1, 10));
+         nLoopCounter = 1;
+         WHILE(nStartday <= nEndDay);
+            sDay = DATE(nStartday, 1);
+            SUBSETELEMENTINSERT(sDim, cSubsetTrg, sDay, 1);
+            nStartday = nStartday + 1;
+            nLoopCounter = nLoopCounter + 1;
+            IF(nLoopCounter > 200);
+               LOGOUTPUT('ERROR', 'While loop ran for more than 200 times. Please check start and end periods');
+               PROCESSQUIT;
+            ENDIF;
+         END;
+      ENDIF;
+
       VIEWSUBSETASSIGN(sCube, cViewTrg, sDim, cSubsetTrg);
 
    ELSEIF(sDim @= 'Ops Measure');
@@ -358,6 +375,24 @@ WHILE(nDimcount <= nSiz);
          END;
          nPeriod = DAYNO(SUBST(ATTRS(sDim, sWeek, 'Next Period'), 4, 10));
       END;
+
+
+      #Day
+      IF(pStartDate @<> '' & pEndDate @<> '');
+         nStartday = DAYNO(SUBST(pStartDate, 1, 10));
+         nEndday = DAYNO(SUBST(pEndDate, 1, 10));
+         nLoopCounter = 1;
+         WHILE(nStartday <= nEndDay);
+            sDay = DATE(nStartday, 1);
+            SUBSETELEMENTINSERT(sDim, cSubsetSrc, sDay, 1);
+            nStartday = nStartday + 1;
+            nLoopCounter = nLoopCounter + 1;
+            IF(nLoopCounter > 200);
+               LOGOUTPUT('ERROR', 'While loop ran for more than 200 times. Please check start and end periods');
+               PROCESSQUIT;
+            ENDIF;
+         END;
+      ENDIF;
 
       VIEWSUBSETASSIGN(sCube, cViewSrc, sDim, cSubsetSrc);
 
