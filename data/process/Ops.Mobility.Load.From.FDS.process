@@ -513,9 +513,17 @@ IF(nTrips = 1);
       , 'pMetrics', cMetricString
    );
 
-   #Sync to Ops
+   #Month Data Sync to Ops
    sProcess = 'Ops.Load.Completed.Trips.From.Mobility';
    EXECUTEPROCESS(sProcess
+      , 'pVersion', 'Actual'
+      , 'pStartDate', pStartDate
+      , 'pEndDate', pEndDate
+   );
+
+   #Day/Week Data Sync to Ops
+   sProcess = 'Ops.Load.Completed.Trips.Day.Week.From.Mobility';
+   RUNPROCESS(sProcess
       , 'pVersion', 'Actual'
       , 'pStartDate', pStartDate
       , 'pEndDate', pEndDate
