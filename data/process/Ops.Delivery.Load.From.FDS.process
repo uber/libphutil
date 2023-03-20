@@ -214,8 +214,10 @@ cPassword = CELLGETS('System Info', 'SQL Password GL Transactions', 'String');
 cMonthEndPeriod = CELLGETS('Admin Play Book', 'Oracle Sync', 'Current Actual Month');
 cMonthEndStatus = CELLGETS('Admin Play Book', 'Oracle Sync', 'Status');
 
-IF(cMonthEndStatus @= 'Close');
-   pStartDate = SUBST(pEndDate, 1, 7) | '-01';
+IF(SCAN('delivery_rider_miles', LOWER(pTable)) = 0);
+   IF(cMonthEndStatus @= 'Close');
+      pStartDate = SUBST(pEndDate, 1, 7) | '-01';
+   ENDIF;
 ENDIF;
 
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
