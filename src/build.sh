@@ -4,9 +4,9 @@ set -euo
 
 shell_build1 () {
   #git checkout $GIT_SHA1;
-  find . -name connect.json -type f -exec sed -i 's/tm1dev.awscorp.uberinternal.com/test.tm1ext.awscorp.uberinternal.com/g' {} \;
-  find . -name connect.json -type f -exec sed -i 's/tm1uat.awscorp.uberinternal.com/uat.tm1ext.awscorp.uberinternal.com/g' {} \;
-  find . -name connect.json -type f -exec sed -i 's/tm1.awscorp.uberinternal.com/prod.tm1ext.awscorp.uberinternal.com/g' {} \;
+  #find . -name connect.json -type f -exec sed -i 's/tm1dev.awscorp.uberinternal.com/test.tm1ext.awscorp.uberinternal.com/g' {} \;
+  #find . -name connect.json -type f -exec sed -i 's/tm1uat.awscorp.uberinternal.com/uat.tm1ext.awscorp.uberinternal.com/g' {} \;
+  #find . -name connect.json -type f -exec sed -i 's/tm1.awscorp.uberinternal.com/prod.tm1ext.awscorp.uberinternal.com/g' {} \;
   
   cat <<EOF > config/default/credentials.json
                 {
@@ -53,6 +53,15 @@ execute_tm1cm () {
   /work/.local/bin/python3.6 -m tm1cm --mode put --environment ${TARGET_ENVIRONMENT} --path $(pwd)
 
   echo "End tm1cm .."
+
+  # Run TI
+  address=$(cat config/${TARGET_ENVIRONMENT}/connect.json | jq -r '.address')
+  echo $address
+  curl -kv --location --request POST "https://$address:443/api/v1/Processes('TAP.Call.Export Redudant Objects')/ibm.tm1.api.v1.Execute" \
+  --header 'Authorization: CAMNamespace c3ZjLXRtMS11YXQ6cW5rN0o0cU16NkhkSFhRVTp1YmVyQUQ=' --header 'Content-Type: application/json; charset=utf-8' \
+  --header 'Cookie: TM1SessionId=Ihfhu95ixxn_ucyMFdhsVNaNaIo; Cookie_1=value'
+
+  echo "End TI execution .."
   
 }
 
@@ -124,6 +133,21 @@ EOF
 
 }
 
+execute_ti () {
+  # Run TI
+  # password=$(cat config/default/credentials.json | jq -r '.password')
+  auth_encode_base64=$(echo -n "svc-jenkins:$TM1_PASSWORD:uberAD" | base64)
+  # echo $auth_encode_base64
+
+  address=$(cat config/${TARGET_ENVIRONMENT}/connect.json | jq -r '.address')
+  echo $address
+
+  curl -kv --location --request POST "https://$address:443/api/v1/Processes('TAP.Call.Export Redudant Objects')/ibm.tm1.api.v1.Execute" \
+  --header "Authorization: CAMNamespace $auth_encode_base64" --header 'Content-Type: application/json; charset=utf-8' 
+
+  echo "End TI execution .."
+}
+
 ### Main body of script starts here
 
 ## Enable debug
@@ -144,6 +168,9 @@ fi
 ### HA Implementation Done
 
 echo "End of script..."
+
+# execute TI 
+execute_ti
 
 ## Disable debug
 set +x
