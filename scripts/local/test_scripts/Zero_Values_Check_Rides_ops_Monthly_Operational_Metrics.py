@@ -37,7 +37,7 @@ class Mytest(Validation):
     email_from = 'pa-eng@uber.com'
     alert_level = {'email': 'error'}
     source = [['ops', 'mdx', MDX]]
-    schedule = '* 7 2-31 * *'
+    schedule = '* 9 2-31 * *'
     keyword = ['Rides_ops_Monthly_operational']
 
     def prepare(self):
