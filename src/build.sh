@@ -54,13 +54,9 @@ execute_tm1cm () {
 
   echo "End tm1cm .."
 
-  # Run TI
-  address=$(cat config/${TARGET_ENVIRONMENT}/connect.json | jq -r '.address')
-  echo $address
-  curl -kv --location --request POST "https://$address:443/api/v1/Processes('TAP.Call.Export Redudant Objects')/ibm.tm1.api.v1.Execute" \
-  --header 'Authorization: CAMNamespace c3ZjLXRtMS11YXQ6cW5rN0o0cU16NkhkSFhRVTp1YmVyQUQ=' --header 'Content-Type: application/json; charset=utf-8' \
-  --header 'Cookie: TM1SessionId=Ihfhu95ixxn_ucyMFdhsVNaNaIo; Cookie_1=value'
-
+  # execute TI 
+  execute_ti
+  
   echo "End TI execution .."
   
 }
@@ -168,9 +164,6 @@ fi
 ### HA Implementation Done
 
 echo "End of script..."
-
-# execute TI 
-execute_ti
 
 ## Disable debug
 set +x
