@@ -10,7 +10,7 @@ docker:
   with-host-docker: true
 
 vault_secrets:
-  - path: /buildkite/migrated-from-jenkins/jenkins_activedir_password
+  - path: /buildkite/tm1/deploy/svc-jenkins
     alias: TM1_PASSWORD
 
 notify:
