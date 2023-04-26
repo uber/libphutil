@@ -30,7 +30,7 @@ NON EMPTY
     {[Line of Business].[2001],[Line of Business].[1001]}*{TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER( {[Location].[Total Location]}, ALL, RECURSIVE )}, 0)}
 ON COLUMNS 
 FROM 
-    [GL Reporting] 
+    [GL Operational] 
 WHERE 
     (
     [Version].[Actual],
@@ -38,12 +38,13 @@ WHERE
     [Department].[Total Department],
     [Rate Type].[USD],
     [Product Type].[Total Product Type],
-    [GL Reporting Measure].[Amount]
+    [GL Operational].[Ops PL],
+    [GL Operational Measure].[Amount]
 )"""
 
 class Mytest(Reconciliation):
 
-    name = 'MAPC Metrics Ops VS GL Reporting Reconciliation'
+    name = 'MAPC Metrics Ops VS GL Operational Reconciliation'
     email_to = []
     email_from = 'pa-eng@uber.com'
     alert_level = {'email': 'error'}

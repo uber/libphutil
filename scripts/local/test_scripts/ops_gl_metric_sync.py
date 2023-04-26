@@ -36,7 +36,7 @@ target_mdx = (
      "{TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER( {[Month].[%s]}, ALL, RECURSIVE )}, 0)} "+
 "ON COLUMNS "+
 "FROM "+
-    "[GL Reporting] "+
+    "[GL Operational] "+
 "WHERE "+
     "("+
     "[Version].[Actual], "+
@@ -45,7 +45,8 @@ target_mdx = (
     "[Rate Type].[USD],"+
     "[Department].[Total Department],"+
     "[Product Type].[Total Product Type],"+
-    "[GL Reporting Measure].[Amount]"+
+    "[GL Operational].[Ops PL],"+
+    "[GL Operational Measure].[Amount]"+
     ")"
 )
 
