@@ -7,55 +7,56 @@ SKIPCHECK;
 
 ## All _fds accounts must not be allocated
 
-[{'Location':'Total Location Incl Discontinued'},'Mobility PL Allocation Measure':{'Allocation Method','Allocation Method Override','Mapping for Alloc TI'}] = S: IF(SCAN('_FDS',UPPER(!ANALYTICS.GL Operational))>0,'',CONTINUE);
+[{'Location':'Total Location Incl Discontinued'},'Mobility PL Allocation Measure':{'Allocation Method','Allocation Method Override','Mapping for Alloc TI'},'Version':{'Actual','Forecast Excl Actuals'}] = S: IF(SCAN('_FDS',UPPER(!ANALYTICS.GL Operational))>0,'',CONTINUE);
 
 ## Check if there is override allocation
 
-['Allocation Method'] =S:
+['Allocation Method','Version':{'Actual','Forecast Excl Actuals'}] =S:
   IF(DB('Mobility PL Allocation',!Version,!Period,!Line of Business,!Location,!Department, !ProductType,  !ANALYTICS.GL Operational,'Allocation Method Override') @<> '',
     DB('Mobility PL Allocation',!Version,!Period,!Line of Business,!Location, !Department, !ProductType,  !ANALYTICS.GL Operational,'Allocation Method Override'), Continue);
 
+
+#################################################################
+# Actual Allocations Driver Mapping Updates
+#################################################################
+
 ## Check if FDS data.
 
-[{'Location':'Total Location Incl Discontinued'},'Allocation Method' ] = S:
+[{'Location':'Total Location Incl Discontinued'},'Allocation Method','Version':'Actual'] = S:
  IF ( ELLEV ('ANALYTICS.GL Operational', !ANALYTICS.GL Operational) = 0,
- IF ( DB('Mobility',!Version,!Period,'FDS','USD',!Line of Business,!Department,'Total Location Incl Discontinued','Total Mobility Product Type','All Mobility Features', !ANALYTICS.GL Operational,'Amount') <> 0
-         % DB('Mobility',!Version,!Period,'FDS','USD',!Line of Business,!Department,'Total Location Incl Discontinued','Total Mobility Product Type','All Mobility Features', !ANALYTICS.GL Operational | '_fds','Amount') <> 0,
+ IF ( DB('Mobility','Actual',!Period,'FDS','USD',!Line of Business,!Department,'Total Location Incl Discontinued','Total Mobility Product Type','All Mobility Features', !ANALYTICS.GL Operational,'Amount') <> 0
+         % DB('Mobility','Actual',!Period,'FDS','USD',!Line of Business,!Department,'Total Location Incl Discontinued','Total Mobility Product Type','All Mobility Features', !ANALYTICS.GL Operational | '_fds','Amount') <> 0,
      IF( ATTRS('Mobility Ops Metrics', !ANALYTICS.GL Operational, 'FDS') @<> '', ATTRS('Mobility Ops Metrics', !ANALYTICS.GL Operational, 'FDS'), 'Calculated'),
   Continue),
 '');
 
-[{'Location':'Total Location Incl Discontinued'},'Allocation Method Override' ] = S:
+[{'Location':'Total Location Incl Discontinued'},'Allocation Method Override','Version':'Actual' ] = S:
 IF (  ELLEV ('Line of Business', !Line of Business) = 0 & ELLEV ('ANALYTICS.GL Operational', !ANALYTICS.GL Operational) = 0 ,
  IF ( DB('Mobility',!Version,!Period,'FDS','USD',!Line of Business,!Department,'Total Location Incl Discontinued','Total Mobility Product Type','All Mobility Features', ATTRS ('ANALYTICS.GL Operational', !ANALYTICS.GL Operational, 'GL Operational L1') | '_fds','Amount')  <> 0,
      IF( ATTRS('Mobility Ops Metrics', ATTRS ('ANALYTICS.GL Operational', !ANALYTICS.GL Operational, 'GL Operational L1') | '_fds' , 'FDS') @<> '', ATTRS('Mobility Ops Metrics',ATTRS ('ANALYTICS.GL Operational', !ANALYTICS.GL Operational, 'GL Operational L1') | '_fds' , 'FDS'), 'Calculated' ),
   Continue),
 Continue);
 
-### Accounts under support service hierarchy to use "Support Services_fds" as allocation method
-
-#[{'Location':'Total Location Incl Discontinued'},'Allocation Method'] = S: IF(ELISANC('ANALYTICS.GL Operational', 'Core Support',!ANALYTICS.GL Operational )=1 % !ANALYTICS.GL Operational@='Allocated Support Costs','Support Services',CONTINUE);
-
-
-[{'Location':'Total Location Incl Discontinued'},'Allocation Method Override' ] = S:
+[{'Location':'Total Location Incl Discontinued'},'Allocation Method Override','Version':'Actual' ] = S:
 IF ( ELLEV ('Line of Business', !Line of Business) = 0  & ELLEV ('ANALYTICS.GL Operational', !ANALYTICS.GL Operational) = 0,
- IF ( DB('Mobility',!Version,!Period,'FDS','USD',!Line of Business,!Department,'Total Location Incl Discontinued','Total Mobility Product Type','All Mobility Features', !ANALYTICS.GL Operational,'Amount') <> 0
-          % DB('Mobility',!Version,!Period,'FDS','USD',!Line of Business,!Department,'Total Location Incl Discontinued','Total Mobility Product Type','All Mobility Features', !ANALYTICS.GL Operational | '_fds','Amount') <> 0,
+ IF ( DB('Mobility','Actual',!Version,!Period,'FDS','USD',!Line of Business,!Department,'Total Location Incl Discontinued','Total Mobility Product Type','All Mobility Features', !ANALYTICS.GL Operational,'Amount') <> 0
+          % DB('Mobility','Actual',!Period,'FDS','USD',!Line of Business,!Department,'Total Location Incl Discontinued','Total Mobility Product Type','All Mobility Features', !ANALYTICS.GL Operational | '_fds','Amount') <> 0,
      IF( ATTRS('Mobility Ops Metrics', !ANALYTICS.GL Operational, 'FDS') @<> '', ATTRS('Mobility Ops Metrics', !ANALYTICS.GL Operational, 'FDS'), 'Calculated' ),
 STET),
 Continue);
 
 
-[{'Location':'Total Location Incl Discontinued'},'Allocation Method Override' ] = S:
+[{'Location':'Total Location Incl Discontinued'},'Allocation Method Override','Version':'Actual'] = S:
 IF ( ELLEV ('Line of Business', !Line of Business) = 0  ,
- IF ( DB('Mobility',!Version,!Period,'FDS','USD',!Line of Business,!Department,'Total Location Incl Discontinued','Total Mobility Product Type','All Mobility Features', !ANALYTICS.GL Operational,'Amount') <> 0
-          % DB('Mobility',!Version,!Period,'FDS','USD',!Line of Business,!Department,'Total Location Incl Discontinued','Total Mobility Product Type','All Mobility Features', !ANALYTICS.GL Operational | '_fds','Amount') <> 0,
+ IF ( DB('Mobility','Actual',!Period,'FDS','USD',!Line of Business,!Department,'Total Location Incl Discontinued','Total Mobility Product Type','All Mobility Features', !ANALYTICS.GL Operational,'Amount') <> 0
+          % DB('Mobility','Actual',!Period,'FDS','USD',!Line of Business,!Department,'Total Location Incl Discontinued','Total Mobility Product Type','All Mobility Features', !ANALYTICS.GL Operational | '_fds','Amount') <> 0,
      IF( ATTRS('Mobility Ops Metrics', !ANALYTICS.GL Operational, 'FDS') @<> '', ATTRS('Mobility Ops Metrics', !ANALYTICS.GL Operational, 'FDS'), 'Calculated' ),
 ''),
 Continue);
+
 ## Default. Need to change to attribute of GL Ops.
 
-[{'Location':'Total Location Incl Discontinued'},'Allocation Method'] = S:
+[{'Location':'Total Location Incl Discontinued'},'Allocation Method','Version':'Actual'] = S:
   IF ( ELLEV ('Line of Business', !Line of Business) = 0,
   IF( DB('Mobility PL Allocation',!Version,!Period,!Line of Business,!Location, !Department, !ProductType,!ANALYTICS.GL Operational ,'Allocation Method Override') @= '',
     IF ( DB('Mobility PL Allocation',!Version,!Period,'Mobility',!Location, !Department, !ProductType,!ANALYTICS.GL Operational, 'Allocation Method Override') @<> '',
@@ -65,13 +66,105 @@ Continue);
 '');
 
 
-[{'Location':'Total Location Incl Discontinued'},'Mapping for Alloc TI' ] = S:
+[{'Location':'Total Location Incl Discontinued'},'Mapping for Alloc TI','Version':'Actual'] = S:
 IF ( ELLEV ('ANALYTICS.GL Operational', !ANALYTICS.GL Operational) = 0,
- IF ( DB('Mobility',!Version,!Period,'FDS','USD',!Line of Business,!Department,'Total Location Incl Discontinued','Total Mobility Product Type','All Mobility Features', !ANALYTICS.GL Operational,'Amount') <> 0, !ANALYTICS.GL Operational,
-      IF ( DB('Mobility',!Version,!Period,'FDS','USD',!Line of Business,!Department,'Total Location Incl Discontinued','Total Mobility Product Type','All Mobility Features', !ANALYTICS.GL Operational | '_fds','Amount') <> 0, !ANALYTICS.GL Operational | '_fds',
-          IF ( DB('Mobility',!Version,!Period,'FDS','USD',!Line of Business,!Department,'Total Location Incl Discontinued','Total Mobility Product Type','All Mobility Features', ATTRS ('ANALYTICS.GL Operational', !ANALYTICS.GL Operational, 'GL Operational L1') | '_fds','Amount') <> 0,
+ IF ( DB('Mobility','Actual',!Period,'FDS','USD',!Line of Business,!Department,'Total Location Incl Discontinued','Total Mobility Product Type','All Mobility Features', !ANALYTICS.GL Operational,'Amount') <> 0, !ANALYTICS.GL Operational,
+      IF ( DB('Mobility','Actual',!Period,'FDS','USD',!Line of Business,!Department,'Total Location Incl Discontinued','Total Mobility Product Type','All Mobility Features', !ANALYTICS.GL Operational | '_fds','Amount') <> 0, !ANALYTICS.GL Operational | '_fds',
+          IF ( DB('Mobility','Actual',!Period,'FDS','USD',!Line of Business,!Department,'Total Location Incl Discontinued','Total Mobility Product Type','All Mobility Features', ATTRS ('ANALYTICS.GL Operational', !ANALYTICS.GL Operational, 'GL Operational L1') | '_fds','Amount') <> 0,
                 ATTRS ('ANALYTICS.GL Operational', !ANALYTICS.GL Operational, 'GL Operational L1') | '_fds',
     DB('Mobility PL Allocation',!Version,!Period,!Line of Business,!Location, !Department, !ProductType,!ANALYTICS.GL Operational ,'Allocation Method')))),
 '');
 
 
+#### Rules to Handle Mapping override by Country
+
+['Version':'Actual','Allocation Method Override']=S: IF(ELLEV ('ANALYTICS.GL Operational', !ANALYTICS.GL Operational) <>0 & !ANALYTICS.GL Operational@<>'GAAP Contribution' ,'',Continue);
+
+['Version':'Actual','Allocation Method Override']=S: IF(ELLEV ('Line of Business', !Line of Business) = 0 & !ANALYTICS.GL Operational@='GAAP Contribution' ,'',Continue);
+
+[{'Allocation Method'},Version:'Actual']=S:
+  IF ( (ELLEV ('Line of Business', !Line of Business) = 0 & ELLEV ('ANALYTICS.GL Operational', !ANALYTICS.GL Operational) = 0 & ELISANC('Location','Total Location by Country',!Location)=1 & DTYPE('Location',!Location)@='C' & SCAN('Country - ',!Location)>0 & !Location@<>'Total Location Incl Discontinued'),
+  IF( DB('Mobility PL Allocation',!Version,!Period,!Line of Business,!Location, !Department, !ProductType,!ANALYTICS.GL Operational ,'Allocation Method Override') @= '',
+    IF ( DB('Mobility PL Allocation',!Version,!Period,'Mobility',!Location, !Department, !ProductType,!ANALYTICS.GL Operational, 'Allocation Method Override') @<> '',
+       DB('Mobility PL Allocation',!Version,!Period,'Mobility',!Location, !Department, !ProductType,!ANALYTICS.GL Operational, 'Allocation Method Override'),
+    DB('Mobility PL Allocation',!Version,!Period,'Mobility',!Location, !Department, !ProductType,'GAAP Contribution', 'Allocation Method Override')),
+     Continue),
+'');
+
+['Mapping for Alloc TI',Version:'Actual']=S:  IF( (ELLEV ('Line of Business', !Line of Business) = 0 & ELLEV ('ANALYTICS.GL Operational', !ANALYTICS.GL Operational) = 0 & ELISANC('Location','Total Location by Country',!Location)=1 & DTYPE('Location',!Location)@='C' & SCAN('Country - ',!Location)>0 & !Location@<>'Total Location Incl Discontinued'),
+			DB('Mobility PL Allocation',!Version,!Period,!Line of Business,!Location, !Department, !ProductType,!ANALYTICS.GL Operational, 'Allocation Method'),'');
+
+#################################################################
+# Forecast Allocations Driver Mapping Updates
+#################################################################
+
+
+[{'Location':'Total Location Incl Discontinued'},'Allocation Method','Version':'Forecast Excl Actuals'] = S:
+ IF ( ELLEV ('ANALYTICS.GL Operational', !ANALYTICS.GL Operational) = 0,
+ IF ( DB('Mobility','Actual',DB('}ElementAttributes_Period',!Period,'Period-2'),'FDS','USD',!Line of Business,!Department,'Total Location Incl Discontinued','Total Mobility Product Type','All Mobility Features', !ANALYTICS.GL Operational,'Amount') <> 0
+         % DB('Mobility','Actual',DB('}ElementAttributes_Period',!Period,'Period-2'),'FDS','USD',!Line of Business,!Department,'Total Location Incl Discontinued','Total Mobility Product Type','All Mobility Features', !ANALYTICS.GL Operational | '_fds','Amount') <> 0,
+     IF( ATTRS('Mobility Ops Metrics', !ANALYTICS.GL Operational, 'FDS') @<> '', ATTRS('Mobility Ops Metrics', !ANALYTICS.GL Operational, 'FDS'), 'Calculated'),
+  Continue),
+'');
+
+[{'Location':'Total Location Incl Discontinued'},'Allocation Method Override','Version':'Forecast Excl Actuals'] = S:
+IF (  ELLEV ('Line of Business', !Line of Business) = 0 & ELLEV ('ANALYTICS.GL Operational', !ANALYTICS.GL Operational) = 0 ,
+ IF ( DB('Mobility','Actual',DB('}ElementAttributes_Period',!Period,'Period-2'),'FDS','USD',!Line of Business,!Department,'Total Location Incl Discontinued','Total Mobility Product Type','All Mobility Features', ATTRS ('ANALYTICS.GL Operational', !ANALYTICS.GL Operational, 'GL Operational L1') | '_fds','Amount')  <> 0,
+     IF( ATTRS('Mobility Ops Metrics', ATTRS ('ANALYTICS.GL Operational', !ANALYTICS.GL Operational, 'GL Operational L1') | '_fds' , 'FDS') @<> '', ATTRS('Mobility Ops Metrics',ATTRS ('ANALYTICS.GL Operational', !ANALYTICS.GL Operational, 'GL Operational L1') | '_fds' , 'FDS'), 'Calculated' ),
+  Continue),
+Continue);
+
+[{'Location':'Total Location Incl Discontinued'},'Allocation Method Override','Version':'Forecast Excl Actuals'] = S:
+IF ( ELLEV ('Line of Business', !Line of Business) = 0  & ELLEV ('ANALYTICS.GL Operational', !ANALYTICS.GL Operational) = 0,
+ IF ( DB('Mobility','Actual',!Version,DB('}ElementAttributes_Period',!Period,'Period-2'),'FDS','USD',!Line of Business,!Department,'Total Location Incl Discontinued','Total Mobility Product Type','All Mobility Features', !ANALYTICS.GL Operational,'Amount') <> 0
+          % DB('Mobility','Actual',DB('}ElementAttributes_Period',!Period,'Period-2'),'FDS','USD',!Line of Business,!Department,'Total Location Incl Discontinued','Total Mobility Product Type','All Mobility Features', !ANALYTICS.GL Operational | '_fds','Amount') <> 0,
+     IF( ATTRS('Mobility Ops Metrics', !ANALYTICS.GL Operational, 'FDS') @<> '', ATTRS('Mobility Ops Metrics', !ANALYTICS.GL Operational, 'FDS'), 'Calculated' ),
+STET),
+Continue);
+
+[{'Location':'Total Location Incl Discontinued'},'Allocation Method Override','Version':'Forecast Excl Actuals'] = S:
+IF ( ELLEV ('Line of Business', !Line of Business) = 0  ,
+ IF ( DB('Mobility','Actual',DB('}ElementAttributes_Period',!Period,'Period-2'),'FDS','USD',!Line of Business,!Department,'Total Location Incl Discontinued','Total Mobility Product Type','All Mobility Features', !ANALYTICS.GL Operational,'Amount') <> 0
+          % DB('Mobility','Actual',DB('}ElementAttributes_Period',!Period,'Period-2'),'FDS','USD',!Line of Business,!Department,'Total Location Incl Discontinued','Total Mobility Product Type','All Mobility Features', !ANALYTICS.GL Operational | '_fds','Amount') <> 0,
+     IF( ATTRS('Mobility Ops Metrics', !ANALYTICS.GL Operational, 'FDS') @<> '', ATTRS('Mobility Ops Metrics', !ANALYTICS.GL Operational, 'FDS'), 'Calculated' ),
+''),
+Continue);
+
+## Default. Need to change to attribute of GL Ops.
+
+[{'Location':'Total Location Incl Discontinued'},'Allocation Method','Version':'Forecast Excl Actuals'] = S:
+  IF ( ELLEV ('Line of Business', !Line of Business) = 0,
+  IF( DB('Mobility PL Allocation',!Version,!Period,!Line of Business,!Location, !Department, !ProductType,!ANALYTICS.GL Operational ,'Allocation Method Override') @= '',
+    IF ( DB('Mobility PL Allocation',!Version,!Period,'Mobility',!Location, !Department, !ProductType,!ANALYTICS.GL Operational, 'Allocation Method Override') @<> '',
+       DB('Mobility PL Allocation',!Version,!Period,'Mobility',!Location, !Department, !ProductType,!ANALYTICS.GL Operational, 'Allocation Method Override'),
+    DB('Mobility PL Allocation',!Version,!Period,'Mobility',!Location, !Department, !ProductType,'GAAP Contribution', 'Allocation Method Override')),
+     Continue),
+'');
+
+[{'Location':'Total Location Incl Discontinued'},'Mapping for Alloc TI','Version':'Forecast Excl Actuals'] = S:
+IF ( ELLEV ('ANALYTICS.GL Operational', !ANALYTICS.GL Operational) = 0,
+ IF ( DB('Mobility','Actual',DB('}ElementAttributes_Period',!Period,'Period-2'),'FDS','USD',!Line of Business,!Department,'Total Location Incl Discontinued','Total Mobility Product Type','All Mobility Features', !ANALYTICS.GL Operational,'Amount') <> 0, !ANALYTICS.GL Operational,
+      IF ( DB('Mobility','Actual',DB('}ElementAttributes_Period',!Period,'Period-2'),'FDS','USD',!Line of Business,!Department,'Total Location Incl Discontinued','Total Mobility Product Type','All Mobility Features', !ANALYTICS.GL Operational | '_fds','Amount') <> 0, !ANALYTICS.GL Operational | '_fds',
+          IF ( DB('Mobility','Actual',DB('}ElementAttributes_Period',!Period,'Period-2'),'FDS','USD',!Line of Business,!Department,'Total Location Incl Discontinued','Total Mobility Product Type','All Mobility Features', ATTRS ('ANALYTICS.GL Operational', !ANALYTICS.GL Operational, 'GL Operational L1') | '_fds','Amount') <> 0,
+                ATTRS ('ANALYTICS.GL Operational', !ANALYTICS.GL Operational, 'GL Operational L1') | '_fds',
+    DB('Mobility PL Allocation',!Version,!Period,!Line of Business,!Location, !Department, !ProductType,!ANALYTICS.GL Operational ,'Allocation Method')))),
+'');
+
+
+#### Rules to Handle Mapping override by Country
+
+['Version':'Forecast Excl Actuals','Allocation Method Override']=S: IF(ELLEV ('ANALYTICS.GL Operational', !ANALYTICS.GL Operational) <>0 & !ANALYTICS.GL Operational@<>'GAAP Contribution' ,'',Continue);
+
+['Version':'Forecast Excl Actuals','Allocation Method Override']=S: IF(ELLEV ('Line of Business', !Line of Business) = 0 & !ANALYTICS.GL Operational@='GAAP Contribution' ,'',Continue);
+
+[{'Allocation Method'},Version:'Forecast Excl Actuals']=S:
+  IF ( (ELLEV ('Line of Business', !Line of Business) = 0 & ELLEV ('ANALYTICS.GL Operational', !ANALYTICS.GL Operational) = 0 & ELISANC('Location','Total Location by Country',!Location)=1 & DTYPE('Location',!Location)@='C' & SCAN('Country - ',!Location)>0 & !Location@<>'Total Location Incl Discontinued'),
+  IF( DB('Mobility PL Allocation',!Version,!Period,!Line of Business,!Location, !Department, !ProductType,!ANALYTICS.GL Operational ,'Allocation Method Override') @= '',
+    IF ( DB('Mobility PL Allocation',!Version,!Period,'Mobility',!Location, !Department, !ProductType,!ANALYTICS.GL Operational, 'Allocation Method Override') @<> '',
+       DB('Mobility PL Allocation',!Version,!Period,'Mobility',!Location, !Department, !ProductType,!ANALYTICS.GL Operational, 'Allocation Method Override'),
+    DB('Mobility PL Allocation',!Version,!Period,'Mobility',!Location, !Department, !ProductType,'GAAP Contribution', 'Allocation Method Override')),
+     Continue),
+'');
+
+['Mapping for Alloc TI',Version:'Forecast Excl Actuals']=S:  IF( (ELLEV ('Line of Business', !Line of Business) = 0 & ELLEV ('ANALYTICS.GL Operational', !ANALYTICS.GL Operational) = 0 & ELISANC('Location','Total Location by Country',!Location)=1 & DTYPE('Location',!Location)@='C' & SCAN('Country - ',!Location)>0 & !Location@<>'Total Location Incl Discontinued'),
+			DB('Mobility PL Allocation',!Version,!Period,!Line of Business,!Location, !Department, !ProductType,!ANALYTICS.GL Operational, 'Allocation Method'),'');
