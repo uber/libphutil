@@ -1,5 +1,5 @@
 {
-    "address": "ops.tm1uat.awscorp.uberinternal.com",
+    "address": "ops-ext.finuat.uberinternal.com",
     "port": "443",
     "ssl": true
 }
