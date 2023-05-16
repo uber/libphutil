@@ -1,0 +1,38 @@
+{
+    "Dimensions": [
+        {
+            "Name": "Version"
+        },
+        {
+            "Name": "Period"
+        },
+        {
+            "Name": "Source"
+        },
+        {
+            "Name": "Rate Type"
+        },
+        {
+            "Name": "Line of Business"
+        },
+        {
+            "Name": "Department"
+        },
+        {
+            "Name": "Location"
+        },
+        {
+            "Name": "Product Type"
+        },
+        {
+            "Name": "Mobility Features"
+        },
+        {
+            "Name": "Mobility Ops Metrics"
+        },
+        {
+            "Name": "Mobility Measure"
+        }
+    ],
+    "Name": "Mobility Snapshot"
+}
