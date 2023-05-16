@@ -1,0 +1,431 @@
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: PROPERTIES                                                           #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+{
+    "DataSource": {
+        "Type": "TM1CubeView",
+        "dataSourceNameForClient": "Mobility PL Allocation",
+        "dataSourceNameForServer": "Mobility PL Allocation",
+        "view": "All"
+    },
+    "HasSecurityAccess": false,
+    "Name": "Mobility Forecast.Drivers.Export.From.Mobility PL Allocation",
+    "Parameters": [],
+    "UIData": "",
+    "Variables": [
+        {
+            "EndByte": 0,
+            "Name": "vVersion",
+            "Position": 1,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vPeriod",
+            "Position": 2,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vLineofBusiness",
+            "Position": 3,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vLocation",
+            "Position": 4,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vDepartment",
+            "Position": 5,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vProductType",
+            "Position": 6,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vANALYTICSGLOperational",
+            "Position": 7,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vMobilityPLAllocationMeasure",
+            "Position": 8,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vValue",
+            "Position": 9,
+            "StartByte": 0,
+            "Type": "String"
+        }
+    ],
+    "VariablesUIData": [
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f"
+    ]
+}
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: PROPERTIES                                                             #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: PROLOG PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+# ================= TAPTOOLS: START GENERATED CODE =================== #
+sProcessName = GETPROCESSNAME();
+IF(sProcessName @<> 'TAP.Call.Queue.Add Job To Queue' & sProcessName @<> 'TAP.CubeSaveData' & sProcessName @<> 'TAP.Call.Save' & sProcessName @<> 'TAP.Call.Recurring' & sProcessName @<> 'DIQ.Call.Batch' & sProcessName @<> 'TAP.Call.Save.Wrapper' & sProcessName @<> 'TAP.Call.CubeSaveData.Wrapper' & sProcessName @<> 'TAP.Call.Tests' & sProcessName @<> 'TAP.Call.Init' & sProcessName @<> 'TAP.Call.Export Application Stats' & sProcessName @<> 'TAP.Cube.Export Data to File' & SCAN('}drill', LOWER(sProcessName)) = 0);
+   sBlock.Execution.Status = CELLGETS('TAP System Info', 'Block Process Execution', 'Value');
+   IF(UPPER(sBlock.Execution.Status) @= 'YES');
+      sBlock.Epilog.Execution = 'Yes';
+      PROCESSBREAK;
+   ENDIF;
+ENDIF;
+LOGOUTPUT('DEBUG', 'PROGRESS: START PROLOG PROCEDURE');
+nMetadataProcedureRecordsStarted = 0;
+nMetadataProcedureRecordsSkipped = 0;
+nMetadataProcedureRecordsRejected = 0;
+nMetadataProcedureRecordsCompleted = 0;
+nDataProcedureRecordsStarted = 0;
+nDataProcedureRecordsSkipped = 0;
+nDataProcedureRecordsRejected = 0;
+nDataProcedureRecordsCompleted = 0;
+nPrologProcedureDataOperations = 0;
+nDataProcedureDataOperations = 0;
+nTotalDataOperations = 0;
+nPrologProcedureMetadataOperations = 0;
+nMetadataProcedureMetadataOperations = 0;
+nDataProcedureMetadataOperations = 0;
+nEpilogProcedureMetadataOperations = 0;
+nTotalProcedureMetadataOperations = 0;
+nPrologProcedureStartTime = NOW();
+nPrologProcedureEndTime = 0;
+nMetadataProcedureStartTime = 0;
+nMetadataProcedureEndTime = 0;
+nDataProcedureStartTime = 0;
+nDataProcedureEndTime = 0;
+# ================= TAPTOOLS: END GENERATED CODE ===================== #
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+##################################################################################################################
+# Name: Process to export drivers data out of Mobility PL Allocation cube and upload to S3 for BigData Allocation
+##################################################################################################################
+
+
+nTimeNow = NOW;
+sTimeStart = TIMST(nTimeNow, '\Y\m\d\h\i\s');
+
+TRUE = 1;
+FALSE = 0;
+nAutoCleanup = TRUE;
+nTotalRecords = 0;
+
+sCube = 'Mobility PL Allocation';
+sCubeTapInfo = 'TAP System Info';
+sCubeSysInfo = 'System Info';
+
+sFile = 'mobility_forecast_allocation_driver_mapping.csv';
+sFileDir = CELLGETS(sCubeTapInfo, 'Files Local Path', 'Value');
+IF(SUBST(sFileDir, LONG(sFileDir), 1) @<> '/');
+   sFileDir = sFileDir | '/';
+ENDIF;
+sFilePath = sFileDir | sFile;
+
+IF(FILEEXISTS(sFilePath) = 1);
+   sCmd = 'rm -f ' | sFilePath;
+   EXECUTECOMMAND(sCmd, 1);
+ENDIF;
+
+### Set Dimension Variables
+sDimVersion = 'Version';
+sDimPeriod = 'Period';
+sDimLob = 'Line of Business';
+sDimLoc = 'Location';
+sDimDept = 'Department';
+sDimProductType = 'Product Type';
+sDimGLOperational = 'ANALYTICS.GL Operational';
+sDimMeas = 'Mobility PL Allocation Measure';
+sSubLocation = 'Country';
+
+sView = 'zTempTI' | GETPROCESSNAME | sTimeStart | NUMBERTOSTRING(RAND());
+sSub = sView;
+
+
+#==============================================================================
+#	SOURCE VIEW
+#==============================================================================
+IF(VIEWEXISTS(sCube, sView) = TRUE);
+   VIEWDESTROY(sCube, sView);
+ENDIF;
+VIEWCREATE(sCube, sView, nAutoCleanup);
+
+nDim = 1;
+sDim = TABDIM(sCube, nDim);
+
+WHILE(sDim @<> '');
+
+   IF(SUBSETEXISTS(sDim, sSub) = TRUE);
+      SUBSETDESTROY(sDim, sSub);
+   ELSE;
+      SUBSETCREATE(sDim, sSub, nAutoCleanup);
+   ENDIF;
+   VIEWSUBSETASSIGN(sCube, sView, sDim, sSub);
+
+   IF(sDim @= sDimVersion);
+      sMDX = '{[' | sDim | '].[Forecast Excl Actuals]}';
+
+   ELSEIF(sDim @= sDimPeriod);
+      sCurrMonth = CELLGETS('Admin Playbook', 'Oracle Sync', 'Current Actual Month');
+      sYear = SUBST(sCurrMonth, 1, 4);
+      nMonth = STRINGTONUMBER(SUBST(sCurrMonth, 6, 7));
+
+      IF(nMonth = 12);
+         nMonth = 1;
+         sYear = NUMBERTOSTRING(STRINGTONUMBER(sYear) + 1);
+      ELSE;
+         nMonth = nMonth + 1;
+      ENDIF;
+
+      IF(nMonth < 10);
+         sForecastMonth = sYear | '-0' | NUMBERTOSTRING(nMonth);
+      ELSE;
+         sForecastMonth = sYear | '-' | NUMBERTOSTRING(nMonth);
+      ENDIF;
+
+      sMDX = '{[' | sDim | '].[' | sForecastMonth | ']}';
+
+   ELSEIF(sDim @= sDimLob);
+      sMDX = '{TM1FILTERBYLEVEL( TM1DRILLDOWNMEMBER( {[' | sDim | '].[Mobility]}, ALL, RECURSIVE ), 0 )}';
+
+   ELSEIF(sDim @= sDimLoc);
+      VIEWSUBSETASSIGN(sCube, sView, sDim, sSubLocation);
+      sMDX = '';
+
+   ELSEIF(sDim @= sDimDept);
+      sMDX = '{[' | sDim | '].[0000]}';
+
+   ELSEIF(sDim @= sDimProductType);
+      sMDX = '{[' | sDim | '].[Unspecified Product Type]}';
+
+   ELSEIF(sDim @= sDimGLOperational);
+      sMDX = '{Except({TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER( {[' | sDim | '].[GAAP Contribution]}, ALL, RECURSIVE )}, 0)},{TM1FILTERBYPATTERN( {TM1SUBSETALL( [' | sDim | '] )}, "*_fds")})}';
+
+   ELSEIF(sDim @= sDimMeas);
+      sMDX = '{[' | sDim | '].[Mapping for Alloc TI]}';
+
+   ELSE;
+      sMDX = '{TM1FILTERBYLEVEL({TM1SUBSETALL([' | sDim | '])}, 0)}';
+
+   ENDIF;
+
+   IF(sMDX @<> '');
+      SUBSETMDXSET(sDim, sSub, sMDX);
+      SUBSETMDXSET(sDim, sSub, '');
+   ENDIF;
+
+   nDim = nDim + 1;
+   sDim = TABDIM(sCube, nDim);
+
+END;
+
+VIEWEXTRACTSKIPZEROESSET(sCube, sView, FALSE);
+VIEWEXTRACTSKIPRULEVALUESSET(sCube, sView, FALSE);
+VIEWEXTRACTSKIPCALCSSET(sCube, sView, FALSE);
+
+DatasourceType = 'View';
+DatasourceNameForServer = sCube;
+DatasourceCubeView = sView;
+
+
+# ================= TAPTOOLS: START GENERATED CODE =================== #
+nPrologProcedureEndTime = NOW();
+LOGOUTPUT('DEBUG', 'DATASOURCE: DatasourceType: "' | DatasourceType | '"');
+LOGOUTPUT('DEBUG', 'DATASOURCE: DatasourceNameForServer: "' | DatasourceNameForServer | '"');
+LOGOUTPUT('DEBUG', 'DATASOURCE: DatasourceCubeView: "' | DatasourceCubeView | '"');
+LOGOUTPUT('DEBUG', 'DATASOURCE: DatasourceDimensionSubset: "' | DatasourceDimensionSubset | '"');
+LOGOUTPUT('DEBUG', 'PROGRESS: END PROLOG PROCEDURE');
+# ================= TAPTOOLS: END GENERATED CODE ===================== #
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: PROLOG PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: METADATA PROCEDURE                                                   #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: METADATA PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: DATA PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+# ================= TAPTOOLS: START GENERATED CODE =================== #
+nDataProcedureRecordsStarted = nDataProcedureRecordsStarted + 1;
+IF(nMetadataProcedureEndTime = 0);
+   LOGOUTPUT('DEBUG', 'PROGRESS: END METADATA PROCEDURE');
+   nMetadataProcedureEndTime = NOW();
+ENDIF;
+IF(nDataProcedureStartTime = 0);
+   LOGOUTPUT('DEBUG', 'PROGRESS: START DATA PROCEDURE');
+   nDataProcedureStartTime = NOW();
+ENDIF;
+# ================= TAPTOOLS: END GENERATED CODE ===================== #
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+nTotalRecords = nTotalRecords + 1;
+
+IF(nTotalRecords = 1);
+
+   ASCIIOUTPUT(sFilePath, 'GL Operational', 'Line of Business', 'Location', 'Month', 'Value');
+
+ENDIF;
+
+IF(TRIM(vValue) @<> '');
+
+   ASCIIOUTPUT(sFilePath, vANALYTICSGLOperational, vLineofBusiness, vLocation, vPeriod, vValue);
+
+ENDIF;
+
+
+# ================= TAPTOOLS: START GENERATED CODE =================== #
+nDataProcedureRecordsCompleted = nDataProcedureRecordsCompleted + 1;
+# ================= TAPTOOLS: END GENERATED CODE ===================== #
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: DATA PROCEDURE                                                         #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: EPILOG PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+# ================= TAPTOOLS: START GENERATED CODE =================== #
+IF(sBlock.Epilog.Execution @= 'Yes');
+   LOGOUTPUT('ERROR', 'Block Process Execution Flag is Yes in TAP System Info Cube. Skipping this process...');
+   PROCESSERROR;
+ENDIF;
+IF(nPrologProcedureEndTime = 0);
+   LOGOUTPUT('DEBUG', 'DATASOURCE: DatasourceType: "NULL"');
+   LOGOUTPUT('DEBUG', 'PROGRESS: END PROLOG PROCEDURE');
+   nPrologProcedureEndTime = NOW();
+ENDIF;
+IF(nMetadataProcedureStartTime > 0 & nMetadataProcedureEndTime = 0);
+   LOGOUTPUT('DEBUG', 'PROGRESS: END METADATA PROCEDURE');
+   nMetadataProcedureEndTime = NOW();
+ENDIF;
+IF(nDataProcedureStartTime > 0 & nDataProcedureEndTime = 0);
+   LOGOUTPUT('DEBUG', 'PROGRESS: END DATA PROCEDURE');
+   nDataProcedureEndTime = NOW();
+ENDIF;
+LOGOUTPUT('DEBUG', 'PROGRESS: START EPILOG PROCEDURE');
+nEpilogProcedureStartTime = NOW();
+# ================= TAPTOOLS: END GENERATED CODE ===================== #
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+sInstance = CELLGETS(sCubeTapInfo, 'Service Name', 'Value');
+sEnv = CELLGETS(sCubeTapInfo, 'Environment', 'Value');
+
+IF(UPPER(sEnv) @= 'UAT');
+   sEnv = 'stage';
+ELSEIF(UPPER(sEnv) @= 'TEST');
+   sEnv = 'dev';
+ENDIF;
+
+sS3Path = 's3://' | sEnv | '-epm-tm1/files/' | sEnv | '/' | sInstance | '/mobility_forecast/';
+
+### This block to be uncommented once we move to new AWS Account ###
+#sCmd = 'aws s3 cp ' | sFilePath | ' ' | sS3Path;
+#IF (FileExists(sFilePath) = 1);
+#  ExecuteCommand(sCmd,1);
+#  LOGOUTPUT('INFO', 'File ' | sFilePath | ' uploaded to S3 bucket ' | sS3Path);
+#ELSE;
+#  LOGOUTPUT('WARNING', 'File ' | sFilePath | ' not found and hence not uploaded to S3 bucket ' | sS3Path);
+#ENDIF;
+
+
+### Temporary code until we move to new AWS account ### 
+pAwsAccessKeyId = CELLGETS(sCubeSysInfo, 'Aws Access Key Id', 'String');
+pAwsSecretAccessKey = CELLGETS(sCubeSysInfo, 'Aws Secret Access Key', 'String');
+pAwsDefaultRegion = CELLGETS(sCubeSysInfo, 'Aws Default Region', 'String');
+
+IF(pAwsAccessKeyId @= '' % pAwsSecretAccessKey @= '' % pAwsDefaultRegion @= '');
+   LOGOUTPUT('WARNING', 'AWS Access credentials are not present to upload the file to S3 bucket');
+ELSE;
+   sCmd = 'export AWS_ACCESS_KEY_ID=' | pAwsAccessKeyId | ' && export AWS_SECRET_ACCESS_KEY=' | pAwsSecretAccessKey | ' && export AWS_DEFAULT_REGION=' | pAwsDefaultRegion | ' && aws s3 cp ' | sFilePath | ' ' | sS3Path;
+
+   IF(FILEEXISTS(sFilePath) = 1);
+      EXECUTECOMMAND(sCmd, 1);
+      LOGOUTPUT('INFO', 'File ' | sFilePath | ' uploaded to S3 bucket ' | sS3Path);
+   ELSE;
+      LOGOUTPUT('WARNING', 'File ' | sFilePath | ' not found and hence not uploaded to S3 bucket ' | sS3Path);
+   ENDIF;
+ENDIF;
+
+
+
+
+
+# ================= TAPTOOLS: START GENERATED CODE =================== #
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: PrologProcedureRuntime: "' | NUMBERTOSTRING(ROUNDP((nPrologProcedureEndTime - nPrologProcedureStartTime) * 86400, 2)) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: PrologProcedureMetadataOperations: "' | NUMBERTOSTRING(nPrologProcedureMetadataOperations) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: PrologProcedureDataOperations: "' | NUMBERTOSTRING(nPrologProcedureDataOperations) | '"');
+
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: MetadataProcedureRuntime: "' | NUMBERTOSTRING(ROUNDP((nMetadataProcedureEndTime - nMetadataProcedureStartTime) * 86400, 2)) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: MetadataProcedureMetadataOperations: "' | NUMBERTOSTRING(nMetadataProcedureMetadataOperations) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: MetadataProcedureRecordsStarted: "' | NUMBERTOSTRING(nMetadataProcedureRecordsStarted) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: MetadataProcedureRecordsSkipped: "' | NUMBERTOSTRING(nMetadataProcedureRecordsSkipped) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: MetadataProcedureRecordsRejected: "' | NUMBERTOSTRING(nMetadataProcedureRecordsRejected) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: MetadataProcedureRecordsCompleted: "' | NUMBERTOSTRING(nMetadataProcedureRecordsCompleted) | '"');
+
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: DataProcedureRuntime: "' | NUMBERTOSTRING(ROUNDP((nDataProcedureEndTime - nDataProcedureStartTime) * 86400, 2)) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: DataProcedureMetadataOperations: "' | NUMBERTOSTRING(nDataProcedureMetadataOperations) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: DataProcedureDataOperations: "' | NUMBERTOSTRING(nDataProcedureDataOperations) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: DataProcedureRecordsStarted: "' | NUMBERTOSTRING(nDataProcedureRecordsStarted) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: DataProcedureRecordsSkipped: "' | NUMBERTOSTRING(nDataProcedureRecordsSkipped) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: DataProcedureRecordsRejected: "' | NUMBERTOSTRING(nDataProcedureRecordsRejected) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: DataProcedureRecordsCompleted: "' | NUMBERTOSTRING(nDataProcedureRecordsCompleted) | '"');
+
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: EpilogProcedureRuntime: "' | NUMBERTOSTRING(ROUNDP((NOW() - nEpilogProcedureStartTime) * 86400, 2)) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: EpilogProcedureMetadataOperations: "' | NUMBERTOSTRING(nEpilogProcedureMetadataOperations) | '"');
+
+nTotalDataOperations = nPrologProcedureDataOperations + nDataProcedureDataOperations;
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: TotalDataOperations: "' | NUMBERTOSTRING(nTotalDataOperations) | '"');
+nTotalMetadataOperations = nPrologProcedureMetadataOperations + nMetadataProcedureMetadataOperations + nDataProcedureMetadataOperations + nEpilogProcedureMetadataOperations;
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: TotalMetadataOperations: "' | NUMBERTOSTRING(nTotalMetadataOperations) | '"');
+LOGOUTPUT('DEBUG', 'PROGRESS: END EPILOG PROCEDURE');
+# ================= TAPTOOLS: END GENERATED CODE ===================== #
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: EPILOG PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
