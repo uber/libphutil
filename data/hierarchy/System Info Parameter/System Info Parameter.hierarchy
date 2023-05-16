@@ -66,6 +66,33 @@
             "Name": "Oracle Password",
             "Type": "Numeric",
             "UniqueName": "[System Info Parameter].[System Info Parameter].[Oracle Password]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Aws Access Key Id"
+            },
+            "Index": 7,
+            "Name": "Aws Access Key Id",
+            "Type": "Numeric",
+            "UniqueName": "[System Info Parameter].[System Info Parameter].[Aws Access Key Id]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Aws Secret Access Key"
+            },
+            "Index": 8,
+            "Name": "Aws Secret Access Key",
+            "Type": "Numeric",
+            "UniqueName": "[System Info Parameter].[System Info Parameter].[Aws Secret Access Key]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Aws Default Region"
+            },
+            "Index": 9,
+            "Name": "Aws Default Region",
+            "Type": "Numeric",
+            "UniqueName": "[System Info Parameter].[System Info Parameter].[Aws Default Region]"
         }
     ],
     "Name": "System Info Parameter",
