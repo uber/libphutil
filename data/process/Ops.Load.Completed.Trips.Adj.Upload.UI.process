@@ -409,12 +409,14 @@ WHILE(p <= DIMSIZ(sDim));
          nDataProcedureDataOperations = nDataProcedureDataOperations + 1;
          # ================= TAPTOOLS: END GENERATED CODE ===================== #
          CELLINCREMENTN(vValue, cCube, cVersion, sPeriod, cSource, sRatetype, sLOB, cDepartment, sLocation, 'Unspecified Fulfillment type', 'Unspecified Merchant Type', 'Unspecified Order Category', ' Unspecified Merchant Segment', 'Unspecified Delivery Features', vMetric, cMeasure);
-      ELSEIF(cCube @= 'Mobility');
+         CELLINCREMENTN(vValue, cCube, cVersion, sPeriod, 'Product PL', sRatetype, sLOB, cDepartment, sLocation, 'Unspecified Fulfillment type', 'Unspecified Merchant Type', 'Unspecified Order Category', ' Unspecified Merchant Segment', 'Unspecified Delivery Features', vMetric, cMeasure); 
+     ELSEIF(cCube @= 'Mobility');
          # ================= TAPTOOLS: START GENERATED CODE =================== #
          nDataProcedureDataOperations = nDataProcedureDataOperations + 1;
          # ================= TAPTOOLS: END GENERATED CODE ===================== #
          CELLINCREMENTN(vValue, cCube, cVersion, sPeriod, cSource, sRatetype, sLOB, cDepartment, sLocation, 'Unspecified Product Type', 'Unspecified Mobility Features', vMetric, cMeasure);
-      ELSEIF(cCube @= 'Ops');
+         CELLINCREMENTN(vValue, cCube, cVersion, sPeriod, 'Product PL', sRatetype, sLOB, cDepartment, sLocation, 'Unspecified Product Type', 'Unspecified Mobility Features', vMetric, cMeasure); 
+     ELSEIF(cCube @= 'Ops');
          # ================= TAPTOOLS: START GENERATED CODE =================== #
          nDataProcedureDataOperations = nDataProcedureDataOperations + 1;
          # ================= TAPTOOLS: END GENERATED CODE ===================== #
