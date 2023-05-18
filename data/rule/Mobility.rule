@@ -36,11 +36,3 @@ SKIPCHECK;
                                                         DB('Mobility Staging',!Version,!Period,!Source,!Rate Type, 'Total Currency' ,!Line of Business,!Department,!Location,!Product Type,!Mobility Features,!Mobility Ops Metrics, 'Amount'),
                                                         STET);
 
- # Rider Miles & Completed Trips
-#Populate only Month level data
-['Actual', 'Product PL','Completed Trips', 'Amount'] = N:IF(DB('}ElementAttributes_Period',!Period,'Input Type') @= 'Month' , ['FDS Incl. Adj'] , continue );
-
-FEEDERS;
-##Feed Only Monthly Level Data
-['Actual', 'FDS Incl. Adj','Completed Trips', 'Amount' ,'Total Time - Month'] => ['Product PL'];
-
