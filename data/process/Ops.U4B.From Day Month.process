@@ -476,6 +476,10 @@ nDataProcedureDataOperations = nDataProcedureDataOperations + 1;
 # ================= TAPTOOLS: END GENERATED CODE ===================== #
 CELLPUTN(vValue, sCube, vVersion, sPeriod, vSource, vRateType, vLob, vDept, vLocation, vSegment, vProduct, vChannel, vProfile, vMetric, 'Amount');
 
+#updating the Product PL Source for Month 
+IF(ATTRS('Period', sPeriod, 'Input Type') @= 'Month' & vmetric @= 'Completed Trips');
+   CELLPUTN(vValue, sCube, vVersion, sPeriod, 'Product PL', vRateType, vLob, vDept, vLocation, vSegment, vProduct, vChannel, vProfile, vMetric, 'Amount');
+ENDIF;
 
 
 
