@@ -170,7 +170,6 @@ sDimDept = 'Department';
 sDimProductType = 'Product Type';
 sDimGLOperational = 'ANALYTICS.GL Operational';
 sDimMeas = 'Mobility PL Allocation Measure';
-sSubLocation = 'Country';
 
 sView = 'zTempTI' | GETPROCESSNAME | sTimeStart | NUMBERTOSTRING(RAND());
 sSub = sView;
@@ -223,8 +222,7 @@ WHILE(sDim @<> '');
       sMDX = '{TM1FILTERBYLEVEL( TM1DRILLDOWNMEMBER( {[' | sDim | '].[Mobility]}, ALL, RECURSIVE ), 0 )}';
 
    ELSEIF(sDim @= sDimLoc);
-      VIEWSUBSETASSIGN(sCube, sView, sDim, sSubLocation);
-      sMDX = '';
+      sMDX = '{[' | sDim | '].[Total Location Incl Discontinued], {TM1FILTERBYPATTERN( {TM1SUBSETALL( [' | sDim | '] )}, "Country - *")}}';
 
    ELSEIF(sDim @= sDimDept);
       sMDX = '{[' | sDim | '].[0000]}';
