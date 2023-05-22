@@ -385,6 +385,9 @@ WHILE(cnt <= nSiz);
    ELSEIF(sDim @= 'Source');
       SUBSETCREATE(sDim, cSubsetTar, 1);
       SUBSETELEMENTINSERT(sDim, cSubsetTar, 'FDS', 1);
+      IF(SCAN('Completed Trips|', pMetrics) > 0);
+         SUBSETELEMENTINSERT(sDim, cSubsetTar, 'Product PL', 1);
+      ENDIF;
       VIEWSUBSETASSIGN(sCube, cViewTar, sDim, cSubsetTar);
 
    ELSE;
