@@ -461,10 +461,6 @@ nDataProcedureDataOperations = nDataProcedureDataOperations + 1;
 # ================= TAPTOOLS: END GENERATED CODE ===================== #
 CELLPUTN(vValue, sCube, vVersion, sPeriod, vSrc, vRateType, vLob, vdept, vLoc, vProduct, vfeature, vmetric, vMsr);
 
-#updating the Product PL Source for Month 
-IF(ATTRS('Period', sPeriod, 'Input Type') @= 'Month' & vmetric @= 'Completed Trips');
-   CELLPUTN(vValue, sCube, vVersion, sPeriod, 'Product PL', vRateType, vLob, vdept, vLoc, vProduct, vfeature, vmetric, vMsr);
-ENDIF;
 
 
 # ================= TAPTOOLS: START GENERATED CODE =================== #
@@ -515,6 +511,11 @@ IF(pMetrics @= 'Completed Trips - Rides Insurance CM | P2 P2P Miles | P3 P2P Mil
    );
 
 ENDIF;
+
+IF(SCAN('Completed Trips|', pMetrics) > 0);
+   EXECUTEPROCESS('Ops.Mobility.CompletedTrips.FDS.To.ProductPL');
+ENDIF;
+
 # ================= TAPTOOLS: START GENERATED CODE =================== #
 LOGOUTPUT('DEBUG', 'PROCESS_METRIC: PrologProcedureRuntime: "' | NUMBERTOSTRING(ROUNDP((nPrologProcedureEndTime - nPrologProcedureStartTime) * 86400, 2)) | '"');
 LOGOUTPUT('DEBUG', 'PROCESS_METRIC: PrologProcedureMetadataOperations: "' | NUMBERTOSTRING(nPrologProcedureMetadataOperations) | '"');
