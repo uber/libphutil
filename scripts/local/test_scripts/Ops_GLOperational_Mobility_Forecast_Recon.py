@@ -4,7 +4,7 @@ from tm1tests.reconciliation import Reconciliation
 
     
 source_mdx = """SELECT NON EMPTY
-    {{TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER( {[Month].[%s]}, ALL, RECURSIVE )}, 0)} + {TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER( {[Month].[%s]}, ALL, RECURSIVE )}, 0)}}
+    {TM1SubsetToSet( [Month].[Month], 'Forecast Allocation Months', 'public' )}
     ON ROWS,
     NON EMPTY
     {[GL Operational].[Gross Bookings],[GL Operational].[Pricing, Incentives, and Other Revenue],[GL Operational].[Net Effective Take Rate (NETR)],[GL Operational].[Variable Costs],[GL Operational].[Variable Contribution],
@@ -25,7 +25,7 @@ WHERE (
 )"""
 
 target_mdx = """SELECT NON EMPTY
-    {{TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER( {[Period].[%s]}, ALL, RECURSIVE )}, 0)} + {TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER( {[Period].[%s]}, ALL, RECURSIVE )}, 0)}}
+    {TM1SubsetToSet( [Period].[Period], 'Forecast Allocation Months', 'public' )}
     ON ROWS,
     NON EMPTY
     {[Mobility Ops Metrics].[Gross Bookings],[Mobility Ops Metrics].[Pricing, Incentives, and Other Revenue],[Mobility Ops Metrics].[Net Effective Take Rate (NETR)],[Mobility Ops Metrics].[Variable Costs],[Mobility Ops Metrics].[Variable Contribution],
@@ -60,8 +60,5 @@ class Mytest(Reconciliation):
 
     def prepare(self):
         super().prepare()
-        now = datetime.now()
-        curr_yr = str(now.year)
-        next_yr = str(int(curr_yr) + 1)
-        self.source[0][2] = source_mdx % (curr_yr,next_yr)
-        self.target[0][2] = target_mdx % (curr_yr,next_yr) 
+        self.source[0][2] = source_mdx % ()
+        self.target[0][2] = target_mdx % () 
