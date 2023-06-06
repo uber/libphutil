@@ -23,28 +23,7 @@ SKIPCHECK;
    ,
       CONTINUE
    );
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=- #
-# Pull Oracle data for VC
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=- #
 
-['Actual', 'Oracle', 'Unspecified Eats Product Type', 'Unspecified Restaurant Type', 'Amount'] = N:
-   IF(
-      ELISANC('Eats Ops Metric', 'GAAP Contribution', !Eats Ops Metric) = 1,
-     DB('ANALYTICS.GL reporting', 'Actual', !Period, 'Total Source Excl Sig Adj', !Rate Type, '2001', !Location, 'Total Department', 'Unspecified Product Type', !Eats Ops Metric, 'Amount'),
-     STET);
-
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=- #
-# Budget Data from Planning
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=- #
-
-['Version' : {'2020 Plan',  'Forecast Excl Actuals'}] =  STET;
-
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=- #
-# PnL Data to be allocated
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=- #
-
-['Actual',{'Product Resto PL', 'Oracle'},'Completed Deliveries'] = N: ['Actual','FDS','Completed Deliveries'];
-['Source' : 'Product Resto PL'] =  STET;
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-  =-=-=-=-=-=-=-=-=-=-=-=-=-=-#
 # Eats Ops Calculated Metrics: CPT
@@ -196,9 +175,6 @@ FEEDERS;
 ['Actual', 'Completed Deliveries'] => ['% of Orders'] , ['TpE'], ['Avg. Basket Size'], ['TpR'], ['% of Trips Promoed'], ['% of GB'], ['ANR Margin'], ['Marketplace Fee %'], ['Promo % of GB'];
 
 ['Actual','Active Restaurants'] => ['% of Restos'];
-
-['Actual','FDS','Completed Deliveries'] => ['Actual','Product Resto PL','Completed Deliveries'];
-['Actual','FDS','Completed Deliveries'] => ['Actual','Oracle','Completed Deliveries'];
 
 ## Feed Ops
 
