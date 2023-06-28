@@ -897,7 +897,7 @@ function array_mergev(array $arrayv) {
  * @return list List of lines.
  */
 function phutil_split_lines($corpus, $retain_endings = true) {
-  if (!strlen($corpus)) {
+  if ($corpus == null || !strlen($corpus)) {
     return array('');
   }
 
