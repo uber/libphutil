@@ -27,7 +27,7 @@
             "Name": "pAccount",
             "Prompt": "",
             "Type": "String",
-            "Value": "Ops PL"
+            "Value": "GAAP Contribution"
         },
         {
             "Name": "pRateType",

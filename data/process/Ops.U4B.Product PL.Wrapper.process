@@ -30,7 +30,7 @@
             "Name": "pAccount",
             "Prompt": "Account: N-Level, C-Level, or BLANK",
             "Type": "String",
-            "Value": "Ops PL"
+            "Value": "GAAP Contribution"
         }
     ],
     "UIData": "CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
@@ -137,7 +137,7 @@ cDimAccount = 'ANALYTICS.GL Operational';
 # ANALYTICS.GL Operational
 sDim = cDimAccount;
 sSub = cSub;
-sEleAnc = IF(cAccount @= '', 'Ops PL', cAccount);
+sEleAnc = IF(cAccount @= '', 'GAAP Contribution', cAccount);
 
 IF(SUBSETEXISTS(sDim, sSub) = 0);
    SUBSETCREATE(sDim, sSub, 1);
