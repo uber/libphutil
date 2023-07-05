@@ -6,17 +6,16 @@ source_mdx = """SELECT NON EMPTY
     {{TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER( {[Period].[%s]}, ALL, RECURSIVE )}, 0)}}
     ON ROWS,
     NON EMPTY
-    {[U4B Ops Metrics].[Gross Bookings],[U4B Ops Metrics].[Net Effective Take Rate (NETR)],[U4B Ops Metrics].[Variable Costs],[U4B Ops Metrics].[Variable Contribution],
-    [U4B Ops Metrics].[Operating Expenses],[U4B Ops Metrics].[Adj EBITDA]}
+    {[U4B Ops Metrics].[Gross Bookings],[U4B Ops Metrics].[Pricing, Incentives, and Other Revenue],[U4B Ops Metrics].[Net Effective Take Rate (NETR)],[U4B Ops Metrics].[Variable Costs],[U4B Ops Metrics].[Variable Contribution],
+    [U4B Ops Metrics].[Operating Expenses],[U4B Ops Metrics].[Adj EBITDA]}*{TM1SubsetToSet( [Rate Type].[Rate Type], 'forecast_allocations' )}
     ON COLUMNS
 FROM
     [U4B]
 WHERE (
     [Version].[Actual],
     [Source].[Oracle],
-    [Rate Type].[USD],
     [Line of Business].[Total Line of Business],   
-    [Department].[Total Department],
+    [Department].[Total Org],
     [U4B Org Segment].[Total U4B Org Segment],
     [U4B Product].[Total U4B Product],
     [U4B Sales Channel].[Total U4B Sales Channel],
@@ -29,17 +28,16 @@ target_mdx = """SELECT NON EMPTY
     {{TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER( {[Period].[%s]}, ALL, RECURSIVE )}, 0)}}
     ON ROWS,
     NON EMPTY
-    {[U4B Ops Metrics].[Gross Bookings],[U4B Ops Metrics].[Net Effective Take Rate (NETR)],[U4B Ops Metrics].[Variable Costs],[U4B Ops Metrics].[Variable Contribution],
-    [U4B Ops Metrics].[Operating Expenses],[U4B Ops Metrics].[Adj EBITDA]}
+    {[U4B Ops Metrics].[Gross Bookings],[U4B Ops Metrics].[Pricing, Incentives, and Other Revenue],[U4B Ops Metrics].[Net Effective Take Rate (NETR)],[U4B Ops Metrics].[Variable Costs],[U4B Ops Metrics].[Variable Contribution],
+    [U4B Ops Metrics].[Operating Expenses],[U4B Ops Metrics].[Adj EBITDA]}*{TM1SubsetToSet( [Rate Type].[Rate Type], 'forecast_allocations' )}
     ON COLUMNS
 FROM
     [U4B]
 WHERE (
     [Version].[Actual],
     [Source].[Product PL],
-    [Rate Type].[USD],
     [Line of Business].[Total Line of Business],   
-    [Department].[Total Department],
+    [Department].[Total Org],
     [U4B Org Segment].[Total U4B Org Segment],
     [U4B Product].[Total U4B Product],
     [U4B Sales Channel].[Total U4B Sales Channel],

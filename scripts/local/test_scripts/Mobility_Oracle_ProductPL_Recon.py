@@ -7,15 +7,14 @@ source_mdx = """SELECT NON EMPTY
     {{TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER( {[Period].[%s]}, ALL, RECURSIVE )}, 0)} + {TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER( {[Period].[%s]}, ALL, RECURSIVE )}, 0)}}
     ON ROWS,
     NON EMPTY
-    {[Mobility Ops Metrics].[Gross Bookings],[Mobility Ops Metrics].[Net Effective Take Rate (NETR)],[Mobility Ops Metrics].[Variable Costs],[Mobility Ops Metrics].[Variable Contribution],
-    [Mobility Ops Metrics].[Operating Expenses],[Mobility Ops Metrics].[Adj EBITDA]}
+    {[Mobility Ops Metrics].[Gross Bookings],[Mobility Ops Metrics].[Pricing, Incentives, and Other Revenue],[Mobility Ops Metrics].[Net Effective Take Rate (NETR)],[Mobility Ops Metrics].[Variable Costs],[Mobility Ops Metrics].[Variable Contribution],
+    [Mobility Ops Metrics].[Operating Expenses],[Mobility Ops Metrics].[Adj EBITDA]}*{TM1SubsetToSet( [Rate Type].[Rate Type], 'forecast_allocations' )}
     ON COLUMNS
 FROM
     [Mobility]
 WHERE (
     [Version].[Actual],
     [Source].[Oracle],
-    [Rate Type].[USD],
     [Line of Business].[Mobility],   
     [Department].[Total Org],
     [Product Type].[Total Product Type],
@@ -28,15 +27,14 @@ target_mdx = """SELECT NON EMPTY
     {{TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER( {[Period].[%s]}, ALL, RECURSIVE )}, 0)} + {TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER( {[Period].[%s]}, ALL, RECURSIVE )}, 0)}}
     ON ROWS,
     NON EMPTY
-    {[Mobility Ops Metrics].[Gross Bookings],[Mobility Ops Metrics].[Net Effective Take Rate (NETR)],[Mobility Ops Metrics].[Variable Costs],[Mobility Ops Metrics].[Variable Contribution],
-    [Mobility Ops Metrics].[Operating Expenses],[Mobility Ops Metrics].[Adj EBITDA]}
+    {[Mobility Ops Metrics].[Gross Bookings],[Mobility Ops Metrics].[Pricing, Incentives, and Other Revenue],[Mobility Ops Metrics].[Net Effective Take Rate (NETR)],[Mobility Ops Metrics].[Variable Costs],[Mobility Ops Metrics].[Variable Contribution],
+    [Mobility Ops Metrics].[Operating Expenses],[Mobility Ops Metrics].[Adj EBITDA]}*{TM1SubsetToSet( [Rate Type].[Rate Type], 'forecast_allocations' )}
     ON COLUMNS
 FROM
     [Mobility]
 WHERE (
     [Version].[Actual],
     [Source].[Product PL],
-    [Rate Type].[USD],
     [Line of Business].[Mobility],   
     [Department].[Total Org],
     [Product Type].[Total Product Type],
