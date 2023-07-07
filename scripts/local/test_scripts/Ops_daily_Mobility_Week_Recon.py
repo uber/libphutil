@@ -4,10 +4,10 @@ from tm1tests.reconciliation import Reconciliation
 
 source_mdx = """
 WITH
-    MEMBER [Period].[current_year_week] AS [Period].[%s]
-    MEMBER [Period].[previous_year_week] AS [Period].[%s]
+    MEMBER [Period].[%s] AS [Period].[%s]
+    MEMBER [Period].[%s] AS [Period].[%s]
 SELECT NON EMPTY
-    {[Period].[current_year_week],[Period].[previous_year_week]}
+    {[Period].[%s],[Period].[%s]}
     ON ROWS,
     NON EMPTY
     {[Mobility Ops Metrics].[Gross Bookings],[Mobility Ops Metrics].[Net Effective Take Rate (NETR)],[Mobility Ops Metrics].[Variable Costs],[Mobility Ops Metrics].[Variable Contribution],
@@ -30,10 +30,10 @@ WHERE (
 
 target_mdx = """
 WITH
-    MEMBER [Period].[current_year_week] AS [Period].[%s]
-    MEMBER [Period].[previous_year_week] AS [Period].[%s]
+    MEMBER [Period].[%s] AS [Period].[%s]
+    MEMBER [Period].[%s] AS [Period].[%s]
 SELECT NON EMPTY
-    {[Period].[current_year_week],[Period].[previous_year_week]}
+    {[Period].[%s],[Period].[%s]}
     ON ROWS,
     NON EMPTY
     {[Mobility Ops Metrics].[Gross Bookings],[Mobility Ops Metrics].[Net Effective Take Rate (NETR)],[Mobility Ops Metrics].[Variable Costs],[Mobility Ops Metrics].[Variable Contribution],
@@ -75,5 +75,7 @@ class Mytest(Reconciliation):
         wd_prev_yr='WD ' + prev_yr
         wk_curr_yr='Week ' + curr_yr
         wk_prev_yr='Week ' + prev_yr
-        self.source[0][2] = source_mdx % (wd_curr_yr,wd_prev_yr)
-        self.target[0][2] = target_mdx % (wk_curr_yr,wk_prev_yr)
+        currentyear_week_comparison = wd_curr_yr + '|' + wk_curr_yr
+        prevyear_week_comparison = wd_prev_yr + '|' + wk_prev_yr  
+        self.source[0][2] = source_mdx % (currentyear_week_comparison,wd_curr_yr,prevyear_week_comparison,wd_prev_yr,currentyear_week_comparison,prevyear_week_comparison)
+        self.target[0][2] = target_mdx % (currentyear_week_comparison,wk_curr_yr,prevyear_week_comparison,wk_prev_yr,currentyear_week_comparison,prevyear_week_comparison)
