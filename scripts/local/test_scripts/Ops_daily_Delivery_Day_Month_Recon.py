@@ -4,10 +4,10 @@ from tm1tests.reconciliation import Reconciliation
 
 source_mdx = """
 WITH
-    MEMBER [Period].[current_year] AS [Period].[%s]
-    MEMBER [Period].[previous_year] AS [Period].[%s]
+    MEMBER [Period].[%s] AS [Period].[%s]
+    MEMBER [Period].[%s] AS [Period].[%s]
 SELECT NON EMPTY
-    {[Period].[current_year],[Period].[previous_year]}
+    {[Period].[%s],[Period].[%s]}
     ON ROWS,
     NON EMPTY
     {[Delivery Ops Metrics].[Gross Bookings],[Delivery Ops Metrics].[Net Effective Take Rate (NETR)],[Delivery Ops Metrics].[Variable Costs],[Delivery Ops Metrics].[Variable Contribution],
@@ -33,10 +33,10 @@ WHERE (
 
 target_mdx = """
 WITH
-    MEMBER [Period].[current_year] AS [Period].[%s]
-    MEMBER [Period].[previous_year] AS [Period].[%s]
+    MEMBER [Period].[%s] AS [Period].[%s]
+    MEMBER [Period].[%s] AS [Period].[%s]
 SELECT NON EMPTY
-    {[Period].[current_year],[Period].[previous_year]}
+    {[Period].[%s],[Period].[%s]}
     ON ROWS,
     NON EMPTY
     {[Delivery Ops Metrics].[Gross Bookings],[Delivery Ops Metrics].[Net Effective Take Rate (NETR)],[Delivery Ops Metrics].[Variable Costs],[Delivery Ops Metrics].[Variable Contribution],
@@ -68,7 +68,7 @@ class Mytest(Reconciliation):
     alert_level = {'email': 'error'}
     source = [['ops', 'mdx', source_mdx]]
     target = [['ops', 'mdx', target_mdx]]
-    schedule = '0 19 * * *'
+    schedule = '0 18 * * *'
     keyword = ['Delivery']
     threshold = ('ge', 1)
 
@@ -77,7 +77,9 @@ class Mytest(Reconciliation):
         now = datetime.now()
         curr_yr = str(now.year)
         prev_yr = str(int(curr_yr) - 1)
-        day_curr_yr='Day ' + curr_yr
-        day_prev_yr='Day ' + prev_yr
-        self.source[0][2] = source_mdx % (curr_yr,prev_yr)
-        self.target[0][2] = target_mdx % (day_curr_yr,day_prev_yr)
+        day_curr_yr ='Day ' + curr_yr
+        day_prev_yr ='Day ' + prev_yr
+        current_year_comparison = curr_yr + '|' + day_curr_yr
+        previous_year_comparison = prev_yr + '|' + day_prev_yr
+        self.source[0][2] = source_mdx % (current_year_comparison,curr_yr,previous_year_comparison,prev_yr,current_year_comparison,previous_year_comparison)
+        self.target[0][2] = target_mdx % (current_year_comparison,day_curr_yr,previous_year_comparison,day_prev_yr,current_year_comparison,previous_year_comparison)
