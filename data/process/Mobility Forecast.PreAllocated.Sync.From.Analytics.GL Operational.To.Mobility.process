@@ -216,9 +216,13 @@ sSrcSub = sSrcView;
 sTgtView = sSrcView | '_Target';
 sTgtSub = sTgtView;
 
+sTgtView2 = sSrcView | '_Target2';
+sTgtSub2 = sTgtView2;
+
+
 
 #==============================================================================
-#	SOURCE VIEW
+# SOURCE VIEW
 #==============================================================================
 IF(VIEWEXISTS(sSrcCube, sSrcView) = TRUE);
    VIEWDESTROY(sSrcCube, sSrcView);
@@ -297,7 +301,7 @@ WHILE(sDim @<> '');
       sMDX = '{TM1FILTERBYLEVEL( TM1DRILLDOWNMEMBER( {[' | sDim | '].[Total Mobility Product Type]}, ALL, RECURSIVE ), 0 )}';
 
    ELSEIF(sDim @= sDimSrcAccount);
-      sMDX = '{[' | sDim | '].[Ops P&L]}';
+      sMDX = '{[' | sDim | '].[Ops P&L], [' | sDim | '].[Completed Trips]}';
 
    ELSEIF(sDim @= sDimSrcGLOperational);
       sMDX = '{TM1FILTERBYLEVEL( TM1DRILLDOWNMEMBER( {[' | sDim | '].[Ops PL]}, ALL, RECURSIVE ), 0 )}';
@@ -330,7 +334,7 @@ DatasourceCubeView = sSrcView;
 
 
 #==============================================================================
-#	Target VIEW
+# Target VIEW I - Zero out forecast data against 'Planning' Source
 #==============================================================================
 IF(VIEWEXISTS(sTgtCube, sTgtView) = TRUE);
    VIEWDESTROY(sTgtCube, sTgtView);
@@ -376,6 +380,56 @@ VIEWEXTRACTSKIPCALCSSET(sTgtCube, sTgtView, TRUE);
 
 VIEWZEROOUT(sTgtCube, sTgtView);
 
+
+#===========================================================================================
+# Target VIEW II - Zero out forecasted 'Completed Trips' metric against 'Product PL' source
+#===========================================================================================
+IF(VIEWEXISTS(sTgtCube, sTgtView2) = TRUE);
+   VIEWDESTROY(sTgtCube, sTgtView2);
+ENDIF;
+VIEWCREATE(sTgtCube, sTgtView2, nAutoCleanup);
+
+nDim = 1;
+sDim = TABDIM(sTgtCube, nDim);
+
+WHILE(sDim @<> '');
+
+   IF(SUBSETEXISTS(sDim, sTgtSub2) = TRUE);
+      SUBSETDESTROY(sDim, sTgtSub2);
+   ELSE;
+      SUBSETCREATE(sDim, sTgtSub2, nAutoCleanup);
+   ENDIF;
+   VIEWSUBSETASSIGN(sTgtCube, sTgtView2, sDim, sTgtSub2);
+
+   IF(sDim @= sDimTgtVersion);
+      sMDX = '{[' | sDim | '].[Forecast Excl Actuals]}';
+
+   ELSEIF(sDim @= sDimTgtSource);
+      sMDX = '{[' | sDim | '].[Product PL]}';
+
+   ELSEIF(sDim @= sDimTgtMobOpsMetrics);
+      sMDX = '{[' | sDim | '].[Completed Trips]}';
+
+   ELSE;
+      sMDX = '{TM1FILTERBYLEVEL({TM1SUBSETALL([' | sDim | '])}, 0)}';
+
+   ENDIF;
+
+   IF(sMDX @<> '');
+      SUBSETMDXSET(sDim, sTgtSub2, sMDX);
+      SUBSETMDXSET(sDim, sTgtSub2, '');
+   ENDIF;
+
+   nDim = nDim + 1;
+   sDim = TABDIM(sTgtCube, nDim);
+
+END;
+
+VIEWEXTRACTSKIPZEROESSET(sTgtCube, sTgtView2, TRUE);
+VIEWEXTRACTSKIPRULEVALUESSET(sTgtCube, sTgtView2, TRUE);
+VIEWEXTRACTSKIPCALCSSET(sTgtCube, sTgtView2, TRUE);
+
+VIEWZEROOUT(sTgtCube, sTgtView2);
 
 
 # ================= TAPTOOLS: START GENERATED CODE =================== #
@@ -425,6 +479,13 @@ ENDIF;
 nDataProcedureDataOperations = nDataProcedureDataOperations + 1;
 # ================= TAPTOOLS: END GENERATED CODE ===================== #
 CELLINCREMENTN(vValue, sTgtCube, vVersion, vMonth, 'Planning', vRateType, vLineofBusiness, vDepartment, vLocation, vProductType, 'Unspecified Mobility Features', vGLOperational, 'Amount');
+
+IF(vGLOperational @= 'Completed Trips');
+   # ================= TAPTOOLS: START GENERATED CODE =================== #
+   nDataProcedureDataOperations = nDataProcedureDataOperations + 1;
+   # ================= TAPTOOLS: END GENERATED CODE ===================== #
+   CELLINCREMENTN(vValue, sTgtCube, vVersion, vMonth, 'Product PL', vRateType, vLineofBusiness, vDepartment, vLocation, vProductType, 'Unspecified Mobility Features', vGLOperational, 'Amount');
+ENDIF;
 
 
 # ================= TAPTOOLS: START GENERATED CODE =================== #
