@@ -1,19 +1,18 @@
-
 from datetime import datetime
 from tm1tests.reconciliation import Reconciliation
 
     
-source_mdx = """SELECT NON EMPTY
+source_mdx = """WITH MEMBER [Account].[Ops PL - GAAP Contribution] AS [Account].[Ops P&L - GAAP Contribution]
+    SELECT NON EMPTY
     {TM1SubsetToSet( [Month].[Month], 'Forecast Allocation Months', 'public' )}
     ON ROWS,
     NON EMPTY
-    {[GL Operational].[Gross Bookings],[GL Operational].[Pricing, Incentives, and Other Revenue],[GL Operational].[Net Effective Take Rate (NETR)],[GL Operational].[Variable Costs],[GL Operational].[Variable Contribution],
-    [GL Operational].[Operating Expenses],[GL Operational].[Adj EBITDA]}
+    {[Account].[Ops PL - GAAP Contribution],[Account].[Completed Trips]}
     ON COLUMNS
 FROM
     [GL Operational]
 WHERE (
-    [Account].[Ops P&L],
+    [GL Operational].[Ops PL],
     [Version].[Forecast Excl Actuals],
     [Location].[Total Location Incl Discontinued],
     [Source].[Planning],
@@ -24,12 +23,12 @@ WHERE (
     [GL Operational Measure].[Amount]
 )"""
 
-target_mdx = """SELECT NON EMPTY
+target_mdx = """WITH MEMBER [Mobility Ops Metrics].[Ops PL - GAAP Contribution] AS [Mobility Ops Metrics].[GAAP Contribution]
+    SELECT NON EMPTY
     {TM1SubsetToSet( [Period].[Period], 'Forecast Allocation Months', 'public' )}
     ON ROWS,
     NON EMPTY
-    {[Mobility Ops Metrics].[Gross Bookings],[Mobility Ops Metrics].[Pricing, Incentives, and Other Revenue],[Mobility Ops Metrics].[Net Effective Take Rate (NETR)],[Mobility Ops Metrics].[Variable Costs],[Mobility Ops Metrics].[Variable Contribution],
-    [Mobility Ops Metrics].[Operating Expenses],[Mobility Ops Metrics].[Adj EBITDA]}
+    {[Mobility Ops Metrics].[Ops PL - GAAP Contribution],[Mobility Ops Metrics].[Completed Trips]}
     ON COLUMNS
 FROM
     [Mobility]
@@ -61,4 +60,4 @@ class Mytest(Reconciliation):
     def prepare(self):
         super().prepare()
         self.source[0][2] = source_mdx % ()
-        self.target[0][2] = target_mdx % () 
+        self.target[0][2] = target_mdx % ()
