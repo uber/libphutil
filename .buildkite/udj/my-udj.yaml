@@ -10,7 +10,7 @@ docker:
   with-host-docker: true
 
 vault_secrets:
-  - path: /buildkite/tm1/deploy/svc-jenkins
+  - path: /buildkite/tm1/deploy/svc-epm-deploy-prod
     alias: TM1_PASSWORD
 
 notify:

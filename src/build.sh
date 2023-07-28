@@ -1,5 +1,8 @@
 #!/bin/sh
 
+TM1_USERNAME="svc-epm-deploy-prod"
+GROUP="OneLogin"
+
 set -euo
 
 shell_build1 () {
@@ -16,8 +19,8 @@ shell_build1 () {
   }
 EOF
 
-  sed -i "s/TM1_NAMESPACE/uberAD/g" config/default/credentials.json
-  sed -i "s/TM1_USERNAME/svc-jenkins@corp.uber.com/g" config/default/credentials.json
+  sed -i "s/TM1_NAMESPACE/$GROUP/g" config/default/credentials.json
+  sed -i "s/TM1_USERNAME/$TM1_USERNAME@corp.uber.com/g" config/default/credentials.json
   sed -i "s/@corp.uber.com//g" config/default/credentials.json
   sed -i "s/TM1_PASSWORD/$TM1_PASSWORD/g" config/default/credentials.json
 }
@@ -132,7 +135,7 @@ EOF
 execute_ti () {
   # Run TI
   # password=$(cat config/default/credentials.json | jq -r '.password')
-  auth_encode_base64=$(echo -n "svc-jenkins:$TM1_PASSWORD:uberAD" | base64)
+  auth_encode_base64=$(echo -n "$TM1_USERNAME:$TM1_PASSWORD:$GROUP" | base64)
   # echo $auth_encode_base64
 
   address=$(cat config/${TARGET_ENVIRONMENT}/connect.json | jq -r '.address')
