@@ -90,11 +90,6 @@ WHILE(nCtr <= nMax);
       SUBSETELEMENTINSERT(sDim, cSubset, sElement, 1);
       VIEWSUBSETASSIGN(cCube, cViewName, sDim, cSubset);
 
-   ELSEIF(sDim @= 'Mobility Ops Metrics');
-      sMDX = 'EXCEPT({TM1FILTERBYLEVEL({TM1SUBSETALL([' | sDim | '])}, 0)}, {[' | sDim | '].[Completed Trips]})';
-      SUBSETCREATEBYMDX(cSubset, sMDX, 1);
-      VIEWSUBSETASSIGN(cCube, cViewName, sDim, cSubset);
-
    ELSE;
       sMDX = '{TM1SORT( {TM1FILTERBYLEVEL({TM1SUBSETALL([ ' | sDim | '] )}, 0)}, ASC)}';
       SUBSETCREATEBYMDX(cSubset, sMdx, 1);
