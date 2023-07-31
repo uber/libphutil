@@ -231,7 +231,7 @@ WHILE(sDim @<> '');
       sMDX = '{[' | sDim | '].[Unspecified Product Type]}';
 
    ELSEIF(sDim @= sDimGLOperational);
-      sMDX = '{Except({TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER( {[' | sDim | '].[GAAP Contribution]}, ALL, RECURSIVE )}, 0)},{TM1FILTERBYPATTERN( {TM1SUBSETALL( [' | sDim | '] )}, "*_fds")})}';
+      sMDX = '{Except({{TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER( {[' | sDim | '].[GAAP Contribution]}, ALL, RECURSIVE )}, 0)}, {[' | sDim | '].[Completed Trips]}}, {TM1FILTERBYPATTERN( {TM1SUBSETALL( [' | sDim | ']] )}, "*_fds")})}';
 
    ELSEIF(sDim @= sDimMeas);
       sMDX = '{[' | sDim | '].[Mapping for Alloc TI]}';
