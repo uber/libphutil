@@ -232,7 +232,7 @@ CONTINUE);
    );
 
 
-['Ops Measure':'Amount',  'Line of Business':'1001'] = C:
+['Ops Measure':'Amount',  'Line of Business':'1001','Actual','FDS'] = C:
    IF(
       ATTRS('Ops Metric', !Ops Metric, 'Aggregate_Location_Flag') @= 'Y'
    ,
@@ -253,7 +253,7 @@ CONTINUE);
       CONTINUE
    );
 
-['Ops Measure':'Amount',  'Line of Business':'2001'] = C:
+['Ops Measure':'Amount',  'Line of Business':'2001','Actual','FDS'] = C:
    IF(
       ATTRS('Ops Metric', !Ops Metric, 'Aggregate_Location_Flag') @= 'Y'
    ,
@@ -274,7 +274,7 @@ CONTINUE);
       CONTINUE
    );
 
-['Ops Measure':'Amount',  'Line of Business':{'1004', '1020','2002','2003','8009', '2007'}, 'Ops Metric' : 'Active Riders'] = C:
+['Ops Measure':'Amount',  'Line of Business':{'1004', '1020','2002','2003','8009', '2007'}, 'Ops Metric' : 'Active Riders','Actual', 'FDS'] = C:
       IF(
          ELLEV('Period', !Period) > 0
       ,
@@ -287,6 +287,28 @@ CONTINUE);
          ,
            STET
          )
+   );
+# Rule for updating adjustments posted via Tm1tegrator Upload
+
+['Ops Measure':'Amount',  'Source':'Ops Adjustment', 'Actual'] = C:
+      IF(
+         ELISANC ('Ops Metric', 'MAPC Metrics',!Ops Metric) > 0
+      ,   
+         IF(
+            ELLEV('Period', !Period) > 0
+         ,
+            0
+         ,
+            IF(
+               (ELLEV ('Location', !Location) > 0)
+            ,
+               DB('Ops', !Version, !Period, !Source, !Rate Type,  'CustomLeaf':!Location | ' Input', !Line of Business, !Product Type, !Ops Metric, 'Amount')
+            ,
+               STET
+               )
+         )
+      ,
+         STET         
    );
 
 ['Ops Measure':'Amount'] = C:
@@ -357,7 +379,7 @@ CONTINUE);
 
 
 
-['Version' : 'Actual', 'Line of Business':'1002', 'Product Type' : {'Expresspool', 'Pool'}] = N :
+['Version' : 'Actual', 'Line of Business':'1002', 'Product Type' : {'Expresspool', 'Pool'},'FDS'] = N :
 
    IF(
       ELISANC('OPS Metric', 'Rides and Eats Metrics', !OPS Metric) = 1 % ELISANC('OPS Metric', 'Rides Only Metrics', !OPS Metric)=1
@@ -367,7 +389,7 @@ CONTINUE);
       CONTINUE
    );
 
-['Version' : 'Actual', 'Line of Business':'1001'] = N :
+['Version' : 'Actual', 'Line of Business':'1001','FDS'] = N :
 
    IF(
       ELISANC('OPS Metric', 'Rides and Eats Metrics', !OPS Metric) = 1 % ELISANC('OPS Metric', 'Rides Only Metrics', !OPS Metric)=1
