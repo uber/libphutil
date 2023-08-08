@@ -102,22 +102,22 @@ $(eval $extract_replica_address)
 EOF
 
         ## Find and replace the primary instance name with replica name in the ART python scripts
-        echo "Find and Replace $repo_name with $extract_replica_name in ART Scripts"
+        # echo "Find and Replace $repo_name with $extract_replica_name in ART Scripts"
         
-        s1="source = \[\["\'$repo_name\'
-        s2="source = \[\["\'$extract_replica_name\'
-        find scripts/local/test_scripts -type f -name "*.py" -exec sed -i "s#$s1#$s2#g" {} \;
+        # s1="source = \[\["\'$repo_name\'
+        # s2="source = \[\["\'$extract_replica_name\'
+        # find scripts/local/test_scripts -type f -name "*.py" -exec sed -i "s#$s1#$s2#g" {} \;
 
-        t1="target = \[\["\'$repo_name\'
-        t2="target = \[\["\'$extract_replica_name\'
-        find scripts/local/test_scripts -type f -name "*.py" -exec sed -i "s#$t1#$t2#g" {} \;
+        # t1="target = \[\["\'$repo_name\'
+        # t2="target = \[\["\'$extract_replica_name\'
+        # find scripts/local/test_scripts -type f -name "*.py" -exec sed -i "s#$t1#$t2#g" {} \;
 
-        r1="\["\'$repo_name\'
-        r2="\["\'$extract_replica_name\'
-        find scripts/local/test_scripts -type f -name "*.py" -exec sed -i "s#$r1#$r2#g" {} \;
+        # r1="\["\'$repo_name\'
+        # r2="\["\'$extract_replica_name\'
+        # find scripts/local/test_scripts -type f -name "*.py" -exec sed -i "s#$r1#$r2#g" {} \;
 
-        grep "source = " scripts/local/test_scripts/*.py
-        grep "target = " scripts/local/test_scripts/*.py
+        # grep "source = " scripts/local/test_scripts/*.py
+        # grep "target = " scripts/local/test_scripts/*.py
         
         repo_name=$extract_replica_name
 
