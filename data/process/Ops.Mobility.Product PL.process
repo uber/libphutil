@@ -463,6 +463,14 @@ IF(sAllocAcc @= 'No Allocate');
    nDataProcedureDataOperations = nDataProcedureDataOperations + 1;
    # ================= TAPTOOLS: END GENERATED CODE ===================== #
    CELLINCREMENTN(vValue, cTargetCube, vVersion, vPeriod, cTargetSource, vRateType, vLOB, vDepartment, vLocation, 'Unspecified Product Type', 'Unspecified Mobility Features', vGLOperational, 'Amount');
+   ####Check if any allocation override present at country level
+   sCountry = ATTRS('Location', vLocation, 'Country L1');
+   IF(sCountry @<> '');
+      sCountryAllocAcc = CELLGETS(cAllocCube, vVersion, vPeriod, vLOB, sCountry, '0000', 'Unspecified Product Type', vGLOperational, 'Mapping for Alloc TI');
+      IF(sCountryAllocAcc @<> '');
+         sAllocAcc = sCountryAllocAcc;
+      ENDIF;
+   ENDIF;
 
 ELSE;
 
