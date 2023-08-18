@@ -48,6 +48,11 @@
             "Weight": 1
         },
         {
+            "ComponentName": "Auto",
+            "ParentName": "Total U4B Org Segment",
+            "Weight": 1
+        },
+        {
             "ComponentName": "Marketstar",
             "ParentName": "Total U4B Org Segment",
             "Weight": 1
@@ -262,10 +267,20 @@
         },
         {
             "Attributes": {
+                "Caption": "Auto",
+                "FDS_Value": "Auto"
+            },
+            "Index": 17,
+            "Name": "Auto",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Org Segment].[U4B Org Segment].[Auto]"
+        },
+        {
+            "Attributes": {
                 "Caption": "Marketstar",
                 "FDS_Value": "Marketstar"
             },
-            "Index": 17,
+            "Index": 18,
             "Name": "Marketstar",
             "Type": "Numeric",
             "UniqueName": "[U4B Org Segment].[U4B Org Segment].[Marketstar]"
