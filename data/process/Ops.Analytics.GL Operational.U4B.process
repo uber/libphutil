@@ -258,7 +258,7 @@ WHILE(cnt <= nSiz);
 
    ELSEIF(sDim @= 'Analytics.Account');
       SUBSETCREATE(sDim, cSubsetName, 1);
-      SUBSETELEMENTINSERT(sDim, cSubsetName, 'Ops P&L', 1);
+      SUBSETELEMENTINSERT(sDim, cSubsetName, 'Ops P&L - GAAP Contribution', 1);
       VIEWSUBSETASSIGN(sCube, cViewName, sDim, cSubsetName);
 
    ELSEIF(sDim @= 'ANALYTICS.Location');
