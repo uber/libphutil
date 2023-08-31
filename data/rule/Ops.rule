@@ -182,6 +182,11 @@ CONTINUE);
 
 ['Actual', 'Line of Business':'8001', 'OTP per OTD Customer'] = ['OTP Customer'] \ ['OTD Customer'];
 
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=- #
+#Source C-level Rule
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=- #
+
+['Version':'Actual', 'Ops Measure':'Amount'] = C: IF(ELLEV('Source',!Source)>0 & ELISANC ('Ops Metric', 'MAPC Metrics',!Ops Metric) > 0,CONSOLIDATECHILDREN('Source'),CONTINUE);
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=- #
 #Total Rides & Eats C-level rules
