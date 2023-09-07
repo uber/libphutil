@@ -170,7 +170,7 @@ CONTINUE);
 
 ['Actual',  'Line of Business':'2001', '% of Trips Promoed'] = C: ['Promo Trips'] \ ['Completed Trips'];
 
-['CPT',  'Amount'] =  (['Existing Driver Incentives'] + ['Total Driver Payments']) \ ['Completed Trips'];
+['Actual','CPT', 'Amount'] =  (['Existing Driver Incentives'] + ['Total Driver Payments']) \ ['Completed Trips'];
 
 
 
@@ -189,10 +189,10 @@ CONTINUE);
 ['Version':'Actual', 'Ops Measure':'Amount'] = C: IF(ELLEV('Source',!Source)>0 & ELISANC ('Ops Metric', 'MAPC Metrics',!Ops Metric) > 0,CONSOLIDATECHILDREN('Source'),CONTINUE);
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=- #
-#Total Rides & Eats C-level rules
+#Total Rides & Eats C-level rules For Actuals
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=- #
 
-['Ops Measure':'Amount' ] = C:
+['Ops Measure':'Amount','Actual' ] = C:
    IF(
       ATTRS('Ops Metric', !Ops Metric, 'Aggregate_LOB_Flag') @= 'Y' &
       ATTRS('Ops Metric', !Ops Metric, 'Aggregate_Location_Flag') @= 'Y'
@@ -215,7 +215,7 @@ CONTINUE);
       CONTINUE
    );
 
-['Ops Measure':'Amount' ] = C:
+['Ops Measure':'Amount','Actual' ] = C:
    IF(
       ATTRS('Ops Metric', !Ops Metric, 'Aggregate_LOB_Flag') @= 'Y'
    ,
@@ -316,7 +316,7 @@ CONTINUE);
          STET         
    );
 
-['Ops Measure':'Amount'] = C:
+['Ops Measure':'Amount','Actual'] = C:
 
    IF(
       ATTRS('Ops Metric', !Ops Metric, 'Aggregate_LOB_Flag') @= 'Y' &
@@ -341,7 +341,7 @@ CONTINUE);
 
 
 
-['Ops Measure':'Amount'] = C:
+['Ops Measure':'Amount','Actual'] = C:
 
    IF(
       ATTRS('Ops Metric', !Ops Metric, 'Aggregate_LOB_Flag') @= 'Y' &
@@ -358,7 +358,7 @@ CONTINUE);
       CONTINUE
    );
 
-['Ops Measure':'Amount'] = C:
+['Ops Measure':'Amount','Actual'] = C:
 
    IF(
       ATTRS('Ops Metric', !Ops Metric, 'Aggregate_LOB_Flag') @<> 'Y' &
@@ -522,7 +522,6 @@ FEEDERS;
 
 #['Actual','FDS','USD','Line of Business':'1001','Completed Trips','Amount']=>DB('GL By Product Allocation','Actual',!Period,'Core Rides',!Location,'Total Product Type Excl Other','GAAP Contribution','Allocation %');
 
-['Completed Trips',  'Amount'] => ['CPT'];
 
 ['Actual',{'FDS','Reported'},'Completed Trips','Amount'] => ['Ops Post Reported Adjs'];
 
@@ -530,4 +529,5 @@ FEEDERS;
 
 
 
+['Actual', 'Completed Trips',  'Amount'] => ['CPT'];
 
