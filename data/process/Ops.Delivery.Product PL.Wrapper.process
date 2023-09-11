@@ -128,13 +128,13 @@ cSpace = ' ';
 
 cTIprocess = 'Ops.Delivery.Product PL';
 cScriptBatch = cScriptRunPath | '/rushti/opsdeliverypl.txt';
-cDimAccount = 'ANALYTICS.GL Operational';
+cDimAccount = 'Delivery Ops Metrics';
 
 # ==================================================================== #
 # Create Source Subset
 # ==================================================================== #
 
-# ANALYTICS.GL Operational
+# Delivery Ops Metrics
 sDim = cDimAccount;
 sSub = cSub;
 sEleAnc = IF(cAccount @= '', 'GAAP Contribution', cAccount);

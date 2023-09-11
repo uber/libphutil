@@ -128,7 +128,7 @@ cSpace = ' ';
 
 cTIprocess = 'Ops.Mobility.Product PL';
 cScriptBatch = cScriptRunPath | '/rushti/opsmobilitypl.txt';
-cDimAccount = 'ANALYTICS.GL Operational';
+cDimAccount = 'Mobility Ops Metrics';
 
 # ==================================================================== #
 # Create Source Subset
@@ -137,7 +137,7 @@ cDimAccount = 'ANALYTICS.GL Operational';
 # ANALYTICS.GL Operational
 sDim = cDimAccount;
 sSub = cSub;
-sEleAnc = IF(cAccount @= '', 'GAAP Contribution', cAccount);
+sEleAnc = IF(cAccount @= '', 'Ops PL', cAccount);
 
 IF(SUBSETEXISTS(sDim, sSub) = 0);
    SUBSETCREATE(sDim, sSub, 1);
