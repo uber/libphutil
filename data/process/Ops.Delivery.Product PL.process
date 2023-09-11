@@ -4,9 +4,9 @@
 {
     "DataSource": {
         "Type": "TM1CubeView",
-        "dataSourceNameForClient": "ANALYTICS.GL Operational",
-        "dataSourceNameForServer": "ANALYTICS.GL Operational",
-        "view": "View1"
+        "dataSourceNameForClient": "Delivery",
+        "dataSourceNameForServer": "Delivery",
+        "view": "Default"
     },
     "HasSecurityAccess": false,
     "Name": "Ops.Delivery.Product PL",
@@ -27,7 +27,7 @@
             "Name": "pAccount",
             "Prompt": "",
             "Type": "String",
-            "Value": "GAAP Contribution"
+            "Value": "Ops PL"
         },
         {
             "Name": "pRateType",
@@ -47,20 +47,6 @@
         },
         {
             "EndByte": 0,
-            "Name": "vPeriod",
-            "Position": 2,
-            "StartByte": 0,
-            "Type": "String"
-        },
-        {
-            "EndByte": 0,
-            "Name": "vSource",
-            "Position": 3,
-            "StartByte": 0,
-            "Type": "String"
-        },
-        {
-            "EndByte": 0,
             "Name": "vRateType",
             "Position": 4,
             "StartByte": 0,
@@ -75,55 +61,93 @@
         },
         {
             "EndByte": 0,
-            "Name": "vLocation",
+            "Name": "vDepartment",
             "Position": 6,
             "StartByte": 0,
             "Type": "String"
         },
         {
             "EndByte": 0,
-            "Name": "vDepartment",
+            "Name": "vLocation",
             "Position": 7,
             "StartByte": 0,
             "Type": "String"
         },
         {
             "EndByte": 0,
-            "Name": "vProductType",
+            "Name": "vfulltype",
             "Position": 8,
             "StartByte": 0,
             "Type": "String"
         },
         {
             "EndByte": 0,
-            "Name": "vAccount",
+            "Name": "vmerchanttype",
             "Position": 9,
             "StartByte": 0,
             "Type": "String"
         },
         {
             "EndByte": 0,
-            "Name": "vGLOperational",
+            "Name": "vordercategory",
             "Position": 10,
             "StartByte": 0,
             "Type": "String"
         },
         {
             "EndByte": 0,
-            "Name": "vMeasure",
+            "Name": "vmerchantsegment",
             "Position": 11,
             "StartByte": 0,
             "Type": "String"
         },
         {
             "EndByte": 0,
-            "Name": "vValue",
+            "Name": "vfeatures",
             "Position": 12,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vMeasure",
+            "Position": 14,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vAccount",
+            "Position": 13,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vSource",
+            "Position": 3,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vPeriod",
+            "Position": 2,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vValue",
+            "Position": 15,
             "StartByte": 0,
             "Type": "Numeric"
         }
     ],
     "VariablesUIData": [
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
         "VarType=32\fColType=827\f",
         "VarType=32\fColType=827\f",
         "VarType=32\fColType=827\f",
@@ -196,7 +220,7 @@ nDataProcedureEndTime = 0;
 ## Initialise Constants               ##
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
 
-cSourceCube = 'ANALYTICS.GL Operational';
+cSourceCube = 'Delivery';
 cTargetCube = 'Delivery';
 cAllocCube = 'Delivery PL Allocation';
 
@@ -207,7 +231,6 @@ cRandomIntA = cRand;
 cViewName = 'zTemp.' | GETPROCESSNAME() | '.' | cRandomIntA;
 cSubsetName = 'zTemp.' | GETPROCESSNAME() | '.' | cRandomIntA;
 
-cDimOpsAcc = 'GL Operational';
 cDimFDSAcc = 'Operational PL FDS Metrics';
 cDimDelAcc = 'Delivery Ops Metrics';
 
@@ -225,7 +248,7 @@ cMerchTypeConsol = 'Total Merchant Type';
 cOrdCatConsol = 'Total Order Category';
 cDelMerchSegConsol = 'Total Merchant Segment';
 cDelFeatureConsol = 'All Delivery Features';
-cSourceConsol = 'Total External Excl Sig Adj';
+cSourceConsol = 'Oracle';
 cLocationConsol = 'Total Location Incl Discontinued';
 cDeptConsol = 'Total Department';
 cLOBConsol = 'Delivery';
@@ -325,12 +348,12 @@ nCtr = 1;
 nMax = CUBEDIMENSIONCOUNTGET(cCube);
 WHILE(nCtr <= nMax);
    sDim = TABDIM(cCube, nCtr);
-   IF(sDim @= 'ANALYTICS.Version');
+   IF(sDim @= 'Version');
       sElement = pVersion;
       SUBSETCREATE(sDim, cSubsetName1, 1);
       SUBSETELEMENTINSERT(sDim, cSubsetName1, sElement, 1);
       VIEWSUBSETASSIGN(cCube, cViewName1, sDim, cSubsetName1);
-   ELSEIF(sDim @= 'ANALYTICS.Month');
+   ELSEIF(sDim @= 'Period');
       IF(DTYPE(sDim, pMonth) @= 'N');
          sElement = pMonth;
          SUBSETCREATE(sDim, cSubsetName1, 1);
@@ -341,7 +364,7 @@ WHILE(nCtr <= nMax);
          SUBSETCREATEBYMDX(cSubsetName1, sMdx, 1);
          VIEWSUBSETASSIGN(cCube, cViewName, sDim, cSubsetName1);
       ENDIF;
-   ELSEIF(sDim @= 'ANALYTICS.GL Operational');
+   ELSEIF(sDim @= 'Delivery Ops Metrics');
       IF(DTYPE(sDim, pAccount) @= 'N');
          sElement = pAccount;
          SUBSETCREATE(sDim, cSubsetName1, 1);
@@ -352,34 +375,24 @@ WHILE(nCtr <= nMax);
          SUBSETCREATEBYMDX(cSubsetName1, sMdx, 1);
          VIEWSUBSETASSIGN(cCube, cViewName1, sDim, cSubsetName1);
       ENDIF;
-   ELSEIF(sDim @= 'ANALYTICS.Product Type');
-      sElement = cProductConsol;
-      SUBSETCREATE(sDim, cSubsetName1, 1);
-      SUBSETELEMENTINSERT(sDim, cSubsetName1, sElement, 1);
-      VIEWSUBSETASSIGN(cCube, cViewName1, sDim, cSubsetName1);
-   ELSEIF(sDim @= 'ANALYTICS.Source');
+   ELSEIF(sDim @= 'Source');
       sElement = cSourceConsol;
       SUBSETCREATE(sDim, cSubsetName1, 1);
       SUBSETELEMENTINSERT(sDim, cSubsetName1, sElement, 1);
       VIEWSUBSETASSIGN(cCube, cViewName1, sDim, cSubsetName1);
-   ELSEIF(sDim @= 'ANALYTICS.Location');
+   ELSEIF(sDim @= 'Location');
       sMDX = '{TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER( { ( [ ' | sDim | '  ].[ ' | cLocationConsol | ' ] )}, ALL, RECURSIVE)}, 0)}';
       SUBSETCREATEBYMDX(cSubsetName1, sMdx, 1);
       VIEWSUBSETASSIGN(cCube, cViewName1, sDim, cSubsetName1);
-   ELSEIF(sDim @= 'ANALYTICS.Department');
+   ELSEIF(sDim @= 'Department');
       sMDX = '{TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER( { ( [ ' | sDim | '  ].[ ' | cDeptConsol | ' ] )}, ALL, RECURSIVE)}, 0)}';
       SUBSETCREATEBYMDX(cSubsetName1, sMdx, 1);
       VIEWSUBSETASSIGN(cCube, cViewName1, sDim, cSubsetName1);
-   ELSEIF(sDim @= 'ANALYTICS.Account');
-      sElement = cGLAccountConsol;
-      SUBSETCREATE(sDim, cSubsetName1, 1);
-      SUBSETELEMENTINSERT(sDim, cSubsetName1, sElement, 1);
-      VIEWSUBSETASSIGN(cCube, cViewName1, sDim, cSubsetName1);
-   ELSEIF(sDim @= 'ANALYTICS.Line of Business');
+   ELSEIF(sDim @= 'Line of Business');
       sMDX = '{TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER( { ( [ ' | sDim | '  ].[ ' | cLOBConsol | ' ] )}, ALL, RECURSIVE)}, 0)}';
       SUBSETCREATEBYMDX(cSubsetName1, sMdx, 1);
       VIEWSUBSETASSIGN(cCube, cViewName1, sDim, cSubsetName1);
-   ELSEIF(sDim @= 'ANALYTICS.Rate Type');
+   ELSEIF(sDim @= 'Rate Type');
       IF(pRateType @= '');
          sMDX = '{TM1SORT( {TM1FILTERBYLEVEL({TM1SUBSETALL([ ' | sDim | '] )}, 0)}, ASC)}';
          SUBSETCREATEBYMDX(cSubsetName1, sMdx, 1);
@@ -388,7 +401,7 @@ WHILE(nCtr <= nMax);
          SUBSETCREATEBYMDX(cSubsetName1, sMdx, 1);
       ENDIF;
       VIEWSUBSETASSIGN(cCube, cViewName1, sDim, cSubsetName1);
-   ELSEIF(sDim @= 'ANALYTICS.GL Operational Measure');
+   ELSEIF(sDim @= 'Delivery Measure');
       sElement = 'Amount';
       SUBSETCREATE(sDim, cSubsetName1, 1);
       SUBSETELEMENTINSERT(sDim, cSubsetName1, sElement, 1);
@@ -463,14 +476,14 @@ ENDIF;
 
 
 ## Retrive Alloc Base Account 
-sAllocAcc = CELLGETS(cAllocCube, vVersion, vPeriod, vLOB, 'Total Location Incl Discontinued', '0000', 'Unspecified Fulfillment type', 'Unspecified Merchant Type', 'Unspecified Order Category', 'Unspecified Merchant Segment', vGLOperational, 'Mapping for Alloc TI');
+sAllocAcc = CELLGETS(cAllocCube, vVersion, vPeriod, vLOB, 'Total Location Incl Discontinued', '0000', 'Unspecified Fulfillment type', 'Unspecified Merchant Type', 'Unspecified Order Category', 'Unspecified Merchant Segment', vAccount, 'Mapping for Alloc TI');
 
 IF(sAllocAcc @= 'No Allocate');
 
    # ================= TAPTOOLS: START GENERATED CODE =================== #
    nDataProcedureDataOperations = nDataProcedureDataOperations + 1;
    # ================= TAPTOOLS: END GENERATED CODE ===================== #
-   CELLINCREMENTN(vValue, cTargetCube, vVersion, vPeriod, cTargetSource, vRateType, vLOB, vDepartment, vLocation, 'Unspecified Fulfillment type', 'Unspecified Merchant Type', 'Unspecified Order Category', 'Unspecified Merchant Segment', 'Unspecified Delivery Features', vGLOperational, 'Amount');
+   CELLINCREMENTN(vValue, cTargetCube, vVersion, vPeriod, cTargetSource, vRateType, vLOB, vDepartment, vLocation, 'Unspecified Fulfillment type', 'Unspecified Merchant Type', 'Unspecified Order Category', 'Unspecified Merchant Segment', 'Unspecified Delivery Features', vAccount, 'Amount');
 
 ELSE;
 
@@ -518,7 +531,7 @@ ELSE;
                                                    # ================= TAPTOOLS: START GENERATED CODE =================== #
                                                    nDataProcedureDataOperations = nDataProcedureDataOperations + 1;
                                                    # ================= TAPTOOLS: END GENERATED CODE ===================== #
-                                                   CELLINCREMENTN(nAllocVal, cTargetCube, vVersion, vPeriod, cTargetSource, vRateType, vLOB, '0000', vLocation, sFulFil, sMerchType, sOrdCat, sMerchSeg, sDelFeat, vGLOperational, 'Amount');
+                                                   CELLINCREMENTN(nAllocVal, cTargetCube, vVersion, vPeriod, cTargetSource, vRateType, vLOB, '0000', vLocation, sFulFil, sMerchType, sOrdCat, sMerchSeg, sDelFeat, vAccount, 'Amount');
                                                 ENDIF;
                                              ENDIF;
                                              Dim5Count = Dim5Count + 1;
@@ -543,7 +556,7 @@ ELSE;
       # ================= TAPTOOLS: START GENERATED CODE =================== #
       nDataProcedureDataOperations = nDataProcedureDataOperations + 1;
       # ================= TAPTOOLS: END GENERATED CODE ===================== #
-      CELLINCREMENTN(vValue, cTargetCube, vVersion, vPeriod, cTargetSource, vRateType, vLOB, vDepartment, vLocation, 'Unspecified Fulfillment type', 'Unspecified Merchant Type', 'Unspecified Order Category', 'Unspecified Merchant Segment', 'Unspecified Delivery Features', vGLOperational, 'Amount');
+      CELLINCREMENTN(vValue, cTargetCube, vVersion, vPeriod, cTargetSource, vRateType, vLOB, vDepartment, vLocation, 'Unspecified Fulfillment type', 'Unspecified Merchant Type', 'Unspecified Order Category', 'Unspecified Merchant Segment', 'Unspecified Delivery Features', vAccount, 'Amount');
    ENDIF;
 
 ENDIF;
