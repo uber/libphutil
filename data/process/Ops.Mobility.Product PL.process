@@ -4,9 +4,9 @@
 {
     "DataSource": {
         "Type": "TM1CubeView",
-        "dataSourceNameForClient": "ANALYTICS.GL Operational",
-        "dataSourceNameForServer": "ANALYTICS.GL Operational",
-        "view": "View1"
+        "dataSourceNameForClient": "Mobility",
+        "dataSourceNameForServer": "Mobility",
+        "view": "Default"
     },
     "HasSecurityAccess": false,
     "Name": "Ops.Mobility.Product PL",
@@ -21,13 +21,13 @@
             "Name": "pMonth",
             "Prompt": "",
             "Type": "String",
-            "Value": "2022-01"
+            "Value": "2021-12"
         },
         {
             "Name": "pAccount",
             "Prompt": "",
             "Type": "String",
-            "Value": "GAAP Contribution"
+            "Value": "Ops PL"
         },
         {
             "Name": "pRateType",
@@ -47,20 +47,6 @@
         },
         {
             "EndByte": 0,
-            "Name": "vPeriod",
-            "Position": 2,
-            "StartByte": 0,
-            "Type": "String"
-        },
-        {
-            "EndByte": 0,
-            "Name": "vSource",
-            "Position": 3,
-            "StartByte": 0,
-            "Type": "String"
-        },
-        {
-            "EndByte": 0,
             "Name": "vRateType",
             "Position": 4,
             "StartByte": 0,
@@ -75,15 +61,22 @@
         },
         {
             "EndByte": 0,
-            "Name": "vLocation",
+            "Name": "vDepartment",
             "Position": 6,
             "StartByte": 0,
             "Type": "String"
         },
         {
             "EndByte": 0,
-            "Name": "vDepartment",
+            "Name": "vLocation",
             "Position": 7,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vFeature",
+            "Position": 9,
             "StartByte": 0,
             "Type": "String"
         },
@@ -97,14 +90,14 @@
         {
             "EndByte": 0,
             "Name": "vAccount",
-            "Position": 9,
+            "Position": 10,
             "StartByte": 0,
             "Type": "String"
         },
         {
             "EndByte": 0,
-            "Name": "vGLOperational",
-            "Position": 10,
+            "Name": "vSource",
+            "Position": 3,
             "StartByte": 0,
             "Type": "String"
         },
@@ -112,6 +105,13 @@
             "EndByte": 0,
             "Name": "vMeasure",
             "Position": 11,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vPeriod",
+            "Position": 2,
             "StartByte": 0,
             "Type": "String"
         },
@@ -196,7 +196,7 @@ nDataProcedureEndTime = 0;
 ## Initialise Constants               ##
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
 
-cSourceCube = 'ANALYTICS.GL Operational';
+cSourceCube = 'Mobility';
 cTargetCube = 'Mobility';
 cAllocCube = 'Mobility PL Allocation';
 
@@ -207,7 +207,6 @@ cRandomIntA = cRand;
 cViewName = 'zTemp.' | GETPROCESSNAME() | '.' | cRandomIntA;
 cSubsetName = 'zTemp.' | GETPROCESSNAME() | '.' | cRandomIntA;
 
-cDimOpsAcc = 'GL Operational';
 cDimFDSAcc = 'Operational PL FDS Metrics';
 cDimMobAcc = 'Mobility Ops Metrics';
 cDimProductType = 'Product Type';
@@ -218,7 +217,7 @@ cMeasure = 'Amount';
 cTargetSource = 'Product PL';
 cProductConsol = 'Total Mobility Product Type';
 cMobilityConsol = 'All Mobility Features';
-cSourceConsol = 'Total External Excl Sig Adj';
+cSourceConsol = 'Oracle';
 cLocationConsol = 'Total Location Incl Discontinued';
 cDeptConsol = 'Total Department';
 cLOBConsol = 'Mobility';
@@ -317,12 +316,12 @@ nCtr = 1;
 nMax = CUBEDIMENSIONCOUNTGET(cCube);
 WHILE(nCtr <= nMax);
    sDim = TABDIM(cCube, nCtr);
-   IF(sDim @= 'ANALYTICS.Version');
+   IF(sDim @= 'Version');
       sElement = pVersion;
       SUBSETCREATE(sDim, cSubsetName1, 1);
       SUBSETELEMENTINSERT(sDim, cSubsetName1, sElement, 1);
       VIEWSUBSETASSIGN(cCube, cViewName1, sDim, cSubsetName1);
-   ELSEIF(sDim @= 'ANALYTICS.Month');
+   ELSEIF(sDim @= 'Period');
       IF(DTYPE(sDim, pMonth) @= 'N');
          sElement = pMonth;
          SUBSETCREATE(sDim, cSubsetName1, 1);
@@ -333,7 +332,7 @@ WHILE(nCtr <= nMax);
          SUBSETCREATEBYMDX(cSubsetName1, sMdx, 1);
          VIEWSUBSETASSIGN(cCube, cViewName, sDim, cSubsetName1);
       ENDIF;
-   ELSEIF(sDim @= 'ANALYTICS.GL Operational');
+   ELSEIF(sDim @= 'Mobility Ops Metrics');
       IF(DTYPE(sDim, pAccount) @= 'N');
          sElement = pAccount;
          SUBSETCREATE(sDim, cSubsetName1, 1);
@@ -344,34 +343,29 @@ WHILE(nCtr <= nMax);
          SUBSETCREATEBYMDX(cSubsetName1, sMdx, 1);
          VIEWSUBSETASSIGN(cCube, cViewName1, sDim, cSubsetName1);
       ENDIF;
-   ELSEIF(sDim @= 'ANALYTICS.Product Type');
+   ELSEIF(sDim @= 'Product Type');
       sElement = cProductConsol;
       SUBSETCREATE(sDim, cSubsetName1, 1);
       SUBSETELEMENTINSERT(sDim, cSubsetName1, sElement, 1);
       VIEWSUBSETASSIGN(cCube, cViewName1, sDim, cSubsetName1);
-   ELSEIF(sDim @= 'ANALYTICS.Source');
+   ELSEIF(sDim @= 'Source');
       sElement = cSourceConsol;
       SUBSETCREATE(sDim, cSubsetName1, 1);
       SUBSETELEMENTINSERT(sDim, cSubsetName1, sElement, 1);
       VIEWSUBSETASSIGN(cCube, cViewName1, sDim, cSubsetName1);
-   ELSEIF(sDim @= 'ANALYTICS.Location');
+   ELSEIF(sDim @= 'Location');
       sMDX = '{TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER( { ( [ ' | sDim | '  ].[ ' | cLocationConsol | ' ] )}, ALL, RECURSIVE)}, 0)}';
       SUBSETCREATEBYMDX(cSubsetName1, sMdx, 1);
       VIEWSUBSETASSIGN(cCube, cViewName1, sDim, cSubsetName1);
-   ELSEIF(sDim @= 'ANALYTICS.Department');
+   ELSEIF(sDim @= 'Department');
       sMDX = '{TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER( { ( [ ' | sDim | '  ].[ ' | cDeptConsol | ' ] )}, ALL, RECURSIVE)}, 0)}';
       SUBSETCREATEBYMDX(cSubsetName1, sMdx, 1);
       VIEWSUBSETASSIGN(cCube, cViewName1, sDim, cSubsetName1);
-   ELSEIF(sDim @= 'ANALYTICS.Account');
-      sElement = cGLAccountConsol;
-      SUBSETCREATE(sDim, cSubsetName1, 1);
-      SUBSETELEMENTINSERT(sDim, cSubsetName1, sElement, 1);
-      VIEWSUBSETASSIGN(cCube, cViewName1, sDim, cSubsetName1);
-   ELSEIF(sDim @= 'ANALYTICS.Line of Business');
+   ELSEIF(sDim @= 'Line of Business');
       sMDX = '{TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER( { ( [ ' | sDim | '  ].[ ' | cLOBConsol | ' ] )}, ALL, RECURSIVE)}, 0)}';
       SUBSETCREATEBYMDX(cSubsetName1, sMdx, 1);
       VIEWSUBSETASSIGN(cCube, cViewName1, sDim, cSubsetName1);
-   ELSEIF(sDim @= 'ANALYTICS.Rate Type');
+   ELSEIF(sDim @= 'Rate Type');
       IF(pRateType @= '');
          sMDX = '{TM1SORT( {TM1FILTERBYLEVEL({TM1SUBSETALL([ ' | sDim | '] )}, 0)}, ASC)}';
          SUBSETCREATEBYMDX(cSubsetName1, sMdx, 1);
@@ -380,7 +374,7 @@ WHILE(nCtr <= nMax);
          SUBSETCREATEBYMDX(cSubsetName1, sMdx, 1);
       ENDIF;
       VIEWSUBSETASSIGN(cCube, cViewName1, sDim, cSubsetName1);
-   ELSEIF(sDim @= 'ANALYTICS.GL Operational Measure');
+   ELSEIF(sDim @= 'Mobility Measure');
       sElement = 'Amount';
       SUBSETCREATE(sDim, cSubsetName1, 1);
       SUBSETELEMENTINSERT(sDim, cSubsetName1, sElement, 1);
@@ -455,21 +449,21 @@ ENDIF;
 ###################################################
 
 ## Retrive Alloc Base Account 
-sAllocAcc = CELLGETS(cAllocCube, vVersion, vPeriod, vLOB, 'Total Location Incl Discontinued', '0000', 'Unspecified Product Type', vGLOperational, 'Mapping for Alloc TI');
+sAllocAcc = CELLGETS(cAllocCube, vVersion, vPeriod, vLOB, 'Total Location Incl Discontinued', '0000', 'Unspecified Product Type', vAccount, 'Mapping for Alloc TI');
 
 IF(sAllocAcc @= 'No Allocate');
 
    # ================= TAPTOOLS: START GENERATED CODE =================== #
    nDataProcedureDataOperations = nDataProcedureDataOperations + 1;
    # ================= TAPTOOLS: END GENERATED CODE ===================== #
-   CELLINCREMENTN(vValue, cTargetCube, vVersion, vPeriod, cTargetSource, vRateType, vLOB, vDepartment, vLocation, 'Unspecified Product Type', 'Unspecified Mobility Features', vGLOperational, 'Amount');
+   CELLINCREMENTN(vValue, cTargetCube, vVersion, vPeriod, cTargetSource, vRateType, vLOB, vDepartment, vLocation, 'Unspecified Product Type', 'Unspecified Mobility Features', vAccount, 'Amount');
 
 ELSE;
 
    ####Check if any allocation override present at country level
    sCountry = ATTRS('Location', vLocation, 'Country L1');
    IF(sCountry @<> '');
-      sCountryAllocAcc = CELLGETS(cAllocCube, vVersion, vPeriod, vLOB, sCountry, '0000', 'Unspecified Product Type', vGLOperational, 'Mapping for Alloc TI');
+      sCountryAllocAcc = CELLGETS(cAllocCube, vVersion, vPeriod, vLOB, sCountry, '0000', 'Unspecified Product Type', vAccount, 'Mapping for Alloc TI');
       IF(sCountryAllocAcc @<> '');
          sAllocAcc = sCountryAllocAcc;
       ENDIF;
@@ -499,7 +493,7 @@ ELSE;
                         # ================= TAPTOOLS: START GENERATED CODE =================== #
                         nDataProcedureDataOperations = nDataProcedureDataOperations + 1;
                         # ================= TAPTOOLS: END GENERATED CODE ===================== #
-                        CELLINCREMENTN(nAllocVal, cTargetCube, vVersion, vPeriod, cTargetSource, vRateType, vLOB, '0000', vLocation, sProductType, sMobilityFeature, vGLOperational, 'Amount');
+                        CELLINCREMENTN(nAllocVal, cTargetCube, vVersion, vPeriod, cTargetSource, vRateType, vLOB, '0000', vLocation, sProductType, sMobilityFeature, vAccount, 'Amount');
                      ENDIF;
                   ENDIF;
                   Dim2Count = Dim2Count + 1;
@@ -512,7 +506,7 @@ ELSE;
       # ================= TAPTOOLS: START GENERATED CODE =================== #
       nDataProcedureDataOperations = nDataProcedureDataOperations + 1;
       # ================= TAPTOOLS: END GENERATED CODE ===================== #
-      CELLINCREMENTN(vValue, cTargetCube, vVersion, vPeriod, cTargetSource, vRateType, vLOB, vDepartment, vLocation, 'Unspecified Product Type', 'Unspecified Mobility Features', vGLOperational, 'Amount');
+      CELLINCREMENTN(vValue, cTargetCube, vVersion, vPeriod, cTargetSource, vRateType, vLOB, vDepartment, vLocation, 'Unspecified Product Type', 'Unspecified Mobility Features', vAccount, 'Amount');
    ENDIF;
 
 ENDIF;
