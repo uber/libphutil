@@ -1,0 +1,22 @@
+version: 1.0
+
+uown: 67ab2db0-fb5f-4a08-af9e-93530f283a6d
+command: "src/coverage_build.sh"
+
+docker:
+  base-image: docker-local.artifactory.uber.internal:5922/devexp/tm1-cov:v6
+  shell: true
+  with-host-docker: true
+
+notify:
+  - email: "${BUILDKITE_BUILD_AUTHOR_EMAIL:-epm-eng@uber.com}"
+    if: build.state == "passed"
+
+  - email: "${BUILDKITE_BUILD_AUTHOR_EMAIL:-epm-eng@uber.com}"
+    if: build.state == "failed"
+
+artifact_paths:
+  - build/coverage/*.xml
+  - build/comment/*.txt
+  - build/junit/*.xml
+  # - build/lint/phabricator-lint

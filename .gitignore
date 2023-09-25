@@ -1,3 +1,5 @@
 .DS_Store
 *.log
 config/*/credentials.json
+.idea
+.idea/*

@@ -1,0 +1,37 @@
+# factorial.py
+def factorial(n):
+    if n == 0:
+        return 1
+    return n * factorial(n - 1)
+
+
+
+
+# First, make sure you have pytest installed (pip install pytest).
+
+# Now, let's create tests using pytest:
+
+
+import pytest
+from factorial import factorial
+
+def test_factorial_of_0():
+    result = factorial(0)
+    assert result == 1
+
+def test_factorial_of_positive_number():
+    result = factorial(5)
+    assert result == 120
+
+def test_factorial_of_negative_number():
+    with pytest.raises(ValueError):
+        factorial(-1)
+
+
+
+
+# To run the pytest tests, save this file as test_factorial_pytest.py and execute it:
+
+
+
+pytest test_factorial_pytest.py

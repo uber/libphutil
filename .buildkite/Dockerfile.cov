@@ -1,0 +1,93 @@
+FROM centos:7
+
+RUN yum update -y
+RUN yum -y install \
+    glibc.i686 \
+    libgcc \
+    libgcc.i686 \
+    libX11 \
+    libstdc++.i686 \
+    libX11.i686 \
+    unixODBC \
+    unixODBC-devel \
+    postgresql-odbc \
+    postgresql-devel \
+    nfs-utils \
+    vim \
+    libaio \
+    sssd \
+    at \
+    zip \
+    unzip \
+    gcc \
+    systemd-devel \
+    gdb \
+    git \
+    patch \
+    netcat \
+    zlib-devel \
+    wget \
+    openssl-devel \
+    libffi-devel \
+    bzip2-devel \
+    xz-devel \
+    make \
+    sqlite-devel
+
+# Download and install Python 3.7.11
+WORKDIR /usr/src
+RUN wget https://www.python.org/ftp/python/3.7.11/Python-3.7.11.tgz
+RUN tar xzf Python-3.7.11.tgz
+WORKDIR /usr/src/Python-3.7.11
+RUN ./configure --enable-optimizations
+RUN make altinstall
+
+# Create a virtual environment
+WORKDIR /var/uber
+RUN /usr/local/bin/python3.7 -m venv python37
+
+# Upgrade pip
+WORKDIR /var/uber/python37/bin
+COPY pip.conf /var/uber/python37/pip.conf
+RUN yes | ./pip install --upgrade pip
+
+# Install the Python packages
+RUN yes | ./pip install \
+    tm1py==1.10.0 \
+    cx_oracle \
+    croniter \
+    libaio \
+    pandas \
+    boto3 \
+    ldap3==2.4.1 \
+    sendgrid \
+    openpyxl \
+    psycopg2 \
+    Flask \
+    connexion[swagger-ui]==2.2.0 \
+    injector==0.12.0 \
+    Flask-Injector \
+    fastavro \
+    apscheduler \
+    botocore \
+    systemd \
+    pyminizip \
+    sdnotify \
+    sendgrid \
+    matplotlib \
+    paramiko \
+    premailer \
+    python-hosts \
+    python-crontab \
+    backoff \
+    dnspython \
+    pytz==2023.3 \
+    pytest-cov \
+    coverage \
+    pytest \
+    pyyaml
+
+RUN yes | ./pip install taptools==1.1.3
+
+# Remove unnecessary files
+RUN rm -f /usr/src/Python-3.7.11.tgz

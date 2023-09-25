@@ -4,10 +4,31 @@ schema:
 ---
 owner:
   name: "EPM"
-  managerEmail: Mark Abercromby <abers@uber.com>  
+  managerEmail: Mark Abercromby <abers@uber.com>
 reviewers:
   groups:
     - tm1
 subscribers:
-  groups:  
+  groups:
     - tm1
+---
+code-quality:
+  coverage:
+    # Can be one of the following
+    # true: execute the coverage
+    # false: Skip coverage completely
+    # will be true by default. can be used to fail the build in future
+    enforce: true
+
+    # Enforce a minimum coverage of 85% for the script
+    # However, allow exceptions if modified/incremental are set
+    min: 85
+
+    # Allow if: coverage of script >= last coverage of the script
+    # true by default
+#    incremental: true
+
+    # Allow diff if: coverage of added/updated lines in the diff >= 90%
+    # only applies to lines coverable by instrumentation
+    # Config/comments/whitespace are ignored for this calculation
+#    modified: 90

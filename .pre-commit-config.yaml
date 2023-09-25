@@ -1,0 +1,60 @@
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
+repos:
+#   Black is a hook that can reformat the code in place.
+#-   repo: https://github.com/ambv/black
+#    rev: 23.7.0
+#    hooks:
+#    -   id: black
+
+#   trailing-whitespace: This hook trims all whitespace from the end of each line. If for any reason you wish to trim additional characters, you can specify the following argument: args: [--chars,"<chars to trim>"] .
+#   end-of-file-fixer : This hooks ensures that all files end in a newline and only a newline.
+#   check-yaml : This hook will attempt to load all yaml files and verify their syntax
+#   check-added-large-files : Finally, this hook will prevent -extremely- large files from being committed. By default, any file that exceeds 500Kb will be considered as a large file. You can modify the size by providing the following argument:
+#   double-quote-string-fixer : This hook, will replace double quotes (") with single quotes (') wherever this is applicable. When the double quotes are needed (say my_string = "Hello 'World'") this hook won’t replace them. We are not using this hook because it will conflict with black hook.
+#   mixed-line-ending : This hook will check mixed line ending and will optionally replace line ending by CRLF (Carriage Return Line) and LF. In our example, we explicitly specify --fix option so that the hook forces replacement of line ending by LF.
+#   check-ast : This hook will check whether the files ending in .py parse as valid Python.
+#   debug-statements: This hook will check for debugger imports in all files ending in .py . For Python 3.7+, it will also verify that no mention to breakpoint() is made in the source code.
+#   check-merge-conflict: This will check for files that contain merge conflict strings.
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+    -   id: trailing-whitespace
+    -   id: end-of-file-fixer
+    -   id: check-yaml
+    -   id: check-added-large-files
+    -   id: mixed-line-ending
+    -   id: check-ast
+    -   id: debug-statements
+    -   id: check-merge-conflict
+        language_version: python3
+
+#   autopep8: Finally, this hook will automatically format all the files ending in .py to conform to the PEP-8 styleguide.
+-   repo: https://github.com/pre-commit/mirrors-autopep8
+    rev: v2.0.4
+    hooks:
+    -   id: autopep8
+
+#   Flake8 is a hook checking that the code format is compliant with PEP8.
+#-   repo: https://github.com/PyCQA/flake8
+#    rev: 6.1.0
+#    hooks:
+#    -   id: flake8
+
+-   repo: https://github.com/asottile/reorder_python_imports
+    rev: v3.10.0
+    hooks:
+    -   id: reorder-python-imports
+#        args: [--application-directories=.:src, --py36-plus]
+
+#   remove any unused import statements
+#-   repo: https://github.com/hadialqattan/pycln
+#    rev: v2.2.2
+#    hooks:
+#    -   id: pycln
+
+#-   repo: https://github.com/pycqa/pylint
+#    rev: v3.0.0a7
+#    hooks:
+#    -   id: pylint
+#        args: ['--rcfile', '.pylintrc']
