@@ -117,6 +117,9 @@ final class PhutilServiceProfiler extends Phobject {
           }
           $desc = implode('; ', $desc);
           break;
+        case 'unit':
+          $desc = $data['engine'];
+          break;
         case 'exec':
           $desc = '$ '.$data['command'];
           break;
@@ -203,6 +206,10 @@ final class PhutilServiceProfiler extends Phobject {
   }
 
   private static function escapeProfilerStringForDisplay($string) {
+    if (empty($string)) {
+      return $string;
+    }
+
     // Convert tabs and newlines to spaces and collapse blocks of whitespace,
     // most often formatting in queries.
     $string = preg_replace('/\s{2,}/', ' ', $string);
