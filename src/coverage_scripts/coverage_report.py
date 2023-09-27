@@ -28,7 +28,7 @@ def generate_comment(
     Generates a comment for the Buildkite UI containing coverage results and warnings.
 
     :param results: Dictionary containing coverage results.
-    :param overall_coverage_report: Overall coverage percentage.
+    # :param overall_coverage_report: Overall coverage percentage.
     :param warning_files: List of files with coverage warnings.
     :param file_coverage_report: Dictionary containing per-file coverage data.
     """
@@ -74,22 +74,6 @@ def load_coverage_configuration(file_name):
         return documents[2]
 
 
-def update_coverage_metadata(coverage_dict, filename, file_coverage, file_coverage_report):
-    """
-    Updates the coverage metadata with file coverage information.
-
-    :param coverage_dict: Dictionary containing coverage metadata.
-    :param filename: Name of the file to update coverage for.
-    :param file_coverage: Coverage percentage for the file.
-    :param file_coverage_report: Dictionary containing file names with their coverage percentage.
-    """
-
-    format_file_coverage = "{:.2f}%".format(file_coverage)
-    coverage_dict[filename] = format_file_coverage
-    file_coverage_report[filename] = format_file_coverage
-    return
-
-
 def calculate_overall_coverage(coverage_data, repo_name):
     """
     Calculates the overall coverage percentage.
@@ -128,10 +112,14 @@ def warning_check(filename, coverage_dict, threshold_data, file_coverage):
     return False
 
 
-def parse_coverage(xml_file):
+def parse_coverage(xml_file, file_coverage_report, coverage_dict, threshold_data, warning_files):
     """
     Parses coverage data from an XML file.
     :param xml_file: Path to the XML file containing coverage data.
+    :param file_coverage_report: Dictionary containing file names with their coverage percentage.
+    :param coverage_dict: Dictionary containing coverage data.
+    :param threshold_data: Dictionary containing coverage threshold data.
+    :param warning_files: list of files that do not pass the warning check.
     :return: Dictionary containing parsed coverage results.
     """
 
@@ -143,18 +131,28 @@ def parse_coverage(xml_file):
     r_lines = str(round(float(root.attrib["line-rate"]) * 100, 3))
     packages = root.findall("./packages/package")
     t_packages = c_packages = len(packages)
-    t_classes = c_classes = r_packages = r_classes = 0
-    classes = root.findall(".//classes/class")
+    t_classes = c_classes = 0
 
     for package in packages:
         if package.attrib["line-rate"] == "0":
             c_packages -= 1
         classes = package.findall("./classes/class")
+
         t_classes += len(classes)
         for cl in classes:
-            rate = float(cl.attrib['line-rate'])
-            if rate != 0:
+            file_coverage = round(float(cl.attrib["line-rate"]) * 100, 2)
+            if file_coverage != 0:
                 c_classes += 1
+            filename = cl.attrib["name"]
+            print(filename)
+            format_file_coverage = "{:.2f}%".format(file_coverage)
+            file_coverage_report[filename] = format_file_coverage
+
+            if warning_check(filename, coverage_dict, threshold_data, file_coverage):
+                warning_files.append(filename)
+
+            # updating the coverage metadata of files which is used to calculate overall coverage percentage.
+            coverage_dict[filename] = format_file_coverage
 
     r_packages = round(c_packages * 100 / t_packages, 3)
     r_classes = round(c_classes * 100 / t_classes, 3)
@@ -163,7 +161,6 @@ def parse_coverage(xml_file):
         'st_packages': "{0}% [  {1}/{2}  ]".format(r_packages, c_packages, t_packages),
         'st_classes': "{0}% [  {1}/{2}  ]".format(r_classes, c_classes, t_classes),
         'st_lines': "{0}% [  {1}/{2}  ]".format(r_lines, c_lines, t_lines),
-        'classes': classes
     }
 
 
@@ -173,28 +170,16 @@ def process_coverage(xml_file):
     :param xml_file: Path to the XML file containing coverage data.
     """
 
-    results = parse_coverage(xml_file)
+    file_coverage_report = {}
+    warning_files = []
     coverage_data = load_yaml_file(METADATA)
 
     repo_name = list(coverage_data.keys())[0]
     coverage_dict = coverage_data[repo_name]
     threshold_data = load_coverage_configuration(CONFIG)
 
-    warning_files = []
-    file_coverage_report = {}
-
-    # fetching each file name and its coverage percentage
-    for class_element in results['classes']:
-        filename = class_element.attrib["name"]
-        file_coverage = round(
-            float(class_element.attrib["line-rate"]) * 100, 2)
-
-        if warning_check(filename, coverage_dict, threshold_data, file_coverage):
-            warning_files.append(filename)
-
-        # updating the metadata
-        update_coverage_metadata(
-            coverage_dict, filename, file_coverage, file_coverage_report)
+    results = parse_coverage(
+        xml_file, file_coverage_report, coverage_dict, threshold_data, warning_files)
 
     write_yaml_file(METADATA, coverage_data)
 

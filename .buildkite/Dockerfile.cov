@@ -85,9 +85,11 @@ RUN yes | ./pip install \
     pytest-cov \
     coverage \
     pytest \
-    pyyaml
+    pyyaml \
+    mock \
+    taptools==1.1.3
 
-RUN yes | ./pip install taptools==1.1.3
+# RUN yes | ./pip install taptools==1.1.3
 
 # Remove unnecessary files
 RUN rm -f /usr/src/Python-3.7.11.tgz

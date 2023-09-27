@@ -24,7 +24,7 @@ coverage_dict = coverage_data[repo_name]
 
 for line in py_files_output.split('\n'):
     status, file_path = line.split(maxsplit=1)
-    if file_path.endswith('.py') and 'scripts/' in file_path:
+    if file_path.endswith('.py') and file_path.startswith('scripts/'):
         if status.startswith('M') or status.startswith('A'):
             changed_py_files.append(file_path)
         elif status.startswith('D'):
@@ -61,12 +61,10 @@ for py_file in changed_py_files:
 
         # Extract the base name without 'test_' prefix and add file to the list
         base_name = os.path.basename(py_file)[5:]
-        # corresponding_file_path = os.path.join('scripts/local', base_name)
-
         files_to_include.append(base_name)
 
-    else:
-        # add the file to the list
+    elif os.path.basename(py_file) != '__init__.py':
+        # add the file to the list on which coverage has to be calculated.
         base_name = os.path.basename(py_file)
         files_to_include.append(base_name)
 
@@ -95,7 +93,7 @@ for entry in entries:
 
 # print(files_to_omit)
 
-# Write the omit string to the .coveragerc file
+# Write the omit string to the config file for pytest-cov package.
 with open('.coveragerc', 'w') as coveragerc_file:
     coveragerc_file.write("[run]" + chr(10) + "omit = " + chr(10))
     for file in files_to_omit:

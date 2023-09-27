@@ -4,7 +4,7 @@ uown: 67ab2db0-fb5f-4a08-af9e-93530f283a6d
 command: "src/coverage_build.sh"
 
 docker:
-  base-image: docker-local.artifactory.uber.internal:5922/devexp/tm1-cov:v6
+  base-image: docker-local.artifactory.uber.internal:5922/devexp/tm1-cov:v7
   shell: true
   with-host-docker: true
 

@@ -22,14 +22,10 @@ if [ "$enforce_value" = "true" ]; then
   mkdir "$directory_name"
   echo "Created the '$directory_name' directory."
 
-  # installing the coverage and pytest tools for running the test and coverage
-  # /work/.local/bin/pip3.6 install pytest-cov coverage pytest pyyaml
-
-  # /work/.local/bin/pip3.6 install boto3
-
   # getting the changed python files from the latest commit id
   /var/uber/python37/bin/python src/coverage_scripts/file_utils.py
 
+  # running the unit tests using pytest and generating the xml coverage report for the scripts using pytest-cov
   /var/uber/python37/bin/pytest --cov=scripts/ --cov-report=xml:./report/coverage.xml scripts/test/
 
   # generating a summary for the test cases run
