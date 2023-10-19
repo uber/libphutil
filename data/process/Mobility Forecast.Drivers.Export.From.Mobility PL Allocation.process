@@ -147,10 +147,9 @@ nTotalRecords = 0;
 
 sCube = 'Mobility PL Allocation';
 sCubeTapInfo = 'TAP System Info';
-sCubeSysInfo = 'System Info';
 
 sFile = 'mobility_forecast_allocation_driver_mapping.csv';
-sFileDir = CELLGETS(sCubeTapInfo, 'Files Local Path', 'Value');
+sFileDir = LOWER(CELLGETS(sCubeTapInfo, 'Files Local Path', 'Value'));
 IF(SUBST(sFileDir, LONG(sFileDir), 1) @<> '/');
    sFileDir = sFileDir | '/';
 ENDIF;
@@ -160,6 +159,12 @@ IF(FILEEXISTS(sFilePath) = 1);
    sCmd = 'rm -f ' | sFilePath;
    EXECUTECOMMAND(sCmd, 1);
 ENDIF;
+
+sS3Path = LOWER(CELLGETS(sCubeTapInfo, 'Files S3 Path', 'Value'));
+IF(SUBST(sS3Path, LONG(sS3Path), 1) @<> '/');
+   sS3Path = sS3Path | '/';
+ENDIF;
+sS3Path = sS3Path | 'mobility_forecast_allocation/';
 
 ### Set Dimension Variables
 sDimVersion = 'Version';
@@ -351,47 +356,13 @@ nEpilogProcedureStartTime = NOW();
 #****Begin: Generated Statements***
 #****End: Generated Statements****
 
-sInstance = CELLGETS(sCubeTapInfo, 'Service Name', 'Value');
-sEnv = CELLGETS(sCubeTapInfo, 'Environment', 'Value');
-
-IF(UPPER(sEnv) @= 'UAT');
-   sEnv = 'stage';
-ELSEIF(UPPER(sEnv) @= 'TEST');
-   sEnv = 'dev';
-ENDIF;
-
-sS3Path = 's3://' | sEnv | '-epm-tm1/files/' | sEnv | '/' | sInstance | '/mobility_forecast/';
-
-### This block to be uncommented once we move to new AWS Account ###
-#sCmd = 'aws s3 cp ' | sFilePath | ' ' | sS3Path;
-#IF (FileExists(sFilePath) = 1);
-#  ExecuteCommand(sCmd,1);
-#  LOGOUTPUT('INFO', 'File ' | sFilePath | ' uploaded to S3 bucket ' | sS3Path);
-#ELSE;
-#  LOGOUTPUT('WARNING', 'File ' | sFilePath | ' not found and hence not uploaded to S3 bucket ' | sS3Path);
-#ENDIF;
-
-
-### Temporary code until we move to new AWS account ### 
-pAwsAccessKeyId = CELLGETS(sCubeSysInfo, 'Aws Access Key Id', 'String');
-pAwsSecretAccessKey = CELLGETS(sCubeSysInfo, 'Aws Secret Access Key', 'String');
-pAwsDefaultRegion = CELLGETS(sCubeSysInfo, 'Aws Default Region', 'String');
-
-IF(pAwsAccessKeyId @= '' % pAwsSecretAccessKey @= '' % pAwsDefaultRegion @= '');
-   LOGOUTPUT('WARNING', 'AWS Access credentials are not present to upload the file to S3 bucket');
+sCmd = 'aws s3 cp ' | sFilePath | ' ' | sS3Path;
+IF(FILEEXISTS(sFilePath) = 1);
+   EXECUTECOMMAND(sCmd, 1);
+   LOGOUTPUT('INFO', 'File ' | sFilePath | ' uploaded to S3 bucket ' | sS3Path);
 ELSE;
-   sCmd = 'export AWS_ACCESS_KEY_ID=' | pAwsAccessKeyId | ' && export AWS_SECRET_ACCESS_KEY=' | pAwsSecretAccessKey | ' && export AWS_DEFAULT_REGION=' | pAwsDefaultRegion | ' && aws s3 cp ' | sFilePath | ' ' | sS3Path;
-
-   IF(FILEEXISTS(sFilePath) = 1);
-      EXECUTECOMMAND(sCmd, 1);
-      LOGOUTPUT('INFO', 'File ' | sFilePath | ' uploaded to S3 bucket ' | sS3Path);
-   ELSE;
-      LOGOUTPUT('WARNING', 'File ' | sFilePath | ' not found and hence not uploaded to S3 bucket ' | sS3Path);
-   ENDIF;
+   LOGOUTPUT('WARNING', 'File ' | sFilePath | ' not found and hence not uploaded to S3 bucket ' | sS3Path);
 ENDIF;
-
-
-
 
 
 # ================= TAPTOOLS: START GENERATED CODE =================== #
