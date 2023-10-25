@@ -58,6 +58,11 @@
             "Weight": 1
         },
         {
+            "ComponentName": "GOV",
+            "ParentName": "Total U4B Org Segment",
+            "Weight": 1
+        },
+        {
             "ComponentName": "Inside Sales",
             "ParentName": "Inside + Scaled Sales",
             "Weight": 1
@@ -284,6 +289,16 @@
             "Name": "Marketstar",
             "Type": "Numeric",
             "UniqueName": "[U4B Org Segment].[U4B Org Segment].[Marketstar]"
+        },
+        {
+            "Attributes": {
+                "Caption": "GOV",
+                "FDS_Value": "GOV"
+            },
+            "Index": 19,
+            "Name": "GOV",
+            "Type": "Numeric",
+            "UniqueName": "[U4B Org Segment].[U4B Org Segment].[GOV]"
         }
     ],
     "Name": "U4B Org Segment",
