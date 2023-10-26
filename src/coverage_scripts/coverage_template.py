@@ -1,5 +1,5 @@
 DIFF_COVERAGE_REPORT_TEMPLATE = """
-Diff Coverage Report
+**Diff Coverage Report**
 
 <table>
     <tr>
@@ -29,22 +29,25 @@ FILE_COVERAGE_TABLE_TEMPLATE = """
 """
 
 REPO_COVERAGE_REPORT_TEMPLATE = """
-Repo Coverage Report
+**Repo Coverage Report**
 
 <table>
     <tr>
-        <th>Repo Name</th>
-        <th>Coverage</th>
+        <th>Name</th>
+        <th>Packages</th>
+        <th>Files</th>
+        <th>Lines</th>
     </tr>
     <tr>
-        <td>{repo_name}</td>
-        <td>{repo_coverage}</td>
+        <td>Coverage Report</td>
+        <td>{st_packages}</td>
+        <td>{st_files}</td>
+        <td>{st_lines}</td>
     </tr>
 </table>
 """
 
 WARNING_TEMPLATE = """
-Warning: the following files have less than the threshold coverage!
-
+**Warning**: the following files have less than the threshold coverage!
 {warning_files}
 """

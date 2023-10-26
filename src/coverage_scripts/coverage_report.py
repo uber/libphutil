@@ -33,11 +33,7 @@ def generate_comment(
     :param file_coverage_report: Dictionary containing per-file coverage data.
     """
 
-    if warning_files:   # if there exist certain files that do not meet the coverage requirement.
-        append_to_file(PHABRICATOR_COMMENT, "\n" +
-                       WARNING_TEMPLATE.format(warning_files="\n".join(warning_files)))
-
-    append_to_file(PHABRICATOR_COMMENT, DIFF_COVERAGE_REPORT_TEMPLATE.format(
+    append_to_file(PHABRICATOR_COMMENT, "\n" + DIFF_COVERAGE_REPORT_TEMPLATE.format(
         st_packages=results.get('st_packages'),
         st_files=results.get('st_classes'),
         st_lines=results.get('st_lines')
@@ -49,6 +45,10 @@ def generate_comment(
 
     append_to_file(PHABRICATOR_COMMENT,
                    FILE_COVERAGE_TABLE_TEMPLATE.format(file_coverage_rows=file_coverage_rows))
+
+    if warning_files:   # if there exist certain files that do not meet the coverage requirement.
+        append_to_file(PHABRICATOR_COMMENT, "\n" +
+                       WARNING_TEMPLATE.format(warning_files="\n".join(warning_files)))
 
     # append_to_file(PHABRICATOR_COMMENT, REPO_COVERAGE_REPORT_TEMPLATE.format(
     #     repo_name=overall_coverage_report[0],
@@ -202,7 +202,7 @@ def main():
     if os.path.exists(XML_FILE):
         process_coverage(XML_FILE)
     else:
-        with open(PHABRICATOR_COMMENT, "w") as file:
+        with open(PHABRICATOR_COMMENT, "a") as file:
             file.write("\nNo test targets exist for the changed files.\n")
             file.write(DIFF_COVERAGE_REPORT_TEMPLATE.format(
                 st_packages="",  # Leave empty to show no value

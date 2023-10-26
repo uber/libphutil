@@ -8,15 +8,9 @@ docker:
   shell: true
   with-host-docker: true
 
-notify:
-  - email: "${BUILDKITE_BUILD_AUTHOR_EMAIL:-epm-eng@uber.com}"
-    if: build.state == "passed"
-
-  - email: "${BUILDKITE_BUILD_AUTHOR_EMAIL:-epm-eng@uber.com}"
-    if: build.state == "failed"
-
 artifact_paths:
   - build/coverage/*.xml
+  - build/full_coverage/*.xml
   - build/comment/*.txt
   - build/junit/*.xml
   # - build/lint/phabricator-lint
