@@ -1,0 +1,171 @@
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: PROPERTIES                                                           #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+{
+    "DataSource": {
+        "Type": "None"
+    },
+    "HasSecurityAccess": false,
+    "Name": "Ops.MAPC.Forecast.Dedpuing.Ratio.Wrapper",
+    "Parameters": [
+        {
+            "Name": "pPeriod",
+            "Prompt": "",
+            "Type": "String",
+            "Value": "2020-06"
+        },
+        {
+            "Name": "pMetric",
+            "Prompt": "",
+            "Type": "String",
+            "Value": "Active Drivers | Active Riders | New Drivers | New Riders |"
+        }
+    ],
+    "UIData": "CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
+    "Variables": [],
+    "VariablesUIData": []
+}
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: PROPERTIES                                                             #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: PROLOG PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+# MAPC Forecast Deduping Wrapper
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+# Summary: Wrapper process to calculate deduping ratio, perform L3M Ratio computation and perform deduping for the forecast data
+
+# ==================================================================== #
+# Globals
+# ==================================================================== #
+
+DatasourceASCIIQuoteCharacter = '';
+
+cMonth = TRIM(pPeriod);
+cMetric = TRIM(pMetric);
+
+cPythonExe = CELLGETS('TAP System Info', 'Python Executable', 'Value');
+cScriptRunPath = CELLGETS('TAP System Info', 'Scripts Local Path', 'Value');
+cScriptRun = cScriptRunPath | '/rushti/rushti.py';
+cScriptConfig = cScriptRunPath | '/rushti/config.ini';
+
+cInstance = CELLGETS('TAP System Info', 'Instance Name', 'Value');
+cBatchUser = CELLGETS('TAP System Info', 'Batch Username', 'Value');
+cBatchPassword = CELLGETS('TAP System Info', 'Batch Password', 'Value');
+cBatchNamespace = CELLGETS('TAP System Info', 'Batch Namespace', 'Value');
+cServiceName = CELLGETS('TAP System Info', 'Service Name', 'Value');
+cServer = CELLGETS('TAP Application Info', CELLGETS('TAP System Info', 'Service Name', 'Value'), 'Endpoint');
+cPort = '443';
+cThreads = '100';
+cSpace = ' ';
+cVersion = 'Actual';
+cRateType = 'USD';
+
+# ==================================================================== #
+# Variables 
+# ==================================================================== #
+
+cTIprocess = 'Ops.MAPC.Forecast.Deduping.Ratio';
+cScriptBatch = cScriptRunPath | '/rushti/mapcdedupingratio.txt';
+
+sDim = 'Location';
+sSub = 'MAPC_Deduping_InScope';
+IF(SUBSETEXISTS(sDim, sSub) = 0);
+   PROCESSQUIT;
+ENDIF;
+
+# ==================================================================== #
+# Create config.ini
+# ==================================================================== #
+
+IF(FILEEXISTS(cScriptConfig) = 0);
+
+   sOutput = '[' | cInstance | ']';
+   ASCIIOUTPUT(cScriptConfig, sOutput);
+
+   sOutput = 'address=' | cServer;
+   ASCIIOUTPUT(cScriptConfig, sOutput);
+
+   sOutput = 'port=443';
+   ASCIIOUTPUT(cScriptConfig, sOutput);
+
+   sOutput = 'user=' | cBatchUser;
+   ASCIIOUTPUT(cScriptConfig, sOutput);
+
+   sOutput = 'namespace=' | cBatchNamespace;
+   ASCIIOUTPUT(cScriptConfig, sOutput);
+
+   sOutput = 'ssl=True';
+   ASCIIOUTPUT(cScriptConfig, sOutput);
+
+ENDIF;
+
+# ==================================================================== #
+# Create batch file 
+# ==================================================================== #
+
+i = 1;
+WHILE(i <= SUBSETGETSIZE(sDim, sSub));
+   sLocation = SUBSETGETELEMENTNAME(sDim, sSub, i);
+   sOutput = 'instance="' | cInstance | '" process="' | cTIprocess | '" pVersion="' | cVersion | '" pCountry="' | sLocation | '" pPeriod="' | cMonth | '" pMetric="' | pMetric | '"';
+   ASCIIOUTPUT(cScriptBatch, sOutput);
+   i = i + 1;
+END;
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: PROLOG PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: METADATA PROCEDURE                                                   #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: METADATA PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: DATA PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: DATA PROCEDURE                                                         #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: EPILOG PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+# ==================================================================== #
+# Run Ti 
+# ==================================================================== #
+
+cTemplateScriptRun = '%cPythonExe% %cScriptRun% %cScriptBatch% %cThreads% %cServiceName%';
+sCommand = EXPAND(cTemplateScriptRun);
+EXECUTECOMMAND(sCommand, 1);
+
+LOGOUTPUT('INFO', 'PYTHON SCRIPT EXECUTION -- COMPLETED --> ' | sCommand);
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: EPILOG PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
