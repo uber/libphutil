@@ -1,0 +1,283 @@
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: PROPERTIES                                                           #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+{
+    "DataSource": {
+        "Type": "TM1CubeView",
+        "dataSourceNameForClient": "MAPC",
+        "dataSourceNameForServer": "MAPC",
+        "view": "MAPC View"
+    },
+    "HasSecurityAccess": false,
+    "Name": "Ops.MAPC.Forecast.Data.Alt.Hierarchy.Cleanup",
+    "Parameters": [
+        {
+            "Name": "pVersion",
+            "Prompt": "",
+            "Type": "String",
+            "Value": "Forecast Excl Actuals"
+        },
+        {
+            "Name": "pMetric",
+            "Prompt": "",
+            "Type": "String",
+            "Value": "Active Drivers | Active Riders | New Drivers | New Riders |"
+        }
+    ],
+    "UIData": "CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
+    "Variables": [
+        {
+            "EndByte": 0,
+            "Name": "vVersion",
+            "Position": 1,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vPeriod",
+            "Position": 2,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vSource",
+            "Position": 3,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vRateType",
+            "Position": 4,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vLocation",
+            "Position": 5,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vLOB",
+            "Position": 6,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vProductType",
+            "Position": 7,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vMetric",
+            "Position": 8,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vMeasure",
+            "Position": 9,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vValue",
+            "Position": 10,
+            "StartByte": 0,
+            "Type": "Numeric"
+        }
+    ],
+    "VariablesUIData": [
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=33\fColType=827\f"
+    ]
+}
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: PROPERTIES                                                             #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: PROLOG PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+# MAPC Forecast Deduped Data clean up in alternate hierarchy
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+# Summary: This Process cleans up the deduped forecast data for all months that is present in the alternate hierarchy
+
+# ==================================================================== #
+# Globals
+# ==================================================================== #
+
+DatasourceASCIIQuoteCharacter = '';
+
+cRand = NUMBERTOSTRING(ROUND(RAND() * 100000));
+cRand = FILL('0', 6 - LONG(cRand)) | cRand;
+cRand = NUMBERTOSTRING(NOW()) | '.' | cRand;
+cRandomIntA = cRand;
+sActualMonth = CELLGETS('Admin Playbook', 'Oracle Sync', 'Current Actual Month');
+sCube = 'MAPC';
+
+
+# -=-=-=-=-=-=-==-=-==-===-==-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=#
+# Create Source View
+# -=-=-=-=-=-=-==-=-==-===-==-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=#
+
+nSiz = CUBEDIMENSIONCOUNTGET(sCube);
+
+cViewSrc = '}zTemp.' | GETPROCESSNAME() | '.' | cRandomIntA | ' Source';
+cSubsetSrc = '}zTemp.' | GETPROCESSNAME() | '.' | cRandomIntA | ' Source';
+VIEWCREATE(sCube, cViewSrc, 1);
+nDimcount = 1;
+
+WHILE(nDimcount <= nSiz);
+
+   sDim = TABDIM(sCube, nDimcount);
+
+   IF(sDim @= 'MAPC Measure');
+      SUBSETCREATE(sDim, cSubsetSrc, 1);
+      SUBSETELEMENTINSERT(sDim, cSubsetSrc, 'Amount', 1);
+      VIEWSUBSETASSIGN(sCube, cViewSrc, sDim, cSubsetSrc);
+
+   ELSEIF(sDim @= 'Ops Metric');
+      SUBSETCREATE(sDim, cSubsetSrc, 1);
+      nCurr = 1;
+      nPos = 1;
+      nMax = LONG(pMetric);
+
+      WHILE(nCurr <= nMax);
+         IF(SUBST(pMetric, nCurr, 1) @= '|');
+            sMetric = SUBST(pMetric, nPos, (nCurr - nPos));
+            sElem = TRIM(sMetric);
+            SUBSETELEMENTINSERT(sDim, cSubsetSrc, sElem, 1);
+            nPos = nCurr + 1;
+         ENDIF;
+         nCurr = nCurr + 1;
+      END;
+
+      VIEWSUBSETASSIGN(sCube, cViewSrc, sDim, cSubsetSrc);
+
+   ELSEIF(sDim @= 'Version');
+      SUBSETCREATE(sDim, cSubsetSrc, 1);
+      SUBSETELEMENTINSERT(sDim, cSubsetSrc, pVersion, 1);
+      VIEWSUBSETASSIGN(sCube, cViewSrc, sDim, cSubsetSrc);
+
+   ELSEIF(sDim @= 'Product Type');
+      SUBSETCREATE(sDim, cSubsetSrc, 1);
+      SUBSETELEMENTINSERT(sDim, cSubsetSrc, 'Unspecified Product Type', 1);
+      VIEWSUBSETASSIGN(sCube, cViewSrc, sDim, cSubsetSrc);
+
+   ELSEIF(sDim @= 'Rate Type');
+      SUBSETCREATE(sDim, cSubsetSrc, 1);
+      SUBSETELEMENTINSERT(sDim, cSubsetSrc, 'USD', 1);
+      VIEWSUBSETASSIGN(sCube, cViewSrc, sDim, cSubsetSrc);
+
+   ELSEIF(sDim @= 'Line of Business');
+      SUBSETCREATE(sDim, cSubsetSrc, 1);
+      SUBSETELEMENTINSERT(sDim, cSubsetSrc, 'Total Rides & Eats', 1);
+      VIEWSUBSETASSIGN(sCube, cViewSrc, sDim, cSubsetSrc);
+
+   ELSEIF(sDim @= 'Location');
+      SUBSETCREATE(sDim, cSubsetSrc, 1);
+      VIEWSUBSETASSIGN(sCube, cViewSrc, sDim, 'MAPC_Deduping_InScope');
+
+   ELSEIF(sDim @= 'Source');
+      SUBSETCREATE(sDim, cSubsetSrc, 1);
+      SUBSETELEMENTINSERT(sDim, cSubsetSrc, 'Planning', 1);
+      VIEWSUBSETASSIGN(sCube, cViewSrc, sDim, cSubsetSrc);
+
+   ELSE;
+      sMdx = EXPAND('{TM1FilterByLevel( {TM1SubsetAll([%sDim%].[%sDim%])}, 0) }');
+      SUBSETCREATEBYMDX(cSubsetSrc, sMdx, 1);
+      SUBSETMDXSET(sDim, cSubsetSrc, '');
+      VIEWSUBSETASSIGN(sCube, cViewSrc, sDim, cSubsetSrc);
+   ENDIF;
+
+   nDimcount = nDimcount + 1;
+END;
+
+# -=-=-=-=-=-=-==-=-==-===-==-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=#
+# Data source
+# -=-=-=-=-=-=-==-=-==-===-==-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=#
+
+VIEWEXTRACTSKIPZEROESSET(SCube, cViewSrc, 1);
+VIEWEXTRACTSKIPRULEVALUESSET(SCube, cViewSrc, 1);
+VIEWEXTRACTSKIPCALCSSET(sCube, cViewSrc, 0);
+
+DatasourceNameForServer = sCube;
+DatasourceType = 'VIEW';
+DatasourceCubeView = cViewSrc;
+
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: PROLOG PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: METADATA PROCEDURE                                                   #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+
+
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: METADATA PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: DATA PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+###### Deduped Forecast Data Cleanup #################################################################################
+
+CELLPUTN(0, 'MAPC', vVersion, vPeriod, 'Planning', vRateType, 'CustomLeaf:' | vLocation | ' Input', '1001', 'Unspecified Product Type', vMetric, 'Amount');
+CELLPUTN(0, 'MAPC', vVersion, vPeriod, 'Planning', vRateType, 'CustomLeaf:' | vLocation | ' Input', '2001', 'Unspecified Product Type', vMetric, 'Amount');
+CELLPUTN(0, 'MAPC', vVersion, vPeriod, 'Planning', vRateType, 'CustomLeaf:' | vLocation | ' Input', 'CustomLeaf:Total Rides & Eats Input', 'Unspecified Product Type', vMetric, 'Amount');
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: DATA PROCEDURE                                                         #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: EPILOG PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: EPILOG PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
