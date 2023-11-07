@@ -1,0 +1,315 @@
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: PROPERTIES                                                           #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+{
+    "DataSource": {
+        "Type": "TM1CubeView",
+        "dataSourceNameForClient": "MAPC",
+        "dataSourceNameForServer": "MAPC",
+        "view": "MAPC View"
+    },
+    "HasSecurityAccess": false,
+    "Name": "Ops.MAPC.Forecast.Data.Deduping",
+    "Parameters": [
+        {
+            "Name": "pVersion",
+            "Prompt": "",
+            "Type": "String",
+            "Value": "Forecast Excl Actuals"
+        },
+        {
+            "Name": "pCountry",
+            "Prompt": "",
+            "Type": "String",
+            "Value": "Country - Australia"
+        },
+        {
+            "Name": "pMetric",
+            "Prompt": "",
+            "Type": "String",
+            "Value": "Active Drivers | Active Riders | New Drivers | New Riders |"
+        }
+    ],
+    "UIData": "CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
+    "Variables": [
+        {
+            "EndByte": 0,
+            "Name": "vVersion",
+            "Position": 1,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vPeriod",
+            "Position": 2,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vSource",
+            "Position": 3,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vRateType",
+            "Position": 4,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vLocation",
+            "Position": 5,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vLOB",
+            "Position": 6,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vProductType",
+            "Position": 7,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vMetric",
+            "Position": 8,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vMeasure",
+            "Position": 9,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vValue",
+            "Position": 10,
+            "StartByte": 0,
+            "Type": "Numeric"
+        }
+    ],
+    "VariablesUIData": [
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=33\fColType=827\f"
+    ]
+}
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: PROPERTIES                                                             #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: PROLOG PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+
+
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+# MAPC Forecast Deduping 
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+# Summary: This Process Dedupes the forecast data 
+
+# ==================================================================== #
+# Globals
+# ==================================================================== #
+
+DatasourceASCIIQuoteCharacter = '';
+
+cRand = NUMBERTOSTRING(ROUND(RAND() * 100000));
+cRand = FILL('0', 6 - LONG(cRand)) | cRand;
+cRand = NUMBERTOSTRING(NOW()) | '.' | cRand;
+cRandomIntA = cRand;
+sActualMonth = CELLGETS('Admin Playbook', 'Oracle Sync', 'Current Actual Month');
+sCube = 'MAPC';
+
+
+# -=-=-=-=-=-=-==-=-==-===-==-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=#
+# Create Source View
+# -=-=-=-=-=-=-==-=-==-===-==-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=#
+
+nSiz = CUBEDIMENSIONCOUNTGET(sCube);
+
+cViewSrc = '}zTemp.' | GETPROCESSNAME() | '.' | cRandomIntA | ' Source';
+cSubsetSrc = '}zTemp.' | GETPROCESSNAME() | '.' | cRandomIntA | ' Source';
+VIEWCREATE(sCube, cViewSrc, 1);
+nDimcount = 1;
+
+WHILE(nDimcount <= nSiz);
+
+   sDim = TABDIM(sCube, nDimcount);
+
+   IF(sDim @= 'MAPC Measure');
+      SUBSETCREATE(sDim, cSubsetSrc, 1);
+      SUBSETELEMENTINSERT(sDim, cSubsetSrc, 'Amount', 1);
+      VIEWSUBSETASSIGN(sCube, cViewSrc, sDim, cSubsetSrc);
+
+   ELSEIF(sDim @= 'Ops Metric');
+      SUBSETCREATE(sDim, cSubsetSrc, 1);
+      nCurr = 1;
+      nPos = 1;
+      nMax = LONG(pMetric);
+
+      WHILE(nCurr <= nMax);
+         IF(SUBST(pMetric, nCurr, 1) @= '|');
+            sMetric = SUBST(pMetric, nPos, (nCurr - nPos));
+            sElem = TRIM(sMetric);
+            SUBSETELEMENTINSERT(sDim, cSubsetSrc, sElem, 1);
+            nPos = nCurr + 1;
+         ENDIF;
+         nCurr = nCurr + 1;
+      END;
+
+      VIEWSUBSETASSIGN(sCube, cViewSrc, sDim, cSubsetSrc);
+
+   ELSEIF(sDim @= 'Version');
+      SUBSETCREATE(sDim, cSubsetSrc, 1);
+      SUBSETELEMENTINSERT(sDim, cSubsetSrc, pVersion, 1);
+      VIEWSUBSETASSIGN(sCube, cViewSrc, sDim, cSubsetSrc);
+
+   ELSEIF(sDim @= 'Product Type');
+      SUBSETCREATE(sDim, cSubsetSrc, 1);
+      SUBSETELEMENTINSERT(sDim, cSubsetSrc, 'Unspecified Product Type', 1);
+      VIEWSUBSETASSIGN(sCube, cViewSrc, sDim, cSubsetSrc);
+
+   ELSEIF(sDim @= 'Rate Type');
+      SUBSETCREATE(sDim, cSubsetSrc, 1);
+      SUBSETELEMENTINSERT(sDim, cSubsetSrc, 'USD', 1);
+      VIEWSUBSETASSIGN(sCube, cViewSrc, sDim, cSubsetSrc);
+
+   ELSEIF(sDim @= 'Line of Business');
+      SUBSETCREATE(sDim, cSubsetSrc, 1);
+      SUBSETELEMENTINSERT(sDim, cSubsetSrc, 'Total Rides & Eats', 1);
+      IF(SCAN('Country - ', pCountry) = 0);
+         SUBSETELEMENTINSERT(sDim, cSubsetSrc, '1001', 2);
+         SUBSETELEMENTINSERT(sDim, cSubsetSrc, '2001', 3);
+      ENDIF;
+      VIEWSUBSETASSIGN(sCube, cViewSrc, sDim, cSubsetSrc);
+
+   ELSEIF(sDim @= 'Location');
+      SUBSETCREATE(sDim, cSubsetSrc, 1);
+      SUBSETELEMENTINSERT(sDim, cSubsetSrc, pCountry, 1);
+      VIEWSUBSETASSIGN(sCube, cViewSrc, sDim, cSubsetSrc);
+
+   ELSEIF(sDim @= 'Source');
+      SUBSETCREATE(sDim, cSubsetSrc, 1);
+      SUBSETELEMENTINSERT(sDim, cSubsetSrc, 'Planning', 1);
+      VIEWSUBSETASSIGN(sCube, cViewSrc, sDim, cSubsetSrc);
+
+   ELSE;
+      sMdx = EXPAND('{TM1FilterByLevel( {TM1SubsetAll([%sDim%].[%sDim%])}, 0) }');
+      SUBSETCREATEBYMDX(cSubsetSrc, sMdx, 1);
+      SUBSETMDXSET(sDim, cSubsetSrc, '');
+      VIEWSUBSETASSIGN(sCube, cViewSrc, sDim, cSubsetSrc);
+   ENDIF;
+
+   nDimcount = nDimcount + 1;
+END;
+
+# -=-=-=-=-=-=-==-=-==-===-==-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=#
+# Data source
+# -=-=-=-=-=-=-==-=-==-===-==-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=#
+
+VIEWEXTRACTSKIPZEROESSET(SCube, cViewSrc, 1);
+VIEWEXTRACTSKIPRULEVALUESSET(SCube, cViewSrc, 1);
+VIEWEXTRACTSKIPCALCSSET(sCube, cViewSrc, 0);
+
+DatasourceNameForServer = sCube;
+DatasourceType = 'VIEW';
+DatasourceCubeView = cViewSrc;
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: PROLOG PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: METADATA PROCEDURE                                                   #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+
+
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: METADATA PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: DATA PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+##### Define at which granularity of LOB the ratio nees to be taken ######################################################
+
+IF(ELLEV('Line of Business', vLOB) = 0);
+   sLOB = vLOB;
+ELSE;
+   sLOB = 'CustomLeaf:Total Rides & Eats Input';
+ENDIF;
+
+###### Forecast Deduping #################################################################################
+
+
+IF(vLocation @= 'Total Location' % (SCAN('(Mega Region)', vLocation) > 0 & ELLEV('Line of Business', vLOB) > 0));
+   nDedupedamount = 0;
+ELSE;
+   nUnDedupedRatio = CELLGETN('MAPC', 'Actual', sActualMonth, 'FDS', vRateType, 'CustomLeaf:' | vLocation | ' Input', sLOB, 'Unspecified Product Type', vMetric, 'UnDedpued Ratio');
+   nDedupedamount = vValue * nUnDedupedRatio;
+ENDIF;
+
+CELLPUTN(nDedupedamount, 'MAPC', vVersion, vPeriod, 'Planning', vRateType, 'CustomLeaf:' | vLocation | ' Input', sLOB, 'Unspecified Product Type', vMetric, 'Amount');
+
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: DATA PROCEDURE                                                         #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: EPILOG PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: EPILOG PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
