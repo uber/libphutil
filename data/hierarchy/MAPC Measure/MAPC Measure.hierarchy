@@ -1,0 +1,64 @@
+{
+    "DefaultMember": {
+        "Attributes": {
+            "Caption": "Amount"
+        },
+        "IsPlaceholder": false,
+        "Name": "Amount",
+        "Ordinal": 1,
+        "Type": "Regular",
+        "UniqueName": "[MAPC Measure].[MAPC Measure].[Amount]",
+        "Weight": 0
+    },
+    "Edges": [],
+    "ElementAttributes": [
+        {
+            "Name": "Format",
+            "Type": "String"
+        }
+    ],
+    "Elements": [
+        {
+            "Attributes": {
+                "Caption": "Amount"
+            },
+            "Index": 1,
+            "Name": "Amount",
+            "Type": "Numeric",
+            "UniqueName": "[MAPC Measure].[MAPC Measure].[Amount]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Deduped Ratio",
+                "Format": "#.00%"
+            },
+            "Index": 2,
+            "Name": "Deduped Ratio",
+            "Type": "Numeric",
+            "UniqueName": "[MAPC Measure].[MAPC Measure].[Deduped Ratio]"
+        },
+        {
+            "Attributes": {
+                "Caption": "L3M Deduped Ratio",
+                "Format": "#.00%"
+            },
+            "Index": 3,
+            "Name": "L3M Deduped Ratio",
+            "Type": "Numeric",
+            "UniqueName": "[MAPC Measure].[MAPC Measure].[L3M Deduped Ratio]"
+        },
+        {
+            "Attributes": {
+                "Caption": "UnDedpued Ratio",
+                "Format": "#.00%"
+            },
+            "Index": 4,
+            "Name": "UnDedpued Ratio",
+            "Type": "Numeric",
+            "UniqueName": "[MAPC Measure].[MAPC Measure].[UnDedpued Ratio]"
+        }
+    ],
+    "Name": "MAPC Measure",
+    "Subsets": [],
+    "UniqueName": "[MAPC Measure].[MAPC Measure]"
+}
