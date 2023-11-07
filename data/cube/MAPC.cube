@@ -1,0 +1,32 @@
+{
+    "Dimensions": [
+        {
+            "Name": "Version"
+        },
+        {
+            "Name": "Period"
+        },
+        {
+            "Name": "Source"
+        },
+        {
+            "Name": "Rate Type"
+        },
+        {
+            "Name": "Location"
+        },
+        {
+            "Name": "Line of Business"
+        },
+        {
+            "Name": "Product Type"
+        },
+        {
+            "Name": "Ops Metric"
+        },
+        {
+            "Name": "MAPC Measure"
+        }
+    ],
+    "Name": "MAPC"
+}
