@@ -1,0 +1,361 @@
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: PROPERTIES                                                           #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+{
+    "DataSource": {
+        "Type": "TM1CubeView",
+        "dataSourceNameForClient": "MAPC",
+        "dataSourceNameForServer": "MAPC",
+        "view": "MAPC View"
+    },
+    "HasSecurityAccess": false,
+    "Name": "Ops.MAPC.Actuals.Megaregion.Total.Loc.Undeduping",
+    "Parameters": [
+        {
+            "Name": "pVersion",
+            "Prompt": "",
+            "Type": "String",
+            "Value": "Actual"
+        },
+        {
+            "Name": "pPeriod",
+            "Prompt": "",
+            "Type": "String",
+            "Value": "2023-06"
+        },
+        {
+            "Name": "pMetric",
+            "Prompt": "",
+            "Type": "String",
+            "Value": "Active Drivers | Active Riders | New Drivers | New Riders |"
+        }
+    ],
+    "UIData": "CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
+    "Variables": [
+        {
+            "EndByte": 0,
+            "Name": "vVersion",
+            "Position": 1,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vPeriod",
+            "Position": 2,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vSource",
+            "Position": 3,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vRateType",
+            "Position": 4,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vLocation",
+            "Position": 5,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vLOB",
+            "Position": 6,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vProductType",
+            "Position": 7,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vMetric",
+            "Position": 8,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vMeasure",
+            "Position": 9,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vValue",
+            "Position": 10,
+            "StartByte": 0,
+            "Type": "Numeric"
+        }
+    ],
+    "VariablesUIData": [
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=33\fColType=827\f"
+    ]
+}
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: PROPERTIES                                                             #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: PROLOG PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+# MAPC Forecast Deduping 
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+# Summary: This Process is to addup the deduped values that are present in the countries and aggregate them at Mega Region and Total Location
+
+# ==================================================================== #
+# Globals
+# ==================================================================== #
+
+DatasourceASCIIQuoteCharacter = '';
+
+cMonth = TRIM(pPeriod);
+cMetric = TRIM(pMetric);
+cVersion = TRIM(pPeriod);
+
+cRand = NUMBERTOSTRING(ROUND(RAND() * 100000));
+cRand = FILL('0', 6 - LONG(cRand)) | cRand;
+cRand = NUMBERTOSTRING(NOW()) | '.' | cRand;
+cRandomIntA = cRand;
+sCube = 'MAPC';
+
+# -=-=-=-=-=-=-==-=-==-===-==-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=#
+# Create Source View
+# -=-=-=-=-=-=-==-=-==-===-==-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=#
+
+nSiz = CUBEDIMENSIONCOUNTGET(sCube);
+
+cViewSrc = '}zTemp.' | GETPROCESSNAME() | '.' | cRandomIntA | ' Source';
+cSubsetSrc = '}zTemp.' | GETPROCESSNAME() | '.' | cRandomIntA | ' Source';
+cMegSubset = '}zTemp.' | GETPROCESSNAME() | '.' | cRandomIntA | ' MegaRegion_Zero_Out';
+VIEWCREATE(sCube, cViewSrc, 1);
+nDimcount = 1;
+
+WHILE(nDimcount <= nSiz);
+
+   sDim = TABDIM(sCube, nDimcount);
+
+   IF(sDim @= 'Period');
+      SUBSETCREATE(sDim, cSubsetSrc, 1);
+      SUBSETELEMENTINSERT(sDim, cSubsetSrc, pPeriod, 1);
+      VIEWSUBSETASSIGN(sCube, cViewSrc, sDim, cSubsetSrc);
+
+   ELSEIF(sDim @= 'MAPC Measure');
+      SUBSETCREATE(sDim, cSubsetSrc, 1);
+      SUBSETELEMENTINSERT(sDim, cSubsetSrc, 'Amount', 1);
+      VIEWSUBSETASSIGN(sCube, cViewSrc, sDim, cSubsetSrc);
+
+   ELSEIF(sDim @= 'Ops Metric');
+      SUBSETCREATE(sDim, cSubsetSrc, 1);
+      nCurr = 1;
+      nPos = 1;
+      nMax = LONG(pMetric);
+
+      WHILE(nCurr <= nMax);
+         IF(SUBST(pMetric, nCurr, 1) @= '|');
+            sMetric = SUBST(pMetric, nPos, (nCurr - nPos));
+            sElem = TRIM(sMetric);
+            SUBSETELEMENTINSERT(sDim, cSubsetSrc, sElem, 1);
+            nPos = nCurr + 1;
+         ENDIF;
+         nCurr = nCurr + 1;
+      END;
+
+      VIEWSUBSETASSIGN(sCube, cViewSrc, sDim, cSubsetSrc);
+
+   ELSEIF(sDim @= 'Version');
+      SUBSETCREATE(sDim, cSubsetSrc, 1);
+      SUBSETELEMENTINSERT(sDim, cSubsetSrc, pVersion, 1);
+      VIEWSUBSETASSIGN(sCube, cViewSrc, sDim, cSubsetSrc);
+
+   ELSEIF(sDim @= 'Product Type');
+      SUBSETCREATE(sDim, cSubsetSrc, 1);
+      SUBSETELEMENTINSERT(sDim, cSubsetSrc, 'Unspecified Product Type', 1);
+      VIEWSUBSETASSIGN(sCube, cViewSrc, sDim, cSubsetSrc);
+
+   ELSEIF(sDim @= 'Rate Type');
+      SUBSETCREATE(sDim, cSubsetSrc, 1);
+      SUBSETELEMENTINSERT(sDim, cSubsetSrc, 'USD', 1);
+      VIEWSUBSETASSIGN(sCube, cViewSrc, sDim, cSubsetSrc);
+
+   ELSEIF(sDim @= 'Line of Business');
+      SUBSETCREATE(sDim, cSubsetSrc, 1);
+      SUBSETELEMENTINSERT(sDim, cSubsetSrc, '1001', 1);
+      SUBSETELEMENTINSERT(sDim, cSubsetSrc, '2001', 2);
+      VIEWSUBSETASSIGN(sCube, cViewSrc, sDim, cSubsetSrc);
+
+   ELSEIF(sDim @= 'Location');
+      VIEWSUBSETASSIGN(sCube, cViewSrc, sDim, 'MAPC_Deduping_InScope');
+
+   ELSEIF(sDim @= 'Source');
+      SUBSETCREATE(sDim, cSubsetSrc, 1);
+      SUBSETELEMENTINSERT(sDim, cSubsetSrc, 'FDS', 1);
+      SUBSETELEMENTINSERT(sDim, cSubsetSrc, 'Ops Adjustment', 2);
+      VIEWSUBSETASSIGN(sCube, cViewSrc, sDim, cSubsetSrc);
+
+   ELSE;
+      sMdx = EXPAND('{TM1FilterByLevel( {TM1SubsetAll([%sDim%].[%sDim%])}, 0) }');
+      SUBSETCREATEBYMDX(cSubsetSrc, sMdx, 1);
+      SUBSETMDXSET(sDim, cSubsetSrc, '');
+      VIEWSUBSETASSIGN(sCube, cViewSrc, sDim, cSubsetSrc);
+   ENDIF;
+
+   nDimcount = nDimcount + 1;
+END;
+
+##### Zero Out the Mega regions and Total Location ##########
+##### The zero out needs to be performed in the alternate hierarchy. But there is no way we can perform the zero out in alternate hierarchy through Traditional TI zero out. Hence performing While Loop with cellputn ###################
+
+sDim = 'Location';
+IF(SUBSETEXISTS(sDim, cMegSubset) = 0);
+   SUBSETCREATE(sDim, cMegSubset, 1);
+ELSE;
+   SUBSETDELETEALLELEMENTS(sDim, cMegSubset);
+ENDIF;
+
+SUBSETMDXSET(sDim, cMegSubset, '{TM1FILTERBYPATTERN( {TM1SUBSETALL( [Location] )}, "*Mega Region*")}');
+SUBSETMDXSET(sDim, cMegSubset, '');
+i = 1;
+WHILE(i <= SUBSETGETSIZE(sDim, cMegSubset));
+   sLocation = SUBSETGETELEMENTNAME(sDim, cMegSubset, i);
+   nCurr = 1;
+   nPos = 1;
+   nMax = LONG(pMetric);
+
+   WHILE(nCurr <= nMax);
+      IF(SUBST(pMetric, nCurr, 1) @= '|');
+         sMetric = SUBST(pMetric, nPos, (nCurr - nPos));
+         sElem = TRIM(sMetric);
+         CELLPUTN(0, 'MAPC', pVersion, pPeriod, 'FDS', 'USD', 'CustomLeaf:' | sLocation | ' Input', '1001', 'Unspecified Product Type', sElem, 'Amount');
+         CELLPUTN(0, 'MAPC', pVersion, pPeriod, 'FDS', 'USD', 'CustomLeaf:' | 'Total Location' | ' Input', '1001', 'Unspecified Product Type', sElem, 'Amount');
+         CELLPUTN(0, 'MAPC', pVersion, pPeriod, 'FDS', 'USD', 'CustomLeaf:' | sLocation | ' Input', '2001', 'Unspecified Product Type', sElem, 'Amount');
+         CELLPUTN(0, 'MAPC', pVersion, pPeriod, 'FDS', 'USD', 'CustomLeaf:' | 'Total Location' | ' Input', '2001', 'Unspecified Product Type', sElem, 'Amount');
+         CELLPUTN(0, 'MAPC', pVersion, pPeriod, 'Ops Adjustment', 'USD', 'CustomLeaf:' | sLocation | ' Input', '1001', 'Unspecified Product Type', sElem, 'Amount');
+         CELLPUTN(0, 'MAPC', pVersion, pPeriod, 'Ops Adjustment', 'USD', 'CustomLeaf:' | 'Total Location' | ' Input', '1001', 'Unspecified Product Type', sElem, 'Amount');
+         CELLPUTN(0, 'MAPC', pVersion, pPeriod, 'Ops Adjustment', 'USD', 'CustomLeaf:' | sLocation | ' Input', '2001', 'Unspecified Product Type', sElem, 'Amount');
+         CELLPUTN(0, 'MAPC', pVersion, pPeriod, 'Ops Adjustment', 'USD', 'CustomLeaf:' | 'Total Location' | ' Input', '2001', 'Unspecified Product Type', sElem, 'Amount');
+         nPos = nCurr + 1;
+      ENDIF;
+      nCurr = nCurr + 1;
+   END;
+   i = i + 1;
+END;
+
+# -=-=-=-=-=-=-==-=-==-===-==-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=#
+# Data source
+# -=-=-=-=-=-=-==-=-==-===-==-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=#
+
+VIEWEXTRACTSKIPZEROESSET(SCube, cViewSrc, 0);
+VIEWEXTRACTSKIPRULEVALUESSET(SCube, cViewSrc, 0);
+VIEWEXTRACTSKIPCALCSSET(sCube, cViewSrc, 0);
+
+DatasourceNameForServer = sCube;
+DatasourceType = 'VIEW';
+DatasourceCubeView = cViewSrc;
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: PROLOG PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: METADATA PROCEDURE                                                   #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+
+
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: METADATA PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: DATA PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+IF(SCAN('Country - ', vLocation) > 0);
+
+   #####     unDeduping the Megaregion by adding up the deduped Countries  ############################
+   ##### Obtain Mega region of the Country ############################
+   sElement = ELCOMP('Location', vLocation, 1);
+   sMegaRegion = ATTRS('Location', sElement, 'Location L5');
+   IF(sMegaRegion @= '');
+      ITEMSKIP;
+   ENDIF;
+
+   #####Update the unDeduped Actual Values in the MAPC cube for MegaRegions ##################
+   CELLINCREMENTN(vValue, 'MAPC', vVersion, vPeriod, vSource, vRateType, 'CustomLeaf:' | sMegaRegion | ' Input', vLOB, 'Unspecified Product Type', vMetric, 'Amount');
+
+ELSEIF(SCAN('Mega Region', vLocation) > 0);
+
+   #####     unDeduping the Total Location by adding up deduped mega regions   ############################
+   ##### Define at which granularity of Product Type the deduped data need to be taken from Ops cube ###################
+
+   IF(vLOB @= '2001');
+      sProductType = 'EATS';
+   ELSEIF(vLOB @= '1001');
+      sProductType = 'Not Specified';
+   ENDIF;
+
+   sDedupedMegaregion = CELLGETN('Ops', vVersion, vPeriod, vSource, vRateType, 'CustomLeaf:' | vLocation | ' Input', vLOB, sProductType, vMetric, 'Amount');
+   CELLINCREMENTN(sDedupedMegaregion, 'MAPC', vVersion, vPeriod, vSource, vRateType, 'CustomLeaf:' | 'Total Location' | ' Input', vLOB, 'Unspecified Product Type', vMetric, 'Amount');
+ENDIF;
+
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: DATA PROCEDURE                                                         #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: EPILOG PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: EPILOG PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
