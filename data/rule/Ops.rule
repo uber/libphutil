@@ -1,3 +1,4 @@
+
 ###############################################################################
 ### Cube: Ops
 ### Dimensions:
@@ -16,6 +17,16 @@ FEEDSTRINGS;
 SKIPCHECK;
 
 ['Reported'] = STET;
+
+['Forecast Excl Actuals'] = 
+  IF
+      ( 
+         ATTRN('Period', !Period, 'End of Period') > ATTRN('Period', DB('Admin Playbook', 'Oracle Sync', 'Current Actual Month'), 'End of Period') 
+      ,
+         CONTINUE
+      ,
+         STET
+      );
 
 # ==========================#
 # Calculate Avg. Fare
@@ -151,7 +162,6 @@ CONTINUE);
 ['Ops Measure':'Amount (M)'] = C:
     ['Amount'] \ 1000000;
 
-
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=- #
 # Eats C-level rules
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=- #
@@ -186,7 +196,7 @@ CONTINUE);
 #Source C-level Rule
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=- #
 
-['Version':'Actual', 'Ops Measure':'Amount'] = C: IF(ELLEV('Source',!Source)>0 & ELISANC ('Ops Metric', 'MAPC Metrics',!Ops Metric) > 0,CONSOLIDATECHILDREN('Source'),CONTINUE);
+[{'Actual', 'Forecast Excl Actuals'}, 'Ops Measure':'Amount'] = C: IF(ELLEV('Source',!Source)>0 & ELISANC ('Ops Metric', 'MAPC Metrics',!Ops Metric) > 0,CONSOLIDATECHILDREN('Source'),CONTINUE);
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=- #
 #Total Rides & Eats C-level rules For Actuals
@@ -298,7 +308,7 @@ CONTINUE);
 ['Ops Measure':'Amount',  'Source':'Ops Adjustment', 'Actual'] = C:
       IF(
          ELISANC ('Ops Metric', 'MAPC Metrics',!Ops Metric) > 0
-      ,   
+      ,
          IF(
             ELLEV('Period', !Period) > 0
          ,
@@ -313,7 +323,7 @@ CONTINUE);
                )
          )
       ,
-         STET         
+         STET
    );
 
 ['Ops Measure':'Amount','Actual'] = C:
@@ -375,14 +385,97 @@ CONTINUE);
       STET
    );
 
+##############################################################
+# MAPC metrics rules for Forecast Excl Actuals version
+##############################################################
+
+['Forecast Excl Actuals', 'Planning', 'USD', 'Ops Measure':'Amount'] = C:
+   IF(
+      ELISANC ('Ops Metric', 'MAPC Metrics',!Ops Metric) > 0
+   ,
+      IF(
+         ELLEV('Period', !Period) > 0
+      ,
+         0
+      ,
+         IF(
+            SCAN ('Country - ', !Location) > 0  &
+            ELLEV('Line Of Business', !Line of Business) = 0
+          ,
+           STET
+          ,
+           CONTINUE
+        )
+      )
+   ,
+      CONTINUE
+   );
+   
+['Forecast Excl Actuals', 'Planning', 'USD', 'Ops Measure':'Amount'] = C:
+   IF(
+      ELISANC ('Ops Metric', 'MAPC Metrics',!Ops Metric) > 0
+   ,
+         IF(
+            ( SCAN ('(Mega Region)', !Location) > 0 % !Location @= 'Total Location' ) &
+            ELLEV('Line Of Business', !Line of Business) = 0
+          ,
+           DB('MAPC', !Version, !Period, !Source, !Rate Type,  'CustomLeaf':!Location | ' Input', !Line of Business, !Product Type, !Ops Metric, 'Amount')
+          ,
+           CONTINUE
+        )
+   ,
+      CONTINUE
+   );    
+      
+
+['Forecast Excl Actuals', 'Planning', 'USD', 'Ops Measure':'Amount'] = C:
+   IF(
+      ELISANC ('Ops Metric', 'MAPC Metrics',!Ops Metric) > 0
+   ,
+         IF(
+            ( SCAN ('Country - ', !Location) > 0 % SCAN ('(Mega Region)', !Location) > 0 % !Location @= 'Total Location' ) & 
+            (!Line of Business @= 'Total Rides & Eats') 
+          ,
+           DB('MAPC', !Version, !Period, !Source, !Rate Type,  'CustomLeaf':!Location | ' Input', 'CustomLeaf':!Line of Business | ' Input', !Product Type, !Ops Metric, 'Amount')
+          ,
+           CONTINUE
+        )
+   ,
+      CONTINUE
+   ); 
+  
+
+####################################################################################################
+# Forecast Consolidation to have either Actuals OR Forecast Excl Actuals based on the current month
+####################################################################################################
+
+['Version':'Forecast', 'Ops Measure':'Amount'] = C:
+   IF
+   (
+      ELISANC ('Ops Metric', 'MAPC Metrics',!Ops Metric) > 0    
+    ,      
+        IF 
+        (
+          ELLEV('Period', !Period) > 0 
+       ,
+          CONSOLIDATECHILDREN('Period') 
+       ,
+          IF
+          (
+             ATTRN('Period', !Period, 'End of Period') > ATTRN('Period', DB('Admin Playbook', 'Oracle Sync', 'Current Actual Month'), 'End of Period')
+          ,
+             ['Version':'Forecast Excl Actuals']
+          ,
+             ['Version':'Actual']
+          )
+        )
+    ,
+      CONTINUE
+   );
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=- #
 # Rides N-level rules
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=- #
-
-
-
-
 
 ['Version' : 'Actual', 'Line of Business':'1002', 'Product Type' : {'Expresspool', 'Pool'},'FDS'] = N :
 
@@ -518,16 +611,11 @@ CONTINUE);
    );
 
 
+
 FEEDERS;
 
 #['Actual','FDS','USD','Line of Business':'1001','Completed Trips','Amount']=>DB('GL By Product Allocation','Actual',!Period,'Core Rides',!Location,'Total Product Type Excl Other','GAAP Contribution','Allocation %');
 
-
 ['Actual',{'FDS','Reported'},'Completed Trips','Amount'] => ['Ops Post Reported Adjs'];
 
-
-
-
-
 ['Actual', 'Completed Trips',  'Amount'] => ['CPT'];
-
