@@ -149,17 +149,23 @@ nDataProcedureEndTime = 0;
 #****End: Generated Statements****
 
 # Process to load data in Ops cubes using upload UI
-
+# Also loads MAPC metrics adjustments in Ops cube
 
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
 # Define Constants
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
 
 cCube = 'Ops';
+cCubeMapc = 'MAPC';
+sDimPeriod = 'Period';
+sDimLOB = 'Line of Business';
+sDimOpsMetric = 'Ops Metric';
+
 cVersion = 'Actual';
 cRateType = 'USD';
 cMeasure = 'Amount';
 cSource = 'Ops Adjustment';
+cMapcMetricConsol = 'MAPC Metrics';
 nRecords = 1;
 
 sPassword = 'corpfin';
@@ -168,6 +174,7 @@ IF(pPWord @<> sPassword);
 ENDIF;
 
 cPeriodMetricLOBString = '';
+cMapcPeriodMetricLOBString = '';
 
 nDate = NOW;
 NEWDATEFORMATTER('', 'PST', 'serial', 'full', 'datetime', '');
@@ -197,7 +204,60 @@ DatasourcePassword = cPassword;
 sQuery = EXPAND('SELECT * FROM "%pTable%"');
 DatasourceQuery = sQuery;
 
+### MAPC cube zero out view formation ###
+sTimeStart = TIMST(nDate, '\Y\m\d\h\i\s');
+sMapcView = 'zTempTI' | GETPROCESSNAME | sTimeStart | NUMBERTOSTRING(RAND());
+sMapcSub = sMapcView;
 
+IF(VIEWEXISTS(cCubeMapc, sMapcView) = 1);
+   VIEWDESTROY(cCubeMapc, sMapcView);
+ENDIF;
+VIEWCREATE(cCubeMapc, sMapcView, 1);
+
+nCtr = 1;
+nMax = CUBEDIMENSIONCOUNTGET(cCubeMapc);
+sMDX = '';
+
+WHILE(nCtr <= nMax);
+   sDim = TABDIM(cCubeMapc, nCtr);
+
+   IF(SUBSETEXISTS(sDim, sMapcSub) = 1);
+      SUBSETDESTROY(sDim, sMapcSub);
+   ENDIF;
+   SUBSETCREATE(sDim, sMapcSub, 1);
+
+
+   IF(sDim @= 'Version');
+      sMDX = '{[' | sDim | '].[' | cVersion | ']}';
+
+   ELSEIF(sDim @= sDimPeriod);
+      sMDX = '';
+
+   ELSEIF(sDim @= 'Source');
+      sMDX = '{[' | sDim | '].[' | cSource | ']}';
+
+   ELSEIF(sDim @= sDimLOB);
+      sMDX = '';
+
+   ELSEIF(sDim @= sDimOpsMetric);
+      sMDX = '';
+
+   ELSEIF(sDim @= 'MAPC Measure');
+      sMDX = '{[' | sDim | '].[Amount]}';
+
+   ELSE;
+      sMDX = '{TM1FILTERBYLEVEL({TM1SUBSETALL([' | sDim | '])}, 0)}';
+   ENDIF;
+
+   IF(sMDX @<> '');
+      SUBSETMDXSET(sDim, sMapcSub, sMDX);
+      SUBSETMDXSET(sDim, sMapcSub, '');
+   ENDIF;
+
+   VIEWSUBSETASSIGN(cCubeMapc, sMapcView, sDim, sMapcSub);
+
+   nCtr = nCtr + 1;
+END;
 
 # ================= TAPTOOLS: START GENERATED CODE =================== #
 nPrologProcedureEndTime = NOW();
@@ -371,6 +431,24 @@ IF(SCAN(sPeriod | '_' | sMetric | '_' | sLOB, cPeriodMetricLOBString) = 0);
    END;
 ENDIF;
 
+### Zero out MAPC cube view ###
+IF(pLevel @= 'Month' & SCAN(sPeriod | '_' | sMetric | '_' | sLOB, cMapcPeriodMetricLOBString) = 0 & (sLOB @= '1001' % sLOB @= '2001') & ELISCOMP(sDimOpsMetric, sMetric, cMapcMetricConsol) = 1);
+
+   cMapcPeriodMetricLOBString = cMapcPeriodMetricLOBString | sPeriod | '_' | sMetric | '_' | sLOB | '|';
+
+   SUBSETDELETEALLELEMENTS(sDimPeriod, sMapcSub);
+   SUBSETELEMENTINSERT(sDimPeriod, sMapcSub, sPeriod, 1);
+
+   SUBSETDELETEALLELEMENTS(sDimLOB, sMapcSub);
+   SUBSETELEMENTINSERT(sDimLOB, sMapcSub, sLOB, 1);
+
+   SUBSETDELETEALLELEMENTS(sDimOpsMetric, sMapcSub);
+   SUBSETELEMENTINSERT(sDimOpsMetric, sMapcSub, sMetric, 1);
+
+   VIEWZEROOUT(cCubeMapc, sMapcView);
+
+ENDIF;
+
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
 # Load Data
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
@@ -405,11 +483,28 @@ WHILE(p <= DIMSIZ(sDim));
          nDataProcedureDataOperations = nDataProcedureDataOperations + 1;
          # ================= TAPTOOLS: END GENERATED CODE ===================== #
          CELLPUTN(vValue, cCube, cVersion, sPeriod, cSource, sRatetype, 'CustomLeaf:' | sLocation | ' Input', sLOB, sProductType, vMetric, cMeasure);
+
+         ### Uploading country level data into MAPC cube for MAPC metrics ###
+         IF(pLevel @= 'Month' & sRateType @= 'USD' & (sLOB @= '1001' % sLOB @= '2001') & SCAN('Country - ', sLocation) > 0 & ELISCOMP(sDimOpsMetric, sMetric, cMapcMetricConsol) = 1);
+            # ================= TAPTOOLS: START GENERATED CODE =================== #
+            nDataProcedureDataOperations = nDataProcedureDataOperations + 1;
+            # ================= TAPTOOLS: END GENERATED CODE ===================== #
+            CELLPUTN(vValue, cCubeMapc, cVersion, sPeriod, cSource, sRateType, 'CustomLeaf:' | sLocation | ' Input', sLOB, 'Unspecified Product Type', sMetric, 'Amount');
+         ENDIF;
       ELSE;
          # ================= TAPTOOLS: START GENERATED CODE =================== #
          nDataProcedureDataOperations = nDataProcedureDataOperations + 1;
          # ================= TAPTOOLS: END GENERATED CODE ===================== #
          CELLINCREMENTN(vValue, cCube, cVersion, sPeriod, cSource, sRatetype, sLocation, sLOB, sProductType, vMetric, cMeasure);
+
+         ### Uploading city level data into MAPC cube for MAPC metrics ###
+         IF(pLevel @= 'Month' & sRateType @= 'USD' & (sLOB @= '1001' % sLOB @= '2001') & ELISCOMP(sDimOpsMetric, sMetric, cMapcMetricConsol) = 1);
+            # ================= TAPTOOLS: START GENERATED CODE =================== #
+            nDataProcedureDataOperations = nDataProcedureDataOperations + 1;
+            # ================= TAPTOOLS: END GENERATED CODE ===================== #
+            CELLINCREMENTN(vValue, cCubeMapc, cVersion, sPeriod, cSource, sRateType, sLocation, sLOB, 'Unspecified Product Type', sMetric, 'Amount');
+         ENDIF;
+
       ENDIF;
    ENDIF;
    p = p + 1;
