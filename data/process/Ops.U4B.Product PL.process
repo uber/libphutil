@@ -465,6 +465,11 @@ ENDIF;
 # Allocation by U4B Dim/ Features
 ###################################################
 
+#Check Fractional Data
+IF(ABS(ROUNDP(vValue, 2)) = 0);
+   ITEMSKIP;
+   #	ASCIIOutput(cFilepath,vLOB,vDepartment,vLocation,vOrgSegment,vProductType,vSalesChannel,vTripProfile,vMetric,NumberToString(vValue));
+ENDIF;
 
 ## Skip variables based on user inputted source  
 sSource = CELLGETS(cAllocCube, vVersion, vPeriod, '5001', 'Total Location Incl Discontinued', '0000', 'Unspecified U4B Trip Profile', 'Unspecified U4B Sales Channel', 'Unspecified U4B Org Segment', 'Unspecified U4B Product', vMetric, 'Source');
