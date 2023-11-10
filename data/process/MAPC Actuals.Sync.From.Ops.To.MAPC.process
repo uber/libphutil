@@ -400,13 +400,13 @@ IF(ELLEV(sDimLoc, vLocation) = 0);
    # ================= TAPTOOLS: START GENERATED CODE =================== #
    nDataProcedureDataOperations = nDataProcedureDataOperations + 1;
    # ================= TAPTOOLS: END GENERATED CODE ===================== #
-   CELLINCREMENTN(vValue, sTgtCube, vVersion, vPeriod, vSource, vRateType, vLocation, vLOB, vProductType, vOpsMetric, vMeasure);
+   CELLINCREMENTN(vValue, sTgtCube, vVersion, vPeriod, vSource, vRateType, vLocation, vLOB, cProductType, vOpsMetric, vMeasure);
 ELSE;
 
    # ================= TAPTOOLS: START GENERATED CODE =================== #
    nDataProcedureDataOperations = nDataProcedureDataOperations + 1;
    # ================= TAPTOOLS: END GENERATED CODE ===================== #
-   CELLPUTN(vValue, sTgtCube, vVersion, vPeriod, vSource, vRateType, 'CustomLeaf:' | vLocation | ' Input', vLOB, vProductType, vOpsMetric, vMeasure);
+   CELLPUTN(vValue, sTgtCube, vVersion, vPeriod, vSource, vRateType, 'CustomLeaf:' | vLocation | ' Input', vLOB, cProductType, vOpsMetric, vMeasure);
 ENDIF;
 
 
