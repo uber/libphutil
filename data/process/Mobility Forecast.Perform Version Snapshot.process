@@ -180,33 +180,16 @@ nDataProcedureEndTime = 0;
 nTimeNow = NOW;
 sTimeStart = TIMST(nTimeNow, '\Y\m\d\h\i\s');
 
-LOGOUTPUT('INFO', 'pVersionFrom : ' | pVersionFrom);
-LOGOUTPUT('INFO', 'pVersionTo : ' | pVersionTo);
-
 pVersionFrom = TRIM(pVersionFrom);
 pVersionTo = TRIM(pVersionTo);
 
 sDimVersion = 'Version';
 
-IF(DIMIX(sDimVersion, pVersionFrom) = 0);
-   PROCESSERROR();
+IF(DIMIX(sDimVersion, pVersionFrom) = 0 % DIMIX(sDimVersion, pVersionTo) = 0);
+   ITEMREJECT('Either Versions: ' | pVersionFrom | ' or ' | pVersionTo | 'does not exist in Version dimension.');
+   PROCESSQUIT;
 ENDIF;
 
-sElePar = 'Snapshot Version';
-
-### element creation and making it child of snapshot version to be done ###
-IF(DIMIX(sDimVersion, pVersionTo) = 0);
-   # ================= TAPTOOLS: START GENERATED CODE =================== #
-   nPrologProcedureMetadataOperations = nPrologProcedureMetadataOperations + 1;
-   # ================= TAPTOOLS: END GENERATED CODE ===================== #
-   DIMENSIONELEMENTINSERT(sDimVersion, '', pVersionTo, 'N');
-   # ================= TAPTOOLS: START GENERATED CODE =================== #
-   nPrologProcedureMetadataOperations = nPrologProcedureMetadataOperations + 1;
-   # ================= TAPTOOLS: END GENERATED CODE ===================== #
-   DIMENSIONELEMENTCOMPONENTADD(sDimVersion, sElePar, pVersionTo, 1);
-ELSEIF(DIMIX(sDimVersion, pVersionTo) > 0 & ELISPAR(sDimVersion, sElePar, pVersionTo) = 0);
-   PROCESSERROR();
-ENDIF;
 
 TRUE = 1;
 FALSE = 0;
