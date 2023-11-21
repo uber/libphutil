@@ -215,8 +215,11 @@ nDataProcedureEndTime = 0;
 
 cSourceCube = 'U4B';
 cTargetCube = 'U4B';
+cStagingCube = 'U4B Staging';
 cAllocCube = 'U4B PL Allocation';
+cCubeDash = 'Dashboard Info';
 
+cStartTime = NOW();
 cRand = NUMBERTOSTRING(ROUND(RAND() * 100000));
 cRand = FILL('0', 6 - LONG(cRand)) | cRand;
 cRand = NUMBERTOSTRING(NOW()) | '.' | cRand;
@@ -252,8 +255,22 @@ cProductConsol = 'Total Product Type';
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
 
 cRandomIntA = NUMBERTOSTRING(INT(RAND() * 100000 * RAND()));
+cRandomIntB = NUMBERTOSTRING(INT(RAND() * 102189 * RAND()));
 cViewName = 'zTemp.' | GETPROCESSNAME() | '.' | cRandomIntA;
 cSubsetName = 'zTemp.' | GETPROCESSNAME() | '.' | cRandomIntA;
+
+sAccount = pAccount;
+IF(pAccount @<> '');
+
+   IF(SCAN('/', pAccount) > 0);
+      sAccount = SUBST(pAccount, 1, SCAN('/', pAccount) - 1);
+   ENDIF;
+   IF(SCAN(',', pAccount) > 0);
+      sAccount = SUBST(pAccount, 1, SCAN(',', pAccount) - 1);
+   ENDIF;
+ENDIF;
+
+sSubsetName = sAccount | '.' | GETPROCESSNAME() | '.' | cRandomIntB;
 
 cCube = cTargetCube;
 VIEWCREATE(cCube, cViewName, 1);
@@ -407,8 +424,28 @@ WHILE(nCtr <= nMax);
 END;
 
 VIEWEXTRACTSKIPRULEVALUESSET(cCube, cViewName1, 1);
-VIEWEXTRACTSKIPCALCSSET(cCube, cViewName1, 0);
+VIEWEXTRACTSKIPCALCSSET(cCube, cViewName1, 1);
 VIEWEXTRACTSKIPZEROESSET(cCube, cViewName1, 1);
+
+sDim = cU4BOrgDim;
+sMDX = '{TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER( {[ ' | sDim | '].[ ' | cU4BOrgConsol | ']}, ALL, RECURSIVE )}, 0)}';
+SUBSETCREATEBYMDX(sSubsetName, sMDX, 1);
+SUBSETMDXSET(sDim, sSubsetName, '');
+
+sDim = cU4BProductDim;
+sMDX = '{TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER( {[ ' | sDim | '].[ ' | cU4BProductConsol | ']}, ALL, RECURSIVE )}, 0)}';
+SUBSETCREATEBYMDX(sSubsetName, sMDX, 1);
+SUBSETMDXSET(sDim, sSubsetName, '');
+
+sDim = cU4BSalesDim;
+sMDX = '{TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER( {[ ' | sDim | '].[ ' | cU4BSalesConsol | ']}, ALL, RECURSIVE )}, 0)}';
+SUBSETCREATEBYMDX(sSubsetName, sMDX, 1);
+SUBSETMDXSET(sDim, sSubsetName, '');
+
+sDim = cU4BTripDim;
+sMDX = '{TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER( {[ ' | sDim | '].[ ' | cU4BTripConsol | ']}, ALL, RECURSIVE )}, 0)}';
+SUBSETCREATEBYMDX(sSubsetName, sMDX, 1);
+SUBSETMDXSET(sDim, sSubsetName, '');
 
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
 ## Set View as DataSource             ##
@@ -496,59 +533,49 @@ IF(sAllocAcc @= 'No Allocate');
 
 ELSE;
 
-   nAllocTotal = CELLGETN(cTargetCube, vVersion, vPeriod, 'FDS', vRateType, sLOB, '0000', sLocation, cU4BOrgConsol, cU4BProductConsol, cU4BSalesConsol, cU4BTripConsol, sAllocAcc, 'Amount');
+   nAllocTotal = CELLGETN(cStagingCube, vVersion, vPeriod, 'FDS', vRateType, 'Total Currency', sLOB, '0000', sLocation, cU4BOrgConsol, cU4BProductConsol, cU4BSalesConsol, cU4BTripConsol, sAllocAcc, 'Amount');
    ## Conduct Allocations by Product / Feature 
 
    IF(nAllocTotal <> 0);
-      Dim1Count = 1;
-      Dim1Size = DIMSIZ(cU4BOrgDim);
-      WHILE(Dim1Count <= Dim1Size);
-         sU4BOrg = DIMNM(cU4BOrgDim, Dim1Count);
-         IF(ELLEV(cU4BOrgDim, sU4BOrg) = 0 & ELISANC(cU4BOrgDim, cU4BOrgConsol, sU4BOrg) = 1);
-            nAllocO = CELLGETN(cTargetCube, vVersion, vPeriod, 'FDS', vRateType, sLOB, '0000', sLocation, sU4BOrg, cU4BProductConsol, cU4BSalesConsol, cU4BTripConsol, sAllocAcc, 'Amount');
-            IF(nAllocO <> 0);
-               Dim2Count = 1;
-               Dim2Size = DIMSIZ(cU4BProductDim);
-               WHILE(Dim2Count <= Dim2Size);
-                  sU4BProduct = DIMNM(cU4BProductDim, Dim2Count);
-                  IF(ELLEV(cU4BProductDim, sU4BProduct) = 0 & ELISANC(cU4BProductDim, cU4BProductConsol, sU4BProduct) = 1);
-                     nAllocP = CELLGETN(cTargetCube, vVersion, vPeriod, 'FDS', vRateType, sLOB, '0000', sLocation, sU4BOrg, sU4BProduct, cU4BSalesConsol, cU4BTripConsol, sAllocAcc, 'Amount');
-                     IF(nAllocP <> 0);
-                        Dim3Count = 1;
-                        Dim3Size = DIMSIZ(cU4BSalesDim);
-                        WHILE(Dim3Count <= Dim3Size);
-                           sU4BSales = DIMNM(cU4BSalesDim, Dim3Count);
-                           IF(ELLEV(cU4BSalesDim, sU4BSales) = 0 & ELISANC(cU4BSalesDim, cU4BSalesConsol, sU4BSales) = 1);
-                              nAllocS = CELLGETN(cTargetCube, vVersion, vPeriod, 'FDS', vRateType, sLOB, '0000', sLocation, sU4BOrg, sU4BProduct, sU4BSales, cU4BTripConsol, sAllocAcc, 'Amount');
-                              IF(nAllocS <> 0);
-                                 Dim4Count = 1;
-                                 Dim4Size = DIMSIZ(cU4BTripDim);
-                                 WHILE(Dim4Count <= Dim4Size);
-                                    sU4BTrip = DIMNM(cU4BTripDim, Dim4Count);
-                                    IF(ELLEV(cU4BTripDim, sU4BTrip) = 0 & ELISANC(cU4BTripDim, cU4BTripConsol, sU4BTrip) = 1);
-                                       nAllocT = CELLGETN(cTargetCube, vVersion, vPeriod, 'FDS', vRateType, sLOB, '0000', sLocation, sU4BOrg, sU4BProduct, sU4BSales, sU4BTrip, sAllocAcc, 'Amount');
-                                       IF(nAllocT <> 0);
-                                          nAllocPerc = nAllocT \ nAllocTotal;
-                                          nAllocVal = vValue * nAllocPerc;
-                                          # ================= TAPTOOLS: START GENERATED CODE =================== #
-                                          nDataProcedureDataOperations = nDataProcedureDataOperations + 1;
-                                          # ================= TAPTOOLS: END GENERATED CODE ===================== #
-                                          CELLINCREMENTN(nAllocVal, cTargetCube, vVersion, vPeriod, cTargetSource, vRateType, vLOB, '0000', vLocation, sU4BOrg, sU4BProduct, sU4BSales, sU4BTrip, vMetric, 'Amount');
-                                       ENDIF;
-                                    ENDIF;
-                                    Dim4Count = Dim4Count + 1;
-                                 END;
-                              ENDIF;
+      Sub1Count = 1;
+      Sub1Size = SUBSETGETSIZE(cU4BOrgDim, sSubsetName);
+      WHILE(Sub1Count <= Sub1Size);
+         sU4BOrg = SUBSETGETELEMENTNAME(cU4BOrgDim, sSubsetName, Sub1Count);
+         nAllocO = CELLGETN(cStagingCube, vVersion, vPeriod, 'FDS', vRateType, 'Total Currency', sLOB, '0000', sLocation, sU4BOrg, cU4BProductConsol, cU4BSalesConsol, cU4BTripConsol, sAllocAcc, 'Amount');
+         IF(nAllocO <> 0);
+            Sub2Count = 1;
+            Sub2Size = SUBSETGETSIZE(cU4BProductDim, sSubsetName);
+            WHILE(Sub2Count <= Sub2Size);
+               sU4BProduct = SUBSETGETELEMENTNAME(cU4BProductDim, sSubsetName, Sub2Count);
+               nAllocP = CELLGETN(cStagingCube, vVersion, vPeriod, 'FDS', vRateType, 'Total Currency', sLOB, '0000', sLocation, sU4BOrg, sU4BProduct, cU4BSalesConsol, cU4BTripConsol, sAllocAcc, 'Amount');
+               IF(nAllocP <> 0);
+                  Sub3Count = 1;
+                  Sub3Size = SUBSETGETSIZE(cU4BSalesDim, sSubsetName);
+                  WHILE(Sub3Count <= Sub3Size);
+                     sU4BSales = SUBSETGETELEMENTNAME(cU4BSalesDim, sSubsetName, Sub3Count);
+                     nAllocS = CELLGETN(cStagingCube, vVersion, vPeriod, 'FDS', vRateType, 'Total Currency', sLOB, '0000', sLocation, sU4BOrg, sU4BProduct, sU4BSales, cU4BTripConsol, sAllocAcc, 'Amount');
+                     IF(nAllocS <> 0);
+                        Sub4Count = 1;
+                        Sub4Size = SUBSETGETSIZE(cU4BTripDim, sSubsetName);
+                        WHILE(Sub4Count <= Sub4Size);
+                           sU4BTrip = SUBSETGETELEMENTNAME(cU4BTripDim, sSubsetName, Sub4Count);
+                           nAllocT = CELLGETN(cStagingCube, vVersion, vPeriod, 'FDS', vRateType, 'Total Currency', sLOB, '0000', sLocation, sU4BOrg, sU4BProduct, sU4BSales, sU4BTrip, sAllocAcc, 'Amount');
+                           IF(nAllocT <> 0);
+                              nAllocPerc = nAllocT \ nAllocTotal;
+                              nAllocVal = vValue * nAllocPerc;
+                              CELLINCREMENTN(nAllocVal, cTargetCube, vVersion, vPeriod, cTargetSource, vRateType, vLOB, '0000', vLocation, sU4BOrg, sU4BProduct, sU4BSales, sU4BTrip, vMetric, 'Amount');
+
                            ENDIF;
-                           Dim3Count = Dim3Count + 1;
+                           Sub4Count = Sub4Count + 1;
                         END;
                      ENDIF;
-                  ENDIF;
-                  Dim2Count = Dim2Count + 1;
-               END;
-            ENDIF;
+                     Sub3Count = Sub3Count + 1;
+                  END;
+               ENDIF;
+               Sub2Count = Sub2Count + 1;
+            END;
          ENDIF;
-         Dim1Count = Dim1Count + 1;
+         Sub1Count = Sub1Count + 1;
       END;
    ELSE;
       # ================= TAPTOOLS: START GENERATED CODE =================== #
@@ -633,6 +660,11 @@ nTotalMetadataOperations = nPrologProcedureMetadataOperations + nMetadataProcedu
 LOGOUTPUT('DEBUG', 'PROCESS_METRIC: TotalMetadataOperations: "' | NUMBERTOSTRING(nTotalMetadataOperations) | '"');
 LOGOUTPUT('DEBUG', 'PROGRESS: END EPILOG PROCEDURE');
 # ================= TAPTOOLS: END GENERATED CODE ===================== #
+CELLPUTN(nDataProcedureRecordsCompleted, cCubeDash, cSourceCube, 'Oracle', pMonth, 'Actual', 'No Rate Type', pAccount, 'Records Processed');
+CELLPUTN(nDataProcedureDataOperations, cCubeDash, cSourceCube, 'Oracle', pMonth, 'Actual', 'No Rate Type', pAccount, 'Allocated Records Count');
+nElapsedTime = ROUND((NOW - cStartTime) / 0.000011574074074074);
+CELLPUTN(nElapsedTime, cCubeDash, cSourceCube, 'Oracle', pMonth, 'Actual', 'No Rate Type', pAccount, 'Elapsed Time');
+
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
 # END: EPILOG PROCEDURE                                                       #
