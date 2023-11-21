@@ -660,11 +660,13 @@ nTotalMetadataOperations = nPrologProcedureMetadataOperations + nMetadataProcedu
 LOGOUTPUT('DEBUG', 'PROCESS_METRIC: TotalMetadataOperations: "' | NUMBERTOSTRING(nTotalMetadataOperations) | '"');
 LOGOUTPUT('DEBUG', 'PROGRESS: END EPILOG PROCEDURE');
 # ================= TAPTOOLS: END GENERATED CODE ===================== #
-CELLPUTN(nDataProcedureRecordsCompleted, cCubeDash, cSourceCube, 'Oracle', pMonth, 'Actual', 'No Rate Type', pAccount, 'Records Processed');
-CELLPUTN(nDataProcedureDataOperations, cCubeDash, cSourceCube, 'Oracle', pMonth, 'Actual', 'No Rate Type', pAccount, 'Allocated Records Count');
-nElapsedTime = ROUND((NOW - cStartTime) / 0.000011574074074074);
-CELLPUTN(nElapsedTime, cCubeDash, cSourceCube, 'Oracle', pMonth, 'Actual', 'No Rate Type', pAccount, 'Elapsed Time');
 
+IF(pRateType @<> '' & pAccount @<> '');
+   CELLPUTN(nDataProcedureRecordsCompleted, cCubeDash, cSourceCube, 'Oracle', pMonth, 'Actual', pRateType, pAccount, 'Records Processed');
+   CELLPUTN(nDataProcedureDataOperations, cCubeDash, cSourceCube, 'Oracle', pMonth, 'Actual', pRateType, pAccount, 'Allocated Records Count');
+   nElapsedTime = ROUND((NOW - cStartTime) / 0.000011574074074074);
+   CELLPUTN(nElapsedTime, cCubeDash, cSourceCube, 'Oracle', pMonth, 'Actual', pRateType, pAccount, 'Elapsed Time');
+ENDIF;
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
 # END: EPILOG PROCEDURE                                                       #
