@@ -1,13 +1,13 @@
 {
     "DefaultMember": {
         "Attributes": {
-            "Caption": "Total Count"
+            "Caption": "Allocated Records Count"
         },
         "IsPlaceholder": false,
-        "Name": "Total Count",
+        "Name": "Allocated Records Count",
         "Ordinal": 1,
         "Type": "Regular",
-        "UniqueName": "[Dashboard Measure].[Dashboard Measure].[Total Count]",
+        "UniqueName": "[Dashboard Measure].[Dashboard Measure].[Allocated Records Count]",
         "Weight": 0
     },
     "Edges": [
@@ -26,9 +26,36 @@
     "Elements": [
         {
             "Attributes": {
-                "Caption": "Total Count"
+                "Caption": "Allocated Records Count"
             },
             "Index": 1,
+            "Name": "Allocated Records Count",
+            "Type": "Numeric",
+            "UniqueName": "[Dashboard Measure].[Dashboard Measure].[Allocated Records Count]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Records Processed"
+            },
+            "Index": 2,
+            "Name": "Records Processed",
+            "Type": "Numeric",
+            "UniqueName": "[Dashboard Measure].[Dashboard Measure].[Records Processed]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Elapsed Time"
+            },
+            "Index": 3,
+            "Name": "Elapsed Time",
+            "Type": "Numeric",
+            "UniqueName": "[Dashboard Measure].[Dashboard Measure].[Elapsed Time]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Total Count"
+            },
+            "Index": 4,
             "Name": "Total Count",
             "Type": "Consolidated",
             "UniqueName": "[Dashboard Measure].[Dashboard Measure].[Total Count]"
@@ -37,7 +64,7 @@
             "Attributes": {
                 "Caption": "Financial"
             },
-            "Index": 2,
+            "Index": 5,
             "Name": "Financial",
             "Type": "Numeric",
             "UniqueName": "[Dashboard Measure].[Dashboard Measure].[Financial]"
@@ -46,7 +73,7 @@
             "Attributes": {
                 "Caption": "Operational"
             },
-            "Index": 3,
+            "Index": 6,
             "Name": "Operational",
             "Type": "Numeric",
             "UniqueName": "[Dashboard Measure].[Dashboard Measure].[Operational]"
