@@ -79,7 +79,7 @@ IF(LONG(sRateTypeAdded) > 0);
    sProcessName = 'Bedrock.Cube.ProcessFeeders';
    sTemplateProcessAll = '';
 
-   cTemplateScriptRun = '%cPythonExe% %cScriptRun% --server ''%cServer%'' --port %cPort% --user ''%cBatchUser%'' --password ''%cBatchPassword%'' --namespace ''%cBatchNamespace%'' --threads ''%cThreads%'' %cTemplateProcess1% %cTemplateProcess2% %cTemplateProcess3% %cTemplateProcess4%';
+   cTemplateScriptRun = '%cPythonExe% %cScriptRun% --server ''%cServer%'' --port %cPort% --user ''%cBatchUser%'' --password ''%cBatchPassword%'' --namespace ''%cBatchNamespace%'' --threads ''%cThreads%'' %cTemplateProcess1% %cTemplateProcess2% %cTemplateProcess3% %cTemplateProcess4% %cTemplateProcess5%';
 
    sCube1 = 'Delivery Staging';
    cTemplateProcess1 = '--process ''%sProcessName%'' pCubeName ''%sCube1%'' ';
