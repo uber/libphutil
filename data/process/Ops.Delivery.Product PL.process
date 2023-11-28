@@ -222,6 +222,7 @@ nDataProcedureEndTime = 0;
 
 cSourceCube = 'Delivery';
 cTargetCube = 'Delivery';
+cStagingCube = 'Delivery Staging';
 cAllocCube = 'Delivery PL Allocation';
 cCubeDash = 'Dashboard Info';
 
@@ -418,7 +419,7 @@ WHILE(nCtr <= nMax);
 END;
 
 VIEWEXTRACTSKIPRULEVALUESSET(cCube, cViewName1, 1);
-VIEWEXTRACTSKIPCALCSSET(cCube, cViewName1, 0);
+VIEWEXTRACTSKIPCALCSSET(cCube, cViewName1, 1);
 VIEWEXTRACTSKIPZEROESSET(cCube, cViewName1, 1);
 
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
@@ -489,7 +490,7 @@ IF(sAllocAcc @= 'No Allocate');
 
 ELSE;
 
-   nAllocTotal = CELLGETN(cTargetCube, vVersion, vPeriod, 'FDS', vRateType, vLOB, '0000', vLocation, cFulFilConsol, cMerchTypeConsol, cOrdCatConsol, cDelMerchSegConsol, cDelFeatureConsol, sAllocAcc, 'Amount');
+   nAllocTotal = CELLGETN(cStagingCube, vVersion, vPeriod, 'FDS', vRateType, 'Total Currency', vLOB, '0000', vLocation, cFulFilConsol, cMerchTypeConsol, cOrdCatConsol, cDelMerchSegConsol, cDelFeatureConsol, sAllocAcc, 'Amount');
    ## Conduct Allocations by Product / Feature 
 
    IF(nAllocTotal <> 0);
@@ -498,35 +499,35 @@ ELSE;
       WHILE(Dim1Count <= Dim1Size);
          sFulFil = DIMNM(cFulFilDim, Dim1Count);
          IF(ELLEV(cFulFilDim, sFulFil) = 0 & ELISANC(cFulFilDim, cFulFilConsol, sFulFil) = 1);
-            nAllocF = CELLGETN(cTargetCube, vVersion, vPeriod, 'FDS', vRateType, vLOB, '0000', vLocation, sFulFil, cMerchTypeConsol, cOrdCatConsol, cDelMerchSegConsol, cDelFeatureConsol, sAllocAcc, 'Amount');
+            nAllocF = CELLGETN(cStagingCube, vVersion, vPeriod, 'FDS', vRateType, 'Total Currency', vLOB, '0000', vLocation, sFulFil, cMerchTypeConsol, cOrdCatConsol, cDelMerchSegConsol, cDelFeatureConsol, sAllocAcc, 'Amount');
             IF(nAllocF <> 0);
                Dim2Count = 1;
                Dim2Size = DIMSIZ(cMerchTypeDim);
                WHILE(Dim2Count <= Dim2Size);
                   sMerchType = DIMNM(cMerchTypeDim, Dim2Count);
                   IF(ELLEV(cMerchTypeDim, sMerchType) = 0 & ELISANC(cMerchTypeDim, cMerchTypeConsol, sMerchType) = 1);
-                     nAllocM = CELLGETN(cTargetCube, vVersion, vPeriod, 'FDS', vRateType, vLOB, '0000', vLocation, sFulFil, sMerchType, cOrdCatConsol, cDelMerchSegConsol, cDelFeatureConsol, sAllocAcc, 'Amount');
+                     nAllocM = CELLGETN(cStagingCube, vVersion, vPeriod, 'FDS', vRateType, 'Total Currency', vLOB, '0000', vLocation, sFulFil, sMerchType, cOrdCatConsol, cDelMerchSegConsol, cDelFeatureConsol, sAllocAcc, 'Amount');
                      IF(nAllocM <> 0);
                         Dim3Count = 1;
                         Dim3Size = DIMSIZ(cOrdCatDim);
                         WHILE(Dim3Count <= Dim3Size);
                            sOrdCat = DIMNM(cOrdCatDim, Dim3Count);
                            IF(ELLEV(cOrdCatDim, sOrdCat) = 0 & ELISANC(cOrdCatDim, cOrdCatConsol, sOrdCat) = 1);
-                              nAllocO = CELLGETN(cTargetCube, vVersion, vPeriod, 'FDS', vRateType, vLOB, '0000', vLocation, sFulFil, sMerchType, sOrdCat, cDelMerchSegConsol, cDelFeatureConsol, sAllocAcc, 'Amount');
+                              nAllocO = CELLGETN(cStagingCube, vVersion, vPeriod, 'FDS', vRateType, 'Total Currency', vLOB, '0000', vLocation, sFulFil, sMerchType, sOrdCat, cDelMerchSegConsol, cDelFeatureConsol, sAllocAcc, 'Amount');
                               IF(nAllocO <> 0);
                                  Dim4Count = 1;
                                  Dim4Size = DIMSIZ(cDelMerchSegDim);
                                  WHILE(Dim4Count <= Dim4Size);
                                     sMerchSeg = DIMNM(cDelMerchSegDim, Dim4Count);
                                     IF(ELLEV(cDelMerchSegDim, sMerchSeg) = 0 & ELISANC(cDelMerchSegDim, cDelMerchSegConsol, sMerchSeg) = 1);
-                                       nAllocS = CELLGETN(cTargetCube, vVersion, vPeriod, 'FDS', vRateType, vLOB, '0000', vLocation, sFulFil, sMerchType, sOrdCat, sMerchSeg, cDelFeatureConsol, sAllocAcc, 'Amount');
+                                       nAllocS = CELLGETN(cStagingCube, vVersion, vPeriod, 'FDS', vRateType, 'Total Currency', vLOB, '0000', vLocation, sFulFil, sMerchType, sOrdCat, sMerchSeg, cDelFeatureConsol, sAllocAcc, 'Amount');
                                        IF(nAllocS <> 0);
                                           Dim5Count = 1;
                                           Dim5Size = DIMSIZ(cDelFeatureDim);
                                           WHILE(Dim5Count <= Dim5Size);
                                              sDelFeat = DIMNM(cDelFeatureDim, Dim5Count);
                                              IF(ELLEV(cDelFeatureDim, sDelFeat) = 0 & ELISANC(cDelFeatureDim, cDelFeatureConsol, sDelFeat) = 1);
-                                                nAllocF = CELLGETN(cTargetCube, vVersion, vPeriod, 'FDS', vRateType, vLOB, '0000', vLocation, sFulFil, sMerchType, sOrdCat, sMerchSeg, sDelFeat, sAllocAcc, 'Amount');
+                                                nAllocF = CELLGETN(cStagingCube, vVersion, vPeriod, 'FDS', vRateType, 'Total Currency', vLOB, '0000', vLocation, sFulFil, sMerchType, sOrdCat, sMerchSeg, sDelFeat, sAllocAcc, 'Amount');
                                                 IF(nAllocF <> 0);
                                                    nAllocPerc = nAllocF \ nAllocTotal;
                                                    nAllocVal = vValue * nAllocPerc;
