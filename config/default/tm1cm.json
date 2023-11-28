@@ -52,7 +52,6 @@
         "}ElementAttributes_GL Operational",
         "}Capabilities",
         "}CubeSecurityProperties",
-        "}CubeSecurity",
         "}ApplicationSecurity",
         "}ElementAttributes_ANALYTICS.*",
         "ANALYTICS.*",
