@@ -10,7 +10,14 @@
     },
     "HasSecurityAccess": false,
     "Name": "Ops.MAPC.Forecast.Data.Deduping.Total Rides Eats",
-    "Parameters": [],
+    "Parameters": [
+        {
+            "Name": "pActualMonth",
+            "Prompt": "REQ: Leaf element",
+            "Type": "String",
+            "Value": ""
+        }
+    ],
     "UIData": "CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
     "Variables": [
         {
@@ -113,6 +120,7 @@ IF(sProcessName @<> 'TAP.Call.Queue.Add Job To Queue' & sProcessName @<> 'TAP.Cu
       PROCESSBREAK;
    ENDIF;
 ENDIF;
+LOGOUTPUT('DEBUG', 'PARAMETER: pActualMonth: "' | pActualMonth | '"');
 LOGOUTPUT('DEBUG', 'PROGRESS: START PROLOG PROCEDURE');
 nMetadataProcedureRecordsStarted = 0;
 nMetadataProcedureRecordsSkipped = 0;
@@ -165,12 +173,11 @@ sDimProductType = 'Product Type';
 sDimOpsMetric = 'Ops Metric';
 sDimMeas = 'MAPC Measure';
 
-sSubLoc = 'MAPC_Deduping_InScope';
-IF(SUBSETEXISTS(sDimLoc, sSubLoc) = 0);
+pActualMonth = TRIM(pActualMonth);
+IF(pActualMonth @= '');
+   ITEMREJECT('Current Actual Month parameter cannot be blank');
    PROCESSQUIT;
 ENDIF;
-
-sActualMonth = CELLGETS('Admin Playbook', 'Oracle Sync', 'Current Actual Month');
 
 sSrcView = 'zTempTI' | GETPROCESSNAME | sTimeStart | NUMBERTOSTRING(RAND());
 sSrcSub = sSrcView;
@@ -294,7 +301,7 @@ ENDIF;
 
 nAmount = CELLGETN(sSrcCube, vVersion, vPeriod, vSource, vRateType, 'CustomLeaf:' | vLocation | ' Input', '1001', vProductType, vMetric, vMeasure) + CELLGETN(sSrcCube, vVersion, vPeriod, vSource, vRateType, 'CustomLeaf:' | vLocation | ' Input', '2001', vProductType, vMetric, vMeasure);
 
-nUnDedupedRatio = CELLGETN(sSrcCube, 'Actual', sActualMonth, 'FDS', vRateType, 'CustomLeaf:' | vLocation | ' Input', 'CustomLeaf:' | vLOB | ' Input', vProductType, vMetric, 'UnDedpued Ratio');
+nUnDedupedRatio = CELLGETN(sSrcCube, 'Actual', pActualMonth, 'FDS', vRateType, 'CustomLeaf:' | vLocation | ' Input', 'CustomLeaf:' | vLOB | ' Input', vProductType, vMetric, 'UnDedpued Ratio');
 nDedupedamount = nAmount * nUnDedupedRatio;
 
 # ================= TAPTOOLS: START GENERATED CODE =================== #
