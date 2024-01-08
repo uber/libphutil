@@ -461,7 +461,7 @@ WHILE(p <= DIMSIZ(sDim));
       # ================= TAPTOOLS: START GENERATED CODE =================== #
       nDataProcedureDataOperations = nDataProcedureDataOperations + 1;
       # ================= TAPTOOLS: END GENERATED CODE ===================== #
-      CELLPUTN(vValue, cCube, 'Actual', sPeriod, 'FDS', sRateType, vLob, '0000', sLocation, vProduct, vFeature, sMetric, 'Amount');
+      CellIncrementN(vValue, cCube, 'Actual', sPeriod, 'FDS', sRateType, vLob, '0000', sLocation, vProduct, vFeature, sMetric, 'Amount');
       cRecordCount = cRecordCount + 1;
    ENDIF;
    p = p + 1;
