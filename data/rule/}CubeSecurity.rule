@@ -1,0 +1,36 @@
+FEEDSTRINGS;
+
+#=-=-=-=-=-=-==-=-=-=-=-=-==-=-=-=-=-=-==-=-=-=-=-=-==-=-=-=-=-=-==-=-=-=-=-=-==-=-=-=-=-=-=-=-=-=-#
+#>---  TM1 Developer - Read Access to all the cubes
+#=-=-=-=-=-=-==-=-=-=-=-=-==-=-=-=-=-=-==-=-=-=-=-=-==-=-=-=-=-=-==-=-=-=-=-=-==-=-=-=-=-=-=-=-=-=-#
+
+['2f4aef8a-5df4-432d-8817-49bb45c096da'] =S: 'READ';
+
+
+['ANALYTICS.GL Operational'] =S: 'NONE';
+
+['Eats GL Allocation'] = S : 'WRITE';
+
+['Mobility PL Allocation', 'c6c54608-b8e0-41ac-a3d5-6f7c157b16b3'] =S:  'WRITE';
+['Mobility Staging'] =S:  'NONE';
+
+['Delivery PL Allocation', '161a9974-9073-421e-9d52-e04635116841'] =S: 'WRITE';
+['Delivery Staging'] =S:  'NONE';
+
+['U4B PL Allocation', '09db252e-9a8f-4590-a0b4-98a8a7f93477'] =S: 'WRITE';
+['U4B Staging'] =S:  'NONE';
+
+['Rides Ops Staging']=S : 'NONE';
+['Eats Ops Staging']=S : 'NONE';
+
+[] = S:
+   IF(
+      SCAN('Ops', !}Cubes) > 0 % SCAN('Eats', !}Cubes) > 0 % SCAN('Delivery', !}Cubes) > 0 % SCAN('U4B', !}Cubes) > 0 % SCAN('MAPC', !}Cubes) > 0
+% SCAN('Mobility', !}Cubes) > 0
+   ,
+      'READ'
+   , 'None'
+   );
+
+
+
