@@ -416,7 +416,7 @@ ELSE;
    ENDIF;
 
 
-   nAllocTotal = CELLGETN(cStagingCube, vVersion, vPeriod, 'FDS', vRateType, 'Total Currency', vLOB, '0000', vLocation, cProductConsol, cMobilityConsol, sAllocAcc, 'Amount');
+   nAllocTotal = CELLGETN(cTargetCube, vVersion, vPeriod, 'FDS', vRateType, vLOB, '0000', vLocation, cProductConsol, cMobilityConsol, sAllocAcc, 'Amount');
    ## Conduct Allocations by Product / Feature 
 
    IF(nAllocTotal <> 0);
@@ -425,14 +425,14 @@ ELSE;
       WHILE(Dim1Count <= Dim1Size);
          sProductType = DIMNM(cDimProductType, Dim1Count);
          IF(ELLEV(cDimProductType, sProductType) = 0 & ELISANC(cDimProductType, cProductConsol, sProductType) = 1);
-            nAllocP = CELLGETN(cStagingCube, vVersion, vPeriod, 'FDS', vRateType, 'Total Currency', vLOB, '0000', vLocation, sProductType, cMobilityConsol, sAllocAcc, 'Amount');
+            nAllocP = CELLGETN(cTargetCube, vVersion, vPeriod, 'FDS', vRateType, vLOB, '0000', vLocation, sProductType, cMobilityConsol, sAllocAcc, 'Amount');
             IF(nAllocP <> 0);
                Dim2Count = 1;
                Dim2Size = DIMSIZ(cDimMobilityFeature);
                WHILE(Dim2Count <= Dim2Size);
                   sMobilityFeature = DIMNM(cDimMobilityFeature, Dim2Count);
                   IF(ELLEV(cDimMobilityFeature, sMobilityFeature) = 0 & ELISANC(cDimMobilityFeature, cMobilityConsol, sMobilityFeature) = 1);
-                     nAllocPM = CELLGETN(cStagingCube, vVersion, vPeriod, 'FDS', vRateType, 'Total Currency', vLOB, '0000', vLocation, sProductType, sMobilityFeature, sAllocAcc, 'Amount');
+                     nAllocPM = CELLGETN(cTargetCube, vVersion, vPeriod, 'FDS', vRateType, vLOB, '0000', vLocation, sProductType, sMobilityFeature, sAllocAcc, 'Amount');
                      IF(nAllocPM <> 0);
                         nAllocPerc = nAllocPM \ nAllocTotal;
                         nAllocVal = vValue * nAllocPerc;
