@@ -22,6 +22,7 @@ SKIPCHECK;
   IF
       ( 
          ATTRN('Period', !Period, 'End of Period') > ATTRN('Period', DB('Admin Playbook', 'Oracle Sync', 'Current Actual Month'), 'End of Period') 
+          % ELLEV('Period', !Period) > 0
       ,
          CONTINUE
       ,
@@ -192,6 +193,58 @@ CONTINUE);
 
 ['Actual', 'Line of Business':'8001', 'OTP per OTD Customer'] = ['OTP Customer'] \ ['OTD Customer'];
 
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- #
+# Period C-level Rule for MAPC metrics 
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- #
+
+### Quarter should reflect the average of deduped values of its months for MAPC metrics
+[{'Actual', 'Forecast Excl Actuals', 'Forecast'}, 'Ops Measure':'Amount'] = C:
+   IF(
+      ELISANC ('Ops Metric', 'MAPC Metrics',!Ops Metric) > 0 & ELLEV('Period', !Period) > 0
+   ,
+      IF(
+        UPPER(DB('}ElementAttributes_Period', !Period, 'Input Type')) @= 'QUARTER' 
+      ,
+        CONSOLIDATECHILDREN('Period') \ CONSOLIDATEDCOUNTUNIQUE(2, 'Period', '', !Version, !Period, !Source, !Rate Type, !Location, !Line of Business, !Product Type, !Ops Metric, !Ops Measure)
+      ,
+        CONTINUE
+      )
+   ,
+      CONTINUE
+   );
+
+### H1 should reflect Q2 deduped value for MAPC metrics
+[{'Actual', 'Forecast Excl Actuals', 'Forecast'}, 'Ops Measure':'Amount'] = C:
+   IF(
+      ELISANC ('Ops Metric', 'MAPC Metrics',!Ops Metric) > 0 & ELLEV('Period', !Period) > 0
+   ,
+      IF(
+        UPPER(DB('}ElementAttributes_Period', !Period, 'Month Name')) @= 'H1'  
+      ,
+        DB('Ops', !Version, SUBST(!Period, 1, 4) | '-Q2', !Source, !Rate Type, !Location, !Line of Business, !Product Type, !Ops Metric, !Ops Measure)
+      ,
+        CONTINUE
+      )
+   ,
+      CONTINUE
+   );
+
+# H2 & FY should reflect Q4 deduped value for MAPC metrics
+[{'Actual', 'Forecast Excl Actuals', 'Forecast'}, 'Ops Measure':'Amount'] = C:
+   IF(
+      ELISANC ('Ops Metric', 'MAPC Metrics',!Ops Metric) > 0 & ELLEV('Period', !Period) > 0
+   ,
+      IF(
+        ( UPPER(DB('}ElementAttributes_Period', !Period, 'Month Name')) @= 'H2' % UPPER(DB('}ElementAttributes_Period', !Period, 'Input Type')) @= 'YEAR' )
+      ,
+        DB('Ops', !Version, SUBST(!Period, 1, 4) | '-Q4', !Source, !Rate Type, !Location, !Line of Business, !Product Type, !Ops Metric, !Ops Measure)
+      ,
+        0
+      )
+   ,
+      CONTINUE
+   );
+
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=- #
 #Source C-level Rule
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=- #
@@ -291,18 +344,13 @@ CONTINUE);
 
 ['Ops Measure':'Amount',  'Line of Business':{'1004', '1020','2002','2003','8009', '2007'}, 'Ops Metric' : 'Active Riders','Actual', 'FDS'] = C:
       IF(
-         ELLEV('Period', !Period) > 0
-      ,
-         0
-      ,
-         IF(
             (ELLEV ('Location', !Location) > 0)
          ,
             DB('Ops', !Version, !Period, !Source, !Rate Type,  'CustomLeaf':!Location | ' Input', !Line of Business, !Product Type, !Ops Metric, 'Amount')
          ,
            STET
-         )
-   );
+         );
+
 # Rule for updating adjustments posted via Tm1tegrator Upload
 
 ['Ops Measure':'Amount',  'Source':'Ops Adjustment', 'Actual'] = C:
@@ -310,18 +358,12 @@ CONTINUE);
          ELISANC ('Ops Metric', 'MAPC Metrics',!Ops Metric) > 0
       ,
          IF(
-            ELLEV('Period', !Period) > 0
-         ,
-            0
-         ,
-            IF(
                (ELLEV ('Location', !Location) > 0)
             ,
                DB('Ops', !Version, !Period, !Source, !Rate Type,  'CustomLeaf':!Location | ' Input', !Line of Business, !Product Type, !Ops Metric, 'Amount')
             ,
                STET
                )
-         )
       ,
          STET
    );
@@ -394,11 +436,6 @@ CONTINUE);
       ELISANC ('Ops Metric', 'MAPC Metrics',!Ops Metric) > 0
    ,
       IF(
-         ELLEV('Period', !Period) > 0
-      ,
-         0
-      ,
-         IF(
             SCAN ('Country - ', !Location) > 0  &
             ELLEV('Line Of Business', !Line of Business) = 0
           ,
@@ -406,7 +443,6 @@ CONTINUE);
           ,
            CONTINUE
         )
-      )
    ,
       CONTINUE
    );
@@ -445,22 +481,16 @@ CONTINUE);
    ); 
   
 
-####################################################################################################
-# Forecast Consolidation to have either Actuals OR Forecast Excl Actuals based on the current month
-####################################################################################################
+####################################################################################################################
+# Forecast Consolidation to have either Actuals OR Forecast Excl Actuals based on the current month for MAPC metrics
+####################################################################################################################
 
 ['Version':'Forecast', 'Ops Measure':'Amount'] = C:
    IF
    (
       ELISANC ('Ops Metric', 'MAPC Metrics',!Ops Metric) > 0    
     ,      
-        IF 
-        (
-          ELLEV('Period', !Period) > 0 
-       ,
-          CONSOLIDATECHILDREN('Period') 
-       ,
-          IF
+        IF
           (
              ATTRN('Period', !Period, 'End of Period') > ATTRN('Period', DB('Admin Playbook', 'Oracle Sync', 'Current Actual Month'), 'End of Period')
           ,
@@ -468,7 +498,6 @@ CONTINUE);
           ,
              ['Version':'Actual']
           )
-        )
     ,
       CONTINUE
    );
