@@ -42,8 +42,25 @@ if [ "$enforce_value" = "true" ]; then
   mkdir "$cov_directory_name"
   echo "Created the '$cov_directory_name' directory."
 
-  # Running tests and coverage on all the scripts for overall coverage.
-  /var/uber/python37/bin/pytest --cov=scripts/ --cov-report=xml:./full_report/coverage.xml scripts/tests
+#####################################################
+# testing coverage for full repo
+#####################################################
+  TEST_DIR="scripts/tests"
+
+  # Loop through each test file in the specified directory
+  # shellcheck disable=SC2231
+  for test_file in $TEST_DIR/test_*.py; do
+    echo "Running tests in $test_file with pytest-cov"
+    /var/uber/python37/bin/pytest --cov=scripts/ --cov-append --cov-report=term-missing "$test_file"
+  done
+
+  # After running all tests, generate the combined XML coverage report
+  echo "Generating combined coverage report..."
+  /var/uber/python37/bin/pytest --cov=scripts/ --cov-report=xml:./full_report/coverage.xml --cov-append
+
+#####################################################
+# testing coverage for full repo completed
+#####################################################
 
   # getting the changed python files from the latest commit id
   /var/uber/python37/bin/python src/coverage_scripts/file_utils.py
