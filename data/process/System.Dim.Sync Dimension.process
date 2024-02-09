@@ -19,6 +19,12 @@
             "Prompt": "REQ: Instance NameREQ: Instance Name",
             "Type": "String",
             "Value": "Analytics"
+        },
+        {
+            "Name": "pIsInstance",
+            "Prompt": "REQ: Instance Name As a Prefix",
+            "Type": "Numeric",
+            "Value": 0
         }
     ],
     "UIData": "CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
@@ -45,6 +51,7 @@
 cRand = NUMBERTOSTRING(ROUND(RAND() * 100000));
 cRand = FILL('0', 6 - LONG(cRand)) | cRand;
 cRand = NUMBERTOSTRING(NOW()) | '.' | cRand;
+cProcess = GETPROCESSNAME();
 
 cView = 'zzTemp' | '.' | cRand;
 cSub = 'zzTemp' | '.' | cRand;
@@ -62,8 +69,11 @@ cPort = '443';
 
 cDimension = TRIM(pDimension);
 cPath = '/var/tm1/' | LOWER(EXPAND('%pInstance%')) | '/files/shared' | '/' | CELLGETS('TAP System Info', 'Service Name', 'Value');
-cFile = LOWER(EXPAND('%cRand%_%cDimension%.txt'));
-
+IF(pIsInstance = 1);
+   cFile = LOWER(EXPAND('%cProcess%_%pInstance%.%cDimension%.txt'));
+ELSE;
+   cFile = LOWER(EXPAND('%cProcess%_%cDimension%.txt'));
+ENDIF;
 cTemplateScriptRun = '%cPythonExe% "%cScriptRun%" --server="%cServer%" --port="%cPort%" --user="%cBatchUser%" --password=''%cBatchPassword%'' --namespace="%cBatchNamespace%" --dimension="%cDimension%" --path="%cPath%" --file="%cFile%" ';
 
 cNow = NOW();
@@ -78,7 +88,8 @@ EXECUTECOMMAND(sCommand, 1);
 # ==================================================================== #
 # Break if no file
 # ==================================================================== #
-cPath = '/var/tm1/planning/files/shared/ops';
+sServiceName = CELLGETS('TAP System Info', 'Service Name', 'Value');
+cPath = '/var/tm1/' | sServiceName | '/files/shared/' | sServiceName;
 sFile = cPath | '/' | cFile;
 IF(FILEEXISTS(sFile) = 0);
    PROCESSERROR();
@@ -87,10 +98,15 @@ ENDIF;
 # ==================================================================== #
 # Clear Data
 # ==================================================================== #
+IF(pIsInstance = 1);
+   sDimension = TRIM(pInstance) | '.' | cDimension;
+ELSE;
+   sDimension = cDimension;
+ENDIF;
 
 sEleString = '';
 
-sCube = '}ElementAttributes_' | cDimension;
+sCube = '}ElementAttributes_' | sDimension;
 sDim = sCube;
 
 IF(CUBEEXISTS(sCube) = 1);
@@ -128,7 +144,7 @@ ENDIF;
 EXECUTEPROCESS('Bedrock.Dim.Import'
    , 'pSourceDir', cPath
    , 'pSourceFile', cFile
-   , 'pDimension', cDimension
+   , 'pDimension', sDimension
    , 'pDebug', 0
 );
 
