@@ -1,1 +1,1 @@
-['Oracle','Actual','GAAP Contribution','Elapsed Time']=C:Roundp((ConsolidateChildren('U4B Ops Metrics')\ CONSOLIDATEDCOUNTUNIQUE(2,'U4B Ops Metrics','Dashboard Info',!Dashboard Cube,!Source,!Period,!Version,!Rate Type,!U4B Ops Metrics,!Dashboard Measure))/60,1);
+['Oracle','Actual','GAAP Contribution','Elapsed Time']=C: ConsolidatedMax(2,'Dashboard Info',!Dashboard Cube,!Source,!Period,'Actual',!Rate Type,'GAAP Contribution','Elapsed Time') \ 60 ;
