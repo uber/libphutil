@@ -78,6 +78,12 @@ DatasourceASCIIQuoteCharacter = '';
 # Constants 
 # -=-=-=-=-=-=-==-=-==-===-==-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=#
 
+cMonth = TRIM(pMonth);
+
+IF(cMonth @='MEC_Month');
+  cMonth = CELLGETS('Admin Playbook', 'Oracle Sync', 'Current Actual Month');
+ENDIF;
+
 sCube = 'Analytics.GL Operational';
 nSiz = CUBEDIMENSIONCOUNTGET(sCube);
 cMobilityLOBConsol = 'Mobility';
@@ -169,7 +175,7 @@ sDim = 'ANALYTICS.GL Operational';
 i = 1;
 WHILE(i <= SUBSETGETSIZE(sDim, sSub));
    sAccount = SUBSETGETELEMENTNAME(sDim, sSub, i);
-   sOutput = 'instance="' | cInstance | '" process="' | cTIprocess | '" pMonth="' | pMonth | '" pMetric="' | sAccount | '" pRateType="' | pRateType | '"';
+   sOutput = 'instance="' | cInstance | '" process="' | cTIprocess | '" pMonth="' | cMonth | '" pMetric="' | sAccount | '" pRateType="' | pRateType | '"';
    ASCIIOUTPUT(cScriptBatch, sOutput);
    i = i + 1;
 END;

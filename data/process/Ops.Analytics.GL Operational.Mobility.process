@@ -179,7 +179,11 @@ nDataProcedureEndTime = 0;
 #****End: Generated Statements****
 
 
+cMonth = TRIM(pMonth);
 
+IF(cMonth @='MEC_Month');
+  cMonth = CELLGETS('Admin Playbook', 'Oracle Sync', 'Current Actual Month');
+ENDIF;
 
 sCube = 'Analytics.GL Operational';
 nSiz = CUBEDIMENSIONCOUNTGET(sCube);
@@ -213,7 +217,7 @@ WHILE(cnt <= nSiz);
 
    ELSEIF(sDim @= 'Analytics.Month');
       SUBSETCREATE(sDim, cSubsetName, 1);
-      SUBSETELEMENTINSERT(sDim, cSubsetName, pMonth, 1);
+      SUBSETELEMENTINSERT(sDim, cSubsetName, cMonth, 1);
       VIEWSUBSETASSIGN(sCube, cViewName, sDim, cSubsetName);
 
    ELSEIF(sDim @= 'Analytics.Version');
@@ -303,7 +307,7 @@ WHILE(cnt <= nSiz);
 
    IF(sDim @= 'Period');
       SUBSETCREATE(sDim, cSubsetTar, 1);
-      SUBSETELEMENTINSERT(sDim, cSubsetTar, pMonth, 1);
+      SUBSETELEMENTINSERT(sDim, cSubsetTar, cMonth, 1);
       VIEWSUBSETASSIGN(sCube, cViewTar, sDim, cSubsetTar);
 
    ELSEIF(sDim @= 'Mobility Measure');
@@ -438,7 +442,7 @@ ENDIF;
 # ================= TAPTOOLS: START GENERATED CODE =================== #
 nDataProcedureDataOperations = nDataProcedureDataOperations + 1;
 # ================= TAPTOOLS: END GENERATED CODE ===================== #
-CELLPUTN(vValue, 'Mobility', vVersion, pMonth, 'Oracle', vRateType, vLob, vDept, vLoc, 'Unspecified Product Type', 'Unspecified Mobility Features', vMetric, 'Amount');
+CELLPUTN(vValue, 'Mobility', vVersion, cMonth, 'Oracle', vRateType, vLob, vDept, vLoc, 'Unspecified Product Type', 'Unspecified Mobility Features', vMetric, 'Amount');
 
 # ================= TAPTOOLS: START GENERATED CODE =================== #
 nDataProcedureRecordsCompleted = nDataProcedureRecordsCompleted + 1;

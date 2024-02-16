@@ -102,6 +102,10 @@ cMonth = TRIM(pMonth);
 cRateType = TRIM(pRateType);
 cAccount = TRIM(pAccount);
 
+IF(cMonth @='MEC_Month');
+  cMonth = CELLGETS('Admin Playbook', 'Oracle Sync', 'Current Actual Month');
+ENDIF;
+
 cRand = NUMBERTOSTRING(ROUND(RAND() * 100000));
 cRand = FILL('0', 6 - LONG(cRand)) | cRand;
 cRand = NUMBERTOSTRING(NOW()) | '.' | cRand;
