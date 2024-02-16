@@ -188,6 +188,11 @@ nDataProcedureEndTime = 0;
 cSourceCube = 'Delivery PL Allocation';
 cTargetCube = cSourceCube;
 
+IF(pPeriodTo @='MEC_Month');
+  pPeriodTo = CELLGETS('Admin Playbook', 'Oracle Sync', 'Current Actual Month');
+  pPeriodFrom = ATTRS('Period',pPeriodTo,'Prior Period');
+ENDIF;
+
 #Turning Logging off
 
 cLogging = CELLGETS('}CubeProperties', cSourceCube, 'Logging');
