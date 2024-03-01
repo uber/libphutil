@@ -41,8 +41,11 @@ SKIPCHECK;
 ######## END Dervied Metrics Calculation
 
 ['Actual', 'FDS', 'Amount'] = N: IF ( ATTRS( 'Delivery Ops Metrics', !Delivery Ops Metrics, 'Fx_Flag') @= 'Y',
+				IF(ELISANC('Rate Type','Ops Rate Types',!Rate Type)=1 % ELISANC('Rate Type','Ops Base Rate Types',!Rate Type)=1,
+
                                                         DB('Delivery Staging',!Version,!Period,!Source,!Rate Type, 'Total Currency',!Line of Business,!Department,!Location,!Delivery Fulfillment Type,!Delivery Merchant Type,!Delivery Order Category,!Delivery Merchant Segment,!Delivery Features,!Delivery Ops Metrics,'Amount'),
-                                                        STET);
+                                                        STET),
+				STET);
 
 
 
