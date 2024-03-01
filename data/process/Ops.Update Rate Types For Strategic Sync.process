@@ -1,0 +1,109 @@
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: PROPERTIES                                                           #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+{
+    "DataSource": {
+        "Type": "None"
+    },
+    "HasSecurityAccess": false,
+    "Name": "Ops.Update Rate Types For Strategic Sync",
+    "Parameters": [],
+    "UIData": "CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
+    "Variables": [],
+    "VariablesUIData": []
+}
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: PROPERTIES                                                             #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: PROLOG PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+sDim = 'Rate Type';
+sConsol = 'Ops Rate Types';
+sAttrDim = '}ElementAttributes_' | sDim;
+sAttribute = 'Ops calculation';
+
+
+IF(DIMIX(sAttrDim, sAttribute) = 0);
+   PROCESSQUIT;
+ENDIF;
+
+# Strategic Rate Types Consolidation #
+IF(DIMIX(sDim, sConsol) = 0);
+   DIMENSIONELEMENTINSERTDIRECT(sDim, '', sConsol, 'C');
+ELSE;
+   #Unwind the consolidation
+   nChildCount = ELCOMPN(sDim, sConsol);
+   IF(nChildCount <> 0);
+      WHILE(nChildCount > 0);
+         sChild = ELCOMP(sDim, sConsol, nChildCount);
+         DIMENSIONELEMENTCOMPONENTDELETE(sDim, sConsol, sChild);
+         nChildCount = nChildCount - 1;
+      END;
+   ENDIF;
+ENDIF;
+
+#Add the elements to the consolidation based on attribute value
+cTimeStamp = TIMST(NOW, '\Y\m\d\h\i\s');
+cSubsetName = GETPROCESSNAME() | cTimeStamp;
+
+## -- Build Subsets for Dimensions
+sMDX = '{FILTER({TM1FILTERBYLEVEL({TM1SUBSETALL([' | sDim | '])},0)}, [' | sDim | '].[' | sAttribute | '] = "Y")}';
+SUBSETCREATEBYMDX(cSubsetName, sMdx, 0);
+SUBSETMDXSET(sDim, cSubsetName, '');
+nSubsetElementCount = SUBSETGETSIZE(sDim, cSubsetName);
+IF(nSubsetElementCount <> 0);
+   nIndex = 1;
+   WHILE(nIndex <= nSubsetElementCount);
+      sElement = SUBSETGETELEMENTNAME(sDim, cSubsetName, nIndex);
+      DIMENSIONELEMENTCOMPONENTADDDIRECT(sDim, sConsol, sElement, 1);
+      nIndex = nIndex + 1;
+   END;
+ENDIF;
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: PROLOG PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: METADATA PROCEDURE                                                   #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: METADATA PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: DATA PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: DATA PROCEDURE                                                         #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: EPILOG PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+SUBSETDESTROY(sDim, cSubsetName);
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: EPILOG PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
