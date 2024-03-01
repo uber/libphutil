@@ -33,6 +33,8 @@ SKIPCHECK;
 ######## END Dervied Metrics Calculation
 
 ['Actual', 'FDS', 'Amount'] = N: IF ( ATTRS( 'Mobility Ops Metrics', !Mobility Ops Metrics, 'Fx_Flag') @= 'Y',
-                                                        DB('Mobility Staging',!Version,!Period,!Source,!Rate Type, 'Total Currency' ,!Line of Business,!Department,!Location,!Product Type,!Mobility Features,!Mobility Ops Metrics, 'Amount'),
+					IF(ELISANC('Rate Type','Ops Rate Types',!Rate Type)=1 % ELISANC('Rate Type','Ops Base Rate Types',!Rate Type)=1,
+                                                       			 DB('Mobility Staging',!Version,!Period,!Source,!Rate Type, 'Total Currency' ,!Line of Business,!Department,!Location,!Product Type,!Mobility Features,!Mobility Ops Metrics, 'Amount')
+					,STET),
                                                         STET);
 
