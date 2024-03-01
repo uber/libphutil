@@ -17,8 +17,9 @@ SKIPCHECK;
    ['Department':'0000', 'U4B Ops Metrics':'Total Mileage (Mileage Type)', 'U4B Measure':'Amount'];
 
 ['Actual', 'FDS', 'Amount'] = N: IF ( ATTRS( 'Delivery Ops Metrics', !U4B Ops Metrics, 'Fx_Flag') @= 'Y ' % ATTRS( 'Mobility Ops Metrics', !U4B Ops Metrics, 'Fx_Flag') @= 'Y ' ,
-                                                        DB('U4B Staging',!Version,!Period,!Source,!Rate Type, 'Total Currency',!Line of Business,!Department,!Location,!U4B Org Segment,!U4B Product,!U4B Sales Channel,!U4B Trip Profile,!U4B Ops Metrics,'Amount'),
-                                                        STET);
+				IF(ELISANC('Rate Type','Ops Rate Types',!Rate Type)=1 % ELISANC('Rate Type','Ops Base Rate Types',!Rate Type)=1,
+			DB('U4B Staging',!Version,!Period,!Source,!Rate Type, 'Total Currency',!Line of Business,!Department,!Location,!U4B Org Segment,!U4B Product,!U4B Sales Channel,!U4B Trip Profile,!U4B Ops Metrics,'Amount'),
+                                                        STET),STET);
 
 
 
