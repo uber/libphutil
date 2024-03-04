@@ -41,7 +41,8 @@ SKIPCHECK;
 
 ## Rate Type Calculation
 
-['Amount'] = N:
+['Amount'] =N:IF(ELISANC('Rate Type','Ops Rate Types',!Rate Type)=1,
+
    ['No Rate Type','Amount'] *
    IF(
       ELISANC('Period', 'Total Time - Month', !Period)=1
@@ -55,16 +56,17 @@ SKIPCHECK;
            ,
              DB('Exchange Rate by Rate Type',!Version, Subst(!Period, 4, 7), !Currency, !Rate Type, 'Amount')
           )
-   );
+   ),CONTINUE);
 
 
 
 
 FEEDERS;
 
-['Amount'] => DB('U4B',!Version,!Period,!Source,!Rate Type,!Line of Business,!Department,!Location,!U4B Org Segment,!U4B Product,!U4B Sales Channel,!U4B Trip Profile,!U4B Ops Metrics,'Amount');
+['No Rate Type'] => ['Ops Rate Types'];
 
+['Amount'] => DB('U4B',!Version,!Period,!Source,'Ops Base Rate Types',!Line of Business,!Department,!Location,!U4B Org Segment,!U4B Product,!U4B Sales Channel,!U4B Trip Profile,!U4B Ops Metrics,'Amount');
 
-['No Rate Type'] => ['FX Rates'];
+['Amount'] => DB('U4B',!Version,!Period,!Source,'Ops Rate Types',!Line of Business,!Department,!Location,!U4B Org Segment,!U4B Product,!U4B Sales Channel,!U4B Trip Profile,!U4B Ops Metrics,'Amount');
 
 ['Rate Type':'USD'] => ['Local'];
