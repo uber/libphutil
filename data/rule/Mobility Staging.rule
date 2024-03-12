@@ -5,7 +5,7 @@ SKIPCHECK;
 
 ## Local Currency
 
-['Local', 'Amount'] = N:
+['Actual','FDS','Local', 'Amount'] = N:
    IF(
       ATTRS('Location', !Location, 'Currency') @= !Currency
    ,
@@ -41,7 +41,7 @@ SKIPCHECK;
 
 ## Rate Type Calculation
 
-['Amount'] = N:IF(ELISANC('Rate Type','Ops Rate Types',!Rate Type)=1,
+['Actual','FDS','Amount'] = N:IF(ELISANC('Rate Type','Ops Rate Types',!Rate Type)=1,
    ['No Rate Type','Amount'] *
    IF(
       ELISANC('Period', 'Total Time - Month', !Period)=1
@@ -63,12 +63,12 @@ SKIPCHECK;
 FEEDERS;
 
 
-['No Rate Type'] => ['Ops Rate Types'];
+['Actual','FDS','No Rate Type'] => ['Ops Rate Types'];
 
-['Amount'] => DB('Mobility',!Version,!Period,!Source,'Ops Base Rate Types',!Line of Business,!Department,!Location,!Product Type,!Mobility Features,!Mobility Ops Metrics,'Amount');
+['Actual','FDS','Amount'] => DB('Mobility',!Version,!Period,!Source,'Ops Base Rate Types',!Line of Business,!Department,!Location,!Product Type,!Mobility Features,!Mobility Ops Metrics,'Amount');
 
-['Amount'] => DB('Mobility',!Version,!Period,!Source,'Ops Rate Types',!Line of Business,!Department,!Location,!Product Type,!Mobility Features,!Mobility Ops Metrics,'Amount');
+['Actual','FDS','Amount'] => DB('Mobility',!Version,!Period,!Source,'Ops Rate Types',!Line of Business,!Department,!Location,!Product Type,!Mobility Features,!Mobility Ops Metrics,'Amount');
 
-['Rate Type':'USD'] => ['Local'];
+['Actual','FDS','Rate Type':'USD'] => ['Local'];
 
 
