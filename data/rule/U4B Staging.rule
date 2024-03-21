@@ -63,7 +63,7 @@ SKIPCHECK;
 
 FEEDERS;
 
-['Actual','FDS','No Rate Type'] => ['Ops Rate Types'];
+['Actual','FDS','No Rate Type'] => ['Ops Rate Types'],['Local'];
 
 ['Actual','FDS','Amount'] => DB('U4B',!Version,!Period,!Source,'Ops Base Rate Types',!Line of Business,!Department,!Location,!U4B Org Segment,!U4B Product,!U4B Sales Channel,!U4B Trip Profile,!U4B Ops Metrics,'Amount');
 
