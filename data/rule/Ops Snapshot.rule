@@ -14,15 +14,61 @@
 
 SKIPCHECK;
 
+
 [ ] = 
   IF
       ( 
-         ELISANC ('Version', 'Snapshot Version', !Version) > 0 & ELISANC ('Ops Metric', 'MAPC Metrics',!Ops Metric) > 0
+         ELISANC ('Version', 'Snapshot Version', !Version) > 0 & ELISANC ('Ops Metric', 'MAPC Metrics',!Ops Metric) > 0 
       ,
          CONTINUE
       ,
          STET
       );
+      
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- #
+# Period C-level Rules
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- #
+
+### Quarter should reflect the average of deduped values of its months for MAPC metrics
+['Ops Measure':'Amount'] = C: 
+   IF(
+      ELLEV('Period', !Period) > 0 & UPPER(DB('}ElementAttributes_Period', !Period, 'Input Type')) @= 'QUARTER' 
+   ,
+      CONSOLIDATECHILDREN('Period') \ CONSOLIDATEDCOUNTUNIQUE(2, 'Period', '', !Version, !Period, !Source, !Rate Type, !Location, !Line of Business, !Product Type, !Ops Metric, !Ops Measure)
+   ,
+      CONTINUE
+   );
+
+### H1 should reflect Q2 deduped value for MAPC metrics
+['Ops Measure':'Amount'] = C: 
+   IF(
+      ELLEV('Period', !Period) > 0 & UPPER(DB('}ElementAttributes_Period', !Period, 'Month Name')) @= 'H1'  
+   ,
+      DB('Ops Snapshot', !Version, SUBST(!Period, 1, 4) | '-Q2', !Source, !Rate Type, !Location, !Line of Business, !Product Type, !Ops Metric, !Ops Measure)
+   ,
+      CONTINUE
+   );
+
+# H2 & FY should reflect Q4 deduped value for MAPC metrics
+['Ops Measure':'Amount'] = C: 
+   IF(
+      ELLEV('Period', !Period) > 0
+   ,
+      IF(
+        ( UPPER(DB('}ElementAttributes_Period', !Period, 'Month Name')) @= 'H2' % UPPER(DB('}ElementAttributes_Period', !Period, 'Input Type')) @= 'YEAR' )
+      ,
+        DB('Ops Snapshot', !Version, SUBST(!Period, 1, 4) | '-Q4', !Source, !Rate Type, !Location, !Line of Business, !Product Type, !Ops Metric, !Ops Measure)
+      ,
+        0
+      )
+   ,
+      CONTINUE
+   );
+
+      
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- #
+# Source C-level Rule
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- #
       
 ['Ops Measure':'Amount'] = C: 
     IF(
@@ -33,20 +79,24 @@ SKIPCHECK;
           CONTINUE
     );          
 
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- #
+# LOB & Location C-level Rules
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- #
+
+### Including 'Total Careem' for the rule to work on historic actuals (2019-01 to 2023-12) which will be stored in a specific snapshot version. 
+### This change is temporary until the business is confident about the backfilled actuals coming from new FDS table. 
+### Post validation, the specific snapshot version will be deleted and the rule change can be reverted. 
 ['Ops Measure':'Amount'] = C:
     IF(
-       ELLEV('Period', !Period) > 0
-    ,
-       0
-    ,
-       IF(
-          ELLEV ('Line of Business', !Line of Business) > 0 & ELLEV ('Location', !Location) > 0
+          #(!Line of Business @= 'Total Rides & Eats' % !Line of Business @= 'Delivery ex M&A' % !Line of Business @= 'Mobility ex M&A')
+          (!Line of Business @= 'Total Rides & Eats' % !Line of Business @= 'Delivery ex M&A' % !Line of Business @= 'Mobility ex M&A' % !Line of Business @= 'Total Careem')
+            & ELLEV ('Location', !Location) > 0
        ,
           DB('Ops Snapshot', !Version, !Period, !Source, !Rate Type,  'CustomLeaf':!Location | ' Input', 'CustomLeaf':!Line of Business | ' Input', !Product Type, !Ops Metric, !Ops Measure)
        ,
         CONTINUE
-      )
     );
+    
 
 ['Ops Measure':'Amount'] = C:
      IF(
@@ -56,13 +106,32 @@ SKIPCHECK;
      ,
       CONTINUE
     );
-    
+
+### Including 'Total Careem' for the rule to work on historic actuals (2019-01 to 2023-12) which will be stored in a specific snapshot version. 
+### This change is temporary until the business is confident about the backfilled actuals coming from new FDS table. 
+### Post validation, the specific snapshot version will be deleted and the rule change can be reverted.   
 ['Ops Measure':'Amount'] = C:
      IF(
-        ELLEV ('Line of Business', !Line of Business) > 0 & ELLEV ('Location', !Location) = 0
+        #(!Line of Business @= 'Total Rides & Eats' % !Line of Business @= 'Delivery ex M&A' % !Line of Business @= 'Mobility ex M&A')
+        (!Line of Business @= 'Total Rides & Eats' % !Line of Business @= 'Delivery ex M&A' % !Line of Business @= 'Mobility ex M&A' % !Line of Business @= 'Total Careem') 
+          & ELLEV ('Location', !Location) = 0
      ,
         DB('Ops Snapshot', !Version, !Period, !Source, !Rate Type,  !Location, 'CustomLeaf':!Line of Business | ' Input', !Product Type, !Ops Metric, !Ops Measure)
      ,
       CONTINUE
     );
 
+['Ops Measure':'Amount'] = C:
+    IF(
+         ELLEV('Line of Business', !Line of Business) > 0 %  ELLEV('Location', !Location) > 0
+         ,
+         IF(
+             SCAN('Rides', !Line of Business) = 0 & SCAN('Eats', !Line of Business) = 0
+             ,
+                0
+             ,
+             CONSOLIDATECHILDREN('Line of Business')
+          )
+   ,
+    CONTINUE
+   );
