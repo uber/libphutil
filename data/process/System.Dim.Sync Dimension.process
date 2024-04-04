@@ -110,31 +110,7 @@ sCube = '}ElementAttributes_' | sDimension;
 sDim = sCube;
 
 IF(CUBEEXISTS(sCube) = 1);
-   i = 1;
-   WHILE(i <= DIMSIZ(sDim));
-      sEle = DIMNM(sDim, i);
-      IF(SUBST(sEle, 1, 1) @<> '_');
-         IF(LONG(sEleString) = 0);
-            sEleString = sEle;
-         ELSE;
-            sEleString = sEleString | '+' | sEle;
-         ENDIF;
-      ENDIF;
-      i = i + 1;
-   END;
-
-   IF(LONG(sEleString) > 0);
-      EXECUTEPROCESS('Bedrock.Cube.Data.Clear'
-         , 'pCube', sCube
-         , 'pView', cView
-         , 'pFilter', EXPAND('%sDim%: %sEleString%')
-         , 'pDimensionDelim', '|'
-         , 'pElementStartDelim', ':'
-         , 'pElementDelim', '+'
-         , 'pDestroyTempObj', 1
-         , 'pDebug', 0
-      );
-   ENDIF;
+   CUBECLEARDATA(sCube);
 ENDIF;
 
 # ==================================================================== #
