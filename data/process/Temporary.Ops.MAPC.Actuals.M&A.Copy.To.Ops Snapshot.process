@@ -244,7 +244,7 @@ WHILE(sDim @<> '');
       sMDX = '{{TM1FILTERBYLEVEL( TM1DRILLDOWNMEMBER( {[' | sDim | '].[Total Rides & Eats with M&A]}, ALL, RECURSIVE ), 0 )}, [' | sDim | '].[Total Rides & Eats], [' | sDim | '].[Total Careem]}';
 
    ELSEIF(sDim @= 'Product Type');
-      sMDX = '{[' | sDim | '].[Not Specified]}';
+      sMDX = '{[' | sDim | '].[EATS], [' | sDim | '].[Not Specified]}';
 
    ELSEIF(sDim @= sDimOpsMetric);
       sMDX = '{[' | sDim | '].[Active Riders], [' | sDim | '].[New Riders]}';
@@ -325,12 +325,18 @@ ELSEIF(vOpsMetric @= 'New Riders');
    vOpsMetric = 'New Users';
 ENDIF;
 
+IF (vLOB @= '1001' & vProductType @= 'EATS');
+  ITEMSKIP;
+ELSEIF (vLOB @= '2001' & vProductType @= 'Not Specified');
+  ITEMSKIP;
+ENDIF;
+
 IF(ELLEV(sDimLoc, vLocation) = 0 & ELLEV(sDimLob, vLOB) = 0);
 
    # ================= TAPTOOLS: START GENERATED CODE =================== #
    nDataProcedureDataOperations = nDataProcedureDataOperations + 1;
    # ================= TAPTOOLS: END GENERATED CODE ===================== #
-   CELLINCREMENTN(vValue, sTgtCube, pVersionTo, vPeriod, vSource, vRateType, vLocation, vLOB, vProductType, vOpsMetric, vMeasure);
+   CELLPUTN(vValue, sTgtCube, pVersionTo, vPeriod, vSource, vRateType, vLocation, vLOB, vProductType, vOpsMetric, vMeasure);
 ELSEIF(ELLEV(sDimLoc, vLocation) > 0 & ELLEV(sDimLob, vLOB) = 0);
 
    # ================= TAPTOOLS: START GENERATED CODE =================== #
