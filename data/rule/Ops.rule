@@ -245,17 +245,19 @@ CONTINUE);
       CONTINUE
    );
 
+
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=- #
 #Source C-level Rule
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=- #
 
 [{'Actual', 'Forecast Excl Actuals'}, 'Ops Measure':'Amount'] = C: IF(ELLEV('Source',!Source)>0 & ELISANC ('Ops Metric', 'MAPC Metrics',!Ops Metric) > 0,CONSOLIDATECHILDREN('Source'),CONTINUE);
 
+
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- #
 # C-level Rules for MAPC metrics Actuals
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- #
 
-['Actual', 'Ops Measure':'Amount', 'Source':'Ops Adjustment'] = C:
+['Actual', 'Ops Measure':'Amount'] = C:
    IF(
       ELISANC ('Ops Metric', 'MAPC Metrics',!Ops Metric) > 0 
    ,
@@ -271,7 +273,7 @@ CONTINUE);
       CONTINUE
    );
    
-['Actual', 'Ops Measure':'Amount', 'Source':'Ops Adjustment'] = C:
+['Actual', 'Ops Measure':'Amount'] = C:
    IF(
       ELISANC ('Ops Metric', 'MAPC Metrics',!Ops Metric) > 0 
    ,
@@ -302,45 +304,12 @@ CONTINUE);
    ,
       CONTINUE
    );   
-
-['Actual', 'Ops Measure':'Amount', 'Source':'FDS'] = C:
-   IF(
-      !Ops Metric @= 'Active Users'  % !Ops Metric @= 'New Users' % !Ops Metric @= 'Unique Users'
-       % !Ops Metric @= 'Unique New Users' % !Ops Metric @= 'X-Platform Users' % !Ops Metric @= 'X-Platform New Users'
-   ,
-      IF(
-            (!Line of Business @= 'Total Rides & Eats' % !Line of Business @= 'Delivery ex M&A' % !Line of Business @= 'Mobility ex M&A' % !Line of Business @= 'Total Careem') &
-            (ELLEV ('Location', !Location) > 0)
-         ,
-            DB('Ops', !Version, !Period, !Source, !Rate Type,  'CustomLeaf':!Location | ' Input', 'CustomLeaf':!Line of Business | ' Input', !Product Type, !Ops Metric, 'Amount')
-         ,
-          CONTINUE
-      )
-   ,
-      CONTINUE
-   );
    
 ['Actual', 'Ops Measure':'Amount', 'Source':'FDS'] = C:
    IF(
-      !Ops Metric @= 'Active Users'  % !Ops Metric @= 'New Users' % !Ops Metric @= 'Unique Users'
-       % !Ops Metric @= 'Unique New Users' % !Ops Metric @= 'X-Platform Users' % !Ops Metric @= 'X-Platform New Users'
-   ,
-      IF(
-            (!Line of Business @= 'Total Rides & Eats' % !Line of Business @= 'Delivery ex M&A' % !Line of Business @= 'Mobility ex M&A' % !Line of Business @= 'Total Careem') &
-            (ELLEV ('Location', !Location) = 0)
-         ,
-            DB('Ops', !Version, !Period, !Source, !Rate Type,  !Location, 'CustomLeaf':!Line of Business | ' Input', !Product Type, !Ops Metric, 'Amount')
-         ,
-          CONTINUE
-      )
-   ,
-      CONTINUE
-   );
-   
-['Actual', 'Ops Measure':'Amount', 'Source':'FDS'] = C:
-   IF(
-      !Ops Metric @= 'Active Users'  % !Ops Metric @= 'New Users' % !Ops Metric @= 'Unique Users'
-       % !Ops Metric @= 'Unique New Users' % !Ops Metric @= 'X-Platform Users' % !Ops Metric @= 'X-Platform New Users'
+      ELISANC ('Ops Metric', 'MAPC Metrics',!Ops Metric) > 0 
+       & !Ops Metric @<> 'Active Drivers' & !Ops Metric @<> 'New Drivers' & !Ops Metric @<> 'Continuing Drivers'
+       & !Ops Metric @<> 'Active Riders' & !Ops Metric @<> 'New Riders' & !Ops Metric @<> 'Continuing Riders'
    ,
       IF(
             ELLEV ('Line of Business', !Line of Business) = 0 &
@@ -352,7 +321,9 @@ CONTINUE);
       )
    ,
       CONTINUE
-   ); 
+   );   
+   
+
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=- #
 #Total Rides & Eats C-level rules For Actuals
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=- #
@@ -476,8 +447,6 @@ CONTINUE);
      CONTINUE
    );
 
-
-
 ['Ops Measure':'Amount','Actual'] = C:
 
    IF(
@@ -512,6 +481,7 @@ CONTINUE);
       STET
    );
 
+
 ##############################################################
 # MAPC metrics rules for Forecast Excl Actuals version
 ##############################################################
@@ -519,6 +489,8 @@ CONTINUE);
 ['Forecast Excl Actuals', 'Planning', 'USD', 'Ops Measure':'Amount'] = C:
    IF(
       ELISANC ('Ops Metric', 'MAPC Metrics',!Ops Metric) > 0
+       & !Ops Metric @<> 'Active Drivers' & !Ops Metric @<> 'New Drivers' & !Ops Metric @<> 'Continuing Drivers'
+       & !Ops Metric @<> 'Active Riders' & !Ops Metric @<> 'New Riders' & !Ops Metric @<> 'Continuing Riders'
    ,
       IF(
             SUBST(!Location, 1, 10) @= 'Country - '  &
@@ -535,12 +507,14 @@ CONTINUE);
 ['Forecast Excl Actuals', 'Planning', 'USD', 'Ops Measure':'Amount'] = C:
    IF(
       ELISANC ('Ops Metric', 'MAPC Metrics',!Ops Metric) > 0
+       & !Ops Metric @<> 'Active Drivers' & !Ops Metric @<> 'New Drivers' & !Ops Metric @<> 'Continuing Drivers'
+       & !Ops Metric @<> 'Active Riders' & !Ops Metric @<> 'New Riders' & !Ops Metric @<> 'Continuing Riders'
    ,
          IF(
             ( SUBST(!Location, LONG(!Location) - 12, 13) @= '(Mega Region)' % !Location @= 'Total Location' ) &
             ELLEV('Line Of Business', !Line of Business) = 0
           ,
-           DB('MAPC', !Version, !Period, !Source, !Rate Type,  'CustomLeaf':!Location | ' Input', !Line of Business, !Product Type, !Ops Metric, 'Amount')
+           DB('Ops', !Version, !Period, !Source, !Rate Type,  'CustomLeaf':!Location | ' Input', !Line of Business, !Product Type, !Ops Metric, 'Amount')
           ,
            CONTINUE
         )
@@ -552,12 +526,14 @@ CONTINUE);
 ['Forecast Excl Actuals', 'Planning', 'USD', 'Ops Measure':'Amount'] = C:
    IF(
       ELISANC ('Ops Metric', 'MAPC Metrics',!Ops Metric) > 0
+       & !Ops Metric @<> 'Active Drivers' & !Ops Metric @<> 'New Drivers' & !Ops Metric @<> 'Continuing Drivers'
+       & !Ops Metric @<> 'Active Riders' & !Ops Metric @<> 'New Riders' & !Ops Metric @<> 'Continuing Riders'
    ,
          IF(
             ( SUBST(!Location, 1, 10) @= 'Country - ' % SUBST(!Location, LONG(!Location) - 12, 13) @= '(Mega Region)' % !Location @= 'Total Location' ) & 
             (!Line of Business @= 'Total Rides & Eats' % !Line of Business @= 'Delivery ex M&A' % !Line of Business @= 'Mobility ex M&A') 
           ,
-           DB('MAPC', !Version, !Period, !Source, !Rate Type,  'CustomLeaf':!Location | ' Input', 'CustomLeaf':!Line of Business | ' Input', !Product Type, !Ops Metric, 'Amount')
+           DB('Ops', !Version, !Period, !Source, !Rate Type,  'CustomLeaf':!Location | ' Input', 'CustomLeaf':!Line of Business | ' Input', !Product Type, !Ops Metric, 'Amount')
           ,
            CONTINUE
         )
@@ -569,6 +545,8 @@ CONTINUE);
 
    IF(
       ELISANC ('Ops Metric', 'MAPC Metrics',!Ops Metric) > 0
+       & !Ops Metric @<> 'Active Drivers' & !Ops Metric @<> 'New Drivers' & !Ops Metric @<> 'Continuing Drivers'
+       & !Ops Metric @<> 'Active Riders' & !Ops Metric @<> 'New Riders' & !Ops Metric @<> 'Continuing Riders'
    ,
       IF(
            ELLEV('Line of Business', !Line of Business) > 0 %  ELLEV('Location', !Location) > 0
