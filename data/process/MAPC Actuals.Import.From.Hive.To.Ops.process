@@ -1,0 +1,624 @@
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: PROPERTIES                                                           #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+{
+    "DataSource": {
+        "Type": "ODBC",
+        "dataSourceNameForClient": "TM1TEGRATOR",
+        "dataSourceNameForServer": "TM1TEGRATOR",
+        "query": "select * from \"pipe.mapc_deduped_actual_monthly.20240219060226.WIBX3W\"",
+        "userName": "epm",
+        "usesUnicode": true
+    },
+    "HasSecurityAccess": false,
+    "Name": "MAPC Actuals.Import.From.Hive.To.Ops",
+    "Parameters": [
+        {
+            "Name": "pTable",
+            "Prompt": "REQ: Postgres table",
+            "Type": "String",
+            "Value": ""
+        }
+    ],
+    "UIData": "CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
+    "Variables": [
+        {
+            "EndByte": 0,
+            "Name": "vLOB",
+            "Position": 1,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vLocation",
+            "Position": 2,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vMetric",
+            "Position": 3,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vPeriod",
+            "Position": 4,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vProductType",
+            "Position": 5,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vSource",
+            "Position": 6,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vValue",
+            "Position": 7,
+            "StartByte": 0,
+            "Type": "Numeric"
+        }
+    ],
+    "VariablesUIData": [
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=33\fColType=827\f"
+    ]
+}
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: PROPERTIES                                                             #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: PROLOG PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+# ================= TAPTOOLS: START GENERATED CODE =================== #
+sProcessName = GETPROCESSNAME();
+IF(sProcessName @<> 'TAP.Call.Queue.Add Job To Queue' & sProcessName @<> 'TAP.CubeSaveData' & sProcessName @<> 'TAP.Call.Save' & sProcessName @<> 'TAP.Call.Recurring' & sProcessName @<> 'DIQ.Call.Batch' & sProcessName @<> 'TAP.Call.Save.Wrapper' & sProcessName @<> 'TAP.Call.CubeSaveData.Wrapper' & sProcessName @<> 'TAP.Call.Tests' & sProcessName @<> 'TAP.Call.Init' & sProcessName @<> 'TAP.Call.Export Application Stats' & sProcessName @<> 'TAP.Cube.Export Data to File' & SCAN('}drill', LOWER(sProcessName)) = 0);
+   sBlock.Execution.Status = CELLGETS('TAP System Info', 'Block Process Execution', 'Value');
+   IF(UPPER(sBlock.Execution.Status) @= 'YES');
+      sBlock.Epilog.Execution = 'Yes';
+      PROCESSBREAK;
+   ENDIF;
+ENDIF;
+LOGOUTPUT('DEBUG', 'PARAMETER: pTable: "' | pTable | '"');
+LOGOUTPUT('DEBUG', 'PROGRESS: START PROLOG PROCEDURE');
+nMetadataProcedureRecordsStarted = 0;
+nMetadataProcedureRecordsSkipped = 0;
+nMetadataProcedureRecordsRejected = 0;
+nMetadataProcedureRecordsCompleted = 0;
+nDataProcedureRecordsStarted = 0;
+nDataProcedureRecordsSkipped = 0;
+nDataProcedureRecordsRejected = 0;
+nDataProcedureRecordsCompleted = 0;
+nPrologProcedureDataOperations = 0;
+nDataProcedureDataOperations = 0;
+nTotalDataOperations = 0;
+nPrologProcedureMetadataOperations = 0;
+nMetadataProcedureMetadataOperations = 0;
+nDataProcedureMetadataOperations = 0;
+nEpilogProcedureMetadataOperations = 0;
+nTotalProcedureMetadataOperations = 0;
+nPrologProcedureStartTime = NOW();
+nPrologProcedureEndTime = 0;
+nMetadataProcedureStartTime = 0;
+nMetadataProcedureEndTime = 0;
+nDataProcedureStartTime = 0;
+nDataProcedureEndTime = 0;
+# ================= TAPTOOLS: END GENERATED CODE ===================== #
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+# Process to load MAPC metrics to Ops cube
+
+nTimeNow = NOW;
+sTimeStart = TIMST(nTimeNow, '\Y\m\d\h\i\s');
+
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+# Define Constants
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+
+TRUE = 1;
+FALSE = 0;
+nAutoCleanup = TRUE;
+nDecimalValue = 0.0000000001;
+
+cCube = 'Ops';
+cVersion = 'Actual';
+cRateType = 'USD';
+cMeasure = 'Amount';
+cSource = 'FDS';
+cSourceAdj = 'Ops Adjustment';
+cProductType = 'Unspecified Product Type';
+
+sDimVersion = 'Version';
+sDimPeriod = 'Period';
+sDimSource = 'Source';
+sDimLocation = 'Location';
+sDimLob = 'Line of Business';
+sDimOpsMetric = 'Ops Metric';
+sDimMeas = 'Ops Measure';
+
+###Record count dashboard
+cRecordCount = 0;
+cLoaddate = TODAY(1);
+cCubeDash = 'Dashboard';
+cRCube = 'Ops';
+rMetric = 'Operational';
+##
+
+cPeriodString = '';
+
+cUser = CELLGETS('System Info', 'SQL User Name GL Transactions', 'String');
+cPassword = CELLGETS('System Info', 'SQL Password GL Transactions', 'String');
+
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+# Set Query
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+
+DatasourceUsername = cUser;
+DatasourcePassword = cPassword;
+sQuery = EXPAND('SELECT * FROM "%pTable%"');
+DatasourceQuery = sQuery;
+
+#==============================================================================
+# Target View Formation
+#==============================================================================
+
+sView = 'zTempTI' | GETPROCESSNAME | sTimeStart | NUMBERTOSTRING(RAND());
+sSub = sView;
+sSubAltHier = sView | '_AltHier';
+sSubLeaf = sView | '_Leaf';
+
+IF(VIEWEXISTS(cCube, sView) = 1);
+   VIEWDESTROY(cCube, sView);
+ENDIF;
+VIEWCREATE(cCube, sView, 1);
+
+nCtr = 1;
+nMax = CUBEDIMENSIONCOUNTGET(cCube);
+sMDX = '';
+
+WHILE(nCtr <= nMax);
+
+   sDim = TABDIM(cCube, nCtr);
+
+   IF(SUBSETEXISTS(sDim, sSub) = 1);
+      SUBSETDESTROY(sDim, sSub);
+   ENDIF;
+   SUBSETCREATE(sDim, sSub, 1);
+
+   IF(sDim @= sDimVersion);
+      sMDX = '{[' | sDim | '].[Actual]}';
+
+   ELSEIF(sDim @= sDimPeriod);
+      sMDX = '';
+
+   ELSEIF(sDim @= sDimSource);
+      sMDX = '{[' | sDim | '].[FDS], [' | sDim | '].[Ops Adjustment]}';
+
+   ELSEIF(sDim @= sDimOpsMetric);
+      #sMDX = '{TM1FILTERBYLEVEL( TM1DRILLDOWNMEMBER( {[' | sDim | '].[MAPC Metrics]}, ALL, RECURSIVE ), 0 )}';
+      sMDX = '{[' | sDim | '].[Active Users], [' | sDim | '].[New Users], [' | sDim | '].[Unique Users], [' | sDim | '].[Unique New Users], [' | sDim | '].[X-Platform Users], [' | sDim | '].[X-Platform New Users]}';
+
+   ELSEIF(sDim @= sDimMeas);
+      sMDX = '{[' | sDim | '].[Amount]}';
+
+   ELSE;
+      sMDX = '{TM1FILTERBYLEVEL({TM1SUBSETALL([' | sDim | '])}, 0)}';
+   ENDIF;
+
+   IF(sMDX @<> '');
+      SUBSETMDXSET(sDim, sSub, sMDX);
+      SUBSETMDXSET(sDim, sSub, '');
+   ENDIF;
+
+   VIEWSUBSETASSIGN(cCube, sView, sDim, sSub);
+
+   nCtr = nCtr + 1;
+END;
+
+VIEWEXTRACTSKIPZEROESSET(cCube, sView, TRUE);
+VIEWEXTRACTSKIPRULEVALUESSET(cCube, sView, TRUE);
+VIEWEXTRACTSKIPCALCSSET(cCube, sView, TRUE);
+
+
+##### Subset creation for clearing out data stored against alternate hierarchies of Location and LOB dimensions #####
+
+### Location dimension ###
+sDim = sDimLocation;
+IF(SUBSETEXISTS(sDim, sSubAltHier) = 1);
+   SUBSETDESTROY(sDim, sSubAltHier);
+ENDIF;
+SUBSETCREATE(sDim, sSubAltHier, 1);
+
+sMDX = '{[' | sDim | '].[Total Location], {TM1FILTERBYPATTERN( {TM1SUBSETALL( [' | sDim | '] )}, "*(Mega Region)")}, {TM1FILTERBYPATTERN( {TM1SUBSETALL( [' | sDim | '] )}, "Country -*")}}';
+SUBSETMDXSET(sDim, sSubAltHier, sMDX);
+SUBSETMDXSET(sDim, sSubAltHier, '');
+
+nLocationAltHierCount = SUBSETGETSIZE(sDim, sSubAltHier);
+nLocationMainHierCount = SUBSETGETSIZE(sDim, sSub);
+
+# Create subset
+IF(SUBSETEXISTS(sDim, sSubLeaf) = 1);
+   SUBSETDESTROY(sDim, sSubLeaf);
+ENDIF;
+SUBSETCREATE(sDim, sSubLeaf, 1);
+
+
+### Line of Business dimension ###
+sDim = sDimLob;
+IF(SUBSETEXISTS(sDim, sSubAltHier) = 1);
+   SUBSETDESTROY(sDim, sSubAltHier);
+ENDIF;
+SUBSETCREATE(sDim, sSubAltHier, 1);
+
+sMDX = '{[' | sDim | '].[Total Rides & Eats], [' | sDim | '].[Delivery ex M&A], [' | sDim | '].[Mobility ex M&A], [' | sDim | '].[Total Careem]}';
+SUBSETMDXSET(sDim, sSubAltHier, sMDX);
+SUBSETMDXSET(sDim, sSubAltHier, '');
+
+nLobAltHierCount = SUBSETGETSIZE(sDim, sSubAltHier);
+nLobMainHierCount = SUBSETGETSIZE(sDim, sSub);
+
+# Get Leaf level Mobility LOB Element
+IF(SUBSETEXISTS(sDim, sSubLeaf) = 1);
+   SUBSETDESTROY(sDim, sSubLeaf);
+ENDIF;
+SUBSETCREATE(sDim, sSubLeaf, 1);
+
+nElemCount = 0;
+sMDX = '{TM1FILTERBYLEVEL( TM1DRILLDOWNMEMBER( {[' | sDim | '].[Mobility ex M&A]}, ALL, RECURSIVE ), 0 )}';
+SUBSETMDXSET(sDim, sSubLeaf, sMDX);
+nElemCount = SUBSETMDXSET(sDim, sSubLeaf, '');
+IF(nElemCount > 0);
+   sMobilityLeaf = SUBSETGETELEMENTNAME(sDim, sSubLeaf, 1);
+ENDIF;
+
+# Get Leaf level Delivery LOB Element
+nElemCount = 0;
+sMDX = '{TM1FILTERBYLEVEL( TM1DRILLDOWNMEMBER( {[' | sDim | '].[Delivery ex M&A]}, ALL, RECURSIVE ), 0 )}';
+SUBSETMDXSET(sDim, sSubLeaf, sMDX);
+nElemCount = SUBSETMDXSET(sDim, sSubLeaf, '');
+IF(nElemCount > 0);
+   sDeliveryLeaf = SUBSETGETELEMENTNAME(sDim, sSubLeaf, 1);
+ENDIF;
+
+### Ops Metric dimension ###
+sDim = sDimOpsMetric;
+nOpsMetricCount = SUBSETGETSIZE(sDim, sSub);
+
+
+
+
+
+# ================= TAPTOOLS: START GENERATED CODE =================== #
+nPrologProcedureEndTime = NOW();
+LOGOUTPUT('DEBUG', 'DATASOURCE: DatasourceType: "' | DatasourceType | '"');
+LOGOUTPUT('DEBUG', 'DATASOURCE: DatasourceNameForServer: "' | DatasourceNameForServer | '"');
+LOGOUTPUT('DEBUG', 'DATASOURCE: DatasourceCubeView: "' | DatasourceCubeView | '"');
+LOGOUTPUT('DEBUG', 'DATASOURCE: DatasourceDimensionSubset: "' | DatasourceDimensionSubset | '"');
+LOGOUTPUT('DEBUG', 'PROGRESS: END PROLOG PROCEDURE');
+# ================= TAPTOOLS: END GENERATED CODE ===================== #
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: PROLOG PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: METADATA PROCEDURE                                                   #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: METADATA PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: DATA PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+# ================= TAPTOOLS: START GENERATED CODE =================== #
+nDataProcedureRecordsStarted = nDataProcedureRecordsStarted + 1;
+IF(nMetadataProcedureEndTime = 0);
+   LOGOUTPUT('DEBUG', 'PROGRESS: END METADATA PROCEDURE');
+   nMetadataProcedureEndTime = NOW();
+ENDIF;
+IF(nDataProcedureStartTime = 0);
+   LOGOUTPUT('DEBUG', 'PROGRESS: START DATA PROCEDURE');
+   nDataProcedureStartTime = NOW();
+ENDIF;
+# ================= TAPTOOLS: END GENERATED CODE ===================== #
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+# Clear Target View
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+#Scanning the Input to find Period to be zeroed out
+
+IF(SCAN(vPeriod, cPeriodString) = 0);
+   cPeriodString = cPeriodString | vPeriod | '|';
+   SUBSETDELETEALLELEMENTS(sDimPeriod, sSub);
+   SUBSETELEMENTINSERT(sDimPeriod, sSub, vPeriod, 1);
+
+   ### Clear out numbers from main hierachies of Location and LOB dimensions ###
+   VIEWZEROOUT(cCube, sView);
+
+   ### Clear out numbers from alternate hierachies of Location and LOB dimensions ###
+   nCounterLoc = 1;
+   WHILE(nCounterLoc <= nLocationAltHierCount);
+      sLoc = SUBSETGETELEMENTNAME(sDimLocation, sSubAltHier, nCounterLoc);
+
+      nCounterLob = 1;
+      WHILE(nCounterLob <= nLobAltHierCount);
+         sLob = SUBSETGETELEMENTNAME(sDimLob, sSubAltHier, nCounterLob);
+
+         nCounterMetric = 1;
+         WHILE(nCounterMetric <= nOpsMetricCount);
+            sMetric = SUBSETGETELEMENTNAME(sDimOpsMetric, sSub, nCounterMetric);
+
+            # ================= TAPTOOLS: START GENERATED CODE =================== #
+            nDataProcedureDataOperations = nDataProcedureDataOperations + 1;
+            # ================= TAPTOOLS: END GENERATED CODE ===================== #
+            CELLPUTN(0, cCube, cVersion, vPeriod, cSource, cRateType, 'CustomLeaf:' | sLoc | ' Input', 'CustomLeaf:' | sLob | ' Input', cProductType, sMetric, cMeasure);
+            # ================= TAPTOOLS: START GENERATED CODE =================== #
+            nDataProcedureDataOperations = nDataProcedureDataOperations + 1;
+            # ================= TAPTOOLS: END GENERATED CODE ===================== #
+            CELLPUTN(0, cCube, cVersion, vPeriod, cSourceAdj, cRateType, 'CustomLeaf:' | sLoc | ' Input', 'CustomLeaf:' | sLob | ' Input', cProductType, sMetric, cMeasure);
+
+            nCounterMetric = nCounterMetric + 1;
+         END;
+
+         nCounterLob = nCounterLob + 1;
+      END;
+
+      nCounterLoc = nCounterLoc + 1;
+   END;
+
+   ### Clear out numbers from main hierachy of Location and alternate hierarchy of LOB dimension ###
+   nCounterLoc = 1;
+   WHILE(nCounterLoc <= nLocationMainHierCount);
+      sLoc = SUBSETGETELEMENTNAME(sDimLocation, sSub, nCounterLoc);
+
+      nCounterLob = 1;
+      WHILE(nCounterLob <= nLobAltHierCount);
+         sLob = SUBSETGETELEMENTNAME(sDimLob, sSubAltHier, nCounterLob);
+
+         nCounterMetric = 1;
+         WHILE(nCounterMetric <= nOpsMetricCount);
+            sMetric = SUBSETGETELEMENTNAME(sDimOpsMetric, sSub, nCounterMetric);
+
+            # ================= TAPTOOLS: START GENERATED CODE =================== #
+            nDataProcedureDataOperations = nDataProcedureDataOperations + 1;
+            # ================= TAPTOOLS: END GENERATED CODE ===================== #
+            CELLPUTN(0, cCube, cVersion, vPeriod, cSource, cRateType, sLoc, 'CustomLeaf:' | sLob | ' Input', cProductType, sMetric, cMeasure);
+            # ================= TAPTOOLS: START GENERATED CODE =================== #
+            nDataProcedureDataOperations = nDataProcedureDataOperations + 1;
+            # ================= TAPTOOLS: END GENERATED CODE ===================== #
+            CELLPUTN(0, cCube, cVersion, vPeriod, cSourceAdj, cRateType, sLoc, 'CustomLeaf:' | sLob | ' Input', cProductType, sMetric, cMeasure);
+
+            nCounterMetric = nCounterMetric + 1;
+         END;
+
+         nCounterLob = nCounterLob + 1;
+      END;
+
+      nCounterLoc = nCounterLoc + 1;
+   END;
+
+   ### Clear out numbers from alternate hierachiy of Location and main hierarchy of LOB dimension ###
+   nCounterLoc = 1;
+   WHILE(nCounterLoc <= nLocationAltHierCount);
+      sLoc = SUBSETGETELEMENTNAME(sDimLocation, sSubAltHier, nCounterLoc);
+
+      nCounterLob = 1;
+      WHILE(nCounterLob <= nLobMainHierCount);
+         sLob = SUBSETGETELEMENTNAME(sDimLob, sSub, nCounterLob);
+
+         nCounterMetric = 1;
+         WHILE(nCounterMetric <= nOpsMetricCount);
+            sMetric = SUBSETGETELEMENTNAME(sDimOpsMetric, sSub, nCounterMetric);
+
+            # ================= TAPTOOLS: START GENERATED CODE =================== #
+            nDataProcedureDataOperations = nDataProcedureDataOperations + 1;
+            # ================= TAPTOOLS: END GENERATED CODE ===================== #
+            CELLPUTN(0, cCube, cVersion, vPeriod, cSource, cRateType, 'CustomLeaf:' | sLoc | ' Input', sLob, cProductType, sMetric, cMeasure);
+            # ================= TAPTOOLS: START GENERATED CODE =================== #
+            nDataProcedureDataOperations = nDataProcedureDataOperations + 1;
+            # ================= TAPTOOLS: END GENERATED CODE ===================== #
+            CELLPUTN(0, cCube, cVersion, vPeriod, cSourceAdj, cRateType, 'CustomLeaf:' | sLoc | ' Input', sLob, cProductType, sMetric, cMeasure);
+
+            nCounterMetric = nCounterMetric + 1;
+         END;
+
+         nCounterLob = nCounterLob + 1;
+      END;
+
+      nCounterLoc = nCounterLoc + 1;
+   END;
+
+ENDIF;
+
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+# Load Data
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+
+IF(ELLEV('Line of Business', vLOB) > 0 & ELLEV('Location', vLocation) > 0);
+
+   # ================= TAPTOOLS: START GENERATED CODE =================== #
+   nDataProcedureDataOperations = nDataProcedureDataOperations + 1;
+   # ================= TAPTOOLS: END GENERATED CODE ===================== #
+   CELLPUTN(vValue, cCube, cVersion, vPeriod, vSource, cRateType, 'CustomLeaf:' | vLocation | ' Input', 'CustomLeaf:' | vLOB | ' Input', cProductType, vMetric, cMeasure);
+   cRecordCount = cRecordCount + 1;
+
+   #### X-Platform metrics are always present at M&A level, Total Rides & Eats level in LOB dimension and at city level, country level & above in Location dimension ###
+   ### Since we dont have numbers at leaf LOB level, the numbers at higher levels (calculated via rules from Alternate hierarchy) are not fed ###
+   ### Hence putting in a small decimal value at leaf level element for X-Platform MAPC metrics so that the C level elements are fed naturally ###
+   IF((vMetric @= 'X-Platform Users' % vMetric @= 'X-Platform New Users') & SUBST(vLocation, 1, 10) @= 'Country - ');
+
+      # Get the 7 series country element 
+      nElemCount = 0;
+      sMDX = '{TM1FILTERBYPATTERN( {TM1FILTERBYLEVEL( TM1DRILLDOWNMEMBER( {[' | sDimLocation | '].[' | vLocation | ']}, ALL, RECURSIVE ), 0 )}, "7*")}';
+      SUBSETMDXSET(sDimLocation, sSubLeaf, sMDX);
+      nElemCount = SUBSETMDXSET(sDimLocation, sSubLeaf, '');
+      IF(nElemCount > 0);
+         sCountryLeaf = SUBSETGETELEMENTNAME(sDimLocation, sSubLeaf, 1);
+
+         IF(vLOB @= 'Mobility ex M&A');
+            # ================= TAPTOOLS: START GENERATED CODE =================== #
+            nDataProcedureDataOperations = nDataProcedureDataOperations + 1;
+            # ================= TAPTOOLS: END GENERATED CODE ===================== #
+            CELLPUTN(nDecimalValue, cCube, cVersion, vPeriod, vSource, cRateType, sCountryLeaf, sMobilityLeaf, cProductType, vMetric, cMeasure);
+         ELSEIF(vLOB @= 'Delivery ex M&A');
+            # ================= TAPTOOLS: START GENERATED CODE =================== #
+            nDataProcedureDataOperations = nDataProcedureDataOperations + 1;
+            # ================= TAPTOOLS: END GENERATED CODE ===================== #
+            CELLPUTN(nDecimalValue, cCube, cVersion, vPeriod, vSource, cRateType, sCountryLeaf, sDeliveryLeaf, cProductType, vMetric, cMeasure);
+         ENDIF;
+
+      ENDIF;
+   ENDIF;
+
+
+ELSEIF(ELLEV('Line of Business', vLOB) > 0 & ELLEV('Location', vLocation) = 0);
+
+   # ================= TAPTOOLS: START GENERATED CODE =================== #
+   nDataProcedureDataOperations = nDataProcedureDataOperations + 1;
+   # ================= TAPTOOLS: END GENERATED CODE ===================== #
+   CELLPUTN(vValue, cCube, cVersion, vPeriod, vSource, cRateType, vLocation, 'CustomLeaf:' | vLOB | ' Input', cProductType, vMetric, cMeasure);
+   cRecordCount = cRecordCount + 1;
+ELSEIF(ELLEV('Line of Business', vLOB) = 0 & ELLEV('Location', vLocation) > 0);
+
+   # ================= TAPTOOLS: START GENERATED CODE =================== #
+   nDataProcedureDataOperations = nDataProcedureDataOperations + 1;
+   # ================= TAPTOOLS: END GENERATED CODE ===================== #
+   CELLPUTN(vValue, cCube, cVersion, vPeriod, vSource, cRateType, 'CustomLeaf:' | vLocation | ' Input', vLOB, cProductType, vMetric, cMeasure);
+   cRecordCount = cRecordCount + 1;
+
+   #### Ops Adjustment are present at leaf LOB level & at Country level and futheron maybe at the higher levels in LOB & Location dimensions.###
+   ### Since we dont have numbers at leaf city level, the numbers at Country level (calculated via rules from Alternate hierarchy) and higher are not fed ###
+   ### Hence putting in a small decimal value at leaf level element for 'Ops Adjustment' so that the C level elements are fed naturally ###
+   IF(vSource @= 'Ops Adjustment' & SUBST(vLocation, 1, 10) @= 'Country - ');
+
+      # Get the 7 series country element 
+      nElemCount = 0;
+      sMDX = '{TM1FILTERBYPATTERN( {TM1FILTERBYLEVEL( TM1DRILLDOWNMEMBER( {[' | sDimLocation | '].[' | vLocation | ']}, ALL, RECURSIVE ), 0 )}, "7*")}';
+      SUBSETMDXSET(sDimLocation, sSubLeaf, sMDX);
+      nElemCount = SUBSETMDXSET(sDimLocation, sSubLeaf, '');
+      IF(nElemCount > 0);
+         sCountryLeaf = SUBSETGETELEMENTNAME(sDimLocation, sSubLeaf, 1);
+         # ================= TAPTOOLS: START GENERATED CODE =================== #
+         nDataProcedureDataOperations = nDataProcedureDataOperations + 1;
+         # ================= TAPTOOLS: END GENERATED CODE ===================== #
+         CELLPUTN(nDecimalValue, cCube, cVersion, vPeriod, vSource, cRateType, sCountryLeaf, vLOB, cProductType, vMetric, cMeasure);
+      ENDIF;
+   ENDIF;
+
+ELSE;
+
+   # ================= TAPTOOLS: START GENERATED CODE =================== #
+   nDataProcedureDataOperations = nDataProcedureDataOperations + 1;
+   # ================= TAPTOOLS: END GENERATED CODE ===================== #
+   CELLPUTN(vValue, cCube, cVersion, vPeriod, vSource, cRateType, vLocation, vLOB, cProductType, vMetric, cMeasure);
+   cRecordCount = cRecordCount + 1;
+ENDIF;
+
+
+
+# ================= TAPTOOLS: START GENERATED CODE =================== #
+nDataProcedureRecordsCompleted = nDataProcedureRecordsCompleted + 1;
+# ================= TAPTOOLS: END GENERATED CODE ===================== #
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: DATA PROCEDURE                                                         #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: EPILOG PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+# ================= TAPTOOLS: START GENERATED CODE =================== #
+IF(sBlock.Epilog.Execution @= 'Yes');
+   LOGOUTPUT('ERROR', 'Block Process Execution Flag is Yes in TAP System Info Cube. Skipping this process...');
+   PROCESSERROR;
+ENDIF;
+IF(nPrologProcedureEndTime = 0);
+   LOGOUTPUT('DEBUG', 'DATASOURCE: DatasourceType: "NULL"');
+   LOGOUTPUT('DEBUG', 'PROGRESS: END PROLOG PROCEDURE');
+   nPrologProcedureEndTime = NOW();
+ENDIF;
+IF(nMetadataProcedureStartTime > 0 & nMetadataProcedureEndTime = 0);
+   LOGOUTPUT('DEBUG', 'PROGRESS: END METADATA PROCEDURE');
+   nMetadataProcedureEndTime = NOW();
+ENDIF;
+IF(nDataProcedureStartTime > 0 & nDataProcedureEndTime = 0);
+   LOGOUTPUT('DEBUG', 'PROGRESS: END DATA PROCEDURE');
+   nDataProcedureEndTime = NOW();
+ENDIF;
+LOGOUTPUT('DEBUG', 'PROGRESS: START EPILOG PROCEDURE');
+nEpilogProcedureStartTime = NOW();
+# ================= TAPTOOLS: END GENERATED CODE ===================== #
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+##Record Count update in Dashboard cube
+CELLINCREMENTN(cRecordCount, cCubeDash, cRCube, cSource, cLoaddate, cVersion, 'No Rate Type', rMetric);
+
+
+# ================= TAPTOOLS: START GENERATED CODE =================== #
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: PrologProcedureRuntime: "' | NUMBERTOSTRING(ROUNDP((nPrologProcedureEndTime - nPrologProcedureStartTime) * 86400, 2)) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: PrologProcedureMetadataOperations: "' | NUMBERTOSTRING(nPrologProcedureMetadataOperations) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: PrologProcedureDataOperations: "' | NUMBERTOSTRING(nPrologProcedureDataOperations) | '"');
+
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: MetadataProcedureRuntime: "' | NUMBERTOSTRING(ROUNDP((nMetadataProcedureEndTime - nMetadataProcedureStartTime) * 86400, 2)) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: MetadataProcedureMetadataOperations: "' | NUMBERTOSTRING(nMetadataProcedureMetadataOperations) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: MetadataProcedureRecordsStarted: "' | NUMBERTOSTRING(nMetadataProcedureRecordsStarted) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: MetadataProcedureRecordsSkipped: "' | NUMBERTOSTRING(nMetadataProcedureRecordsSkipped) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: MetadataProcedureRecordsRejected: "' | NUMBERTOSTRING(nMetadataProcedureRecordsRejected) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: MetadataProcedureRecordsCompleted: "' | NUMBERTOSTRING(nMetadataProcedureRecordsCompleted) | '"');
+
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: DataProcedureRuntime: "' | NUMBERTOSTRING(ROUNDP((nDataProcedureEndTime - nDataProcedureStartTime) * 86400, 2)) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: DataProcedureMetadataOperations: "' | NUMBERTOSTRING(nDataProcedureMetadataOperations) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: DataProcedureDataOperations: "' | NUMBERTOSTRING(nDataProcedureDataOperations) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: DataProcedureRecordsStarted: "' | NUMBERTOSTRING(nDataProcedureRecordsStarted) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: DataProcedureRecordsSkipped: "' | NUMBERTOSTRING(nDataProcedureRecordsSkipped) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: DataProcedureRecordsRejected: "' | NUMBERTOSTRING(nDataProcedureRecordsRejected) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: DataProcedureRecordsCompleted: "' | NUMBERTOSTRING(nDataProcedureRecordsCompleted) | '"');
+
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: EpilogProcedureRuntime: "' | NUMBERTOSTRING(ROUNDP((NOW() - nEpilogProcedureStartTime) * 86400, 2)) | '"');
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: EpilogProcedureMetadataOperations: "' | NUMBERTOSTRING(nEpilogProcedureMetadataOperations) | '"');
+
+nTotalDataOperations = nPrologProcedureDataOperations + nDataProcedureDataOperations;
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: TotalDataOperations: "' | NUMBERTOSTRING(nTotalDataOperations) | '"');
+nTotalMetadataOperations = nPrologProcedureMetadataOperations + nMetadataProcedureMetadataOperations + nDataProcedureMetadataOperations + nEpilogProcedureMetadataOperations;
+LOGOUTPUT('DEBUG', 'PROCESS_METRIC: TotalMetadataOperations: "' | NUMBERTOSTRING(nTotalMetadataOperations) | '"');
+LOGOUTPUT('DEBUG', 'PROGRESS: END EPILOG PROCEDURE');
+# ================= TAPTOOLS: END GENERATED CODE ===================== #
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: EPILOG PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
