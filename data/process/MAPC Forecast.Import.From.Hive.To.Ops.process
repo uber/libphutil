@@ -3,105 +3,69 @@
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
 {
     "DataSource": {
-        "Type": "TM1CubeView",
-        "dataSourceNameForClient": "Ops",
-        "dataSourceNameForServer": "Ops",
-        "view": "All"
+        "Type": "ODBC",
+        "dataSourceNameForClient": "TM1TEGRATOR",
+        "dataSourceNameForServer": "TM1TEGRATOR",
+        "query": "select * from \"pipe.mapc_deduped_actual_monthly.20240219061317.GXWY1R\"",
+        "userName": "epm",
+        "usesUnicode": true
     },
     "HasSecurityAccess": false,
-    "Name": "MAPC Forecast.Export.From.Ops.To.S3",
+    "Name": "MAPC Forecast.Import.From.Hive.To.Ops",
     "Parameters": [
         {
-            "Name": "pMonth",
-            "Prompt": "REQ: Leaf or Consol element",
+            "Name": "pTable",
+            "Prompt": "",
             "Type": "String",
-            "Value": ""
-        },
-        {
-            "Name": "pMonthDelim",
-            "Prompt": "OPT: Delimiter ( Default ¦ )",
-            "Type": "String",
-            "Value": "¦"
+            "Value": "pipe.rides_eats_ops_tm1_monthly.20200707221351.YT0BIT"
         }
     ],
-    "UIData": "",
+    "UIData": "CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
     "Variables": [
         {
             "EndByte": 0,
-            "Name": "vVersion",
+            "Name": "vLOB",
             "Position": 1,
             "StartByte": 0,
             "Type": "String"
         },
         {
             "EndByte": 0,
-            "Name": "vPeriod",
+            "Name": "vLocation",
             "Position": 2,
             "StartByte": 0,
             "Type": "String"
         },
         {
             "EndByte": 0,
-            "Name": "vSource",
+            "Name": "vMetric",
             "Position": 3,
             "StartByte": 0,
             "Type": "String"
         },
         {
             "EndByte": 0,
-            "Name": "vRateType",
+            "Name": "vPeriod",
             "Position": 4,
             "StartByte": 0,
             "Type": "String"
         },
         {
             "EndByte": 0,
-            "Name": "vLocation",
+            "Name": "vProductType",
             "Position": 5,
             "StartByte": 0,
             "Type": "String"
         },
         {
             "EndByte": 0,
-            "Name": "vLineofBusiness",
-            "Position": 6,
-            "StartByte": 0,
-            "Type": "String"
-        },
-        {
-            "EndByte": 0,
-            "Name": "vProductType",
-            "Position": 7,
-            "StartByte": 0,
-            "Type": "String"
-        },
-        {
-            "EndByte": 0,
-            "Name": "vOpsMetric",
-            "Position": 8,
-            "StartByte": 0,
-            "Type": "String"
-        },
-        {
-            "EndByte": 0,
-            "Name": "vOpsMeasure",
-            "Position": 9,
-            "StartByte": 0,
-            "Type": "String"
-        },
-        {
-            "EndByte": 0,
             "Name": "vValue",
-            "Position": 10,
+            "Position": 6,
             "StartByte": 0,
             "Type": "Numeric"
         }
     ],
     "VariablesUIData": [
-        "VarType=32\fColType=827\f",
-        "VarType=32\fColType=827\f",
-        "VarType=32\fColType=827\f",
-        "VarType=32\fColType=827\f",
         "VarType=32\fColType=827\f",
         "VarType=32\fColType=827\f",
         "VarType=32\fColType=827\f",
@@ -126,8 +90,7 @@ IF(sProcessName @<> 'TAP.Call.Queue.Add Job To Queue' & sProcessName @<> 'TAP.Cu
       PROCESSBREAK;
    ENDIF;
 ENDIF;
-LOGOUTPUT('DEBUG', 'PARAMETER: pMonth: "' | pMonth | '"');
-LOGOUTPUT('DEBUG', 'PARAMETER: pMonthDelim: "' | pMonthDelim | '"');
+LOGOUTPUT('DEBUG', 'PARAMETER: pTable: "' | pTable | '"');
 LOGOUTPUT('DEBUG', 'PROGRESS: START PROLOG PROCEDURE');
 nMetadataProcedureRecordsStarted = 0;
 nMetadataProcedureRecordsSkipped = 0;
@@ -156,164 +119,42 @@ nDataProcedureEndTime = 0;
 #****Begin: Generated Statements***
 #****End: Generated Statements****
 
-########################################################################################################################################################
-# Name: Process to export undeduped forecast MAPC metrics data out of Ops cube and upload to S3 for computation of deduped forecast amount in Big Data
-#########################################################################################################################################################
+##### Process to load Forecast MAPC metrics to Ops cube from Hive #####
 
-pMonth = TRIM(pMonth);
-IF(pMonth @= '');
-   LOGOUTPUT('ERROR', 'Month can not be blank');
-   PROCESSERROR;
-ENDIF;
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+# Define Constants
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
 
-nTimeNow = NOW;
-sTimeStart = TIMST(nTimeNow, '\Y\m\d\h\i\s');
-
-TRUE = 1;
-FALSE = 0;
-nAutoCleanup = TRUE;
-nTotalRecords = 0;
-
-sCube = 'Ops';
-sCubeTapInfo = 'TAP System Info';
-
-sFile = 'mapc_forecast_undeduped.csv';
-sFileDir = LOWER(CELLGETS(sCubeTapInfo, 'Files Local Path', 'Value'));
-IF(SUBST(sFileDir, LONG(sFileDir), 1) @<> '/');
-   sFileDir = sFileDir | '/';
-ENDIF;
-sFilePath = sFileDir | sFile;
-
-IF(FILEEXISTS(sFilePath) = 1);
-   sCmd = 'rm -f ' | sFilePath;
-   EXECUTECOMMAND(sCmd, 1);
-ENDIF;
-
-sS3Path = LOWER(CELLGETS(sCubeTapInfo, 'Files S3 Path', 'Value'));
-IF(SUBST(sS3Path, LONG(sS3Path), 1) @<> '/');
-   sS3Path = sS3Path | '/';
-ENDIF;
-sS3Path = sS3Path | 'mapc_forecast/';
-
-### Set Dimension Variables
-sDimVersion = 'Version';
-sDimPeriod = 'Period';
-sDimSource = 'Source';
-sDimRateType = 'Rate Type';
-sDimLoc = 'Location';
-sDimLob = 'Line of Business';
-sDimProductType = 'Product Type';
-sDimOpsMetric = 'Ops Metric';
-sDimMeas = 'Ops Measure';
-
-sView = 'zTempTI' | GETPROCESSNAME | sTimeStart | NUMBERTOSTRING(RAND());
-sSub = sView;
+cCube = 'Ops';
+cVersion = 'Forecast Excl Actuals';
+cRateType = 'USD';
+cMeasure = 'Amount';
+cSource = 'Planning';
+cProductType = 'Unspecified Product Type';
 
 
-#==============================================================================
-#	SOURCE VIEW
-#==============================================================================
-IF(VIEWEXISTS(sCube, sView) = TRUE);
-   VIEWDESTROY(sCube, sView);
-ENDIF;
-VIEWCREATE(sCube, sView, nAutoCleanup);
+###Record count dashboard
+cRecordCount = 0;
+cLoaddate = TODAY(1);
+cCubeDash = 'Dashboard';
+cRCube = 'Ops';
+rMetric = 'Operational';
+##
 
-nDim = 1;
-sDim = TABDIM(sCube, nDim);
 
-WHILE(sDim @<> '');
+cUser = CELLGETS('System Info', 'SQL User Name GL Transactions', 'String');
+cPassword = CELLGETS('System Info', 'SQL Password GL Transactions', 'String');
 
-   IF(SUBSETEXISTS(sDim, sSub) = TRUE);
-      SUBSETDESTROY(sDim, sSub);
-   ENDIF;
-   SUBSETCREATE(sDim, sSub, nAutoCleanup);
-   VIEWSUBSETASSIGN(sCube, sView, sDim, sSub);
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+# Set Query
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
 
-   IF(sDim @= sDimVersion);
-      sMDX = '{[' | sDim | '].[Forecast Excl Actuals]}';
+DatasourceUsername = cUser;
+DatasourcePassword = cPassword;
+sQuery = EXPAND('SELECT * FROM "%pTable%"');
+DatasourceQuery = sQuery;
 
-   ELSEIF(sDim @= sDimPeriod);
-      sMDX = '';
-      IF(SCAN(pMonthDelim, pMonth) > 0);
-         sMonths = pMonth;
-         sDelimIndex = SCAN(pMonthDelim, sMonths);
-         WHILE(sDelimIndex > 0);
-            sMonth = SUBST(sMonths, 1, sDelimIndex - 1);
-            IF(DIMIX(sDim, sMonth) > 0);
-               sMDX = sMDX | 'TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER( {[' | sDim | '].[' | sMonth | ']}, ALL, RECURSIVE )}, 0),';
-            ELSE;
-               LOGOUTPUT('ERROR', 'Month: ' | sMonth | ' is invalid');
-            ENDIF;
-            sMonths = SUBST(sMonths, sDelimIndex + 1, LONG(sMonths));
-            sDelimIndex = SCAN(pMonthDelim, sMonths);
-         END;
-         IF(TRIM(sMonths) @<> '');
-            sMonth = sMonths;
-            IF(DIMIX(sDim, sMonth) > 0);
-               sMDX = sMDX | 'TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER( {[' | sDim | '].[' | sMonth | ']}, ALL, RECURSIVE )}, 0),';
-            ELSE;
-               LOGOUTPUT('ERROR', 'Month: ' | sMonth | ' is invalid');
-            ENDIF;
-         ENDIF;
 
-         IF(sMDX @= '');
-            LOGOUTPUT('ERROR', 'Month: ' | pMonth | ' is invalid');
-            PROCESSERROR;
-         ELSE;
-            sMDX = '{' | SUBST(sMDX, 1, LONG(sMDX) - 1) | '}';
-         ENDIF;
-      ELSE;
-         IF(DIMIX(sDim, pMonth) > 0);
-            sMDX = '{TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER( {[' | sDim | '].[' | pMonth | ']}, ALL, RECURSIVE )}, 0)}';
-         ELSE;
-            LOGOUTPUT('ERROR', 'Month: ' | pMonth | ' is invalid');
-            PROCESSERROR;
-         ENDIF;
-      ENDIF;
-
-   ELSEIF(sDim @= sDimSource);
-      sMDX = '{[' | sDim | '].[Planning]}';
-
-   ELSEIF(sDim @= sDimRateType);
-      sMDX = '{[' | sDim | '].[USD]}';
-
-   ELSEIF(sDim @= sDimLoc);
-      sMDX = '{TM1FILTERBYPATTERN( {TM1SUBSETALL( [Location])}, "Country -*")}';
-
-   ELSEIF(sDim @= sDimLob);
-      sMDX = '{TM1FILTERBYLEVEL( TM1DRILLDOWNMEMBER( {[' | sDim | '].[Total Rides & Eats]}, ALL, RECURSIVE ), 0 )}';
-
-   ELSEIF(sDim @= sDimProductType);
-      sMDX = '{[' | sDim | '].[Unspecified Product Type]}';
-
-   ELSEIF(sDim @= sDimOpsMetric);
-      sMDX = '{[' | sDim | '].[Active Users], [' | sDim | '].[New Users]}';
-
-   ELSEIF(sDim @= sDimMeas);
-      sMDX = '{[' | sDim | '].[Amount]}';
-
-   ELSE;
-      sMDX = '{TM1FILTERBYLEVEL({TM1SUBSETALL([' | sDim | '])}, 0)}';
-
-   ENDIF;
-
-   IF(sMDX @<> '');
-      SUBSETMDXSET(sDim, sSub, sMDX);
-      SUBSETMDXSET(sDim, sSub, '');
-   ENDIF;
-
-   nDim = nDim + 1;
-   sDim = TABDIM(sCube, nDim);
-
-END;
-
-VIEWEXTRACTSKIPZEROESSET(sCube, sView, TRUE);
-VIEWEXTRACTSKIPRULEVALUESSET(sCube, sView, TRUE);
-VIEWEXTRACTSKIPCALCSSET(sCube, sView, FALSE);
-
-DatasourceType = 'View';
-DatasourceNameForServer = sCube;
-DatasourceCubeView = sView;
 
 
 # ================= TAPTOOLS: START GENERATED CODE =================== #
@@ -332,8 +173,12 @@ LOGOUTPUT('DEBUG', 'PROGRESS: END PROLOG PROCEDURE');
 # BEGIN: METADATA PROCEDURE                                                   #
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
 
+
+
 #****Begin: Generated Statements***
 #****End: Generated Statements****
+
+
 
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
@@ -358,15 +203,28 @@ ENDIF;
 #****Begin: Generated Statements***
 #****End: Generated Statements****
 
-nTotalRecords = nTotalRecords + 1;
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
+# Load Data
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
 
-IF(nTotalRecords = 1);
-   ASCIIOUTPUT(sFilePath, 'Period', 'MAPC Metric', 'Location', 'LOB', 'Product Type', 'Amount');
+IF(vLOB @= 'Total Rides and Eats');
+   vLOB = 'Total Rides & Eats';
 ENDIF;
 
+IF(ELLEV('Line of Business', vLOB) > 0 & ELLEV('Location', vLocation) > 0);
 
-IF(SCAN('Country - ', vLocation) = 1);
-   ASCIIOUTPUT(sFilePath, vPeriod, vOpsMetric, vLocation, vLineofBusiness, vProductType, NUMBERTOSTRING(vValue));
+   # ================= TAPTOOLS: START GENERATED CODE =================== #
+   nDataProcedureDataOperations = nDataProcedureDataOperations + 1;
+   # ================= TAPTOOLS: END GENERATED CODE ===================== #
+   CELLPUTN(vValue, cCube, cVersion, vPeriod, cSource, cRateType, 'CustomLeaf:' | vLocation | ' Input', 'CustomLeaf:' | vLOB | ' Input', cProductType, vMetric, cMeasure);
+   cRecordCount = cRecordCount + 1;
+ELSEIF(ELLEV('Line of Business', vLOB) = 0 & (SCAN('(Mega Region)', vLocation) > 0 % vLocation @= 'Total Location'));
+
+   # ================= TAPTOOLS: START GENERATED CODE =================== #
+   nDataProcedureDataOperations = nDataProcedureDataOperations + 1;
+   # ================= TAPTOOLS: END GENERATED CODE ===================== #
+   CELLPUTN(vValue, cCube, cVersion, vPeriod, cSource, cRateType, 'CustomLeaf:' | vLocation | ' Input', vLOB, cProductType, vMetric, cMeasure);
+   cRecordCount = cRecordCount + 1;
 ENDIF;
 
 # ================= TAPTOOLS: START GENERATED CODE =================== #
@@ -402,16 +260,13 @@ LOGOUTPUT('DEBUG', 'PROGRESS: START EPILOG PROCEDURE');
 nEpilogProcedureStartTime = NOW();
 # ================= TAPTOOLS: END GENERATED CODE ===================== #
 
+
+
 #****Begin: Generated Statements***
 #****End: Generated Statements****
 
-sCmd = 'aws s3 cp ' | sFilePath | ' ' | sS3Path;
-IF(FILEEXISTS(sFilePath) = 1);
-   EXECUTECOMMAND(sCmd, 1);
-   LOGOUTPUT('INFO', 'File ' | sFilePath | ' uploaded to S3 bucket ' | sS3Path);
-ELSE;
-   LOGOUTPUT('ERROR', 'File ' | sFilePath | ' not found and hence not uploaded to S3 bucket ' | sS3Path);
-ENDIF;
+#Record Count update in Dashboard cube
+CELLINCREMENTN(cRecordCount, cCubeDash, cRCube, cSource, cLoaddate, cVersion, cRateType, rMetric);
 
 
 
