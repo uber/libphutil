@@ -9,11 +9,11 @@
         "view": "All"
     },
     "HasSecurityAccess": false,
-    "Name": "Ops.MAPC.Forecast.Perform Version Snapshot",
+    "Name": "MAPC.Cleanup.In.Ops Snapshot.At.AltHierarchy",
     "Parameters": [
         {
-            "Name": "pVersionTo",
-            "Prompt": "REQ: To Version",
+            "Name": "pVersion",
+            "Prompt": "REQ: Version",
             "Type": "String",
             "Value": ""
         },
@@ -126,7 +126,7 @@ IF(sProcessName @<> 'TAP.Call.Queue.Add Job To Queue' & sProcessName @<> 'TAP.Cu
       PROCESSBREAK;
    ENDIF;
 ENDIF;
-LOGOUTPUT('DEBUG', 'PARAMETER: pVersionTo: "' | pVersionTo | '"');
+LOGOUTPUT('DEBUG', 'PARAMETER: pVersion: "' | pVersion | '"');
 LOGOUTPUT('DEBUG', 'PARAMETER: pMonth: "' | pMonth | '"');
 LOGOUTPUT('DEBUG', 'PROGRESS: START PROLOG PROCEDURE');
 nMetadataProcedureRecordsStarted = 0;
@@ -153,23 +153,22 @@ nDataProcedureStartTime = 0;
 nDataProcedureEndTime = 0;
 # ================= TAPTOOLS: END GENERATED CODE ===================== #
 
-
 #****Begin: Generated Statements***
 #****End: Generated Statements****
 
-######################################################################################################
-# Process to copy MAPC Actuals and Forecast data to 'Ops Snapshot' cube
-######################################################################################################
+################################################################################################################################
+# Process to clear out MAPC data stored in Ops Snapshot cubes at alternate hierarchies of LOB & Location dimensions.
+################################################################################################################################
 
 
 nTimeNow = NOW;
 sTimeStart = TIMST(nTimeNow, '\Y\m\d\h\i\s');
 
-pVersionTo = TRIM(pVersionTo);
+pVersion = TRIM(pVersion);
 pMonth = TRIM(pMonth);
 
 sDim = 'Version';
-sElement = pVersionTo;
+sElement = pVersion;
 IF(DIMIX(sDim, sElement) = 0);
    ITEMREJECT(sElement | ' does not exist in ' | sDim | ' Dimension');
    PROCESSQUIT;
@@ -187,8 +186,7 @@ TRUE = 1;
 FALSE = 0;
 nAutoCleanup = TRUE;
 
-sSrcCube = 'Ops';
-sTgtCube = 'Ops Snapshot';
+sCube = 'Ops Snapshot';
 
 ### Set Dimension Variables
 sDimVersion = 'Version';
@@ -200,67 +198,39 @@ sDimLob = 'Line of Business';
 sDimOpsMetric = 'Ops Metric';
 sDimMeas = 'Ops Measure';
 
-sSrcView = 'zTempTI' | GETPROCESSNAME | sTimeStart | NUMBERTOSTRING(RAND());
-sSrcSub = sSrcView;
-
-sTgtView = sSrcView | '_Target';
-sTgtSub = sTgtView;
-
-nCurrActualMonthEOP = ATTRN(sDimPeriod, CELLGETS('Admin Playbook', 'Oracle Sync', 'Current Actual Month'), 'End of Period');
-nMonthEOP = ATTRN(sDimPeriod, pMonth, 'End of Period');
+sView = 'zTempTI' | GETPROCESSNAME | sTimeStart | NUMBERTOSTRING(RAND());
+sSub = sView;
 
 #==============================================================================
 #  SOURCE VIEW
 #==============================================================================
-IF(VIEWEXISTS(sSrcCube, sSrcView) = TRUE);
-   VIEWDESTROY(sSrcCube, sSrcView);
+IF(VIEWEXISTS(sCube, sView) = TRUE);
+   VIEWDESTROY(sCube, sView);
 ENDIF;
-VIEWCREATE(sSrcCube, sSrcView, nAutoCleanup);
+VIEWCREATE(sCube, sView, nAutoCleanup);
 
 nDim = 1;
-sDim = TABDIM(sSrcCube, nDim);
+sDim = TABDIM(sCube, nDim);
 
 WHILE(sDim @<> '');
 
-   IF(SUBSETEXISTS(sDim, sSrcSub) = TRUE);
-      SUBSETDESTROY(sDim, sSrcSub);
+   IF(SUBSETEXISTS(sDim, sSub) = TRUE);
+      SUBSETDESTROY(sDim, sSub);
    ENDIF;
-   SUBSETCREATE(sDim, sSrcSub, nAutoCleanup);
-   VIEWSUBSETASSIGN(sSrcCube, sSrcView, sDim, sSrcSub);
+   SUBSETCREATE(sDim, sSub, nAutoCleanup);
+   VIEWSUBSETASSIGN(sCube, sView, sDim, sSub);
 
    IF(sDim @= sDimVersion);
-
-      IF(nMonthEOP > nCurrActualMonthEOP);
-         sMDX = '{[' | sDim | '].[Forecast Excl Actuals]}';
-      ELSE;
-         sMDX = '{[' | sDim | '].[Actual]}';
-      ENDIF;
+      sMDX = '{[' | sDim | '].[' | pVersion | ']}';
 
    ELSEIF(sDim @= sDimPeriod);
       sMDX = '{[' | sDim | '].[' | pMonth | ']}';
-
-   ELSEIF(sDim @= sDimSource);
-
-      IF(nMonthEOP > nCurrActualMonthEOP);
-         sMDX = '{[' | sDim | '].[Planning]}';
-      ELSE;
-         sMDX = '{[' | sDim | '].[FDS], [' | sDim | '].[Ops Adjustment]}';
-      ENDIF;
-
-   ELSEIF(sDim @= sDimRateType);
-      sMDX = '{[' | sDim | '].[USD]}';
 
    ELSEIF(sDim @= sDimLoc);
       sMDX = '{{TM1FILTERBYLEVEL({TM1SUBSETALL([' | sDim | '])}, 0)}, [' | sDim | '].[Total Location], {TM1FILTERBYPATTERN( {TM1SUBSETALL( [' | sDim | '] )}, "*(Mega Region)*")}, {TM1FILTERBYPATTERN( {TM1SUBSETALL( [' | sDim | '] )}, "Country - *")}}';
 
    ELSEIF(sDim @= sDimLob);
-      sMDX = '{{TM1FILTERBYLEVEL( TM1DRILLDOWNMEMBER( {[' | sDim | '].[Total Rides & Eats]}, ALL, RECURSIVE ), 0 )}, [' | sDim | '].[Total Rides & Eats], [' | sDim | '].[Delivery ex M&A], [' | sDim | '].[Mobility ex M&A]}';
-
-   ELSEIF(sDim @= sDimOpsMetric);
-      sMDX = '{TM1FILTERBYLEVEL( TM1DRILLDOWNMEMBER( {[' | sDim | '].[MAPC Metrics]}, ALL, RECURSIVE ), 0 )}';
-
-   ELSEIF(sDim @= sDimMeas);
-      sMDX = '{[' | sDim | '].[Amount]}';
+      sMDX = '{{TM1FILTERBYLEVEL({TM1SUBSETALL([' | sDim | '])}, 0)}, [' | sDim | '].[Total Rides & Eats], [' | sDim | '].[Delivery ex M&A], [' | sDim | '].[Mobility ex M&A]}';
 
    ELSE;
       sMDX = '{TM1FILTERBYLEVEL({TM1SUBSETALL([' | sDim | '])}, 0)}';
@@ -268,76 +238,22 @@ WHILE(sDim @<> '');
    ENDIF;
 
    IF(sMDX @<> '');
-      SUBSETMDXSET(sDim, sSrcSub, sMDX);
-      SUBSETMDXSET(sDim, sSrcSub, '');
+      SUBSETMDXSET(sDim, sSub, sMDX);
+      SUBSETMDXSET(sDim, sSub, '');
    ENDIF;
 
    nDim = nDim + 1;
-   sDim = TABDIM(sSrcCube, nDim);
+   sDim = TABDIM(sCube, nDim);
 
 END;
 
-VIEWEXTRACTSKIPZEROESSET(sSrcCube, sSrcView, TRUE);
-VIEWEXTRACTSKIPRULEVALUESSET(sSrcCube, sSrcView, FALSE);
-VIEWEXTRACTSKIPCALCSSET(sSrcCube, sSrcView, FALSE);
+VIEWEXTRACTSKIPZEROESSET(sCube, sView, TRUE);
+VIEWEXTRACTSKIPRULEVALUESSET(sCube, sView, FALSE);
+VIEWEXTRACTSKIPCALCSSET(sCube, sView, FALSE);
 
 DatasourceType = 'View';
-DatasourceNameForServer = sSrcCube;
-DatasourceCubeView = sSrcView;
-
-
-#==============================================================================
-#  Target VIEW - Ops Snapshot cube
-#==============================================================================
-
-### Before clearing out the leaf level data, clear out the intersections at alternate hierarchies of LOB and Location dimensions ###
-EXECUTEPROCESS('MAPC.Cleanup.In.Ops Snapshot.At.AltHierarchy'
-   , 'pVersion', pVersionTo
-   , 'pMonth', pMonth
-);
-
-IF(VIEWEXISTS(sTgtCube, sTgtView) = TRUE);
-   VIEWDESTROY(sTgtCube, sTgtView);
-ENDIF;
-VIEWCREATE(sTgtCube, sTgtView, nAutoCleanup);
-
-nDim = 1;
-sDim = TABDIM(sTgtCube, nDim);
-
-WHILE(sDim @<> '');
-
-   IF(SUBSETEXISTS(sDim, sTgtSub) = TRUE);
-      SUBSETDESTROY(sDim, sTgtSub);
-   ENDIF;
-   SUBSETCREATE(sDim, sTgtSub, nAutoCleanup);
-   VIEWSUBSETASSIGN(sTgtCube, sTgtView, sDim, sTgtSub);
-
-   IF(sDim @= sDimVersion);
-      sMDX = '{[' | sDim | '].[' | pVersionTo | ']}';
-
-   ELSEIF(sDim @= sDimPeriod);
-      sMDX = '{[' | sDim | '].[' | pMonth | ']}';
-
-   ELSE;
-      sMDX = '{TM1FILTERBYLEVEL({TM1SUBSETALL([' | sDim | '])}, 0)}';
-
-   ENDIF;
-
-   IF(sMDX @<> '');
-      SUBSETMDXSET(sDim, sTgtSub, sMDX);
-      SUBSETMDXSET(sDim, sTgtSub, '');
-   ENDIF;
-
-   nDim = nDim + 1;
-   sDim = TABDIM(sTgtCube, nDim);
-
-END;
-
-VIEWEXTRACTSKIPZEROESSET(sTgtCube, sTgtView, TRUE);
-VIEWEXTRACTSKIPRULEVALUESSET(sTgtCube, sTgtView, TRUE);
-VIEWEXTRACTSKIPCALCSSET(sTgtCube, sTgtView, TRUE);
-
-VIEWZEROOUT(sTgtCube, sTgtView);
+DatasourceNameForServer = sCube;
+DatasourceCubeView = sView;
 
 
 
@@ -381,30 +297,31 @@ ENDIF;
 # ================= TAPTOOLS: END GENERATED CODE ===================== #
 
 
+
 #****Begin: Generated Statements***
 #****End: Generated Statements****
 
+### Clear out numbers from alternate hierachiy of Location and main hierarchy of LOB dimension ###
+IF(ELLEV(sDimLoc, vLocation) > 0 & ELLEV(sDimLob, vLOB) = 0);
+   # ================= TAPTOOLS: START GENERATED CODE =================== #
+   nDataProcedureDataOperations = nDataProcedureDataOperations + 1;
+   # ================= TAPTOOLS: END GENERATED CODE ===================== #
+   CELLPUTN(0, sCube, vVersion, vPeriod, vSource, vRateType, 'CustomLeaf:' | vLocation | ' Input', vLOB, vProductType, vOpsMetric, vMeasure);
 
-IF(ELLEV(sDimLoc, vLocation) = 0 & ELLEV(sDimLob, vLOB) = 0);
-   # ================= TAPTOOLS: START GENERATED CODE =================== #
-   nDataProcedureDataOperations = nDataProcedureDataOperations + 1;
-   # ================= TAPTOOLS: END GENERATED CODE ===================== #
-   CELLINCREMENTN(vValue, sTgtCube, pVersionTo, vPeriod, vSource, vRateType, vLocation, vLOB, vProductType, vOpsMetric, vMeasure);
-ELSEIF(ELLEV(sDimLoc, vLocation) > 0 & ELLEV(sDimLob, vLOB) = 0);
-   # ================= TAPTOOLS: START GENERATED CODE =================== #
-   nDataProcedureDataOperations = nDataProcedureDataOperations + 1;
-   # ================= TAPTOOLS: END GENERATED CODE ===================== #
-   CELLPUTN(vValue, sTgtCube, pVersionTo, vPeriod, vSource, vRateType, 'CustomLeaf:' | vLocation | ' Input', vLOB, vProductType, vOpsMetric, vMeasure);
+   ### Clear out numbers from main hierachy of Location and alternate hierarchy of LOB dimension ###
 ELSEIF(ELLEV(sDimLoc, vLocation) = 0 & ELLEV(sDimLob, vLOB) > 0);
    # ================= TAPTOOLS: START GENERATED CODE =================== #
    nDataProcedureDataOperations = nDataProcedureDataOperations + 1;
    # ================= TAPTOOLS: END GENERATED CODE ===================== #
-   CELLPUTN(vValue, sTgtCube, pVersionTo, vPeriod, vSource, vRateType, vLocation, 'CustomLeaf:' | vLOB | ' Input', vProductType, vOpsMetric, vMeasure);
+   CELLPUTN(0, sCube, vVersion, vPeriod, vSource, vRateType, vLocation, 'CustomLeaf:' | vLOB | ' Input', vProductType, vOpsMetric, vMeasure);
+
+   ### Clear out numbers from alternate hierachies of Location and LOB dimensions ###
 ELSEIF(ELLEV(sDimLoc, vLocation) > 0 & ELLEV(sDimLob, vLOB) > 0);
    # ================= TAPTOOLS: START GENERATED CODE =================== #
    nDataProcedureDataOperations = nDataProcedureDataOperations + 1;
    # ================= TAPTOOLS: END GENERATED CODE ===================== #
-   CELLPUTN(vValue, sTgtCube, pVersionTo, vPeriod, vSource, vRateType, 'CustomLeaf:' | vLocation | ' Input', 'CustomLeaf:' | vLOB | ' Input', vProductType, vOpsMetric, vMeasure);
+   CELLPUTN(0, sCube, vVersion, vPeriod, vSource, vRateType, 'CustomLeaf:' | vLocation | ' Input', 'CustomLeaf:' | vLOB | ' Input', vProductType, vOpsMetric, vMeasure);
+
 ENDIF;
 
 
@@ -444,10 +361,8 @@ LOGOUTPUT('DEBUG', 'PROGRESS: START EPILOG PROCEDURE');
 nEpilogProcedureStartTime = NOW();
 # ================= TAPTOOLS: END GENERATED CODE ===================== #
 
-
 #****Begin: Generated Statements***
 #****End: Generated Statements****
-
 
 
 # ================= TAPTOOLS: START GENERATED CODE =================== #
