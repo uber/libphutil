@@ -273,7 +273,7 @@ WHILE(sDim @<> '');
       sMDX = '{[' | sDim | '].[USD]}';
 
    ELSEIF(sDim @= sDimSrcLob);
-      sMDX = '{[' | sDim | '].[1001], [' | sDim | '].[2001]}';
+      sMDX = '{TM1FILTERBYLEVEL( TM1DRILLDOWNMEMBER( {[' | sDim | '].[Total Rides & Eats]}, ALL, RECURSIVE ), 0 )}';
 
    ELSEIF(sDim @= sDimSrcDept);
       sMDX = '{TM1FILTERBYLEVEL( TM1DRILLDOWNMEMBER( {[' | sDim | '].[Total Department]}, ALL, RECURSIVE ), 0 )}';
