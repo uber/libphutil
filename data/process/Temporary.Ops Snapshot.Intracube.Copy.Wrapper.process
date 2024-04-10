@@ -1,0 +1,178 @@
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: PROPERTIES                                                           #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+{
+    "DataSource": {
+        "Type": "TM1DimensionSubset",
+        "dataSourceNameForClient": "Period",
+        "dataSourceNameForServer": "Period",
+        "subset": "All"
+    },
+    "HasSecurityAccess": false,
+    "Name": "Temporary.Ops Snapshot.Intracube.Copy.Wrapper",
+    "Parameters": [
+        {
+            "Name": "pSnapshotVersion",
+            "Prompt": "REQ: To Version",
+            "Type": "String",
+            "Value": ""
+        },
+        {
+            "Name": "pMonth",
+            "Prompt": "REQ: Leaf or Consol element",
+            "Type": "String",
+            "Value": ""
+        },
+        {
+            "Name": "pMonthDelim",
+            "Prompt": "OPT: Delimiter ( Default ¦ )",
+            "Type": "String",
+            "Value": "¦"
+        }
+    ],
+    "UIData": "",
+    "Variables": [
+        {
+            "EndByte": 0,
+            "Name": "vPeriod",
+            "Position": 1,
+            "StartByte": 0,
+            "Type": "String"
+        }
+    ],
+    "VariablesUIData": [
+        "VarType=32\fColType=827\f"
+    ]
+}
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: PROPERTIES                                                             #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: PROLOG PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#########################################################################################################################################################
+# Wrapper process to copy MAPC Snapshot data from Active Riders & New Riders to Active Users & New Users respectively for the given snapshot version
+#########################################################################################################################################################
+
+
+nTimeNow = NOW;
+sTimeStart = TIMST(nTimeNow, '\Y\m\d\h\i\s');
+
+pSnapshotVersion = TRIM(pSnapshotVersion);
+pMonth = TRIM(pMonth);
+
+IF(pMonth @= '');
+   LOGOUTPUT('INFO', 'Month can not be blank');
+   PROCESSQUIT;
+ENDIF;
+
+sDimVersion = 'Version';
+IF(DIMIX(sDimVersion, pSnapshotVersion) = 0);
+   LOGOUTPUT('INFO', 'Version: ' | pSnapshotVersion | ' does not exist in Version dimension');
+   PROCESSQUIT;
+ENDIF;
+
+
+TRUE = 1;
+FALSE = 0;
+nAutoCleanup = TRUE;
+
+sSrcSub = 'zTempTI' | GETPROCESSNAME | sTimeStart | NUMBERTOSTRING(RAND());
+
+sDim = 'Period';
+
+IF(SUBSETEXISTS(sDim, sSrcSub) = TRUE);
+   SUBSETDESTROY(sDim, sSrcSub);
+ENDIF;
+SUBSETCREATE(sDim, sSrcSub, nAutoCleanup);
+
+sMDX = '';
+IF(SCAN(pMonthDelim, pMonth) > 0);
+   sMonths = pMonth;
+   sDelimIndex = SCAN(pMonthDelim, sMonths);
+   WHILE(sDelimIndex > 0);
+      sMonth = SUBST(sMonths, 1, sDelimIndex - 1);
+      IF(DIMIX(sDim, sMonth) > 0);
+         sMDX = sMDX | 'TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER( {[' | sDim | '].[' | sMonth | ']}, ALL, RECURSIVE )}, 0),';
+      ENDIF;
+      sMonths = SUBST(sMonths, sDelimIndex + 1, LONG(sMonths));
+      sDelimIndex = SCAN(pMonthDelim, sMonths);
+   END;
+   IF(TRIM(sMonths) @<> '');
+      sMonth = sMonths;
+      IF(DIMIX(sDim, sMonth) > 0);
+         sMDX = sMDX | 'TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER( {[' | sDim | '].[' | sMonth | ']}, ALL, RECURSIVE )}, 0),';
+      ENDIF;
+   ENDIF;
+
+   sMDX = '{' | SUBST(sMDX, 1, LONG(sMDX) - 1) | '}';
+ELSE;
+   sMDX = '{TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER( {[' | sDim | '].[' | pMonth | ']}, ALL, RECURSIVE )}, 0)}';
+ENDIF;
+
+IF(sMDX @<> '');
+   SUBSETMDXSET(sDim, sSrcSub, sMDX);
+   SUBSETMDXSET(sDim, sSrcSub, '');
+ENDIF;
+
+DatasourceType = 'Subset';
+DatasourceNameForServer = sDim;
+DatasourceDimensionSubset = sSrcSub;
+
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: PROLOG PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: METADATA PROCEDURE                                                   #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: METADATA PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: DATA PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+EXECUTEPROCESS('Temporary.Ops Snapshot.Intracube.Copy'
+   , 'pSnapshotVersion', pSnapshotVersion
+   , 'pMonth', vPeriod
+);
+
+RUNPROCESS('Temporary.Ops Snapshot.Intracube.Ops Adjustment.Copy'
+   , 'pSnapshotVersion', pSnapshotVersion
+   , 'pMonth', vPeriod
+);
+
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: DATA PROCEDURE                                                         #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: EPILOG PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: EPILOG PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #

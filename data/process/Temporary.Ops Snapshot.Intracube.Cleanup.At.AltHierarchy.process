@@ -1,0 +1,292 @@
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: PROPERTIES                                                           #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+{
+    "DataSource": {
+        "Type": "TM1CubeView",
+        "dataSourceNameForClient": "Ops",
+        "dataSourceNameForServer": "Ops",
+        "view": "All"
+    },
+    "HasSecurityAccess": false,
+    "Name": "Temporary.Ops Snapshot.Intracube.Cleanup.At.AltHierarchy",
+    "Parameters": [
+        {
+            "Name": "pSnapshotVersion",
+            "Prompt": "REQ: Version",
+            "Type": "String",
+            "Value": ""
+        },
+        {
+            "Name": "pMonth",
+            "Prompt": "REQ: Leaf",
+            "Type": "String",
+            "Value": ""
+        }
+    ],
+    "UIData": "",
+    "Variables": [
+        {
+            "EndByte": 0,
+            "Name": "vVersion",
+            "Position": 1,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vPeriod",
+            "Position": 2,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vSource",
+            "Position": 3,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vRateType",
+            "Position": 4,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vLocation",
+            "Position": 5,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vLOB",
+            "Position": 6,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vProductType",
+            "Position": 7,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vOpsMetric",
+            "Position": 8,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vMeasure",
+            "Position": 9,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vValue",
+            "Position": 10,
+            "StartByte": 0,
+            "Type": "Numeric"
+        }
+    ],
+    "VariablesUIData": [
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=33\fColType=827\f"
+    ]
+}
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: PROPERTIES                                                             #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: PROLOG PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+################################################################################################################################
+# Process to clear out MAPC data stored in Ops Snapshot cubes at alternate hierarchies of LOB & Location dimensions.
+################################################################################################################################
+
+
+nTimeNow = NOW;
+sTimeStart = TIMST(nTimeNow, '\Y\m\d\h\i\s');
+
+pSnapshotVersion = TRIM(pSnapshotVersion);
+pMonth = TRIM(pMonth);
+
+sDim = 'Version';
+sElement = pSnapshotVersion;
+IF(DIMIX(sDim, sElement) = 0);
+   LOGOUTPUT('INFO', sElement | ' does not exist in ' | sDim | ' Dimension');
+   PROCESSQUIT;
+ENDIF;
+
+sDim = 'Period';
+sElement = pMonth;
+IF(DIMIX(sDim, sElement) = 0);
+   LOGOUTPUT('INFO', sElement | ' does not exist in ' | sDim | ' Dimension');
+   PROCESSQUIT;
+ENDIF;
+
+TRUE = 1;
+FALSE = 0;
+nAutoCleanup = TRUE;
+
+sCube = 'Ops Snapshot';
+
+### Set Dimension Variables
+sDimVersion = 'Version';
+sDimPeriod = 'Period';
+sDimSource = 'Source';
+sDimRateType = 'Rate Type';
+sDimLoc = 'Location';
+sDimLob = 'Line of Business';
+sDimOpsMetric = 'Ops Metric';
+sDimMeas = 'Ops Measure';
+
+sView = 'zTempTI' | GETPROCESSNAME | sTimeStart | NUMBERTOSTRING(RAND());
+sSub = sView;
+
+#==============================================================================
+#  SOURCE VIEW
+#==============================================================================
+IF(VIEWEXISTS(sCube, sView) = TRUE);
+   VIEWDESTROY(sCube, sView);
+ENDIF;
+VIEWCREATE(sCube, sView, nAutoCleanup);
+
+nDim = 1;
+sDim = TABDIM(sCube, nDim);
+
+WHILE(sDim @<> '');
+
+   IF(SUBSETEXISTS(sDim, sSub) = TRUE);
+      SUBSETDESTROY(sDim, sSub);
+   ENDIF;
+   SUBSETCREATE(sDim, sSub, nAutoCleanup);
+   VIEWSUBSETASSIGN(sCube, sView, sDim, sSub);
+
+   IF(sDim @= sDimVersion);
+      sMDX = '{[' | sDim | '].[' | pSnapshotVersion | ']}';
+
+   ELSEIF(sDim @= sDimPeriod);
+      sMDX = '{[' | sDim | '].[' | pMonth | ']}';
+
+   ELSEIF(sDim @= sDimSource);
+      sMDX = '{[' | sDim | '].[FDS], [' | sDim | '].[Ops Adjustment], [' | sDim | '].[Planning]}';
+
+   ELSEIF(sDim @= sDimRateType);
+      sMDX = '{[' | sDim | '].[USD]}';
+
+   ELSEIF(sDim @= sDimLoc);
+      sMDX = '{{TM1FILTERBYLEVEL({TM1SUBSETALL([' | sDim | '])}, 0)}, [' | sDim | '].[Total Location], {TM1FILTERBYPATTERN( {TM1SUBSETALL( [' | sDim | '] )}, "*(Mega Region)*")}, {TM1FILTERBYPATTERN( {TM1SUBSETALL( [' | sDim | '] )}, "Country - *")}}';
+      
+   ELSEIF(sDim @= sDimLob);
+      sMDX = '{[' | sDim | '].[1001], [' | sDim | '].[2001], [' | sDim | '].[Total Rides & Eats]}';
+
+   ELSEIF(sDim @= sDimOpsMetric);
+      sMDX = '{[' | sDim | '].[Active Users], [' | sDim | '].[New Users]}';
+
+   ELSEIF(sDim @= sDimMeas);
+      sMDX = '{[' | sDim | '].[Amount]}';
+
+   ELSE;
+      sMDX = '{TM1FILTERBYLEVEL({TM1SUBSETALL([' | sDim | '])}, 0)}';
+
+   ENDIF;
+
+   IF(sMDX @<> '');
+      SUBSETMDXSET(sDim, sSub, sMDX);
+      SUBSETMDXSET(sDim, sSub, '');
+   ENDIF;
+
+   nDim = nDim + 1;
+   sDim = TABDIM(sCube, nDim);
+
+END;
+
+VIEWEXTRACTSKIPZEROESSET(sCube, sView, TRUE);
+VIEWEXTRACTSKIPRULEVALUESSET(sCube, sView, FALSE);
+VIEWEXTRACTSKIPCALCSSET(sCube, sView, FALSE);
+
+DatasourceType = 'View';
+DatasourceNameForServer = sCube;
+DatasourceCubeView = sView;
+
+
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: PROLOG PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: METADATA PROCEDURE                                                   #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: METADATA PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: DATA PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+### Clear out numbers from alternate hierachiy of Location and main hierarchy of LOB dimension ###
+IF(ELLEV(sDimLoc, vLocation) > 0 & ELLEV(sDimLob, vLOB) = 0);
+   CELLPUTN(0, sCube, vVersion, vPeriod, vSource, vRateType, 'CustomLeaf:' | vLocation | ' Input', vLOB, vProductType, vOpsMetric, vMeasure);
+
+   ### Clear out numbers from main hierachy of Location and alternate hierarchy of LOB dimension ###
+ELSEIF(ELLEV(sDimLoc, vLocation) = 0 & ELLEV(sDimLob, vLOB) > 0);
+   CELLPUTN(0, sCube, vVersion, vPeriod, vSource, vRateType, vLocation, 'CustomLeaf:' | vLOB | ' Input', vProductType, vOpsMetric, vMeasure);
+
+   ### Clear out numbers from alternate hierachies of Location and LOB dimensions ###
+ELSEIF(ELLEV(sDimLoc, vLocation) > 0 & ELLEV(sDimLob, vLOB) > 0);
+   CELLPUTN(0, sCube, vVersion, vPeriod, vSource, vRateType, 'CustomLeaf:' | vLocation | ' Input', 'CustomLeaf:' | vLOB | ' Input', vProductType, vOpsMetric, vMeasure);
+   
+ENDIF;
+
+
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: DATA PROCEDURE                                                         #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: EPILOG PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: EPILOG PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #

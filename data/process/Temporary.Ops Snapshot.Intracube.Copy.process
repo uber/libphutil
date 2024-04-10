@@ -1,0 +1,370 @@
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: PROPERTIES                                                           #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+{
+    "DataSource": {
+        "Type": "TM1CubeView",
+        "dataSourceNameForClient": "Ops",
+        "dataSourceNameForServer": "Ops",
+        "view": "All"
+    },
+    "HasSecurityAccess": false,
+    "Name": "Temporary.Ops Snapshot.Intracube.Copy",
+    "Parameters": [
+        {
+            "Name": "pSnapshotVersion",
+            "Prompt": "REQ: To Version",
+            "Type": "String",
+            "Value": ""
+        },
+        {
+            "Name": "pMonth",
+            "Prompt": "REQ: Leaf",
+            "Type": "String",
+            "Value": ""
+        }
+    ],
+    "UIData": "",
+    "Variables": [
+        {
+            "EndByte": 0,
+            "Name": "vVersion",
+            "Position": 1,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vPeriod",
+            "Position": 2,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vSource",
+            "Position": 3,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vRateType",
+            "Position": 4,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vLocation",
+            "Position": 5,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vLOB",
+            "Position": 6,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vProductType",
+            "Position": 7,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vOpsMetric",
+            "Position": 8,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vMeasure",
+            "Position": 9,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vValue",
+            "Position": 10,
+            "StartByte": 0,
+            "Type": "Numeric"
+        }
+    ],
+    "VariablesUIData": [
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=33\fColType=827\f"
+    ]
+}
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: PROPERTIES                                                             #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: PROLOG PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+#############################################################################################################################################
+# Process to copy MAPC Snapshot data from Active Riders & New Riders to Active Users & New Users respectively for the given snapshot version
+#############################################################################################################################################
+
+
+nTimeNow = NOW;
+sTimeStart = TIMST(nTimeNow, '\Y\m\d\h\i\s');
+
+pSnapshotVersion = TRIM(pSnapshotVersion);
+pMonth = TRIM(pMonth);
+
+sDim = 'Version';
+sElement = pSnapshotVersion;
+IF(DIMIX(sDim, sElement) = 0);
+   LOGOUTPUT('INFO', sElement | ' does not exist in ' | sDim | ' Dimension');
+   PROCESSQUIT;
+ENDIF;
+
+sDim = 'Period';
+sElement = pMonth;
+IF(DIMIX(sDim, sElement) = 0);
+   LOGOUTPUT('INFO', sElement | ' does not exist in ' | sDim | ' Dimension');
+   PROCESSQUIT;
+ENDIF;
+
+
+TRUE = 1;
+FALSE = 0;
+nAutoCleanup = TRUE;
+
+sSrcCube = 'Ops Snapshot';
+sTgtCube = 'Ops Snapshot';
+
+### Set Dimension Variables
+sDimVersion = 'Version';
+sDimPeriod = 'Period';
+sDimSource = 'Source';
+sDimRateType = 'Rate Type';
+sDimLoc = 'Location';
+sDimLob = 'Line of Business';
+sDimOpsMetric = 'Ops Metric';
+sDimMeas = 'Ops Measure';
+
+sSrcView = 'zTempTI' | GETPROCESSNAME | sTimeStart | NUMBERTOSTRING(RAND());
+sSrcSub = sSrcView;
+
+sTgtView = sSrcView | '_Target';
+sTgtSub = sTgtView;
+
+#==============================================================================
+#  SOURCE VIEW
+#==============================================================================
+IF(VIEWEXISTS(sSrcCube, sSrcView) = TRUE);
+   VIEWDESTROY(sSrcCube, sSrcView);
+ENDIF;
+VIEWCREATE(sSrcCube, sSrcView, nAutoCleanup);
+
+nDim = 1;
+sDim = TABDIM(sSrcCube, nDim);
+
+WHILE(sDim @<> '');
+
+   IF(SUBSETEXISTS(sDim, sSrcSub) = TRUE);
+      SUBSETDESTROY(sDim, sSrcSub);
+   ENDIF;
+   SUBSETCREATE(sDim, sSrcSub, nAutoCleanup);
+   VIEWSUBSETASSIGN(sSrcCube, sSrcView, sDim, sSrcSub);
+
+   IF(sDim @= sDimVersion);
+      sMDX = '{[' | sDim | '].[' | pSnapshotVersion | ']}';
+
+   ELSEIF(sDim @= sDimPeriod);
+      sMDX = '{[' | sDim | '].[' | pMonth | ']}';
+
+   ELSEIF(sDim @= sDimSource);
+      sMDX = '{[' | sDim | '].[FDS], [' | sDim | '].[Ops Adjustment], [' | sDim | '].[Planning]}';
+
+   ELSEIF(sDim @= sDimRateType);
+      sMDX = '{[' | sDim | '].[USD]}';
+
+   ELSEIF(sDim @= sDimLoc);
+      sMDX = '{{TM1FILTERBYLEVEL({TM1SUBSETALL([' | sDim | '])}, 0)}, [' | sDim | '].[Total Location], {TM1FILTERBYPATTERN( {TM1SUBSETALL( [' | sDim | '] )}, "*(Mega Region)*")}, {TM1FILTERBYPATTERN( {TM1SUBSETALL( [' | sDim | '] )}, "Country - *")}}';
+
+   ELSEIF(sDim @= sDimLob);
+      sMDX = '{[' | sDim | '].[1001], [' | sDim | '].[2001], [' | sDim | '].[Total Rides & Eats]}';
+      
+   ELSEIF(sDim @= sDimOpsMetric);
+      sMDX = '{[' | sDim | '].[Active Riders], [' | sDim | '].[New Riders]}';
+
+   ELSEIF(sDim @= sDimMeas);
+      sMDX = '{[' | sDim | '].[Amount]}';
+
+   ELSE;
+      sMDX = '{TM1FILTERBYLEVEL({TM1SUBSETALL([' | sDim | '])}, 0)}';
+
+   ENDIF;
+
+   IF(sMDX @<> '');
+      SUBSETMDXSET(sDim, sSrcSub, sMDX);
+      SUBSETMDXSET(sDim, sSrcSub, '');
+   ENDIF;
+
+   nDim = nDim + 1;
+   sDim = TABDIM(sSrcCube, nDim);
+
+END;
+
+VIEWEXTRACTSKIPZEROESSET(sSrcCube, sSrcView, TRUE);
+VIEWEXTRACTSKIPRULEVALUESSET(sSrcCube, sSrcView, FALSE);
+VIEWEXTRACTSKIPCALCSSET(sSrcCube, sSrcView, FALSE);
+
+DatasourceType = 'View';
+DatasourceNameForServer = sSrcCube;
+DatasourceCubeView = sSrcView;
+
+
+#==============================================================================
+#  Target VIEW - Ops Snapshot cube
+#==============================================================================
+
+### Before zero out of leaf level elements, clear out the intersections at alternate hierarchies of LOB and Location dimensions ###
+EXECUTEPROCESS('Temporary.Ops Snapshot.Intracube.Cleanup.At.AltHierarchy'
+   , 'pSnapshotVersion', pSnapshotVersion
+   , 'pMonth', pMonth
+);
+
+
+IF(VIEWEXISTS(sTgtCube, sTgtView) = TRUE);
+   VIEWDESTROY(sTgtCube, sTgtView);
+ENDIF;
+VIEWCREATE(sTgtCube, sTgtView, nAutoCleanup);
+
+nDim = 1;
+sDim = TABDIM(sTgtCube, nDim);
+
+WHILE(sDim @<> '');
+
+   IF(SUBSETEXISTS(sDim, sTgtSub) = TRUE);
+      SUBSETDESTROY(sDim, sTgtSub);
+   ENDIF;
+   SUBSETCREATE(sDim, sTgtSub, nAutoCleanup);
+   VIEWSUBSETASSIGN(sTgtCube, sTgtView, sDim, sTgtSub);
+
+   IF(sDim @= sDimVersion);
+      sMDX = '{[' | sDim | '].[' | pSnapshotVersion | ']}';
+
+   ELSEIF(sDim @= sDimPeriod);
+      sMDX = '{[' | sDim | '].[' | pMonth | ']}';
+
+   ELSEIF(sDim @= sDimSource);
+      sMDX = '{[' | sDim | '].[FDS], [' | sDim | '].[Ops Adjustment], [' | sDim | '].[Planning]}';
+
+   ELSEIF(sDim @= sDimOpsMetric);
+      sMDX = '{[' | sDim | '].[Active Users], [' | sDim | '].[New Users]}';
+
+   ELSE;
+      sMDX = '{TM1FILTERBYLEVEL({TM1SUBSETALL([' | sDim | '])}, 0)}';
+
+   ENDIF;
+
+   IF(sMDX @<> '');
+      SUBSETMDXSET(sDim, sTgtSub, sMDX);
+      SUBSETMDXSET(sDim, sTgtSub, '');
+   ENDIF;
+
+   nDim = nDim + 1;
+   sDim = TABDIM(sTgtCube, nDim);
+
+END;
+
+VIEWEXTRACTSKIPZEROESSET(sTgtCube, sTgtView, TRUE);
+VIEWEXTRACTSKIPRULEVALUESSET(sTgtCube, sTgtView, TRUE);
+VIEWEXTRACTSKIPCALCSSET(sTgtCube, sTgtView, TRUE);
+
+VIEWZEROOUT(sTgtCube, sTgtView);
+
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: PROLOG PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: METADATA PROCEDURE                                                   #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: METADATA PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: DATA PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+IF(vOpsMetric @= 'Active Riders');
+   vOpsMetric = 'Active Users';
+ELSEIF(vOpsMetric @= 'New Riders');
+   vOpsMetric = 'New Users';
+ENDIF;
+
+IF(ELLEV(sDimLoc, vLocation) = 0 & ELLEV(sDimLob, vLOB) = 0);
+  
+   CELLPUTN(vValue, sTgtCube, pSnapshotVersion, vPeriod, vSource, vRateType, vLocation, vLOB, vProductType, vOpsMetric, vMeasure);
+ELSEIF(ELLEV(sDimLoc, vLocation) > 0 & ELLEV(sDimLob, vLOB) = 0);
+   
+   CELLPUTN(vValue, sTgtCube, pSnapshotVersion, vPeriod, vSource, vRateType, 'CustomLeaf:' | vLocation | ' Input', vLOB, vProductType, vOpsMetric, vMeasure);
+ELSEIF(ELLEV(sDimLoc, vLocation) = 0 & ELLEV(sDimLob, vLOB) > 0);
+  
+   CELLPUTN(vValue, sTgtCube, pSnapshotVersion, vPeriod, vSource, vRateType, vLocation, 'CustomLeaf:' | vLOB | ' Input', vProductType, vOpsMetric, vMeasure);
+ELSEIF(ELLEV(sDimLoc, vLocation) > 0 & ELLEV(sDimLob, vLOB) > 0);
+  
+   CELLPUTN(vValue, sTgtCube, pSnapshotVersion, vPeriod, vSource, vRateType, 'CustomLeaf:' | vLocation | ' Input', 'CustomLeaf:' | vLOB | ' Input', vProductType, vOpsMetric, vMeasure);
+ENDIF;
+
+
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: DATA PROCEDURE                                                         #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: EPILOG PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+EXECUTEPROCESS('Temporary.Ops Snapshot.Intracube.UnfedCells.Copy'
+   , 'pSnapshotVersion', pSnapshotVersion
+   , 'pMonth', pMonth
+);
+
+
+
+
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: EPILOG PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
