@@ -1,0 +1,346 @@
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: PROPERTIES                                                           #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+{
+    "DataSource": {
+        "Type": "TM1CubeView",
+        "dataSourceNameForClient": "Mobility",
+        "dataSourceNameForServer": "Mobility",
+        "view": "ztemp_test"
+    },
+    "HasSecurityAccess": false,
+    "Name": "Temp_Mobility Forecast.Perform Actuals Copy On Version Snapshot",
+    "Parameters": [
+        {
+            "Name": "pTargetVersion",
+            "Prompt": "",
+            "Type": "String",
+            "Value": ""
+        }
+    ],
+    "UIData": "CubeAction=1511\fDataAction=1503\fCubeLogChanges=0\f",
+    "Variables": [
+        {
+            "EndByte": 0,
+            "Name": "vVersion",
+            "Position": 1,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vPeriod",
+            "Position": 2,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vSource",
+            "Position": 3,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vRateType",
+            "Position": 4,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vLineofBusiness",
+            "Position": 5,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vDepartment",
+            "Position": 6,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vLocation",
+            "Position": 7,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vProductType",
+            "Position": 8,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vMobilityFeatures",
+            "Position": 9,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vMobilityOpsMetrics",
+            "Position": 10,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vMobilityMeasure",
+            "Position": 11,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vValue",
+            "Position": 12,
+            "StartByte": 0,
+            "Type": "Numeric"
+        }
+    ],
+    "VariablesUIData": [
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=33\fColType=827\f"
+    ]
+}
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: PROPERTIES                                                             #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: PROLOG PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+nTimeNow = NOW;
+sTimeStart = TIMST(nTimeNow, '\Y\m\d\h\i\s');
+
+pVersionFrom = 'Actual';
+pVersionTo = TRIM(pTargetVersion);
+
+sDimVersion = 'Version';
+
+IF(DIMIX(sDimVersion, pTargetVersion) = 0);
+   ITEMREJECT('Versions: ' | pTargetVersion | 'does not exist in Version dimension.');
+   PROCESSQUIT;
+ENDIF;
+
+
+TRUE = 1;
+FALSE = 0;
+nAutoCleanup = FALSE;
+nTotalRecords = 0;
+
+sSrcCube = 'Mobility';
+sTgtCube = 'Mobility Snapshot';
+
+### Set Dimension Variables
+sDimPeriod = 'Period';
+sDimSource = 'Source';
+sDimRateType = 'Rate Type';
+sDimLob = 'Line of Business';
+sDimDept = 'Department';
+sDimLoc = 'Location';
+sDimProductType = 'Product Type';
+sDimMobFeatures = 'Mobility Features';
+sDimMobOpsMetrics = 'Mobility Ops Metrics';
+sDimMeas = 'Mobility Measure';
+
+sPeriodSourceSub = 'Snapshot_Actual_Periods';
+
+sCurrMonth = TIMST(nTimeNow, '\Y-\m');
+
+sSrcView = 'zTempTI' | GETPROCESSNAME | sTimeStart | NUMBERTOSTRING(RAND());
+sSrcSub = sSrcView;
+
+sTgtView = sSrcView | '_Target';
+sTgtSub = sTgtView;
+
+IF(SUBSETEXISTS(sDimPeriod, sPeriodSourceSub) = FALSE);
+   ITEMREJECT('Period Source Subset does not exist');
+   PROCESSQUIT;
+ENDIF;
+
+sPeriodSourceSize = SUBSETGETSIZE(sDimPeriod, sPeriodSourceSub);
+
+IF(sPeriodSourceSize <= 0);
+   ITEMREJECT('Period Source Subset does not have any elements:' | NUMBERTOSTRING(sPeriodSourceSize));
+   PROCESSQUIT;
+ENDIF;
+
+
+#==============================================================================
+#  SOURCE VIEW
+#==============================================================================
+IF(VIEWEXISTS(sSrcCube, sSrcView) = TRUE);
+   VIEWDESTROY(sSrcCube, sSrcView);
+ENDIF;
+VIEWCREATE(sSrcCube, sSrcView, nAutoCleanup);
+
+nDim = 1;
+sDim = TABDIM(sSrcCube, nDim);
+
+WHILE(sDim @<> '');
+
+
+   IF(SUBSETEXISTS(sDim, sSrcSub) = TRUE);
+      SUBSETDESTROY(sDim, sSrcSub);
+   ELSE;
+      SUBSETCREATE(sDim, sSrcSub, nAutoCleanup);
+   ENDIF;
+   VIEWSUBSETASSIGN(sSrcCube, sSrcView, sDim, sSrcSub);
+
+   IF(sDim @= sDimPeriod);
+      IF(SUBSETEXISTS(sDim, sPeriodSourceSub) = TRUE);
+         i = 1;
+         WHILE(i <= sPeriodSourceSize);
+            sEle = SUBSETGETELEMENTNAME(sDim, sPeriodSourceSub, i);
+            SUBSETELEMENTINSERT(sDim, sSrcSub, sEle, i);
+            i = i + 1;
+         END;
+         LOGOUTPUT('Info', 'Period Dim subset Size:' | NUMBERTOSTRING(SUBSETGETSIZE(sDimPeriod, sSrcSub)));
+      ENDIF;
+
+   ELSEIF(sDim @= sDimVersion);
+      SUBSETELEMENTINSERT(sDim, sSrcSub, pVersionFrom, 1);
+   ELSE;
+      sSourceMDX = '{TM1FILTERBYLEVEL({TM1SUBSETALL([' | sDim | '])}, 0)}';
+
+   ENDIF;
+
+   IF(sSourceMDX @<> '');
+      SUBSETMDXSET(sDim, sSrcSub, sSourceMDX);
+      SUBSETMDXSET(sDim, sSrcSub, '');
+   ENDIF;
+
+   nDim = nDim + 1;
+   sDim = TABDIM(sSrcCube, nDim);
+
+END;
+
+VIEWEXTRACTSKIPZEROESSET(sSrcCube, sSrcView, TRUE);
+VIEWEXTRACTSKIPRULEVALUESSET(sSrcCube, sSrcView, FALSE);
+VIEWEXTRACTSKIPCALCSSET(sSrcCube, sSrcView, TRUE);
+
+DatasourceType = 'View';
+DatasourceNameForServer = sSrcCube;
+DatasourceCubeView = sSrcView;
+
+
+#==============================================================================
+#  Target VIEW
+#==============================================================================
+IF(VIEWEXISTS(sTgtCube, sTgtView) = TRUE);
+   VIEWDESTROY(sTgtCube, sTgtView);
+ENDIF;
+VIEWCREATE(sTgtCube, sTgtView, nAutoCleanup);
+
+nDim = 1;
+sDim = TABDIM(sTgtCube, nDim);
+
+WHILE(sDim @<> '');
+
+   IF(SUBSETEXISTS(sDim, sTgtSub) = TRUE);
+      SUBSETDESTROY(sDim, sTgtSub);
+   ELSE;
+      SUBSETCREATE(sDim, sTgtSub, nAutoCleanup);
+   ENDIF;
+   VIEWSUBSETASSIGN(sTgtCube, sTgtView, sDim, sTgtSub);
+
+   IF(sDim @= sDimPeriod);
+      IF(SUBSETEXISTS(sDim, sPeriodSourceSub) = TRUE);
+         i = 1;
+         WHILE(i <= sPeriodSourceSize);
+            sEle = SUBSETGETELEMENTNAME(sDim, sPeriodSourceSub, i);
+            SUBSETELEMENTINSERT(sDim, sTgtSub, sEle, i);
+            i = i + 1;
+         END;
+         VIEWSUBSETASSIGN(sTgtCube, sTgtView, sDim, sTgtSub);
+      ENDIF;
+
+   ELSEIF(sDim @= sDimVersion);
+      SUBSETELEMENTINSERT(sDim, sTgtSub, pVersionTo, 1);
+
+   ELSE;
+      sMDX = '{TM1FILTERBYLEVEL({TM1SUBSETALL([' | sDim | '])}, 0)}';
+
+   ENDIF;
+
+   IF(sMDX @<> '');
+      SUBSETMDXSET(sDim, sTgtSub, sMDX);
+      SUBSETMDXSET(sDim, sTgtSub, '');
+   ENDIF;
+
+   nDim = nDim + 1;
+   sDim = TABDIM(sTgtCube, nDim);
+
+END;
+
+VIEWEXTRACTSKIPZEROESSET(sTgtCube, sTgtView, TRUE);
+VIEWEXTRACTSKIPRULEVALUESSET(sTgtCube, sTgtView, TRUE);
+VIEWEXTRACTSKIPCALCSSET(sTgtCube, sTgtView, TRUE);
+
+VIEWZEROOUT(sTgtCube, sTgtView);
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: PROLOG PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: METADATA PROCEDURE                                                   #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: METADATA PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: DATA PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+CELLINCREMENTN(vValue, sTgtCube, pVersionTo, vPeriod, vSource, vRateType, vLineofBusiness, vDepartment, vLocation, vProductType, vMobilityFeatures, vMobilityOpsMetrics, vMobilityMeasure);
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: DATA PROCEDURE                                                         #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: EPILOG PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: EPILOG PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #

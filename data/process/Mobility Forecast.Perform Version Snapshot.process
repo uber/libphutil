@@ -215,6 +215,7 @@ sSubRateType = 'forecast_allocations';
 
 sCurrMonth = TIMST(nTimeNow, '\Y-\m');
 
+nCurrActualMonth = TRIM(CELLGETS('Admin Playbook', 'Oracle Sync', 'Current Actual Month'));
 sSrcView = 'zTempTI' | GETPROCESSNAME | sTimeStart | NUMBERTOSTRING(RAND());
 sSrcSub = sSrcView;
 
@@ -434,6 +435,12 @@ nTotalMetadataOperations = nPrologProcedureMetadataOperations + nMetadataProcedu
 LOGOUTPUT('DEBUG', 'PROCESS_METRIC: TotalMetadataOperations: "' | NUMBERTOSTRING(nTotalMetadataOperations) | '"');
 LOGOUTPUT('DEBUG', 'PROGRESS: END EPILOG PROCEDURE');
 # ================= TAPTOOLS: END GENERATED CODE ===================== #
+IF(nCurrActualMonth @<> '');
+   nCurrActualMonth = SUBST(nCurrActualMonth, 6, 7);
+   IF(nCurrActualMonth @<> '01');
+      EXECUTEPROCESS('Mobility Forecast.Perform Actuals Copy On Version Snapshot', 'pTargetVersion', pVersionTo);
+   ENDIF;
+ENDIF;
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
 # END: EPILOG PROCEDURE                                                       #

@@ -1,0 +1,367 @@
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: PROPERTIES                                                           #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+{
+    "DataSource": {
+        "Type": "TM1CubeView",
+        "dataSourceNameForClient": "Mobility",
+        "dataSourceNameForServer": "Mobility",
+        "view": "All"
+    },
+    "HasSecurityAccess": false,
+    "Name": "Mobility Forecast.Perform Actuals Copy On Version Snapshot",
+    "Parameters": [
+        {
+            "Name": "pTargetVersion",
+            "Prompt": "REQ: From Version",
+            "Type": "String",
+            "Value": "Forecast Excl Actuals"
+        }
+    ],
+    "UIData": "",
+    "Variables": [
+        {
+            "EndByte": 0,
+            "Name": "vVersion",
+            "Position": 1,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vPeriod",
+            "Position": 2,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vSource",
+            "Position": 3,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vRateType",
+            "Position": 4,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vLineofBusiness",
+            "Position": 5,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vDepartment",
+            "Position": 6,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vLocation",
+            "Position": 7,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vProductType",
+            "Position": 8,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vMobilityFeatures",
+            "Position": 9,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vMobilityOpsMetrics",
+            "Position": 10,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vMobilityMeasure",
+            "Position": 11,
+            "StartByte": 0,
+            "Type": "String"
+        },
+        {
+            "EndByte": 0,
+            "Name": "vValue",
+            "Position": 12,
+            "StartByte": 0,
+            "Type": "Numeric"
+        }
+    ],
+    "VariablesUIData": [
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=32\fColType=827\f",
+        "VarType=33\fColType=827\f"
+    ]
+}
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: PROPERTIES                                                             #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: PROLOG PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+######################################################################################################
+# Process to copy Mobility forecast data (both pre and post allocated) to Mobility Snapshot cube 
+######################################################################################################
+
+
+nTimeNow = NOW;
+sTimeStart = TIMST(nTimeNow, '\Y\m\d\h\i\s');
+
+pVersionFrom = 'Actual';
+pVersionTo = TRIM(pTargetVersion);
+
+sDimVersion = 'Version';
+
+IF(DIMIX(sDimVersion, pTargetVersion) = 0);
+   ITEMREJECT('Versions: ' | pTargetVersion | 'does not exist in Version dimension.');
+   PROCESSQUIT;
+ENDIF;
+
+
+TRUE = 1;
+FALSE = 0;
+nAutoCleanup = TRUE;
+nTotalRecords = 0;
+
+sSrcCube = 'Mobility';
+sTgtCube = 'Mobility Snapshot';
+
+### Set Dimension Variables
+sDimPeriod = 'Period';
+sDimSource = 'Source';
+sDimRateType = 'Rate Type';
+sDimLob = 'Line of Business';
+sDimDept = 'Department';
+sDimLoc = 'Location';
+sDimProductType = 'Product Type';
+sDimMobFeatures = 'Mobility Features';
+sDimMobOpsMetrics = 'Mobility Ops Metrics';
+sDimMeas = 'Mobility Measure';
+
+sCurrMonth = TIMST(nTimeNow, '\Y-\m');
+
+sSrcView = 'zTempTI' | GETPROCESSNAME | sTimeStart | NUMBERTOSTRING(RAND());
+sSrcSub = sSrcView;
+sSrcPeriodSub = '}zTempTI' | GETPROCESSNAME | sTimeStart | NUMBERTOSTRING(RAND());
+
+sTgtView = sSrcView | '_Target';
+sTgtSub = sTgtView;
+sTgtPeriodSub = '}zTempTI' | GETPROCESSNAME | sTimeStart | NUMBERTOSTRING(RAND());
+
+nCurrActualMonth = TRIM(CELLGETS('Admin Playbook', 'Oracle Sync', 'Current Actual Month'));
+IF(nCurrActualMonth @<> '');
+   nCurrActualMonthYear = SUBST(nCurrActualMonth, 1, 4);
+   nCurrActualMonthEOP = ATTRN(sDimPeriod, nCurrActualMonth, 'End of Period');
+ELSE;
+   LOGOUTPUT('Info', 'Current Acutal Month Config not available in the Admin Playbook');
+   PROCESSQUIT;
+ENDIF;
+
+#==============================================================================
+#  SOURCE VIEW
+#==============================================================================
+IF(VIEWEXISTS(sSrcCube, sSrcView) = TRUE);
+   VIEWDESTROY(sSrcCube, sSrcView);
+ENDIF;
+VIEWCREATE(sSrcCube, sSrcView, nAutoCleanup);
+
+nDim = 1;
+sDim = TABDIM(sSrcCube, nDim);
+
+WHILE(sDim @<> '');
+
+
+   IF(SUBSETEXISTS(sDim, sSrcSub) = TRUE);
+      SUBSETDESTROY(sDim, sSrcSub);
+   ELSE;
+      SUBSETCREATE(sDim, sSrcSub, nAutoCleanup);
+   ENDIF;
+   VIEWSUBSETASSIGN(sSrcCube, sSrcView, sDim, sSrcSub);
+
+   IF(sDim @= sDimPeriod);
+      sSourceMdx = '{TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER({[' | sDimPeriod | '].[' | nCurrActualMonthYear | ']}, ALL, RECURSIVE )}, 0)}';
+   ELSEIF(sDim @= sDimVersion);
+      SUBSETELEMENTINSERT(sDim, sSrcSub, pVersionFrom, 1);
+   ELSE;
+      sSourceMDX = '{TM1FILTERBYLEVEL({TM1SUBSETALL([' | sDim | '])}, 0)}';
+
+   ENDIF;
+
+   IF(sSourceMDX @<> '');
+      SUBSETMDXSET(sDim, sSrcSub, sSourceMDX);
+      SUBSETMDXSET(sDim, sSrcSub, '');
+   ENDIF;
+
+   nDim = nDim + 1;
+   sDim = TABDIM(sSrcCube, nDim);
+
+END;
+
+sPeriodSourceSize = SUBSETGETSIZE(sDimPeriod, sSrcSub);
+i = 1;
+IF(SUBSETEXISTS(sDimPeriod, sSrcPeriodSub) = TRUE);
+   SUBSETDESTROY(sDimPeriod, sSrcPeriodSub);
+ELSE;
+   SUBSETCREATE(sDimPeriod, sSrcPeriodSub, nAutoCleanup);
+ENDIF;
+VIEWSUBSETASSIGN(sSrcCube, sSrcView, sDimPeriod, sSrcPeriodSub);
+
+WHILE(i <= sPeriodSourceSize);
+   sEle = SUBSETGETELEMENTNAME(sDimPeriod, sSrcSub, i);
+   nMonthEOP = ATTRN(sDimPeriod, sEle, 'End of Period');
+   IF(nMonthEOP <= nCurrActualMonthEOP);
+      SUBSETELEMENTINSERT(sDimPeriod, sSrcPeriodSub, sEle, 1);
+   ENDIF;
+   i = i + 1;
+END;
+
+VIEWEXTRACTSKIPZEROESSET(sSrcCube, sSrcView, TRUE);
+VIEWEXTRACTSKIPRULEVALUESSET(sSrcCube, sSrcView, FALSE);
+VIEWEXTRACTSKIPCALCSSET(sSrcCube, sSrcView, TRUE);
+
+DatasourceType = 'View';
+DatasourceNameForServer = sSrcCube;
+DatasourceCubeView = sSrcView;
+
+
+#==============================================================================
+#  Target VIEW
+#==============================================================================
+IF(VIEWEXISTS(sTgtCube, sTgtView) = TRUE);
+   VIEWDESTROY(sTgtCube, sTgtView);
+ENDIF;
+VIEWCREATE(sTgtCube, sTgtView, nAutoCleanup);
+
+nDim = 1;
+sDim = TABDIM(sTgtCube, nDim);
+
+WHILE(sDim @<> '');
+
+   IF(SUBSETEXISTS(sDim, sTgtSub) = TRUE);
+      SUBSETDESTROY(sDim, sTgtSub);
+   ELSE;
+      SUBSETCREATE(sDim, sTgtSub, nAutoCleanup);
+   ENDIF;
+   VIEWSUBSETASSIGN(sTgtCube, sTgtView, sDim, sTgtSub);
+
+   IF(sDim @= sDimPeriod);
+      sTgtMdx = '{TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER({[' | sDimPeriod | '].[' | nCurrActualMonthYear | ']}, ALL, RECURSIVE )}, 0)}';
+
+   ELSEIF(sDim @= sDimVersion);
+      SUBSETELEMENTINSERT(sDim, sTgtSub, pVersionTo, 1);
+
+   ELSE;
+      sTgtMDX = '{TM1FILTERBYLEVEL({TM1SUBSETALL([' | sDim | '])}, 0)}';
+
+   ENDIF;
+
+   IF(sTgtMDX @<> '');
+      SUBSETMDXSET(sDim, sTgtSub, sTgtMDX);
+      SUBSETMDXSET(sDim, sTgtSub, '');
+   ENDIF;
+
+   nDim = nDim + 1;
+   sDim = TABDIM(sTgtCube, nDim);
+
+END;
+
+sPeriodTgtSize = SUBSETGETSIZE(sDimPeriod, sTgtSub);
+i = 1;
+IF(SUBSETEXISTS(sDimPeriod, sTgtPeriodSub) = TRUE);
+   SUBSETDESTROY(sDimPeriod, sTgtPeriodSub);
+ELSE;
+   SUBSETCREATE(sDimPeriod, sTgtPeriodSub, nAutoCleanup);
+ENDIF;
+VIEWSUBSETASSIGN(sTgtCube, sTgtView, sDimPeriod, sTgtPeriodSub);
+
+WHILE(i <= sPeriodTgtSize);
+   sEle = SUBSETGETELEMENTNAME(sDimPeriod, sTgtSub, i);
+   nMonthEOP = ATTRN(sDimPeriod, sEle, 'End of Period');
+   IF(nMonthEOP <= nCurrActualMonthEOP);
+      SUBSETELEMENTINSERT(sDimPeriod, sTgtPeriodSub, sEle, 1);
+   ENDIF;
+   i = i + 1;
+END;
+
+VIEWEXTRACTSKIPZEROESSET(sTgtCube, sTgtView, TRUE);
+VIEWEXTRACTSKIPRULEVALUESSET(sTgtCube, sTgtView, TRUE);
+VIEWEXTRACTSKIPCALCSSET(sTgtCube, sTgtView, TRUE);
+
+VIEWZEROOUT(sTgtCube, sTgtView);
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: PROLOG PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: METADATA PROCEDURE                                                   #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: METADATA PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: DATA PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+CELLINCREMENTN(vValue, sTgtCube, pVersionTo, vPeriod, vSource, vRateType, vLineofBusiness, vDepartment, vLocation, vProductType, vMobilityFeatures, vMobilityOpsMetrics, vMobilityMeasure);
+
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: DATA PROCEDURE                                                         #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# BEGIN: EPILOG PROCEDURE                                                     #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+
+
+#****Begin: Generated Statements***
+#****End: Generated Statements****
+
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# END: EPILOG PROCEDURE                                                       #
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
