@@ -8,7 +8,7 @@ from TM1py.Services import TM1Service
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--server', help='Server Name', required=False, default='ops.tm1dev.awscorp.uberinternal.com')
+    parser.add_argument('--server', help='Server Name', required=False, default='ops.findev.uberinternal.com')
     parser.add_argument('--port', help='Server Port', required=False, default='443')
     parser.add_argument('--user', help='Username', required=True)
     parser.add_argument('--ssl', help='SSL', required=False, default=True, type=bool)
