@@ -1,6 +1,6 @@
 #!/bin/sh
 
-TM1_USERNAME="svc-epm-deploy-prod"
+TM1_USERNAME="svc-epm-deploy-uat"
 GROUP="OneLogin"
 
 set -euo

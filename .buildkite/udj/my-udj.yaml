@@ -10,7 +10,7 @@ docker:
   with-host-docker: true
 
 vault_secrets:
-  - path: /buildkite/tm1/deploy/svc-epm-deploy-prod
+  - path: /buildkite/tm1/deploy/svc-epm-deploy-uat
     alias: TM1_PASSWORD
 
 notify:
