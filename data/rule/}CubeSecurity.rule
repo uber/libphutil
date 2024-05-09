@@ -6,6 +6,10 @@ FEEDSTRINGS;
 
 ['2f4aef8a-5df4-432d-8817-49bb45c096da'] =S: 'READ';
 
+#Removing cube access for Accounting group as per request FINTELPA-9173
+
+['e7605184-2d46-4c71-abde-fcfa6c0b2b5c']=S:'NONE';
+
 
 ['ANALYTICS.GL Operational'] =S: 'NONE';
 
@@ -22,6 +26,7 @@ FEEDSTRINGS;
 
 ['Rides Ops Staging']=S : 'NONE';
 ['Eats Ops Staging']=S : 'NONE';
+
 
 [] = S:
    IF(
