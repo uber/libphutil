@@ -12,16 +12,27 @@ from base64 import b64decode
 from concurrent.futures import ThreadPoolExecutor
 
 from TM1py import TM1Service
+from taptools import getsecret
 
 def tm1get_credentials(service_name):
     file_location='/var/tm1/'+service_name+'/config/deploy/node.json'
-    with open(file_location) as f:
-        _config = json.load(f)
-        ENV = _config['normal']['load_balancer']['internal']['endpoint_suffix']
-        TM1 = _config['normal']['tm1']
-        tm1password=TM1['password']
-        f.close()
-    return tm1password
+    try:
+        with open(file_location, 'r') as f:
+            _config = json.load(f)
+            env = _config['normal']['tm1tegrator']['environment']  
+            user = _config['normal']['tm1']['user']
+            logging.info(f"Environment: {env}, User: {user}")
+            tm1password = getsecret.get_password('tm1_password', env)
+            f.close()
+            
+            return tm1password
+
+    except FileNotFoundError:
+        logging.error(f"File not found: {file_location}")
+    except json.JSONDecodeError as e:
+        logging.error(f"Error decoding JSON from the file: {file_location} - {str(e)}")
+    except Exception as e:
+        logging.error(f"An unexpected error occurred: {str(e)}")
 
 
 def set_current_directory():
