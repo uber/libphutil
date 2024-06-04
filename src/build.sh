@@ -141,10 +141,10 @@ execute_ti () {
   address=$(cat config/${TARGET_ENVIRONMENT}/connect.json | jq -r '.address')
   echo $address
 
-  curl -kv --location --request POST "https://$address:443/api/v1/Processes('TAP.Call.Export Redudant Objects')/ibm.tm1.api.v1.Execute" \
-  --header "Authorization: CAMNamespace $auth_encode_base64" --header 'Content-Type: application/json; charset=utf-8' 
+  # curl -kv --location --request POST "https://$address:443/api/v1/Processes('TAP.Call.Export Redudant Objects')/ibm.tm1.api.v1.Execute" \
+  # --header "Authorization: CAMNamespace $auth_encode_base64" --header 'Content-Type: application/json; charset=utf-8' 
 
-  echo "End TI execution .."
+  echo "TI execution skipped temporarily..."
 }
 
 ### Main body of script starts here
