@@ -316,6 +316,7 @@ DatasourceNameForServer = sCube;
 DatasourceCubeView = sView;
 
 
+
 # ================= TAPTOOLS: START GENERATED CODE =================== #
 nPrologProcedureEndTime = NOW();
 LOGOUTPUT('DEBUG', 'DATASOURCE: DatasourceType: "' | DatasourceType | '"');
@@ -405,15 +406,13 @@ nEpilogProcedureStartTime = NOW();
 #****Begin: Generated Statements***
 #****End: Generated Statements****
 
-sCmd = 'aws s3 cp ' | sFilePath | ' ' | sS3Path;
+sCmd = 'gsutil cp ' | sFilePath | ' ' | sS3Path;
 IF(FILEEXISTS(sFilePath) = 1);
    EXECUTECOMMAND(sCmd, 1);
-   LOGOUTPUT('INFO', 'File ' | sFilePath | ' uploaded to S3 bucket ' | sS3Path);
+   LOGOUTPUT('INFO', 'File ' | sFilePath | ' uploaded to cloud storage bucket ' | sS3Path);
 ELSE;
-   LOGOUTPUT('ERROR', 'File ' | sFilePath | ' not found and hence not uploaded to S3 bucket ' | sS3Path);
+   LOGOUTPUT('ERROR', 'File ' | sFilePath | ' not found and hence not uploaded to cloud storage bucket ' | sS3Path);
 ENDIF;
-
-
 
 # ================= TAPTOOLS: START GENERATED CODE =================== #
 LOGOUTPUT('DEBUG', 'PROCESS_METRIC: PrologProcedureRuntime: "' | NUMBERTOSTRING(ROUNDP((nPrologProcedureEndTime - nPrologProcedureStartTime) * 86400, 2)) | '"');
