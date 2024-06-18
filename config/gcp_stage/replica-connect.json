@@ -1,5 +1,5 @@
 [{
-    "address": "ops-1.findev.uberinternal.com",
+    "address": "ops-1.finuat.uberinternal.com",
     "port": "443",
     "ssl": true
 }
