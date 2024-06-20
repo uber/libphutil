@@ -15,15 +15,15 @@
 
 SKIPCHECK;
 
-['MAPC Measure':'Amount','Source':{'FDS','Ops Adjustment'},'Version':'Actual','Ops Metric':{'Active Riders','New Riders','Active Drivers','New Drivers'},
+['MAPC Measure':'Amount','Source':{'FDS','Ops Adjustment'},'Version':'Actual','Ops Metric':{'Active Drivers','New Drivers','Continuing Drivers'},
 									'Rate Type':'USD','UnSpecified Product Type']=C: IF(  ( (SCAN('Country - ',!Location)>0 % SCAN('(Mega Region)',!Location)>0 % SCAN('Total Location',!Location)>0 ) & ELLEV('Line Of Business', !Line of Business)=0),
    										DB('MAPC', !Version, !Period, !Source, !Rate Type,  'CustomLeaf':!Location | ' Input',!Line of Business,'UnSpecified Product Type', !Ops Metric, 'Amount'),CONTINUE );
 
 ['MAPC Measure':{'Deduped Ratio','L3M Deduped Ratio','UnDedpued Ratio'},'Source':'FDS','Version':'Actual','Ops Metric'
-:{'Active Riders','New Riders','Active Drivers','New Drivers'},'Rate Type':'USD'] = C:IF(  (!Line of Business @= 'Total Rides & Eats' &  ELLEV('Location', !Location) > 0),
+:{'Active Drivers','New Drivers','Continuing Drivers'},'Rate Type':'USD'] = C:IF(  (!Line of Business @= 'Total Rides & Eats' &  ELLEV('Location', !Location) > 0),
 										DB('MAPC', !Version, !Period, !Source, !Rate Type,  'CustomLeaf':!Location | ' Input', 'CustomLeaf:' | !Line of Business | 'Input', !Product Type, !Ops Metric, !MAPC Measure),CONTINUE);
 
 
 ['MAPC Measure':{'Deduped Ratio','L3M Deduped Ratio','UnDedpued Ratio'},'Source':'FDS','Version':'Actual','Ops Metric'
-:{'Active Riders','New Riders','Active Drivers','New Drivers'},'Rate Type':'USD'] = C: IF(ELLEV('Location', !Location) > 0,
+:{'Active Drivers','New Drivers','Continuing Drivers'},'Rate Type':'USD'] = C: IF(ELLEV('Location', !Location) > 0,
 										DB('MAPC', !Version, !Period, !Source, !Rate Type,  'CustomLeaf':!Location | ' Input', !Line of Business, !Product Type, !Ops Metric, !MAPC Measure),CONTINUE);

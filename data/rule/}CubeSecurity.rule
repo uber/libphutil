@@ -30,8 +30,7 @@ FEEDSTRINGS;
 
 [] = S:
    IF(
-      SCAN('Ops', !}Cubes) > 0 % SCAN('Eats', !}Cubes) > 0 % SCAN('Delivery', !}Cubes) > 0 % SCAN('U4B', !}Cubes) > 0 % SCAN('MAPC', !}Cubes) > 0
-% SCAN('Mobility', !}Cubes) > 0
+      SCAN('Ops', !}Cubes) > 0 % SCAN('Eats', !}Cubes) > 0 % SCAN('Delivery', !}Cubes) > 0 % SCAN('U4B', !}Cubes) > 0 % SCAN('Mobility', !}Cubes) > 0
    ,
       'READ'
    , 'None'

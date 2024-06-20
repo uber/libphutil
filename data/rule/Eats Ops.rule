@@ -24,7 +24,6 @@ SKIPCHECK;
       CONTINUE
    );
 
-
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-  =-=-=-=-=-=-=-=-=-=-=-=-=-=-#
 # Eats Ops Calculated Metrics: CPT
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=- =-=-=-=-=-=-=-=-=-=-=-=-=-=- #
@@ -186,21 +185,15 @@ FEEDERS;
 
 ['Actual', 'FDS', 'Total Eats Product Type', 'Total Eats Restaurant Type', 'Completed Deliveries', 'Amount'] =>DB('Ops', 'Actual', !Period, 'FDS', !Rate Type, !Location, '2001', 'EATS', 'Completed Trips', 'Amount');
 
-['Actual', 'FDS', 'Unspecified Eats Product Type', 'Unspecified Restaurant Type', 'Active Eaters', 'Amount'] =>DB('Ops', 'Actual', !Period, 'FDS', !Rate Type, !Location, '2001', 'EATS', 'Active Riders', 'Amount');
-
 ['Actual', 'FDS', 'Unspecified Eats Product Type', 'Unspecified Restaurant Type', 'Active Eaters L28', 'Amount'] =>DB('Ops', 'Actual', !Period, 'FDS', !Rate Type, !Location, '2001', 'EATS', 'Active Riders L28', 'Amount');
 
 ['Actual', 'FDS', 'Unspecified Eats Product Type', 'Unspecified Restaurant Type', 'Weekly Active Eaters', 'Amount'] =>DB('Ops', 'Actual', !Period, 'FDS', !Rate Type, !Location, '2001', 'EATS', 'Weekly Active Riders', 'Amount');
-
-['Actual', 'FDS', 'Unspecified Eats Product Type', 'Unspecified Restaurant Type', 'New Eaters', 'Amount'] =>DB('Ops', 'Actual', !Period, 'FDS', !Rate Type, !Location, '2001', 'EATS', 'New Riders', 'Amount');
 
 ['Actual', 'FDS', 'Unspecified Eats Product Type', 'Unspecified Restaurant Type', 'New Eater Deliveries', 'Amount'] =>DB('Ops', 'Actual', !Period, 'FDS', !Rate Type, !Location, '2001', 'EATS', 'New Rider Trips', 'Amount');
 
 ['Actual', 'FDS', 'Unspecified Eats Product Type', 'Unspecified Restaurant Type', 'Resurrected Eaters', 'Amount'] =>DB('Ops', 'Actual', !Period, 'FDS', !Rate Type, !Location, '2001', 'EATS', 'Resurrected Riders', 'Amount');
 
 ['Actual', 'FDS', 'Unspecified Eats Product Type', 'Unspecified Restaurant Type', '84 Day Inactive Eaters', 'Amount'] =>DB('Ops', 'Actual', !Period, 'FDS', !Rate Type, !Location, '2001', 'EATS', '84 Day Inactive Riders', 'Amount');
-
-['Actual', 'FDS', 'Unspecified Eats Product Type', 'Unspecified Restaurant Type', 'Continuing Eaters', 'Amount'] =>DB('Ops', 'Actual', !Period, 'FDS', !Rate Type, !Location, '2001', 'EATS', 'Continuing Riders', 'Amount');
 
 ['Actual', 'FDS', 'Unspecified Eats Product Type', 'Unspecified Restaurant Type', 'Continuing Eater Deliveries', 'Amount'] =>DB('Ops', 'Actual', !Period, 'FDS', !Rate Type, !Location, '2001', 'EATS', 'Continuing Rider Trips', 'Amount');
 
