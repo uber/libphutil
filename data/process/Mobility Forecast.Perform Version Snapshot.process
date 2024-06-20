@@ -405,6 +405,14 @@ nEpilogProcedureStartTime = NOW();
 #****Begin: Generated Statements***
 #****End: Generated Statements****
 
+#Copy Actuals data into Snapshot version
+
+IF(nCurrActualMonth @<> '');
+   nCurrActualMonth = SUBST(nCurrActualMonth, 6, 7);
+   IF(nCurrActualMonth @<> '01');
+      EXECUTEPROCESS('Mobility Forecast.Perform Actuals Copy On Version Snapshot', 'pTargetVersion', pVersionTo);
+   ENDIF;
+ENDIF;
 
 # ================= TAPTOOLS: START GENERATED CODE =================== #
 LOGOUTPUT('DEBUG', 'PROCESS_METRIC: PrologProcedureRuntime: "' | NUMBERTOSTRING(ROUNDP((nPrologProcedureEndTime - nPrologProcedureStartTime) * 86400, 2)) | '"');
@@ -435,12 +443,6 @@ nTotalMetadataOperations = nPrologProcedureMetadataOperations + nMetadataProcedu
 LOGOUTPUT('DEBUG', 'PROCESS_METRIC: TotalMetadataOperations: "' | NUMBERTOSTRING(nTotalMetadataOperations) | '"');
 LOGOUTPUT('DEBUG', 'PROGRESS: END EPILOG PROCEDURE');
 # ================= TAPTOOLS: END GENERATED CODE ===================== #
-IF(nCurrActualMonth @<> '');
-   nCurrActualMonth = SUBST(nCurrActualMonth, 6, 7);
-   IF(nCurrActualMonth @<> '01');
-      EXECUTEPROCESS('Mobility Forecast.Perform Actuals Copy On Version Snapshot', 'pTargetVersion', pVersionTo);
-   ENDIF;
-ENDIF;
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
 # END: EPILOG PROCEDURE                                                       #
