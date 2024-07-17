@@ -207,7 +207,7 @@ ENDIF;
 # ================= TAPTOOLS: START GENERATED CODE =================== #
 nDataProcedureDataOperations = nDataProcedureDataOperations + 1;
 # ================= TAPTOOLS: END GENERATED CODE ===================== #
-CELLINCREMENTN(value, 'Mobility', 'Forecast Excl Actuals', vPeriod, 'Product PL', vRate_Type, vlob, vdepartment, vlocation, vproduct_type, 'Unspecified Mobility Features', vMobility_Ops_Metrics, 'Amount');
+CELLPUTN(value, 'Mobility', 'Forecast Excl Actuals', vPeriod, 'Product PL', vRate_Type, vlob, vdepartment, vlocation, vproduct_type, 'Unspecified Mobility Features', vMobility_Ops_Metrics, 'Amount');
 
 
 # ================= TAPTOOLS: START GENERATED CODE =================== #
