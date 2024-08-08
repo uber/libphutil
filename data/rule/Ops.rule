@@ -492,6 +492,30 @@ CONTINUE);
       CONTINUE
    );
 
+##################################################################################
+# Apply Natural consolidation for Loctions-Country,Mega Region and Total location
+# For Total Rides and Eats with M&A but not for Total Rides and Eats
+##################################################################################
+
+['Forecast Excl Actuals', 'Planning', 'USD', 'Ops Measure':'Amount'] = C:
+
+IF(
+      ELISANC ('Ops Metric', 'MAPC Metrics',!Ops Metric) > 0,
+
+      IF(
+            ( SUBST(!Location, 1, 10) @= 'Country - ' % SUBST(!Location, LONG(!Location) - 12, 13) @= '(Mega Region)' % !Location @= 'Total Location' ) & 
+
+            (ELISPAR('Line Of Business','Total Rides & Eats with M&A',!Line of Business)= 1 & !Line of Business @<> 'Total Rides & Eats'),
+
+            STET,
+
+            CONTINUE
+      ),
+      CONTINUE
+);
+
+
+
 ['Forecast Excl Actuals', 'Planning', 'USD', 'Ops Measure':'Amount'] = C:
    IF(
       !Ops Metric @= 'Active Drivers' % !Ops Metric @= 'New Drivers' % !Ops Metric @= 'Continuing Drivers'
