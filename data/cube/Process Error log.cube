@@ -1,0 +1,17 @@
+{
+    "Dimensions": [
+        {
+            "Name": "Process Item"
+        },
+        {
+            "Name": "}Clients"
+        },
+        {
+            "Name": "Process Error log Item"
+        },
+        {
+            "Name": "Process Error log Measure"
+        }
+    ],
+    "Name": "Process Error log"
+}

@@ -1,0 +1,38 @@
+{
+    "DefaultMember": {
+        "Attributes": {
+            "Caption": "Message"
+        },
+        "IsPlaceholder": false,
+        "Name": "Message",
+        "Ordinal": 1,
+        "Type": "Regular",
+        "UniqueName": "[Process Error log Measure].[Process Error log Measure].[Message]",
+        "Weight": 0
+    },
+    "Edges": [],
+    "ElementAttributes": [],
+    "Elements": [
+        {
+            "Attributes": {
+                "Caption": "Message"
+            },
+            "Index": 1,
+            "Name": "Message",
+            "Type": "String",
+            "UniqueName": "[Process Error log Measure].[Process Error log Measure].[Message]"
+        },
+        {
+            "Attributes": {
+                "Caption": "Value"
+            },
+            "Index": 2,
+            "Name": "Value",
+            "Type": "Numeric",
+            "UniqueName": "[Process Error log Measure].[Process Error log Measure].[Value]"
+        }
+    ],
+    "Name": "Process Error log Measure",
+    "Subsets": [],
+    "UniqueName": "[Process Error log Measure].[Process Error log Measure]"
+}

@@ -1,0 +1,8 @@
+{
+    "Attributes": {
+        "Caption": "Process Error log Measure"
+    },
+    "Hierarchies": [],
+    "Name": "Process Error log Measure",
+    "UniqueName": "[Process Error log Measure]"
+}

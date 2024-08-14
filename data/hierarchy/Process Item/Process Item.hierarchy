@@ -1,0 +1,29 @@
+{
+    "DefaultMember": {
+        "Attributes": {
+            "Caption": "Metric_Adjustment"
+        },
+        "IsPlaceholder": false,
+        "Name": "Metric_Adjustment",
+        "Ordinal": 1,
+        "Type": "Regular",
+        "UniqueName": "[Process Item].[Process Item].[Metric_Adjustment]",
+        "Weight": 0
+    },
+    "Edges": [],
+    "ElementAttributes": [],
+    "Elements": [
+        {
+            "Attributes": {
+                "Caption": "Metric_Adjustment"
+            },
+            "Index": 1,
+            "Name": "Metric_Adjustment",
+            "Type": "Numeric",
+            "UniqueName": "[Process Item].[Process Item].[Metric_Adjustment]"
+        }
+    ],
+    "Name": "Process Item",
+    "Subsets": [],
+    "UniqueName": "[Process Item].[Process Item]"
+}
