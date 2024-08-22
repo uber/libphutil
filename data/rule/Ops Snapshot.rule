@@ -126,7 +126,7 @@ SKIPCHECK;
          ELLEV('Line of Business', !Line of Business) > 0 %  ELLEV('Location', !Location) > 0
          ,
          IF(
-             SCAN('Rides', !Line of Business) = 0 & SCAN('Eats', !Line of Business) = 0
+             ( SCAN('Rides', !Line of Business) = 0 & SCAN('Eats', !Line of Business) = 0 & ELISPAR('Line Of Business','Total Rides & Eats with M&A',!Line of Business)= 0)
              ,
                 0
              ,

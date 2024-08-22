@@ -505,7 +505,7 @@ IF(
       IF(
             ( SUBST(!Location, 1, 10) @= 'Country - ' % SUBST(!Location, LONG(!Location) - 12, 13) @= '(Mega Region)' % !Location @= 'Total Location' ) & 
 
-            (ELISPAR('Line Of Business','Total Rides & Eats with M&A',!Line of Business)= 1 & !Line of Business @<> 'Total Rides & Eats'),
+            (ELISPAR('Line Of Business','Total Careem',!Line of Business)= 1 % (ELISPAR('Line Of Business','Total Rides & Eats with M&A',!Line of Business)= 1 & !Line of Business @<> 'Total Rides & Eats')),
 
             STET,
 
