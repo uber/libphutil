@@ -67,9 +67,6 @@ cPythonExe = CELLGETS('TAP System Info', 'Python Executable', 'Value');
 cScriptRun = CELLGETS('TAP System Info', 'Scripts Shared Path', 'Value');
 cScriptRun = cScriptRun | '/tap/backup_feeders.py';
 
-cBatchUser = CELLGETS('TAP System Info', 'Batch Username', 'Value');
-cBatchPassword = CELLGETS('TAP System Info', 'Batch Password', 'Value');
-cBatchNamespace = CELLGETS('TAP System Info', 'Batch Namespace', 'Value');
 cBatchApplication = CELLGETS('TAP System Info', 'Service Name', 'Value');
 cBatchEnvironment = CELLGETS('TAP System Info', 'Environment', 'Value');
 

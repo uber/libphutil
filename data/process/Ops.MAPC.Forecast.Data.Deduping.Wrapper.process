@@ -93,7 +93,6 @@ cScriptConfig = cScriptRunPath | '/rushti/config.ini';
 
 cInstance = CELLGETS('TAP System Info', 'Instance Name', 'Value');
 cBatchUser = CELLGETS('TAP System Info', 'Batch Username', 'Value');
-cBatchPassword = CELLGETS('TAP System Info', 'Batch Password', 'Value');
 cBatchNamespace = CELLGETS('TAP System Info', 'Batch Namespace', 'Value');
 cServiceName = CELLGETS('TAP System Info', 'Service Name', 'Value');
 cServer = CELLGETS('TAP Application Info', CELLGETS('TAP System Info', 'Service Name', 'Value'), 'Endpoint');

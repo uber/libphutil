@@ -102,8 +102,8 @@ cMonth = TRIM(pMonth);
 cRateType = TRIM(pRateType);
 cAccount = TRIM(pAccount);
 
-IF(cMonth @='MEC_Month');
-  cMonth = CELLGETS('Admin Playbook', 'Oracle Sync', 'Current Actual Month');
+IF(cMonth @= 'MEC_Month');
+   cMonth = CELLGETS('Admin Playbook', 'Oracle Sync', 'Current Actual Month');
 ENDIF;
 
 cRand = NUMBERTOSTRING(ROUND(RAND() * 100000));
@@ -118,7 +118,6 @@ cScriptConfig = cScriptRunPath | '/rushti/config.ini';
 
 cInstance = CELLGETS('TAP System Info', 'Instance Name', 'Value');
 cBatchUser = CELLGETS('TAP System Info', 'Batch Username', 'Value');
-cBatchPassword = CELLGETS('TAP System Info', 'Batch Password', 'Value');
 cBatchNamespace = CELLGETS('TAP System Info', 'Batch Namespace', 'Value');
 cServiceName = CELLGETS('TAP System Info', 'Service Name', 'Value');
 cServer = CELLGETS('TAP Application Info', CELLGETS('TAP System Info', 'Service Name', 'Value'), 'Endpoint');

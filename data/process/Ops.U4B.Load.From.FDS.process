@@ -178,7 +178,6 @@ mDash = 'Dashboard Measure';
 rMetric = 'Operational';
 cMetricString = '';
 nTrips = 0;
-nMiles = 0;
 
 ##
 
@@ -359,8 +358,6 @@ ENDIF;
 
 IF(sMetric @= 'Completed Trips');
    nTrips = 1;
-ELSEIF(sMetric @= 'Completed Trips - Rides Insurance CM' % sMetric @= 'P2 P2P Miles' % sMetric @= 'P3 P2P Miles' % sMetric @= 'P2 Non-P2P Miles' % sMetric @= 'P3 Non-P2P Miles' % sMetric @= 'P2P Miles');
-   nMiles = 1;
 ENDIF;
 
 
