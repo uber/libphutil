@@ -195,7 +195,6 @@ nDataProcedureEndTime = 0;
 cCube = 'Mobility';
 nRecords = 1;
 nTrips = 0;
-nMiles = 0;
 
 ###Record count dashboard
 cRecordCount = 0;
@@ -437,8 +436,6 @@ ENDIF;
 
 IF(sMetric @= 'Completed Trips');
    nTrips = 1;
-ELSEIF(sMetric @= 'Completed Trips - Rides Insurance CM' % sMetric @= 'P2 P2P Miles' % sMetric @= 'P3 P2P Miles' % sMetric @= 'P2 Non-P2P Miles' % sMetric @= 'P3 Non-P2P Miles');
-   nMiles = 1;
 ENDIF;
 
 IF(SCAN(sMetric, cMetricString) = 0);
@@ -461,7 +458,7 @@ WHILE(p <= DIMSIZ(sDim));
       # ================= TAPTOOLS: START GENERATED CODE =================== #
       nDataProcedureDataOperations = nDataProcedureDataOperations + 1;
       # ================= TAPTOOLS: END GENERATED CODE ===================== #
-      CellIncrementN(vValue, cCube, 'Actual', sPeriod, 'FDS', sRateType, vLob, '0000', sLocation, vProduct, vFeature, sMetric, 'Amount');
+      CELLINCREMENTN(vValue, cCube, 'Actual', sPeriod, 'FDS', sRateType, vLob, '0000', sLocation, vProduct, vFeature, sMetric, 'Amount');
       cRecordCount = cRecordCount + 1;
    ENDIF;
    p = p + 1;
