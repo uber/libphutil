@@ -408,10 +408,11 @@ nEpilogProcedureStartTime = NOW();
 #Copy Actuals data into Snapshot version
 
 IF(nCurrActualMonth @<> '');
-   nCurrActualMonth = SUBST(nCurrActualMonth, 6, 7);
-   IF(nCurrActualMonth @<> '01');
-      EXECUTEPROCESS('Mobility Forecast.Perform Actuals Copy On Version Snapshot', 'pTargetVersion', pVersionTo);
-   ENDIF;
+   nCurrActualYear = SUBST(nCurrActualMonth, 1, 4);
+   EXECUTEPROCESS('Mobility Forecast.Perform Actuals Copy Wrapper'
+      , 'pMonth', nCurrActualYear
+      , 'pVersionTo', pVersionTo
+   );
 ENDIF;
 
 # ================= TAPTOOLS: START GENERATED CODE =================== #

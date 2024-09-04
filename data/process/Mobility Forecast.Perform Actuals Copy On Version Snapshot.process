@@ -16,6 +16,12 @@
             "Prompt": "REQ: From Version",
             "Type": "String",
             "Value": "Forecast Excl Actuals"
+        },
+        {
+            "Name": "pMonth",
+            "Prompt": "",
+            "Type": "String",
+            "Value": ""
         }
     ],
     "UIData": "",
@@ -144,6 +150,8 @@ pVersionTo = TRIM(pTargetVersion);
 
 sDimVersion = 'Version';
 
+sSubRateType = 'forecast_allocations';
+
 IF(DIMIX(sDimVersion, pTargetVersion) = 0);
    ITEMREJECT('Versions: ' | pTargetVersion | 'does not exist in Version dimension.');
    PROCESSQUIT;
@@ -174,17 +182,13 @@ sCurrMonth = TIMST(nTimeNow, '\Y-\m');
 
 sSrcView = 'zTempTI' | GETPROCESSNAME | sTimeStart | NUMBERTOSTRING(RAND());
 sSrcSub = sSrcView;
-sSrcPeriodSub = '}zTempTI' | GETPROCESSNAME | sTimeStart | NUMBERTOSTRING(RAND());
+sSrcRateSub = '}zTempTI' | GETPROCESSNAME | sTimeStart | NUMBERTOSTRING(RAND());
 
 sTgtView = sSrcView | '_Target';
 sTgtSub = sTgtView;
-sTgtPeriodSub = '}zTempTI' | GETPROCESSNAME | sTimeStart | NUMBERTOSTRING(RAND());
 
 nCurrActualMonth = TRIM(CELLGETS('Admin Playbook', 'Oracle Sync', 'Current Actual Month'));
-IF(nCurrActualMonth @<> '');
-   nCurrActualMonthYear = SUBST(nCurrActualMonth, 1, 4);
-   nCurrActualMonthEOP = ATTRN(sDimPeriod, nCurrActualMonth, 'End of Period');
-ELSE;
+IF(nCurrActualMonth @= '');
    LOGOUTPUT('Info', 'Current Acutal Month Config not available in the Admin Playbook');
    PROCESSQUIT;
 ENDIF;
@@ -211,7 +215,7 @@ WHILE(sDim @<> '');
    VIEWSUBSETASSIGN(sSrcCube, sSrcView, sDim, sSrcSub);
 
    IF(sDim @= sDimPeriod);
-      sSourceMdx = '{TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER({[' | sDimPeriod | '].[' | nCurrActualMonthYear | ']}, ALL, RECURSIVE )}, 0)}';
+      sSourceMdx = '{TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER({[' | sDimPeriod | '].[' | pMonth | ']}, ALL, RECURSIVE )}, 0)}';
    ELSEIF(sDim @= sDimVersion);
       SUBSETELEMENTINSERT(sDim, sSrcSub, pVersionFrom, 1);
    ELSE;
@@ -229,21 +233,18 @@ WHILE(sDim @<> '');
 
 END;
 
-sPeriodSourceSize = SUBSETGETSIZE(sDimPeriod, sSrcSub);
+sRateTypeSourceSize = SUBSETGETSIZE(sDimRateType, sSubRateType);
 i = 1;
-IF(SUBSETEXISTS(sDimPeriod, sSrcPeriodSub) = TRUE);
-   SUBSETDESTROY(sDimPeriod, sSrcPeriodSub);
+IF(SUBSETEXISTS(sDimRateType, sSrcRateSub) = TRUE);
+   SUBSETDESTROY(sDimRateType, sSrcRateSub);
 ELSE;
-   SUBSETCREATE(sDimPeriod, sSrcPeriodSub, nAutoCleanup);
+   SUBSETCREATE(sDimRateType, sSrcRateSub, nAutoCleanup);
 ENDIF;
-VIEWSUBSETASSIGN(sSrcCube, sSrcView, sDimPeriod, sSrcPeriodSub);
+VIEWSUBSETASSIGN(sSrcCube, sSrcView, sDimRateType, sSrcRateSub);
 
-WHILE(i <= sPeriodSourceSize);
-   sEle = SUBSETGETELEMENTNAME(sDimPeriod, sSrcSub, i);
-   nMonthEOP = ATTRN(sDimPeriod, sEle, 'End of Period');
-   IF(nMonthEOP <= nCurrActualMonthEOP);
-      SUBSETELEMENTINSERT(sDimPeriod, sSrcPeriodSub, sEle, 1);
-   ENDIF;
+WHILE(i <= sRateTypeSourceSize);
+   sEle = SUBSETGETELEMENTNAME(sDimRateType, sSubRateType, i);
+   SUBSETELEMENTINSERT(sDimRateType, sSrcRateSub, sEle, 1);
    i = i + 1;
 END;
 
@@ -277,7 +278,7 @@ WHILE(sDim @<> '');
    VIEWSUBSETASSIGN(sTgtCube, sTgtView, sDim, sTgtSub);
 
    IF(sDim @= sDimPeriod);
-      sTgtMdx = '{TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER({[' | sDimPeriod | '].[' | nCurrActualMonthYear | ']}, ALL, RECURSIVE )}, 0)}';
+      sTgtMdx = '{TM1FILTERBYLEVEL( {TM1DRILLDOWNMEMBER({[' | sDimPeriod | '].[' | pMonth | ']}, ALL, RECURSIVE )}, 0)}';
 
    ELSEIF(sDim @= sDimVersion);
       SUBSETELEMENTINSERT(sDim, sTgtSub, pVersionTo, 1);
@@ -297,23 +298,6 @@ WHILE(sDim @<> '');
 
 END;
 
-sPeriodTgtSize = SUBSETGETSIZE(sDimPeriod, sTgtSub);
-i = 1;
-IF(SUBSETEXISTS(sDimPeriod, sTgtPeriodSub) = TRUE);
-   SUBSETDESTROY(sDimPeriod, sTgtPeriodSub);
-ELSE;
-   SUBSETCREATE(sDimPeriod, sTgtPeriodSub, nAutoCleanup);
-ENDIF;
-VIEWSUBSETASSIGN(sTgtCube, sTgtView, sDimPeriod, sTgtPeriodSub);
-
-WHILE(i <= sPeriodTgtSize);
-   sEle = SUBSETGETELEMENTNAME(sDimPeriod, sTgtSub, i);
-   nMonthEOP = ATTRN(sDimPeriod, sEle, 'End of Period');
-   IF(nMonthEOP <= nCurrActualMonthEOP);
-      SUBSETELEMENTINSERT(sDimPeriod, sTgtPeriodSub, sEle, 1);
-   ENDIF;
-   i = i + 1;
-END;
 
 VIEWEXTRACTSKIPZEROESSET(sTgtCube, sTgtView, TRUE);
 VIEWEXTRACTSKIPRULEVALUESSET(sTgtCube, sTgtView, TRUE);
