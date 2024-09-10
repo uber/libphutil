@@ -6,6 +6,8 @@ import os
 import shlex
 import sys
 import itertools
+import random
+import time
 import json
 import base64
 from base64 import b64decode
@@ -13,6 +15,7 @@ from concurrent.futures import ThreadPoolExecutor
 
 from TM1py import TM1Service
 from taptools import getsecret
+from taptools import async_status
 
 def tm1get_credentials(service_name):
     file_location='/var/tm1/'+service_name+'/config/deploy/node.json'
@@ -131,14 +134,27 @@ def execute_line(line, tm1_services):
         instance_name=instance_name)
     logging.info(msg)
     try:
-        response = tm1.processes.execute(process_name=process_name, **parameters)
+        #response = tm1.processes.execute(process_name=process_name, **parameters)
+        # Reset async_id
+        async_id = ''
+        total_time=0
+        async_id = tm1.processes.execute_with_return(process_name=process_name, **parameters, return_async_id = True)
+        logging.info(f'async_id for {process_name} called with params {parameters} : {async_id}')
+        response, total_time, retry_count = async_status.get_async_job_status(tm1, async_id, max_retries=60) if async_id != None else None
+        if response[0] == False:
+            raise Exception(f'params: {parameters} - {response[1]}')
+        elif response == None:
+            raise Exception(f'params: {parameters} - No reponse received after maximum retries')
+
         msg_raw = "Execution Successful: {process_name} with Parameters: {parameters} on instance: {instance_name}. " \
-                  "Elapsed time: {elapsed_time}"
+                  "Elapsed time:{elapsed_time} with response:{response} and retry count of:{retry_count}"
         msg = msg_raw.format(
             process_name=process_name,
             parameters=parameters,
             instance_name=instance_name,
-            elapsed_time=response.elapsed)
+            elapsed_time=total_time,
+            retry_count=retry_count,
+            response=response)
         logging.info(msg)
     except Exception as e:
         msg = "Execution Failed. Process: {process}, Parameters: {parameters}, Error: {error}".format(
