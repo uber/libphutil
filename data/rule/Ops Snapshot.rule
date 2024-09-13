@@ -121,16 +121,39 @@ SKIPCHECK;
       CONTINUE
     );
 
+##################################################################################
+# Apply Natural consolidation for Loctions-Country,Mega Region and Total location
+# For Mobility M&A and Delivery M&A
+##################################################################################
+   
+['Ops Measure':'Amount'] = C:
+
+IF(
+      ELISANC ('Ops Metric', 'MAPC Metrics',!Ops Metric) > 0,
+
+      IF(
+            (ELLEV('Line of Business', !Line of Business) > 0 %  ELLEV('Location', !Location) > 0) & 
+
+            ( (ELISANC('Line Of Business','Delivery',!Line of Business)= 1 & !Line of Business @<>'Delivery ex M&A') % (ELISANC('Line Of Business','Mobility',!Line of Business)= 1 & !Line of Business @<>'Mobility ex M&A')),
+
+            STET,
+
+            CONTINUE
+      ),
+      CONTINUE
+);
+
+
 ['Ops Measure':'Amount'] = C:
     IF(
          ELLEV('Line of Business', !Line of Business) > 0 %  ELLEV('Location', !Location) > 0
          ,
          IF(
-             ( SCAN('Rides', !Line of Business) = 0 & SCAN('Eats', !Line of Business) = 0 & ELISPAR('Line Of Business','Total Rides & Eats with M&A',!Line of Business)= 0)
-             ,
-                0
+             (!Line of Business @='Delivery'  % !Line of Business @='Mobility' % SCAN('Total Rides & Eats', !Line of Business) > 0)
              ,
              CONSOLIDATECHILDREN('Line of Business')
+             ,
+                0
           )
    ,
     CONTINUE
