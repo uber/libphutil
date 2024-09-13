@@ -254,8 +254,11 @@ WHILE(sDim @<> '');
       sMDX = '{{TM1FILTERBYLEVEL({TM1SUBSETALL([' | sDim | '])}, 0)}, [' | sDim | '].[Total Location], {TM1FILTERBYPATTERN( {TM1SUBSETALL( [' | sDim | '] )}, "*(Mega Region)*")}, {TM1FILTERBYPATTERN( {TM1SUBSETALL( [' | sDim | '] )}, "Country - *")}}';
 
    ELSEIF(sDim @= sDimLob);
-      sMDX = '{{TM1FILTERBYLEVEL( TM1DRILLDOWNMEMBER( {[' | sDim | '].[Total Rides & Eats with M&A]}, ALL, RECURSIVE ), 0 )}, [' | sDim | '].[Total Rides & Eats], [' | sDim | '].[Delivery ex M&A], [' | sDim | '].[Mobility ex M&A], [' | sDim | '].[Total Careem]}';
-
+      sMDX = '{ {Union(
+      {TM1FILTERBYLEVEL( TM1DRILLDOWNMEMBER( {[' | sDim | '].[Mobility]}, ALL, RECURSIVE ), 0 )},
+      {TM1FILTERBYLEVEL( TM1DRILLDOWNMEMBER( {[' | sDim | '].[Delivery]}, ALL, RECURSIVE ), 0 )}
+      )},[' | sDim | '].[Total Rides & Eats], [' | sDim | '].[Delivery ex M&A], [' | sDim | '].[Mobility ex M&A], [' | sDim | '].[Total Careem]}';
+      LOGOUTPUT('Info', sMDX);
    ELSEIF(sDim @= sDimOpsMetric);
       sMDX = '{TM1FILTERBYLEVEL( TM1DRILLDOWNMEMBER( {[' | sDim | '].[MAPC Metrics]}, ALL, RECURSIVE ), 0 )}';
 
