@@ -135,7 +135,7 @@ DatasourceDimensionSubset = sSrcSub;
 
 nMonthEOP = ATTRN(sDim, vPeriod, 'End of Period');
 
-IF(nMonthEOP < nCurrActualMonthEOP);
+IF(nMonthEOP <= nCurrActualMonthEOP);
    RUNPROCESS('Mobility Forecast.Perform Actuals Copy On Version Snapshot'
       , 'pTargetVersion', pVersionTo
       , 'pMonth', vPeriod
