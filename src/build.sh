@@ -1,7 +1,7 @@
 #!/bin/sh
 
 TM1_USERNAME="svc-epm-deploy-uat"
-GROUP="OneLogin"
+GROUP="uberAD"
 
 set -euo
 
