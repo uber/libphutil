@@ -416,26 +416,8 @@ CONTINUE);
    
 
 ##################################################################################
-# Apply Natural consolidation for C Level Locations
-# For Mobility M&A and Delivery M&A
+# For Mobility and Delivery consolidation
 ##################################################################################
-
-['Actual','Ops Measure':'Amount'] = C:
-
-IF(
-      ELISANC ('Ops Metric', 'MAPC Metrics',!Ops Metric) > 0,
-
-      IF(
-            (ELLEV ('Location', !Location) > 0) & 
-
-            ( (ELISANC('Line Of Business','Delivery',!Line of Business)= 1 & !Line of Business @<>'Delivery ex M&A') % (ELISANC('Line Of Business','Mobility',!Line of Business)= 1 & !Line of Business @<>'Mobility ex M&A')),
-
-            STET,
-
-            CONTINUE
-      ),
-      CONTINUE
-);
 
 ['Ops Measure':'Amount','Actual'] = C:
 
@@ -447,7 +429,8 @@ IF(
            ELLEV('Line of Business', !Line of Business) > 0 %  ELLEV('Location', !Location) > 0
            ,
            IF(
-               (!Line of Business @='Delivery'  % !Line of Business @='Mobility' % SCAN('Total Rides & Eats', !Line of Business) > 0)
+               ( !Line of Business @='Delivery'  % !Line of Business @='Mobility' % (ELISANC('Line Of Business','Delivery',!Line of Business)= 1 & !Line of Business @<>'Delivery ex M&A') 
+               % (ELISANC('Line Of Business','Mobility',!Line of Business)= 1 & !Line of Business @<>'Mobility ex M&A') % SCAN('Total Rides & Eats', !Line of Business) > 0)
                ,
                CONSOLIDATECHILDREN('Line of Business')
                ,
