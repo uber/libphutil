@@ -500,28 +500,6 @@ CONTINUE);
 
 ##################################################################################
 # Apply Natural consolidation for Loctions-Country,Mega Region and Total location
-# For Mobility M&A and Delivery M&A
-##################################################################################
-
-['Forecast Excl Actuals', 'Planning', 'USD', 'Ops Measure':'Amount'] = C:
-
-IF(
-      ELISANC ('Ops Metric', 'MAPC Metrics',!Ops Metric) > 0,
-
-      IF(
-            ( SUBST(!Location, 1, 10) @= 'Country - ' % SUBST(!Location, LONG(!Location) - 12, 13) @= '(Mega Region)' % !Location @= 'Total Location' ) & 
-
-            ( (ELISANC('Line Of Business','Delivery',!Line of Business)= 1 & !Line of Business @<>'Delivery ex M&A') % (ELISANC('Line Of Business','Mobility',!Line of Business)= 1 & !Line of Business @<>'Mobility ex M&A')),
-
-            STET,
-
-            CONTINUE
-      ),
-      CONTINUE
-);
-
-##################################################################################
-# Apply Natural consolidation for Loctions-Country,Mega Region and Total location
 # For Total Rides and Eats with M&A but not for Total Rides and Eats
 ##################################################################################
 
@@ -615,7 +593,8 @@ IF(
            ELLEV('Line of Business', !Line of Business) > 0 %  ELLEV('Location', !Location) > 0
            ,
            IF(
-               (!Line of Business @='Delivery'  % !Line of Business @='Mobility' % SCAN('Total Rides & Eats', !Line of Business) > 0)
+               ( !Line of Business @='Delivery'  % !Line of Business @='Mobility' % (ELISANC('Line Of Business','Delivery',!Line of Business)= 1 & !Line of Business @<>'Delivery ex M&A') 
+               % (ELISANC('Line Of Business','Mobility',!Line of Business)= 1 & !Line of Business @<>'Mobility ex M&A') % SCAN('Total Rides & Eats', !Line of Business) > 0)
                ,
                CONSOLIDATECHILDREN('Line of Business')
                ,
