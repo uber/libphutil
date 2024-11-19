@@ -69,58 +69,54 @@ WHILE(nCurPos <= LONG(sLoopString));
    sCurChar = SUBST(sLoopString, nCurPos, 1);
    IF(sCurChar @= '|');
       sRateType = SUBST(sLoopString, nStart, nCurPos - nStart);
-     IF(LONG(sAddedRateTypes) > 0 &  UPPER(sBatchTriggerFlag) @= 'YES');
+      IF(LONG(sAddedRateTypes) > 0 & UPPER(sBatchTriggerFlag) @= 'YES');
 
-   cPythonExe = CELLGETS('TAP System Info', 'Python Executable', 'Value');
+         cPythonExe = CELLGETS('TAP System Info', 'Python Executable', 'Value');
 
-   cScriptRun = CELLGETS('TAP System Info', 'Scripts Shared Path', 'Value');
-   cScriptRun = cScriptRun | '/tap/tap-runti-in-parallel.py';
+         cScriptRun = CELLGETS('TAP System Info', 'Scripts Shared Path', 'Value');
+         cScriptRun = cScriptRun | '/tap/tap-runtipro-in-parallel.py';
 
-   cBatchUser = CELLGETS('TAP System Info', 'Batch Username', 'Value');
-   cBatchPassword = CELLGETS('TAP System Info', 'Batch Password', 'Value');
-   cBatchNamespace = CELLGETS('TAP System Info', 'Batch Namespace', 'Value');
+         cAnalytics1Server = CELLGETS('TAP Application Info', 'Analytics-1', 'Endpoint');
+         cAnalyticsServer = CELLGETS('TAP Application Info', 'Analytics', 'Endpoint');
 
-   cAnalytics1Server = CELLGETS('TAP Application Info', 'Analytics-1', 'Endpoint');
-   cAnalyticsServer = CELLGETS('TAP Application Info', 'Analytics', 'Endpoint');
+         cPort = '443';
+         cThreads = '30';
 
-   cPort = '443';
-   cThreads = '30';
+         pPeriod = '';
+         sProcessName = 'Cube.Data.Copy_Ops.ops.to.GLOperational.Reporting';
+         vElement = 'Analytics Sync';
+         #Identify all the leaf ubder Analytics Sync
+         pSourceDim = 'Ops Metric';
+         pMetric = '';
+         nIndex = 1;
+         nLimit = ELCOMPN(pSourceDim, vElement);
+         WHILE(nIndex <= nLimit);
+            sElName = ELEMENTCOMPONENT(pSourceDim, '', vElement, nIndex) | '|';
+            pMetric = pMetric | sElName;
+            nIndex = nIndex + 1;
+         END;
+         sTemplateProcessAll = '';
+         sAddedRateTypes = sRateType;
+         cTemplateScriptRun = '%cPythonExe% %cScriptRun% --server ''%cAnalyticsServer%'' --port %cPort% --threads ''%cThreads%'' %sTemplateProcessAll%';
 
-   pPeriod = '';
-   sProcessName = 'Cube.Data.Copy_Ops.ops.to.GLOperational.Reporting';
-   vElement = 'Analytics Sync';
-   #Identify all the leaf ubder Analytics Sync
-   pSourceDim = 'Ops Metric';
-   pMetric = '';
-   nIndex = 1;
-   nLimit = ELCOMPN(pSourceDim, vElement);
-   WHILE(nIndex <= nLimit);
-      sElName = ELEMENTCOMPONENT(pSourceDim, '', vElement, nIndex) | '|';
-      pMetric = pMetric | sElName;
-      nIndex = nIndex + 1;
-   END;
-    sTemplateProcessAll = '';
-    sAddedRateTypes = sRateType ;
-   cTemplateScriptRun = '%cPythonExe% %cScriptRun% --server ''%cAnalyticsServer%'' --port %cPort% --user ''%cBatchUser%'' --password ''%cBatchPassword%'' --namespace ''%cBatchNamespace%'' --threads ''%cThreads%'' %sTemplateProcessAll%';
+         cTemplateProcess_GO = '--process ''%sProcessName%'' pMetric ''% pMetric%'' sAddedRateTypes ''% sAddedRateTypes%'' ';
 
-   cTemplateProcess_GO = '--process ''%sProcessName%'' pMetric ''% pMetric%'' sAddedRateTypes ''% sAddedRateTypes%'' ';
+         sTemplateProcessAll = sTemplateProcessAll | EXPAND(cTemplateProcess_GO);
+         sCommand = EXPAND(cTemplateScriptRun);
 
-   sTemplateProcessAll = sTemplateProcessAll | EXPAND(cTemplateProcess_GO);
-   sCommand = EXPAND(cTemplateScriptRun);
+         EXECUTECOMMAND(sCommand, 1);
 
-   EXECUTECOMMAND(sCommand, 1);
+         sTemplateProcessAll = '';
+         cTemplateScriptRun = '%cPythonExe% %cScriptRun% --server ''%cAnalytics1Server%'' --port %cPort% --threads ''%cThreads%'' %sTemplateProcessAll%';
+         sTemplateProcessAll = sTemplateProcessAll | EXPAND(cTemplateProcess_GO);
+         sCommand = EXPAND(cTemplateScriptRun);
 
-   sTemplateProcessAll = '';
-   cTemplateScriptRun = '%cPythonExe% %cScriptRun% --server ''%cAnalytics1Server%'' --port %cPort% --user ''%cBatchUser%'' --password ''%cBatchPassword%'' --namespace ''%cBatchNamespace%'' --threads ''%cThreads%'' %sTemplateProcessAll%';
-   sTemplateProcessAll = sTemplateProcessAll | EXPAND(cTemplateProcess_GO);
-   sCommand = EXPAND(cTemplateScriptRun);
-
-   EXECUTECOMMAND(sCommand, 1);
+         EXECUTECOMMAND(sCommand, 1);
 
       ENDIF;
-        nStart = nCurPos + 1;
-     ENDIF;
-      nCurPos = nCurPos + 1;
+      nStart = nCurPos + 1;
+   ENDIF;
+   nCurPos = nCurPos + 1;
 END;
 # ================= TAPTOOLS: START GENERATED CODE =================== #
 nPrologProcedureEndTime = NOW();

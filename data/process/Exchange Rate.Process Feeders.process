@@ -67,11 +67,7 @@ IF(LONG(sRateTypeAdded) > 0);
    cPythonExe = CELLGETS('TAP System Info', 'Python Executable', 'Value');
 
    cScriptRun = CELLGETS('TAP System Info', 'Scripts Shared Path', 'Value');
-   cScriptRun = cScriptRun | '/tap/tap-runti-in-parallel.py';
-
-   cBatchUser = CELLGETS('TAP System Info', 'Batch Username', 'Value');
-   cBatchPassword = CELLGETS('TAP System Info', 'Batch Password', 'Value');
-   cBatchNamespace = CELLGETS('TAP System Info', 'Batch Namespace', 'Value');
+   cScriptRun = cScriptRun | '/tap/tap-runtipro-in-parallel.py';
    cServer = CELLGETS('TAP Application Info', CELLGETS('TAP System Info', 'Service Name', 'Value'), 'Endpoint');
    cPort = '443';
    cThreads = '30';
@@ -79,7 +75,7 @@ IF(LONG(sRateTypeAdded) > 0);
    sProcessName = 'Bedrock.Cube.ProcessFeeders';
    sTemplateProcessAll = '';
 
-   cTemplateScriptRun = '%cPythonExe% %cScriptRun% --server ''%cServer%'' --port %cPort% --user ''%cBatchUser%'' --password ''%cBatchPassword%'' --namespace ''%cBatchNamespace%'' --threads ''%cThreads%'' %cTemplateProcess1% %cTemplateProcess2% %cTemplateProcess3% %cTemplateProcess4% %cTemplateProcess5%';
+   cTemplateScriptRun = '%cPythonExe% %cScriptRun% --server ''%cServer%'' --port %cPort% --threads ''%cThreads%'' %cTemplateProcess1% %cTemplateProcess2% %cTemplateProcess3% %cTemplateProcess4% %cTemplateProcess5%';
 
    sCube1 = 'Delivery Staging';
    cTemplateProcess1 = '--process ''%sProcessName%'' pCubeName ''%sCube1%'' ';
@@ -103,12 +99,7 @@ IF(LONG(sRateTypeAdded) > 0);
 
    sCommand = EXPAND(cTemplateScriptRun);
 
-   # Strip password
-   nPassStartInd = SCAN('--password', sCommand);
-   nPassEndInd = SCAN('--namespace', sCommand);
-   sLogCommand = SUBST(sCommand, 1, nPassStartInd - 1) | SUBST(sCommand, nPassEndInd, LONG(sCommand));
-
-   LOGOUTPUT('INFO', 'Sample command : ' | SUBST(sLogCommand, 1, 200));
+   LOGOUTPUT('INFO', 'Sample command : ' | SUBST(sCommand, 1, 200));
 
    EXECUTECOMMAND(sCommand, 1);
 

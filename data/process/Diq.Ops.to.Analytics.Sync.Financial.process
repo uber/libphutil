@@ -86,68 +86,61 @@ WHILE(nCurPos <= LONG(sLoopString));
       sRateType = SUBST(sLoopString, nStart, nCurPos - nStart);
       IF(TRIM(sRateType) @<> '' & UPPER(sBatchTriggerFlag) @= 'YES');
 
-       cPythonExe = CELLGETS('TAP System Info', 'Python Executable', 'Value');
-
+        cPythonExe = CELLGETS('TAP System Info', 'Python Executable', 'Value');
         cScriptRun = CELLGETS('TAP System Info', 'Scripts Shared Path', 'Value');
-       cScriptRun = cScriptRun | '/tap/tap-runti-in-parallel.py';
+        cScriptRun = cScriptRun | '/tap/tap-runtipro-in-parallel.py';
+        cPACServer = CELLGETS('TAP Application Info', 'PAC', 'Endpoint');
+        cPort = '443';
+        cThreads = '30';
 
-       cBatchUser = CELLGETS('TAP System Info', 'Batch Username', 'Value');
-       cBatchPassword = CELLGETS('TAP System Info', 'Batch Password', 'Value');
-         cBatchNamespace = CELLGETS('TAP System Info', 'Batch Namespace', 'Value');
-       cPACServer = CELLGETS('TAP Application Info', 'PAC', 'Endpoint');
-       cPort = '443';
-      cThreads = '30';
+        pPeriod = '';
+        pRate = sRateType;
+        pMetric = 'Analytics Sync';
+        sProcessName = 'Ops.Cube.Update.DiqConfig.Ops Financial';
+        sTemplateProcessAll = '';
+        cTemplateScriptRun = '%cPythonExe% %cScriptRun% --server ''%cPACServer%'' --port %cPort% --threads ''%cThreads%'' %sTemplateProcessAll%';
 
-       pPeriod = '';
-       pRate = sRateType;
-       pMetric = 'Analytics Sync';
-       sProcessName = 'Ops.Cube.Update.DiqConfig.Ops Financial';
-       sTemplateProcessAll = '';
-      cTemplateScriptRun = '%cPythonExe% %cScriptRun% --server ''%cPACServer%'' --port %cPort% --user ''%cBatchUser%'' --password ''%cBatchPassword%'' --namespace ''%cBatchNamespace%'' --threads ''%cThreads%'' %sTemplateProcessAll%';
-
-      cTemplateProcess_GO = '--process ''%sProcessName%'' pDIQ_Index ''% pDIQ_Index%'' pPeriod ''%pPeriod%'' pRate ''% pRate%'' pMetric ''% pMetric%'' ';
+        cTemplateProcess_GO = '--process ''%sProcessName%'' pDIQ_Index ''% pDIQ_Index%'' pPeriod ''%pPeriod%'' pRate ''% pRate%'' pMetric ''% pMetric%'' ';
 
 
-       i = 1;
-       MONTH = SUBST(TODAY(1), 1, 7);
-       pPeriod = MONTH;
-       pMonth = '';
-       ##Export additional Month to make sure it will be in sync with Analytics MEC
+        i = 1;
+        MONTH = SUBST(TODAY(1), 1, 7);
+        pPeriod = MONTH;
+        pMonth = '';
+        ##Export additional Month to make sure it will be in sync with Analytics MEC
         WHILE(i <= 37);
-         pPeriod = pPeriod | pMonth;
+          pPeriod = pPeriod | pMonth;
 
-         sTemplateProcessAll = sTemplateProcessAll | EXPAND(cTemplateProcess_GO);
+          sTemplateProcessAll = sTemplateProcessAll | EXPAND(cTemplateProcess_GO);
 
           sMonth = ATTRS('Month', MONTH, 'Period-1');
-         pMonth = '+' | sMonth;
+          pMonth = '+' | sMonth;
           MONTH = sMonth;
           i = i + 1;
-       END;
+        END;
 
 
-       sCommand = EXPAND(cTemplateScriptRun);
+        sCommand = EXPAND(cTemplateScriptRun);
 
-       EXECUTECOMMAND(sCommand, 1);
+        EXECUTECOMMAND(sCommand, 1);
 
-      ##Call Sync DIQ 
+        ##Call Sync DIQ 
 
-      sProcessName = 'DIQ.Call.Batch';
-       sTemplateProcessAll = '';
-       cTemplateScriptRun = '%cPythonExe% %cScriptRun% --server ''%cPACServer%'' --port %cPort% --user ''%cBatchUser%'' --password ''%cBatchPassword%'' --namespace ''%cBatchNamespace%'' --threads ''%cThreads%'' %sTemplateProcessAll%';
+        sProcessName = 'DIQ.Call.Batch';
+        sTemplateProcessAll = '';
+        cTemplateScriptRun = '%cPythonExe% %cScriptRun% --server ''%cPACServer%'' --port %cPort% --threads ''%cThreads%'' %sTemplateProcessAll%';
 
-      cTemplateProcess_GO = '--process ''%sProcessName%'' pDIQBatch ''%pDIQ_Batch%'' ';
+        cTemplateProcess_GO = '--process ''%sProcessName%'' pDIQBatch ''%pDIQ_Batch%'' ';
 
-       sTemplateProcessAll = sTemplateProcessAll | EXPAND(cTemplateProcess_GO);
+        sTemplateProcessAll = sTemplateProcessAll | EXPAND(cTemplateProcess_GO);
 
-       sCommand = EXPAND(cTemplateScriptRun);
+        sCommand = EXPAND(cTemplateScriptRun);
 
-       EXECUTECOMMAND(sCommand, 1);
-
-
-         ENDIF;
-        nStart = nCurPos + 1;
-     ENDIF;
-      nCurPos = nCurPos + 1;
+        EXECUTECOMMAND(sCommand, 1);
+      ENDIF;
+      nStart = nCurPos + 1;
+   ENDIF;
+   nCurPos = nCurPos + 1;
 END;
 
 # ================= TAPTOOLS: START GENERATED CODE =================== #
