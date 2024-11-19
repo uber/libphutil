@@ -65,16 +65,14 @@ nDataProcedureEndTime = 0;
 cPythonExe = CELLGETS('TAP System Info', 'Python Executable', 'Value');
 
 cScriptRun = CELLGETS('TAP System Info', 'Scripts Shared Path', 'Value');
-cScriptRun = cScriptRun | '/tap/tap-runti-in-parallel.py';
+cScriptRun = cScriptRun | '/tap/tap-runtipro-in-parallel.py';
 
-cBatchUser = CELLGETS('TAP System Info', 'Batch Username', 'Value');
-cBatchPassword = CELLGETS('TAP System Info', 'Batch Password', 'Value');
-cBatchNamespace = CELLGETS('TAP System Info', 'Batch Namespace', 'Value');
+
 cServer = CELLGETS('TAP Application Info', CELLGETS('TAP System Info', 'Service Name', 'Value'), 'Endpoint');
 cPort = '443';
 cThreads = '10';
 
-cTemplateScriptRun = '%cPythonExe% %cScriptRun% --server ''%cServer%'' --port %cPort% --user ''%cBatchUser%'' --password ''%cBatchPassword%'' --namespace ''%cBatchNamespace%'' --threads ''%cThreads%'' %sTemplateProcess%';
+cTemplateScriptRun = '%cPythonExe% %cScriptRun% --server ''%cServer%'' --port %cPort% --threads ''%cThreads%'' %sTemplateProcess%';
 cTemplateProcess = '--process ''Bedrock.Cube.ProcessFeeders'' pCubeName ''%sCube%'' ';
 
 # ==================================================================== #
@@ -95,9 +93,6 @@ END;
 sCommand = EXPAND(cTemplateScriptRun);
 LOGOUTPUT('INFO', 'PYTHON SCRIPT EXECUTION -- START -- SYNCHRONOUS');
 sLogCommand = IF(LONG(sCommand) > 600, SUBST(sCommand, 1, 600) | '. . . (600 char max)', sCommand);
-nPassStartInd = SCAN('--password', sLogCommand);
-nPassEndInd = SCAN('--namespace', sLogCommand);
-sLogCommand = SUBST(sLogCommand, 1, nPassStartInd - 1) | SUBST(sLogCommand, nPassEndInd, LONG(sLogCommand));
 LOGOUTPUT('INFO', EXPAND('PYTHON SCRIPT COMMAND: %sLogCommand%'));
 # ================= TAPTOOLS: START GENERATED CODE =================== #
 nPrologProcedureEndTime = NOW();
