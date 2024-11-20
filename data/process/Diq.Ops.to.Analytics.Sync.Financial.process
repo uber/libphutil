@@ -90,10 +90,6 @@ WHILE(nCurPos <= LONG(sLoopString));
 
          cScriptRun = CELLGETS('TAP System Info', 'Scripts Shared Path', 'Value');
          cScriptRun = cScriptRun | '/tap/tap-runti-in-parallel.py';
-
-         cBatchUser = CELLGETS('TAP System Info', 'Batch Username', 'Value');
-         cBatchPassword = CELLGETS('TAP System Info', 'Batch Password', 'Value');
-         cBatchNamespace = CELLGETS('TAP System Info', 'Batch Namespace', 'Value');
          cPACServer = CELLGETS('TAP Application Info', 'PAC', 'Endpoint');
          cPort = '443';
          cThreads = '30';
@@ -103,7 +99,7 @@ WHILE(nCurPos <= LONG(sLoopString));
          pMetric = 'Analytics Sync';
          sProcessName = 'Ops.Cube.Update.DiqConfig.Ops Financial';
          sTemplateProcessAll = '';
-         cTemplateScriptRun = '%cPythonExe% %cScriptRun% --server ''%cPACServer%'' --port %cPort% --user ''%cBatchUser%'' --password ''%cBatchPassword%'' --namespace ''%cBatchNamespace%'' --threads ''%cThreads%'' %sTemplateProcessAll%';
+         cTemplateScriptRun = '%cPythonExe% %cScriptRun% --server ''%cPACServer%'' --port %cPort% --threads ''%cThreads%'' %sTemplateProcessAll%';
 
          cTemplateProcess_GO = '--process ''%sProcessName%'' pDIQ_Index ''% pDIQ_Index%'' pPeriod ''%pPeriod%'' pRate ''% pRate%'' pMetric ''% pMetric%'' ';
 
@@ -133,7 +129,7 @@ WHILE(nCurPos <= LONG(sLoopString));
 
          sProcessName = 'DIQ.Call.Batch';
          sTemplateProcessAll = '';
-         cTemplateScriptRun = '%cPythonExe% %cScriptRun% --server ''%cPACServer%'' --port %cPort% --user ''%cBatchUser%'' --password ''%cBatchPassword%'' --namespace ''%cBatchNamespace%'' --threads ''%cThreads%'' %sTemplateProcessAll%';
+         cTemplateScriptRun = '%cPythonExe% %cScriptRun% --server ''%cPACServer%'' --port %cPort% --threads ''%cThreads%'' %sTemplateProcessAll%';
 
          cTemplateProcess_GO = '--process ''%sProcessName%'' pDIQBatch ''%pDIQ_Batch%'' ';
 
