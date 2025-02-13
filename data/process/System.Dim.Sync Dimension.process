@@ -60,10 +60,6 @@ cPythonExe = CELLGETS('TAP System Info', 'Python Executable', 'Value');
 
 cScriptRun = CELLGETS('TAP System Info', 'Scripts Shared Path', 'Value') | '/tap/' | 'system-dimension-sync.py';
 
-cBatchUser = CELLGETS('TAP System Info', 'Batch Username', 'Value');
-cBatchPassword = CELLGETS('TAP System Info', 'Batch Password', 'Value');
-cBatchNamespace = CELLGETS('TAP System Info', 'Batch Namespace', 'Value');
-
 cServer = CELLGETS('TAP Application Info', LOWER(EXPAND('%pInstance%')), 'Endpoint');
 cPort = '443';
 
@@ -74,7 +70,7 @@ IF(pIsInstance = 1);
 ELSE;
    cFile = LOWER(EXPAND('%cProcess%_%cDimension%.txt'));
 ENDIF;
-cTemplateScriptRun = '%cPythonExe% "%cScriptRun%" --server="%cServer%" --port="%cPort%" --user="%cBatchUser%" --password=''%cBatchPassword%'' --namespace="%cBatchNamespace%" --dimension="%cDimension%" --path="%cPath%" --file="%cFile%" ';
+cTemplateScriptRun = '%cPythonExe% "%cScriptRun%" --server="%cServer%" --port="%cPort%"  --dimension="%cDimension%" --path="%cPath%" --file="%cFile%" ';
 
 cNow = NOW();
 
