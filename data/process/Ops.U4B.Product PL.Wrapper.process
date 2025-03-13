@@ -117,7 +117,6 @@ cScriptRun = cScriptRunPath | '/rushti/rushti.py';
 cScriptConfig = cScriptRunPath | '/rushti/config.ini';
 
 cInstance = CELLGETS('TAP System Info', 'Instance Name', 'Value');
-cBatchUser = CELLGETS('TAP System Info', 'Batch Username', 'Value');
 cBatchNamespace = CELLGETS('TAP System Info', 'Batch Namespace', 'Value');
 cServiceName = CELLGETS('TAP System Info', 'Service Name', 'Value');
 cServer = CELLGETS('TAP Application Info', CELLGETS('TAP System Info', 'Service Name', 'Value'), 'Endpoint');
@@ -174,9 +173,6 @@ IF(FILEEXISTS(cScriptConfig) = 0);
    ASCIIOUTPUT(cScriptConfig, sOutput);
 
    sOutput = 'port=443';
-   ASCIIOUTPUT(cScriptConfig, sOutput);
-
-   sOutput = 'user=' | cBatchUser;
    ASCIIOUTPUT(cScriptConfig, sOutput);
 
    sOutput = 'namespace=' | cBatchNamespace;
