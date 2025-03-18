@@ -243,8 +243,6 @@ cPythonExe = CELLGETS(cTAPSysInfoCube, 'Python Executable', 'Value');
 
 cScriptRun = CELLGETS(cTAPSysInfoCube, 'Scripts Local Path', 'Value') | '/data-move.py';
 
-cBatchUser = CELLGETS(cTAPSysInfoCube, 'Batch Username', 'Value');
-cBatchPassword = CELLGETS(cTAPSysInfoCube, 'Batch Password', 'Value');
 cBatchNamespace = CELLGETS(cTAPSysInfoCube, 'Batch Namespace', 'Value');
 
 cFilePath = '/var/tm1/' | cSyncFrom | '/files/shared/ops/';
@@ -265,8 +263,6 @@ cFilter = cPlanVersionDim | cElementStartDelim | pPlanVersion | cDimensionDelim 
 cTemplateScriptRun = '%cPythonExe% "%cScriptRun%"  
 --server="%cServer%" 
 --port="%cPortNumber%" 
---user="%cBatchUser%" 
---password=''%cBatchPassword%'' 
 --namespace="%cBatchNamespace%" 
 --pCube="%cExportCube%" 
 --pView="%cView%" 
