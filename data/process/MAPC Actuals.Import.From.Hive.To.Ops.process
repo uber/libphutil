@@ -355,6 +355,12 @@ ENDIF;
 #****Begin: Generated Statements***
 #****End: Generated Statements****
 
+#Exclude unnecessary source data combination
+
+IF(vLOB @= 'Online Food Delivery ex M&A' % vSource @= 'FDS+Ops Adjustment');
+   ITEMSKIP;
+ENDIF;
+
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
 # Clear Target View
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-#
