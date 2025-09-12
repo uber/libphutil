@@ -239,7 +239,7 @@ final class HTTPSFuture extends BaseHTTPFuture {
       curl_multi_add_handle(self::$multi, $curl);
 
       curl_setopt($curl, CURLOPT_URL, $uri);
-      curl_setopt($ch, CURLOPT_VERBOSE, false);
+      curl_setopt($curl, CURLOPT_VERBOSE, false);
 
       if (defined('CURLOPT_PROTOCOLS')) {
         // cURL supports a lot of protocols, and by default it will honor
