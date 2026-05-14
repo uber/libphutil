@@ -20,6 +20,7 @@ final class PhutilChunkedIterator extends Phobject implements Iterator {
     $this->size = $size;
   }
 
+  #[\ReturnTypeWillChange]
   public function rewind() {
     $this->iterator->rewind();
     $this->next();
@@ -29,6 +30,7 @@ final class PhutilChunkedIterator extends Phobject implements Iterator {
   /**
    * @return int
    */
+  #[\ReturnTypeWillChange]
   public function key() {
     return $this->key;
   }
@@ -36,10 +38,12 @@ final class PhutilChunkedIterator extends Phobject implements Iterator {
   /**
    * @return array
    */
+  #[\ReturnTypeWillChange]
   public function current() {
     return $this->current;
   }
 
+  #[\ReturnTypeWillChange]
   public function next() {
     $this->current = array();
     while ($this->iterator->valid()) {
@@ -53,6 +57,7 @@ final class PhutilChunkedIterator extends Phobject implements Iterator {
     $this->key++;
   }
 
+  #[\ReturnTypeWillChange]
   public function valid() {
     return (bool)$this->current;
   }

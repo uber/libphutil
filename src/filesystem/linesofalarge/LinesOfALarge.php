@@ -99,6 +99,7 @@ abstract class LinesOfALarge extends Phobject implements Iterator {
   /**
    * @task iterator
    */
+  #[\ReturnTypeWillChange]
   final public function rewind() {
     $this->willRewind();
 
@@ -115,6 +116,7 @@ abstract class LinesOfALarge extends Phobject implements Iterator {
   /**
    * @task iterator
    */
+  #[\ReturnTypeWillChange]
   final public function key() {
     return $this->num;
   }
@@ -123,6 +125,7 @@ abstract class LinesOfALarge extends Phobject implements Iterator {
   /**
    * @task iterator
    */
+  #[\ReturnTypeWillChange]
   final public function current() {
     return $this->line;
   }
@@ -131,6 +134,7 @@ abstract class LinesOfALarge extends Phobject implements Iterator {
   /**
    * @task iterator
    */
+  #[\ReturnTypeWillChange]
   final public function valid() {
     return $this->valid;
   }
@@ -139,6 +143,7 @@ abstract class LinesOfALarge extends Phobject implements Iterator {
   /**
    * @task iterator
    */
+  #[\ReturnTypeWillChange]
   final public function next() {
     // Consume the stream a chunk at a time into an internal buffer, then
     // read lines out of that buffer. This gives us flexibility (stream sources

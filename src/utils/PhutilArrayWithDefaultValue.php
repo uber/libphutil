@@ -35,10 +35,12 @@ final class PhutilArrayWithDefaultValue extends PhutilArray {
     return $this;
   }
 
+  #[\ReturnTypeWillChange]
   public function offsetExists($key) {
     return true;
   }
 
+  #[\ReturnTypeWillChange]
   public function offsetGet($key) {
     if (!parent::offsetExists($key)) {
       $this->offsetSet($key, $this->defaultValue);

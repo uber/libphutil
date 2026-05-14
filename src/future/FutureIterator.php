@@ -158,6 +158,7 @@ final class FutureIterator extends Phobject implements Iterator {
   /**
    * @task iterator
    */
+  #[\ReturnTypeWillChange]
   public function rewind() {
     $this->wait = array_keys($this->futures);
     $this->work = null;
@@ -168,6 +169,7 @@ final class FutureIterator extends Phobject implements Iterator {
   /**
    * @task iterator
    */
+  #[\ReturnTypeWillChange]
   public function next() {
     $this->key = null;
     if (!count($this->wait)) {
@@ -261,6 +263,7 @@ final class FutureIterator extends Phobject implements Iterator {
   /**
    * @task iterator
    */
+  #[\ReturnTypeWillChange]
   public function current() {
     if ($this->isTimeout) {
       return null;
@@ -271,6 +274,7 @@ final class FutureIterator extends Phobject implements Iterator {
   /**
    * @task iterator
    */
+  #[\ReturnTypeWillChange]
   public function key() {
     if ($this->isTimeout) {
       return null;
@@ -281,6 +285,7 @@ final class FutureIterator extends Phobject implements Iterator {
   /**
    * @task iterator
    */
+  #[\ReturnTypeWillChange]
   public function valid() {
     if ($this->isTimeout) {
       return true;
