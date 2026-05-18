@@ -62,16 +62,19 @@ final class CaseInsensitiveArray extends PhutilArray {
     return array_values($this->keys);
   }
 
+  #[\ReturnTypeWillChange]
   public function offsetExists($key) {
     $key = $this->transformKey($key);
     return array_key_exists($key, $this->keys);
   }
 
+  #[\ReturnTypeWillChange]
   public function offsetGet($key) {
     $key = $this->transformKey($key);
     return parent::offsetGet($this->keys[$key]);
   }
 
+  #[\ReturnTypeWillChange]
   public function offsetSet($key, $value) {
     $transformed_key = $this->transformKey($key);
 
@@ -87,6 +90,7 @@ final class CaseInsensitiveArray extends PhutilArray {
     parent::offsetSet($key, $value);
   }
 
+  #[\ReturnTypeWillChange]
   public function offsetUnset($key) {
     $key = $this->transformKey($key);
 

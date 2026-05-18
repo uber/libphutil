@@ -16,6 +16,7 @@ final class PhutilStreamIterator
 /* -(  Iterator Implementation  )-------------------------------------------- */
 
 
+  #[\ReturnTypeWillChange]
   public function rewind() {
     if ($this->started) {
       // When you first foreach() an iterator the rewind() method gets called
@@ -29,18 +30,22 @@ final class PhutilStreamIterator
     $this->next();
   }
 
+  #[\ReturnTypeWillChange]
   public function valid() {
     return ($this->data !== null);
   }
 
+  #[\ReturnTypeWillChange]
   public function current() {
     return $this->data;
   }
 
+  #[\ReturnTypeWillChange]
   public function key() {
     return $this->naturalKey;
   }
 
+  #[\ReturnTypeWillChange]
   public function next() {
     $stream = $this->stream;
 

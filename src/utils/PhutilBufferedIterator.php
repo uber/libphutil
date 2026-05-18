@@ -77,6 +77,7 @@ abstract class PhutilBufferedIterator extends Phobject implements Iterator {
   /**
    * @task iterator
    */
+  #[\ReturnTypeWillChange]
   final public function rewind() {
     $this->didRewind();
     $this->data = array();
@@ -88,6 +89,7 @@ abstract class PhutilBufferedIterator extends Phobject implements Iterator {
   /**
    * @task iterator
    */
+  #[\ReturnTypeWillChange]
   final public function valid() {
     return (bool)count($this->data);
   }
@@ -96,6 +98,7 @@ abstract class PhutilBufferedIterator extends Phobject implements Iterator {
   /**
    * @task iterator
    */
+  #[\ReturnTypeWillChange]
   final public function current() {
     return end($this->data);
   }
@@ -109,6 +112,7 @@ abstract class PhutilBufferedIterator extends Phobject implements Iterator {
    * @return scalar Key for the current result (as per @{method:current}).
    * @task iterator
    */
+  #[\ReturnTypeWillChange]
   public function key() {
     return $this->naturalKey;
   }
@@ -117,6 +121,7 @@ abstract class PhutilBufferedIterator extends Phobject implements Iterator {
   /**
    * @task iterator
    */
+  #[\ReturnTypeWillChange]
   final public function next() {
     if ($this->data) {
       $this->naturalKey++;

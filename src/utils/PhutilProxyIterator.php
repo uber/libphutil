@@ -21,23 +21,28 @@ abstract class PhutilProxyIterator
 /* -(  Iterator Implementation  )-------------------------------------------- */
 
 
+  #[\ReturnTypeWillChange]
   final public function rewind() {
     $this->iterator->rewind();
     $this->update();
   }
 
+  #[\ReturnTypeWillChange]
   final public function valid() {
     return $this->valid;
   }
 
+  #[\ReturnTypeWillChange]
   final public function current() {
     return $this->value;
   }
 
+  #[\ReturnTypeWillChange]
   final public function key() {
     return $this->key;
   }
 
+  #[\ReturnTypeWillChange]
   final public function next() {
     $this->iterator->next();
     $this->update();
