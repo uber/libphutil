@@ -142,6 +142,9 @@ function mpull(array $list, $method, $key_method = null) {
   foreach ($list as $key => $object) {
     if ($key_method !== null) {
       $key = $object->$key_method();
+      if ($key === null) {
+        $key = '';
+      }
     }
     if ($method !== null) {
       $value = $object->$method();
@@ -216,6 +219,9 @@ function ppull(array $list, $property, $key_property = null) {
   foreach ($list as $key => $object) {
     if ($key_property !== null) {
       $key = $object->$key_property;
+      if ($key === null) {
+        $key = '';
+      }
     }
     if ($property !== null) {
       $value = $object->$property;
@@ -264,6 +270,9 @@ function ipull(array $list, $index, $key_index = null) {
   foreach ($list as $key => $array) {
     if ($key_index !== null) {
       $key = $array[$key_index];
+      if ($key === null) {
+        $key = '';
+      }
     }
     if ($index !== null) {
       $value = $array[$index];
